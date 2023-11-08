@@ -1,5 +1,5 @@
 
-
+import Navigate from '../Router/Navigate';
 
 const Leaderboard = () => {
   const lignes = ` 
@@ -10,6 +10,7 @@ const Leaderboard = () => {
       <td class="text-center">10/10/1999</td>
   </tr>`;
   renderLeaderboardPage(lignes);
+  backListenner();
 }
 
 
@@ -18,7 +19,7 @@ function renderLeaderboardPage(lignes) {
 
   main.innerHTML = `
   <div class="d-flex justify-content-end">
-    <div class="back mx-5 my-4 p-2 rounded border bg-primary-subtle">back</div>
+    <button type="button" class="back btn btn-primary btn-lg mx-5 my-4">Back</button>
   </div>
  
 
@@ -39,6 +40,13 @@ function renderLeaderboardPage(lignes) {
     </div>
   </div>
   `;
+}
+
+function backListenner() {
+  const back = document.querySelector('.back');
+  back.addEventListener('click', () =>{
+    Navigate('/');
+  })
 }
 
 export default Leaderboard;
