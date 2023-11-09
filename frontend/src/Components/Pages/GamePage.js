@@ -1,5 +1,6 @@
 import Phaser from 'phaser';
 import GameScene from '../Game/GameScene';
+import StartMenuScene from '../Game/StartMenuScene';
 
 let game;
 
@@ -22,7 +23,7 @@ const GamePage = () => {
         debug: false,
       },
     },
-    scene: [GameScene],
+    scene: [StartMenuScene,GameScene],
     //  parent DOM element into which the canvas created by the renderer will be injected.
     parent: 'gameDiv',
   };
