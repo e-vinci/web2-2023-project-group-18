@@ -1,6 +1,7 @@
 import Phaser from 'phaser';
 import playButton from '../../assets/playButtonChristmas.png';
 import backgroundMountain from '../../assets/backgroundMoutain.png'
+// import GameScene from './GameScene';
 
 const PLAY_BUTTON = 'play';
 const BACKGROUND_MOUNTAIN = 'back';
@@ -38,6 +39,9 @@ class StartMenuScene extends Phaser.Scene {
     // Resized image
     this.backgroundMountain.setTexture(BACKGROUND_MOUNTAIN);
     this.backgroundMountain.setDisplaySize(newWidth, newHeight);
+
+    const background = this.add.rectangle(400, 300, 800, 600, 0x000000, 0.8);
+    background.setOrigin(0.5);
 
     this.playButton = this.add.image(400, 300, PLAY_BUTTON);
     this.playButton.setOrigin(0.5);
