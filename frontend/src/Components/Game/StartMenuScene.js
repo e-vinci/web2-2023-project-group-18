@@ -18,8 +18,6 @@ class StartMenuScene extends Phaser.Scene {
     }
   
     create() {
-    const space = this.input.keyboard.on('keydown-SPACE', this.startGame, this);
-
     this.backgroundMountain = this.add.image(400,300, BACKGROUND_MOUNTAIN);
     // Rezise background image
     const newWidth = 800; 
@@ -43,10 +41,11 @@ class StartMenuScene extends Phaser.Scene {
 
     this.playButton = this.add.image(400, 300, PLAY_BUTTON);
     this.playButton.setOrigin(0.5);
-    this.playButton.setInteractive();
-    this.playButton.on(space, () => this.startGame());
+    this.playButton.setInteractive({ useHandCursor: true }); 
+    this.playButton.on('pointerdown', () => {
+      this.startGame();
+    });    
 
-    
     }
   
     startGame() {

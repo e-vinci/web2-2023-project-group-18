@@ -6,13 +6,11 @@ import platformAsset from '../../assets/platform.png';
 import starAsset from '../../assets/star.png';
 import bombAsset from '../../assets/bomb.png';
 import dudeAsset from '../../assets/dude.png';
-// import playButton from '../../assets/playButton.png';
 
 const GROUND_KEY = 'ground';
 const DUDE_KEY = 'dude';
 const STAR_KEY = 'star';
 const BOMB_KEY = 'bomb';
-// const PLAY_BUTTON = 'play';
 
 class GameScene extends Phaser.Scene {
   constructor() {
