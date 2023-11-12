@@ -1,5 +1,5 @@
 import Phaser from 'phaser';
-import playButton from '../../assets/playButtonChristmas.png';
+import playButton from '../../assets/playButtonNew.png';
 import backgroundMountain from '../../assets/backgroundMoutain.png'
 // import GameScene from './GameScene';
 
@@ -40,8 +40,8 @@ class StartMenuScene extends Phaser.Scene {
     this.backgroundMountain.setTexture(BACKGROUND_MOUNTAIN);
     this.backgroundMountain.setDisplaySize(newWidth, newHeight);
 
-    const background = this.add.rectangle(400, 300, 800, 600, 0x000000, 0.8);
-    background.setOrigin(0.5);
+    const backgroundShadow = this.add.rectangle(400, 300, 800, 600, 0x000000, 0.5);
+    backgroundShadow.setOrigin(0.5);
 
     this.playButton = this.add.image(400, 300, PLAY_BUTTON);
     this.playButton.setOrigin(0.5);
@@ -49,6 +49,10 @@ class StartMenuScene extends Phaser.Scene {
     this.playButton.on('pointerdown', () => {
       this.startGame();
     });    
+
+    const textRules = this.add.text(400,400,'Press space to jump over obstacles and roll down the slope \n at full speed to earn as many coins as possible');
+    textRules.setOrigin(0.5);
+    textRules.setAlign('center');
 
     }
   
