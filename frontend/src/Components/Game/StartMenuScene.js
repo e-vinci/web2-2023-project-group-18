@@ -50,7 +50,10 @@ class StartMenuScene extends Phaser.Scene {
       this.startGame();
     });    
 
-    const textRules = this.add.text(400,400,'Press space to jump over obstacles and roll down the slope \n at full speed to earn as many coins as possible');
+    const textRules = this.add.text(400,410,'Press space to jump over obstacles and roll down the slope \n at full speed to earn as many coins as possible',{
+      fontSize: '20px',
+      color: '#ffffff'
+    });
     textRules.setOrigin(0.5);
     textRules.setAlign('center');
 
