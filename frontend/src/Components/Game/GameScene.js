@@ -6,11 +6,15 @@ import platformAsset from '../../assets/platform.png';
 import starAsset from '../../assets/star.png';
 import bombAsset from '../../assets/bomb.png';
 import dudeAsset from '../../assets/dude.png';
+// eslint-disable-next-line no-unused-vars
+import PauseSceneMenu from './PauseSceneMenu';
+import pauseButton from '../../assets/pauseButton.png';
 
 const GROUND_KEY = 'ground';
 const DUDE_KEY = 'dude';
 const STAR_KEY = 'star';
 const BOMB_KEY = 'bomb';
+const PAUSE_BUTTON  = 'pause';
 
 class GameScene extends Phaser.Scene {
   constructor() {
@@ -21,6 +25,7 @@ class GameScene extends Phaser.Scene {
     this.stars = undefined;
     this.bombSpawner = undefined;
     this.gameOver = false;
+    this.pauseButton = undefined;
   }
 
   preload() {
@@ -33,6 +38,7 @@ class GameScene extends Phaser.Scene {
       frameWidth: 32,
       frameHeight: 48,
     });
+    this.load.image(PAUSE_BUTTON, pauseButton);
   }
 
   create() {
@@ -49,6 +55,13 @@ class GameScene extends Phaser.Scene {
     this.physics.add.collider(this.player, bombsGroup, this.hitBomb, null, this);
     this.physics.add.overlap(this.player, this.stars, this.collectStar, null, this);
     this.cursors = this.input.keyboard.createCursorKeys();
+
+    this.pauseButton = this.add.image(770,30,PAUSE_BUTTON);
+    this.pauseButton.setInteractive({useHandCursor: true});
+    this.pauseButton.setScale(0.5);
+    this.pauseButton.on('pointerdown', () => {
+      this.pauseGame();
+    }); 
 
     /* The Collider takes two objects and tests for collision and performs separation against them.
     Note that we could call a callback in case of collision... */
@@ -164,6 +177,11 @@ class GameScene extends Phaser.Scene {
     player.anims.play('turn');
 
     this.gameOver = true;
+  }
+
+  pauseGame() {
+    this.scene.pause();
+    this.scene.launch('pause-menu');
   }
 }
 
