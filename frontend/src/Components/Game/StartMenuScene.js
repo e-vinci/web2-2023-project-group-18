@@ -1,7 +1,6 @@
 import Phaser from 'phaser';
 import playButton from '../../assets/playButtonNew.png';
 import backgroundMountain from '../../assets/backgroundMoutain.png'
-// import GameScene from './GameScene';
 
 const PLAY_BUTTON = 'play';
 const BACKGROUND_MOUNTAIN = 'back';
@@ -45,10 +44,10 @@ class StartMenuScene extends Phaser.Scene {
 
     const titleGame = this.add.text(400,50,'SANTA FALL', {
       fontSize: '50px',
-      fontFamily: 'Georgia Pro Light',
+      fontFamily: 'Roboto',
       color: '#ffffff'
     })
-    titleGame.setOrigin(0.5);
+    titleGame.setOrigin(0.5); 
 
     this.playButton = this.add.image(400, 300, PLAY_BUTTON);
     this.playButton.setOrigin(0.5);
@@ -77,7 +76,7 @@ class StartMenuScene extends Phaser.Scene {
     const textRules = this.add.text(400,410,'Press space to jump over obstacles and roll down the slope \n at full speed to earn as many coins as possible',{
       fontSize: '23px',
       color: '#ffffff',
-      fontFamily: 'Georgia Pro Light'
+      fontFamily: 'Roboto'
     });
     textRules.setOrigin(0.5);
     textRules.setAlign('center');
