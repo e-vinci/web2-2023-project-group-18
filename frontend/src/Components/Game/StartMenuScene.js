@@ -1,6 +1,6 @@
 import Phaser from 'phaser';
 import playButton from '../../assets/playButtonNew.png';
-import backgroundMountain from '../../assets/backgroundMoutain.png'
+import backgroundMountain from '../../assets/background.png'
 
 const PLAY_BUTTON = 'play';
 const BACKGROUND_MOUNTAIN = 'back';
