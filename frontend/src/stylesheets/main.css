@@ -2,7 +2,7 @@
 body{
   margin: 0;
   font-family: "Roboto", sans-serif;
-  background: url('../assets/wp11711257-snowboarding-4k-wallpapers.jpg') no-repeat;
+  background: url('../assets/wp11711257-4k-snowboarding-wallpapers.jpg') no-repeat;
   background-size: cover ;
 
 }
@@ -110,18 +110,13 @@ text-decoration :underline;
 }
 
 .back{
-display: flex;
-align-items: center;
-justify-content: space-evenly;
-margin-bottom: 10px;
-height: 90px;
-width: 90px;
+font-size: 60px;
 background-color: transparent;
 border-radius: 50px;
 color: white;
-border-color: #ebebeb;
+border-color: transparent;
 }
 .div-back{
-  margin-left: 5%;
-  margin-top: 5%;
+  margin-left: 3%;
+  margin-top: 3%;
 }
