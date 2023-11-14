@@ -6,8 +6,6 @@ import platformAsset from '../../assets/platform.png';
 import starAsset from '../../assets/star.png';
 import bombAsset from '../../assets/bomb.png';
 import dudeAsset from '../../assets/dude.png';
-// eslint-disable-next-line no-unused-vars
-import PauseSceneMenu from './PauseSceneMenu';
 import pauseButton from '../../assets/pauseButton.png';
 
 const GROUND_KEY = 'ground';
