@@ -1,4 +1,13 @@
+#shop-page {
+    background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.7)),
+                url('../assets/background.png') no-repeat center center fixed;
+    background-size: cover;
+    color: white;
+    font-family: "Roboto", sans-serif;
+}
+
 .change-page-button {
+    color: white;
     border: none;
     background: none;
     font-weight: normal;
@@ -7,4 +16,37 @@
 
 .change-page-button:hover {
     font-weight: bold;
+}
+
+.store-buy-button {
+    width: 100%;
+    background-color: rgb(43, 75, 141);
+    color: white;
+    border: 0px;
+ 
+    border-top-right-radius: 0px;
+    border-top-left-radius: 0px;
+}
+
+.store-buy-button:hover {
+    background-color: rgb(29, 51, 95);
+}
+
+.store-own-button {
+    width: 100%;
+    background-color: rgb(135, 135, 135);
+    color: white;
+    border: 0px;
+ 
+    border-top-right-radius: 0px;
+    border-top-left-radius: 0px;
+}
+
+.store-own-button:hover {
+    background-color: rgb(97, 97, 97);
+}
+
+.store-picture {
+    border-top-right-radius: 5px;
+    border-top-left-radius: 5px;
 }
