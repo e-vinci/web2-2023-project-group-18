@@ -60,14 +60,14 @@ function renderShopPage(numberCoins) {
         <br>
         <div class="d-flex justify-content-between align-items-center position-relative m-3">
             <h1 class="mx-auto">Store</h1>
-            <button type="button" class="back btn btn-primary btn-lg position-absolute top-0 end-0">Back</button>
+            <button type="button" class="back store-back-button btn btn-primary btn-lg position-absolute top-0 end-0">Back</button>
         </div>
 
         <div class="container mt-3 mb-4">
             <div class="row">
                 <h4 class="text-left">Coins: ${numberCoins}</h4>
                 <div class="col-md-6">
-                    <div class="border rounded p-3">
+                    <div class="shop-part border rounded p-3">
                     
                         <h1 class="text-center">Characters</h1>
 
@@ -82,7 +82,7 @@ function renderShopPage(numberCoins) {
                     </div>
                 </div>
                 <div class="col-md-6">
-                    <div class="border rounded p-3">
+                    <div class="shop-part border rounded p-3">
                         <h1 class="text-center">Themes</h1>
                         
                         <div id="theme-list"></div>
@@ -129,7 +129,7 @@ function displayCurrentSkinPage(ownSkins) {
             skinHTML += `
                 <div class="col-md-4 text-center">
                     <h3>${skin.name}</h3>
-                    <img class="w-100 store-picture" src="${templateSkinImage}" alt="skin picture ${skin.name}">
+                    <img class="w-100 store-picture" src="${templateSkinImage}" alt="skin picture ${skin.name}" draggable="false">
                     ${typeButton}
                 </div>`;
         }
@@ -214,5 +214,12 @@ function backListenner() {
         Navigate('/');
     })
 }
+
+// No right click on picture
+document.addEventListener('contextmenu', (e) => {
+    if (e.target.nodeName === "IMG") {
+        e.preventDefault();
+    }
+});
 
 export default ShopPage;

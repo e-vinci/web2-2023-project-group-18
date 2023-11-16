@@ -9,7 +9,7 @@ import { Navbar as BootstrapNavbar } from 'bootstrap';
  */
 
 const Navbar = () => {
-  const navbarWrapper = document.querySelector('#navbarWrapper');
+  /* const navbarWrapper = document.querySelector('#navbarWrapper');
   const navbar = `
   <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container-fluid">
@@ -40,8 +40,8 @@ const Navbar = () => {
           </div>
         </div>
       </nav>
-  `;
-  navbarWrapper.innerHTML = navbar;
+  `; 
+  navbarWrapper.innerHTML = navbar; */
 };
 
 export default Navbar;
