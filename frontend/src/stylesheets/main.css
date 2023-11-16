@@ -1,0 +1,28 @@
+body {
+    margin: 0;
+    height: 100%;
+}
+
+#settings-page {
+    background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.8)),
+                url('../assets/background.png') no-repeat center center fixed;
+    background-size: cover;
+    color: white;
+    font-family: "Roboto", sans-serif;
+    height: 100vh;
+}
+
+.back-button {
+    background-color: rgb(43, 75, 141);
+    border: 0px;
+}
+.back-button:hover {
+    background-color: rgb(29, 51, 95);
+}
+.back-button:not(:disabled):not(.disabled):active {
+    background-color: rgb(24, 42, 78);
+}
+
+.settings-frame {
+    width: 50%;
+}
