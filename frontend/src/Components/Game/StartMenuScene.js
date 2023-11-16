@@ -1,6 +1,6 @@
 import Phaser from 'phaser';
 import playButton from '../../assets/playButtonNew.png';
-import backgroundMountain from '../../assets/background.png'
+import backgroundMountain from '../../assets/backgroundV2.png'
 
 const PLAY_BUTTON = 'play';
 const BACKGROUND_MOUNTAIN = 'back';
@@ -50,14 +50,15 @@ class StartMenuScene extends Phaser.Scene {
     titleGame.setOrigin(0.5); 
 
     this.playButton = this.add.image(400, 300, PLAY_BUTTON);
+    this.playButton.setScale(0.7);
     this.playButton.setOrigin(0.5);
     this.playButton.setInteractive({ useHandCursor: true }); 
 
     // Set up the pulsing animation
     this.tweens.add({
       targets: this.playButton,
-      scaleX: 1.2, // Scale factor for X
-      scaleY: 1.2, // Scale factor for Y
+      scaleX: 0.9, // Scale factor for X
+      scaleY: 0.9, // Scale factor for Y
       duration: 800, // Duration in milliseconds
       yoyo: true, // Make the animation reverse to its original state
       repeat: -1, // Repeat indefinitely
