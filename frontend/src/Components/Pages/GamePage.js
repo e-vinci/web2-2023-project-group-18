@@ -6,16 +6,16 @@ let game;
 
 const GamePage = () => {
   const phaserGame = `
-<div id="gameDiv" class="d-flex justify-content-center my-3">
-</div>`;
+<div id="gameDiv" class="d-flex justify-content-center"> </div>`;
 
   const main = document.querySelector('main');
   main.innerHTML = phaserGame;
 
   const config = {
     type: Phaser.AUTO,
-    width: 800,
-    height: 600,
+    width: 1536,
+    height: 650,
+    transparent: true,
     physics: {
       default: 'arcade',
       arcade: {

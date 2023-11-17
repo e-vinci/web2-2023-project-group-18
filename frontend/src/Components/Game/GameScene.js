@@ -1,7 +1,6 @@
 import Phaser from 'phaser';
 import ScoreLabel from './ScoreLabel';
 import BombSpawner from './BombSpawner';
-import skyAsset from '../../assets/sky.png';
 import platformAsset from '../../assets/platform.png';
 import starAsset from '../../assets/star.png';
 import bombAsset from '../../assets/bomb.png';
@@ -27,7 +26,6 @@ class GameScene extends Phaser.Scene {
   }
 
   preload() {
-    this.load.image('sky', skyAsset);
     this.load.image(GROUND_KEY, platformAsset);
     this.load.image(STAR_KEY, starAsset);
     this.load.image(BOMB_KEY, bombAsset);
@@ -40,11 +38,11 @@ class GameScene extends Phaser.Scene {
   }
 
   create() {
-    this.add.image(400, 300, 'sky');
     const platforms = this.createPlatforms();
     this.player = this.createPlayer();
     this.stars = this.createStars();
-    this.scoreLabel = this.createScoreLabel(16, 16, 0);
+    this.scoreLabel = this.createScoreLabel(20, 20, 0);
+    this.scoreLabel.setColor('#ffffff');
     this.bombSpawner = new BombSpawner(this, BOMB_KEY);
     const bombsGroup = this.bombSpawner.group;
     this.physics.add.collider(this.stars, platforms);
@@ -54,9 +52,9 @@ class GameScene extends Phaser.Scene {
     this.physics.add.overlap(this.player, this.stars, this.collectStar, null, this);
     this.cursors = this.input.keyboard.createCursorKeys();
 
-    this.pauseButton = this.add.image(770,30,PAUSE_BUTTON);
+    this.pauseButton = this.add.image(1480,50,PAUSE_BUTTON);
     this.pauseButton.setInteractive({useHandCursor: true});
-    this.pauseButton.setScale(0.5);
+    this.pauseButton.setScale(0.8);
     this.pauseButton.on('pointerdown', () => {
       this.pauseGame();
     }); 
@@ -82,7 +80,7 @@ class GameScene extends Phaser.Scene {
     }
 
     if (this.cursors.up.isDown && this.player.body.touching.down) {
-      this.player.setVelocityY(-330);
+      this.player.setVelocityY(-360);
     }
   }
 
@@ -90,13 +88,14 @@ class GameScene extends Phaser.Scene {
     const platforms = this.physics.add.staticGroup();
 
     platforms
-      .create(400, 568, GROUND_KEY)
-      .setScale(2)
+      .create(800, 660, GROUND_KEY)
+      .setScale(5)
       .refreshBody();
 
     platforms.create(600, 400, GROUND_KEY);
     platforms.create(50, 250, GROUND_KEY);
-    platforms.create(750, 220, GROUND_KEY);
+    platforms.create(820, 180, GROUND_KEY);
+    platforms.create(1200,350, GROUND_KEY);
     return platforms;
   }
 
@@ -133,7 +132,7 @@ class GameScene extends Phaser.Scene {
   createStars() {
     const stars = this.physics.add.group({
       key: STAR_KEY,
-      repeat: 11,
+      repeat: 16,
       setXY: { x: 12, y: 0, stepX: 70 },
     });
 
