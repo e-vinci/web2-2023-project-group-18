@@ -35,6 +35,7 @@ const LoginPage = () => {
   
 
   linkClick();
+  
   document.querySelector('form').addEventListener('submit', (e) => {
     e.preventDefault();
     animeLogin(true);
