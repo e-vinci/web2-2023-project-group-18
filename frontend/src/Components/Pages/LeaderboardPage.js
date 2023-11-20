@@ -2,15 +2,37 @@
 import Navigate from '../Router/Navigate';
 
 const Leaderboard = () => {
-  const lignes = ` 
-  <tr>
-      <td class="text-center">1</td>
-      <td class="text-center">GoodHyper</td>
-      <td class="text-center">128 m</td>
-      <td class="text-center">10/10/1999</td>
-  </tr>`;
-  renderLeaderboardPage(lignes);
-  backListenner();
+  fetchAllScores();
+}
+
+
+function fetchAllScores() {
+  let lignes = '';
+  fetch('http://localhost:3000/scores/')
+  .then((response) => {
+    if (!response.ok) throw new Error(`fetch error : ${response.status} : ${response.statusText}`);
+    return response.json();
+  })
+  .then((allLigne) => {
+    let count = 1;
+    allLigne.forEach(ligne => {
+      lignes = ` 
+      <tr>
+          <td class="text-center">${count}</td>
+          <td class="text-center">${ligne.username}</td>
+          <td class="text-center">${ligne.score} m</td>
+          <td class="text-center">10/10/1999</td>
+      </tr>`;
+      count+=1;
+    });
+    renderLeaderboardPage(lignes);
+  })
+  .catch((err) => {
+    console.error('Error fetching ', err);
+    document.querySelector('main').innerHTML = `Error: API is not online`;
+  });
+
+  
 }
 
 
@@ -40,6 +62,7 @@ function renderLeaderboardPage(lignes) {
     </div>
   </div>
   `;
+  backListenner();
 }
 
 function backListenner() {
