@@ -1,4 +1,7 @@
-import Navigate from "../Router/Navigate";
+
+import anime from 'animejs/lib/anime.es';
+
+import Navigate from '../Router/Navigate';
 
 const HomePage = () => {
   const main = document.querySelector('main');
@@ -34,6 +37,7 @@ const HomePage = () => {
   main.innerHTML = mainHTML;
   isConnected(true);
   linkClick();
+  animeLinks();
 };
 
 function isConnected(params) {
@@ -57,12 +61,31 @@ function isConnected(params) {
 }
 
 function linkClick() {
-  const links = document.querySelectorAll(".nav-link");
+  const links = document.querySelectorAll('.nav-link');
   links.forEach((link) => {
-    link.addEventListener("click", (e) => {
+    link.addEventListener('click', (e) => {
       Navigate(e.target.dataset.uri);
-    // ou Navigate(link.dataset.uri);
-    })
+      // ou Navigate(link.dataset.uri);
+    });
+  });
+}
+
+function animeLinks() {
+  const links = document.querySelectorAll('li');
+
+  const num = 500;
+  let cpt = 1;
+  links.forEach((link) => {
+    window.addEventListener(
+      'mouseover',
+      anime({
+        targets: link,
+        translateX: 50,
+        translateY: 100,
+        duration: num * cpt,
+      }),
+    );
+    cpt += 1;
   });
 }
 
