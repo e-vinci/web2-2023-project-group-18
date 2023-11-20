@@ -1,3 +1,4 @@
+import anime from 'animejs/lib/anime.es';
 import Navigate from '../Router/Navigate';
 
 const RegisterPage = () => {
@@ -33,6 +34,11 @@ const RegisterPage = () => {
       </div>`;
 
   linkClick();
+  
+  document.querySelector('form').addEventListener('submit', (e) => {
+    e.preventDefault();
+    animeLogin(true);
+  });
 };
 
 function linkClick() {
@@ -42,6 +48,44 @@ function linkClick() {
       Navigate(link.dataset.uri);
     });
   });
+}
+
+function animeLogin(isConnected) {
+  const borderColor = document.querySelector('.wrapper');
+  const inputsColor = document.querySelectorAll('.input-box input');
+
+  if (isConnected) {
+    inputsColor.forEach((input) => {
+      // eslint-disable-next-line no-param-reassign
+      input.style.borderColor = '#00FF00';
+      // eslint-disable-next-line no-param-reassign
+      input.style.animationName = 'changeColorGreen';
+      // eslint-disable-next-line no-param-reassign
+      input.style.animationDuration = '2s';
+    });
+
+    borderColor.style.borderColor = '#00FF00';
+    borderColor.style.animationName = 'changeColorGreen';
+    borderColor.style.animationDuration = '2s';
+  } else {
+    borderColor.style.borderColor = '#FF0000';
+    borderColor.style.animationName = 'changeColorRed';
+    borderColor.style.animationDuration = '2s';
+    inputsColor.forEach((input) => {
+      // eslint-disable-next-line no-param-reassign
+      input.style.borderColor = '#FF0000';
+      // eslint-disable-next-line no-param-reassign
+      input.style.animationName = 'changeColorRed';
+      // eslint-disable-next-line no-param-reassign
+      input.style.animationDuration = '2s';
+    });
+    anime({
+      targets: '.wrapper',
+      easing: 'linear',
+      duration: 150,
+      translateX: [{ value: 50 }, { value: -50 }],
+    });
+  }
 }
 
 export default RegisterPage;
