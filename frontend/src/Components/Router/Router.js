@@ -1,4 +1,5 @@
 import { removePathPrefix, usePathPrefix } from '../../utils/path-prefix';
+// eslint-disable-next-line import/no-cycle
 import routes from './routes';
 
 const Router = () => {
@@ -40,6 +41,13 @@ function onFrontendLoad() {
 
     componentToRender();
   });
-}
+}  
+
+export const navigateToHomePage = () => {
+  const homeComponent = routes['/'];
+  if (!homeComponent) throw Error(`The home ressource does not exist.`);
+    homeComponent();
+  window.history.pushState({}, '', usePathPrefix('/'));
+};
 
 export default Router;
