@@ -34,7 +34,7 @@ const RegisterPage = () => {
       </div>`;
 
   linkClick();
-  
+
   document.querySelector('form').addEventListener('submit', (e) => {
     e.preventDefault();
     animeLogin(true);
