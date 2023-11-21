@@ -3,8 +3,7 @@ import replayButton from '../../assets/replayButton.png';
 import homeButton from '../../assets/homeButton.png';
 import restartButton from '../../assets/restartButton.png';
 import parametersButton from '../../assets/parametersButton.png';
-// eslint-disable-next-line import/no-cycle
-import { navigateToHomePage } from '../Router/Router';
+import Navigate from '../Router/Navigate';
 
 
 const REPLAY_BUTTON = 'replay';
@@ -78,7 +77,7 @@ class PauseMenuScene extends Phaser.Scene {
 
     goHome() {
         this.scene.stop('pause-menu');
-        navigateToHomePage();
+        Navigate('/');
     }
 
     replayGame() {
