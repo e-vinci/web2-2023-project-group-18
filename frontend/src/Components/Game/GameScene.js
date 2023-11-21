@@ -80,7 +80,7 @@ class GameScene extends Phaser.Scene {
     }
 
     if (this.cursors.up.isDown && this.player.body.touching.down) {
-      this.player.setVelocityY(-360);
+      this.player.setVelocityY(-330);
     }
   }
 
@@ -88,14 +88,13 @@ class GameScene extends Phaser.Scene {
     const platforms = this.physics.add.staticGroup();
 
     platforms
-      .create(800, 660, GROUND_KEY)
+      .create(400, 568, GROUND_KEY)
       .setScale(5)
       .refreshBody();
 
     platforms.create(600, 400, GROUND_KEY);
     platforms.create(50, 250, GROUND_KEY);
-    platforms.create(820, 180, GROUND_KEY);
-    platforms.create(1200,350, GROUND_KEY);
+    platforms.create(750, 220, GROUND_KEY);
     return platforms;
   }
 
@@ -132,7 +131,7 @@ class GameScene extends Phaser.Scene {
   createStars() {
     const stars = this.physics.add.group({
       key: STAR_KEY,
-      repeat: 16,
+      repeat: 11,
       setXY: { x: 12, y: 0, stepX: 70 },
     });
 
