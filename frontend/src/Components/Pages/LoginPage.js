@@ -1,6 +1,5 @@
 import anime from 'animejs/lib/anime.es';
-// eslint-disable-next-line import/no-extraneous-dependencies
-import 'boxicons';
+
 
 import Navigate from '../Router/Navigate';
 
@@ -16,12 +15,12 @@ const LoginPage = () => {
             <h1>Login</h1>
             <div class="input-box">
               <input type="text" placeholder="Username" required>
-              <i class="bi bi-people"></i>
+              <i class='bx bxs-user'></i>
             </div>
 
             <div class="input-box">
               <input type="password" placeholder="Password" required>
-              <i class="bi bi-key-fill"></i>
+              <i class='bx bxs-lock-alt'></i>
             </div>
 
             <button type="submit" class="btn">Login</button>
