@@ -2,14 +2,12 @@ import Phaser from 'phaser';
 import replayButton from '../../assets/replayButton.png';
 import homeButton from '../../assets/homeButton.png';
 import restartButton from '../../assets/restartButton.png';
-import parametersButton from '../../assets/parametersButton.png';
 import Navigate from '../Router/Navigate';
 
 
 const REPLAY_BUTTON = 'replay';
 const HOME_BUTTON = 'home';
 const RESTART_BUTTON = 'restart';
-const PARAMETERS_BUTTON = 'parameters';
 
 
 class PauseMenuScene extends Phaser.Scene {
@@ -18,14 +16,12 @@ class PauseMenuScene extends Phaser.Scene {
         this.replayButton = undefined;
         this.homeButton = undefined;
         this.restartButton = undefined;
-        this.parametersButton = undefined;
     }
 
     preload () {
         this.load.image(REPLAY_BUTTON, replayButton);
         this.load.image(HOME_BUTTON, homeButton);
         this.load.image(RESTART_BUTTON, restartButton);
-        this.load.image(PARAMETERS_BUTTON, parametersButton);
     }
 
     create() {
@@ -62,12 +58,6 @@ class PauseMenuScene extends Phaser.Scene {
             this.replayGame();
         })
 
-        this.parametersButton = this.add.image(1500,600, PARAMETERS_BUTTON);
-        this.parametersButton.setScale(0.7);
-        this.parametersButton.setInteractive({useHandCursor: true});
-        this.parametersButton.on('pointerdown', () => {
-            this.goParameters();
-        })
     }
 
     restartGame() {
