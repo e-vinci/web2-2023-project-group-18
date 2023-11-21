@@ -89,7 +89,7 @@ class GameScene extends Phaser.Scene {
 
     platforms
       .create(400, 568, GROUND_KEY)
-      .setScale(5)
+      .setScale(2)
       .refreshBody();
 
     platforms.create(600, 400, GROUND_KEY);
