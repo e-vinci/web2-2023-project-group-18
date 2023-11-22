@@ -1,5 +1,6 @@
 import Phaser from 'phaser';
 import GameScene from '../Game/GameScene';
+import StartMenuScene from '../Game/StartMenuScene';
 
 let game;
 
@@ -13,8 +14,9 @@ const GamePage = () => {
 
   const config = {
     type: Phaser.AUTO,
-    width: 800,
-    height: 600,
+    width: 1536,
+    height: 650,
+    transparent: true,
     physics: {
       default: 'arcade',
       arcade: {
@@ -22,7 +24,7 @@ const GamePage = () => {
         debug: false,
       },
     },
-    scene: [GameScene],
+    scene: [StartMenuScene,GameScene],
     //  parent DOM element into which the canvas created by the renderer will be injected.
     parent: 'gameDiv',
   };
