@@ -14,7 +14,7 @@ const HomePage = () => {
     
     <div class= "menu">
         <h1>SantaFall</h1>
-        <h3>Let us slide</h3>
+        <h2>Let us slide</h2>
         <ul>
       <li><a class="nav-link" href="#" data-uri="/game">Play</a></li>
       <li><a class="nav-link" href="#" data-uri="/leaderboard">LeaderBoard</a></li>
