@@ -29,8 +29,6 @@ const HomePage = () => {
       <li><a class="nav-link" href="#" data-uri="/credit">Credits</a></li>
         </ul>
     </div>
-    <div>
-  </div>;
   </div>
 `;
 
