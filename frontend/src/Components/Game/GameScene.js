@@ -6,6 +6,7 @@ import platformAsset from '../../assets/platform.png';
 import starAsset from '../../assets/star.png';
 import bombAsset from '../../assets/bomb.png';
 import dudeAsset from '../../assets/dude.png';
+import Settings from '../../utils/settings';
 
 const GROUND_KEY = 'ground';
 const DUDE_KEY = 'dude';
@@ -49,6 +50,7 @@ class GameScene extends Phaser.Scene {
     this.physics.add.collider(this.player, bombsGroup, this.hitBomb, null, this);
     this.physics.add.overlap(this.player, this.stars, this.collectStar, null, this);
     this.cursors = this.input.keyboard.createCursorKeys();
+    this.key = this.input.keyboard.addKey('SPACE');
 
     /* The Collider takes two objects and tests for collision and performs separation against them.
     Note that we could call a callback in case of collision... */
@@ -57,6 +59,11 @@ class GameScene extends Phaser.Scene {
   update() {
     if (this.gameOver) {
       return;
+    }
+
+    const key = Settings.getKey();
+    if (key !== this.key.label) {
+      this.key = this.input.keyboard.addKey(key);
     }
 
     if (this.cursors.left.isDown) {
@@ -70,7 +77,7 @@ class GameScene extends Phaser.Scene {
       this.player.anims.play('turn');
     }
 
-    if (this.cursors.up.isDown && this.player.body.touching.down) {
+    if (this.key.isDown && this.player.body.touching.down) {
       this.player.setVelocityY(-330);
     }
   }

@@ -1,5 +1,6 @@
 import Phaser from 'phaser';
 import GameScene from '../Game/GameScene';
+import Settings from '../../utils/settings'
 
 let game;
 
@@ -31,6 +32,13 @@ const GamePage = () => {
   // therefore destroy any started game prior to recreate it
   if (game) game.destroy(true);
   game = new Phaser.Game(config);
+
+  
+  const backElement = document.querySelector('#gameDiv');
+  backElement.addEventListener('click', () =>{
+    Settings.openSettings();
+  })
 };
+
 
 export default GamePage;

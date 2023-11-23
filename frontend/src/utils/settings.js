@@ -1,10 +1,13 @@
-let key = "SPACE";
+let key = "ARROWUP";
 
-const SettingsPage = () => {
-    renderSettingsPage(key);
+const openSettings = () => {
+    renderSettings(key);
 }
 
-function renderSettingsPage(keysettings) {
+const getKey = () => key;
+
+
+function renderSettings(keysettings) {
     const main = document.querySelector('main');
 
     const overlay = document.createElement('div');
@@ -58,5 +61,5 @@ function renderSettingsPage(keysettings) {
     });
 }
 
-export default SettingsPage;
+export default {openSettings, getKey};
 
