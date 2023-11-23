@@ -1,5 +1,5 @@
 
-import anime from 'animejs/lib/anime.es';
+// import anime from 'animejs/lib/anime.es';
 
 import Navigate from '../Router/Navigate';
 
@@ -37,7 +37,7 @@ const HomePage = () => {
   main.innerHTML = mainHTML;
   isConnected(false);
   linkClick();
-  animeLinks();
+  // animeLinks();
 };
 
 function isConnected(params) {
@@ -70,23 +70,23 @@ function linkClick() {
   });
 }
 
-function animeLinks() {
-  const links = document.querySelectorAll('li');
+// function animeLinks() {
+//   const links = document.querySelectorAll('li');
 
-  const num = 500;
-  let cpt = 1;
-  links.forEach((link) => {
-    window.addEventListener(
-      'mouseover',
-      anime({
-        targets: link,
-        translateX: 50,
-        translateY: 100,
-        duration: num * cpt,
-      }),
-    );
-    cpt += 1;
-  });
-}
+//   const num = 500;
+//   let cpt = 1;
+//   links.forEach((link) => {
+//     window.addEventListener(
+//       'mouseover',
+//       anime({
+//         targets: link,
+//         translateX: 50,
+//         translateY: 100,
+//         duration: num * cpt,
+//       }),
+//     );
+//     cpt += 1;
+//   });
+// }
 
 export default HomePage;
