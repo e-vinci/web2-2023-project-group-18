@@ -40,6 +40,6 @@ function onFrontendLoad() {
 
     componentToRender();
   });
-}
+}  
 
 export default Router;
