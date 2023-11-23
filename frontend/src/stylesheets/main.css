@@ -1,3 +1,30 @@
+body {
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+/* Background and background animation */
+#background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 200%;
+  height: 100%;
+  background-image: url('../assets/BG.png');
+  background-size: 50% 100%;
+  animation: scrollBackground 50s linear infinite; /* Ajust the velocity of the animation */
+  z-index: -1;
+}
+
+@keyframes scrollBackground {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: -100% 0;
+  }
+}
 /*Home page*/
 body{
   margin: 0;
