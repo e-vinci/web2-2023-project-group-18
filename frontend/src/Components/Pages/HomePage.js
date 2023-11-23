@@ -35,7 +35,7 @@ const HomePage = () => {
 `;
 
   main.innerHTML = mainHTML;
-  isConnected(true);
+  isConnected(false);
   linkClick();
   animeLinks();
 };

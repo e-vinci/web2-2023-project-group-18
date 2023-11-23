@@ -1,8 +1,15 @@
+
+* {
+    font-family: "Pixel";
+    font-size: 30px;
+}
+
 body {
   margin: 0;
   padding: 0;
   overflow: hidden;
 }
+
 
 /* Background and background animation */
 #background {
@@ -26,13 +33,6 @@ body {
   }
 }
 /*Home page*/
-body{
-  margin: 0;
-  font-family: "Roboto", sans-serif;
-  background: url('../assets/background-image-4k.jpg') no-repeat;
-  background-size: cover ;
-
-}
 
 .screen {
   height: 100vh;
