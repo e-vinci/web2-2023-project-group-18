@@ -1,16 +1,12 @@
 
-
-html, body {
-    height: 100%;
-}
-
 * {
+    color: #fff;
     font-family: 'Pixel';
     font-size: 30px;
-    margin: 0;
-    padding: 0;
     box-sizing: border-box;
+    scroll-behavior: smooth;
 }
+
 /*Login Page + Register Page*/
 
 
@@ -258,15 +254,16 @@ display:none;
 }
 
 .credit{
-  text-align: center;
+  display: flex;
+  justify-content: space-evenly;
 }
 .credit li{
-  margin: 1em 0;
+  margin: 0.5em 0;
 }
 .credit li a {
   text-decoration: none;
   color: #ebebeb;
-  font-weight: 700;
+  font-weight: 70;
 }
 .credit li
 a:hover,
@@ -276,4 +273,43 @@ color: #dbdbdb;
 .credit ul{
   list-style: none;
   padding: 0;
+}
+
+
+.superCreditPage{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 60vh;
+}
+
+.creditPage {
+height: 950px;
+width: 800px;
+background: transparent;
+border: 6px solid rgba(255,255,225,.2);
+backdrop-filter: blur(10px);
+box-shadow: 0 0 5px rgba(0,0,0,.2);
+color:#fff ;
+border-radius: 10px;
+padding: 30px 40px;
+justify-content: space-evenly;
+}
+
+.h1Credit{
+  justify-content: center;
+  text-align: center;
+  font-size: 26px;
+}
+
+.creditPage div ul h3{
+  text-decoration: underline;
+  font-size: 20px;
+}
+
+.creditPage div li{
+  font-size: 18px;
+}
+.div-back{
+  width: 100px;
 }
