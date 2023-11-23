@@ -1,4 +1,9 @@
 
+
+html, body {
+    height: 100%;
+}
+
 * {
     font-family: 'Pixel';
     font-size: 30px;
@@ -130,6 +135,7 @@ border-color: transparent;
 }
 
 
+
 body {
   margin: 0;
   padding: 0;
@@ -158,6 +164,8 @@ body {
     background-position: -100% 0;
   }
 }
+
+
 /*Home page*/
 
 .screen {
