@@ -1,6 +1,5 @@
 import Phaser from 'phaser';
 import GameScene from '../Game/GameScene';
-import Settings from '../../utils/settings'
 
 let game;
 
@@ -33,11 +32,6 @@ const GamePage = () => {
   if (game) game.destroy(true);
   game = new Phaser.Game(config);
 
-  
-  const backElement = document.querySelector('#gameDiv');
-  backElement.addEventListener('click', () =>{
-    Settings.openSettings();
-  })
 };
 
 
