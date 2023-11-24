@@ -1,0 +1,15 @@
+
+### Basic url
+@baseUrl = http://localhost:3000/scores
+
+### Get all score in order [id, score]
+GET {{baseUrl}}/
+
+
+### put socres
+PUT {{baseUrl}}/2
+Content-Type: application/json
+
+{
+    "score": 125
+}
