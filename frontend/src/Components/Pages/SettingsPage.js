@@ -1,10 +1,47 @@
+let keyLabel = "SPACE";
 let key = "SPACE";
 
-const SettingsPage = () => {
-    renderSettingsPage(key);
+const phaserKeyMapping = {
+    ',': "COMMA",
+    '-': "MINUS",
+    '+': "PLUS",
+    ';': "SEMICOLON",
+    ':': "COLON",
+    '!': "EXCLAMATION_MARK",
+    '@': "AT",
+    '#': "HASH",
+    '$': "DOLLAR",
+    '%': "PERCENT",
+    '^': "CARET",
+    '&': "AMPERSAND",
+    '*': "ASTERISK",
+    '(': "OPEN_PAREN",
+    ')': "CLOSED_PAREN",
+    '_': "UNDERSCORE",
+    '=': "EQUALS",
+    '[': "OPEN_BRACKET",
+    ']': "CLOSED_BRACKET",
+    '{': "OPEN_BRACE",
+    '}': "CLOSED_BRACE",
+    '|': "PIPE",
+    '\\': "BACKSLASH",
+    '/': "FORWARD_SLASH",
+    '.': "PERIOD",
+    '<': "LESS_THAN",
+    '>': "GREATER_THAN",
+    '?': "QUESTION_MARK",
+    '`': "BACKTICK",
+    '~': "TILDE",
+    '"': "DOUBLE_QUOTE",
+    "'": "SINGLE_QUOTE",
+    " ": "SPACE"
 }
 
-function renderSettingsPage(keysettings) {
+const SettingsPage = () => {
+    renderSettingsPage();
+}
+
+function renderSettingsPage() {
     const main = document.querySelector('main');
 
     const overlay = document.createElement('div');
@@ -23,7 +60,7 @@ function renderSettingsPage(keysettings) {
                         <span>Change Key</span>
                     </div>
                     <div class="col-6 d-flex align-items-center justify-content-center">
-                        <button id="settings-key-button" class="btn btn-dark">${keysettings}</button>
+                        <button id="settings-key-button" class="btn btn-dark">${keyLabel}</button>
                     </div>
                 </div>
             </div>
@@ -42,9 +79,10 @@ function renderSettingsPage(keysettings) {
 
 
         function handleKeyDown(event) {
-            key = event.key.toUpperCase();
-            if(key === " ")
-                key = "SPACE"
+            keyLabel = event.key.toUpperCase();
+            key = event.key;
+            if(phaserKeyMapping[event.key])
+                key = phaserKeyMapping[event.key] 
             changeKeyButton.innerText = `${key}`;
             changeKeyButton.style.backgroundColor = '';
             changeKeyButton.removeEventListener("keydown", handleKeyDown, true);
