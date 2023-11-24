@@ -1,4 +1,4 @@
-import anime from 'animejs';
+import anime from 'animejs/lib/anime.es';
 
 // Get key saved in browser or space
 let key = localStorage.getItem('selectedKey') || "SPACE";
