@@ -11,7 +11,7 @@ const CreditPage = () => {
         <h1 class="h1Credit">Game Credits</h1>
         <br>
       <div class="credit">
-      
+      <br>
       <ul>
         <h3>Game Design :</h3>
         <li>Cattaruzza Alexis</li>
@@ -20,7 +20,7 @@ const CreditPage = () => {
         <li>Massart Xavier</li>
         <li>Ubah Chisom</li>
       </ul>
-
+      <br>
       <ul>
         <h3>Art & Animation :</h3>
         <li>Cattaruzza Alexis</li>
@@ -30,7 +30,7 @@ const CreditPage = () => {
         <li>Ubah Chisom</li>
       </ul>
       </div>
-      <br>
+      
       <div class="credit">
       <ul>
         <h3>Programming :</h3>
@@ -40,7 +40,7 @@ const CreditPage = () => {
         <li>Massart Xavier</li>
         <li>Ubah Chisom</li>
       </ul>
-
+  
       <ul>
         <h3>Sound Design :</h3>
         <li>Cattaruzza Alexis</li>
