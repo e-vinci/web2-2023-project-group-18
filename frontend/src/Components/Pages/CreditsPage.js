@@ -1,7 +1,7 @@
 import Navigate from '../Router/Navigate';
 
 
-const NewPage = () => {
+const CreditPage = () => {
   const main = document.querySelector('main')
   main.innerHTML = `<div class="div-back"><button id="link" class="back" type="button" data-uri="/"><i class='bx bx-arrow-back'></i></button></div>
   
@@ -66,17 +66,14 @@ const NewPage = () => {
       </div>
   `;
 
-  onClick();
+  linkClick();
 }
 
-function onClick() {
-
-  const button = document.querySelector('button');
-  button.addEventListener("load", (e) => {
-    e.preventDefault();
-    Navigate(e.target.dataset.uri)
+function linkClick() {
+  const link = document.querySelector('#link');
+  link.addEventListener('click', () => {
+    Navigate(link.dataset.uri);
   });
-  Navigate();
 }
 
-export default NewPage;
+export default CreditPage;
