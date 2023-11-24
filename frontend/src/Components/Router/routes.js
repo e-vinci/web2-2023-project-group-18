@@ -12,7 +12,7 @@ const routes = {
   '/register': RegisterPage,
   '/login':LoginPage,
   '/game': GamePage,
-  '/leaderboard': Leaderboard
+  '/leaderboard': Leaderboard,
 };
 
 export default routes;

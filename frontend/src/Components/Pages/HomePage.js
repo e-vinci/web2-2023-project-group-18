@@ -35,7 +35,7 @@ const HomePage = () => {
   main.innerHTML = mainHTML;
   isConnected(false);
   linkClick();
-  animeLinks();
+   animeLinks();
 };
 
 function isConnected(params) {
@@ -86,5 +86,6 @@ function linkClick() {
     cpt += 1;
    });
  }
+
 
 export default HomePage;
