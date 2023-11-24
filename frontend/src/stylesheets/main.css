@@ -7,7 +7,7 @@
     width: 100%;
 }
 
-.overlay {
+.settings-overlay {
     position: fixed;
     top: 0;
     left: 0;
@@ -17,7 +17,7 @@
     z-index: 9998; /* Inférieur à l'élément settings-page */
 }
 
-.close-settings-button {
+.settings-close-button {
     background-color: transparent;
     border: none;
     font-size: 2rem;
@@ -35,6 +35,6 @@
     z-index: 9999;
 }
 
-.error-key-settings {
+.settings-error-key {
     display: none;
 }

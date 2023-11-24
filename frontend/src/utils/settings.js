@@ -16,14 +16,14 @@ const openSettings = () => {
 
     // create a div that will contain the pop up settings
     const overlay = document.createElement('div');
-    overlay.className = 'overlay';
+    overlay.className = 'settings-overlay';
 
     overlay.innerHTML = `
     <div class="settings-page">
         <div class="d-flex align-items-center justify-content-center h-75">
             <div class="settings-frame card align-items-center p-3">
                 <h3 class="text-center mb-4">Keyboard setting</h3>
-                <button type="button" class="close close-settings-button position-absolute top-0 end-0 m-2" aria-label="Close">
+                <button type="button" class="close settings-close-button position-absolute top-0 end-0 m-2" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
                 <div class="row w-100">
@@ -34,7 +34,7 @@ const openSettings = () => {
                         <button id="settings-key-button" class="btn btn-dark">${key}</button>
                     </div>
                     <div class="d-flex justify-content-center text-danger mt-2">
-                        <span class="error-key-settings">This key cannot be assigned, choose another key</span>
+                        <span class="settings-error-key">This key cannot be assigned, choose another key</span>
                     </div>
                 </div>
             </div>
@@ -43,7 +43,7 @@ const openSettings = () => {
     `
     main.appendChild(overlay);
 
-    const closeButton = overlay.querySelector('.close-settings-button');
+    const closeButton = overlay.querySelector('.settings-close-button');
     const changeKeyButton = overlay.querySelector('#settings-key-button');
 
     // listener to change key
