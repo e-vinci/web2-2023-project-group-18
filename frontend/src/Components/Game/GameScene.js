@@ -62,7 +62,8 @@ class GameScene extends Phaser.Scene {
     }
 
     const key = Settings.getKey();
-    if (key !== this.key.label) {
+    if (Phaser.Input.Keyboard.KeyCodes[key] !== this.key.keyCode) {
+      this.key.destroy();
       this.key = this.input.keyboard.addKey(key);
     }
 
