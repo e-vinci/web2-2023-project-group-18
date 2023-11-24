@@ -52,14 +52,13 @@ class GameScene extends Phaser.Scene {
     this.physics.add.collider(this.player, bombsGroup, this.hitBomb, null, this);
     this.physics.add.overlap(this.player, this.stars, this.collectStar, null, this);
     this.cursors = this.input.keyboard.createCursorKeys();
-
+    this.key = this.input.keyboard.addKey('SPACE');
     this.pauseButton = this.add.image(1480,50,PAUSE_BUTTON);
     this.pauseButton.setInteractive({useHandCursor: true});
     this.pauseButton.setScale(0.8);
     this.pauseButton.on('pointerdown', () => {
       this.pauseGame();
     }); 
-    this.key = this.input.keyboard.addKey('SPACE');
 
     /* The Collider takes two objects and tests for collision and performs separation against them.
     Note that we could call a callback in case of collision... */
