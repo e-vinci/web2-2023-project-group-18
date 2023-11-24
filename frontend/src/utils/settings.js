@@ -1,15 +1,20 @@
-let key = "ARROWUP";
+import anime from 'animejs';
 
-const openSettings = () => {
-    renderSettings(key);
-}
+// Get key saved in browser or space
+let key = localStorage.getItem('selectedKey') || "SPACE";
+
+const keyNotSupported = ['!', '"', '#', '$', '%', '&', "'", '(', ')', '*', '+', ',', 
+    '-', '.', '/', ':', ';', '<', '=', '>', '?', '@', '[', '\\', ']', '^', '_', '`', '{', 
+    '|', '}', '~', 'µ', 'ù', '€', '£', '¤', '§', '°', '¨', '¦', '¨', '²', '³', 'Dead', '^^', 
+    '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', 'CapsLock'];
+
 
 const getKey = () => key;
 
-
-function renderSettings(keysettings) {
+const openSettings = () => {
     const main = document.querySelector('main');
 
+    // create a div that will contain the pop up settings
     const overlay = document.createElement('div');
     overlay.className = 'overlay';
 
@@ -26,28 +31,51 @@ function renderSettings(keysettings) {
                         <span>Change Key</span>
                     </div>
                     <div class="col-6 d-flex align-items-center justify-content-center">
-                        <button id="settings-key-button" class="btn btn-dark">${keysettings}</button>
+                        <button id="settings-key-button" class="btn btn-dark">${key}</button>
+                    </div>
+                    <div class="d-flex justify-content-center text-danger mt-2">
+                        <span class="error-key-settings">This key cannot be assigned, choose another key</span>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-
     `
     main.appendChild(overlay);
 
     const closeButton = overlay.querySelector('.close-settings-button');
     const changeKeyButton = overlay.querySelector('#settings-key-button');
 
+    // listener to change key
     changeKeyButton.addEventListener('click', () => {
         changeKeyButton.innerText = 'CHOOSE A KEY';
         changeKeyButton.style.backgroundColor = 'rgba(0, 0, 0, 0.6)';
 
-
+        // this is a function to be able to remove the listener once executed
         function handleKeyDown(event) {
-            key = event.key.toUpperCase();
-            if(key === " ")
-                key = "SPACE"
+            const borderColor = document.querySelector('.settings-frame');
+            const errorText = document.querySelector('.error-key-settings');
+
+            if(!keyNotSupported.includes(event.key)) {
+                key = event.key.toUpperCase();
+                key = key === " " ? "SPACE": key;
+
+                // Save key in browser
+                localStorage.setItem('selectedKey', key);
+
+                errorText.style.display = 'none';
+                borderColor.style.borderColor = '#FFFFFF';
+            } else {
+                errorText.style.display = 'block';
+                borderColor.style.borderColor = '#FF0000';
+
+                anime({
+                  targets: '.settings-frame',
+                  easing: 'linear',
+                  duration: 150,
+                  translateX: [{ value: 50 }, { value: 0 }],
+                });
+            }
             changeKeyButton.innerText = `${key}`;
             changeKeyButton.style.backgroundColor = '';
             changeKeyButton.removeEventListener("keydown", handleKeyDown, true);
