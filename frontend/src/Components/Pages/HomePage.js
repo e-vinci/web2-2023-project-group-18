@@ -30,6 +30,20 @@ const HomePage = () => {
         </ul>
     </div>
   </div>
+
+   <div id="cookies">
+      <div class= "container">
+        <div class="subcontainer">
+          <div class="cookies">
+            <p>
+              This app uses cookies to ensure you get the best experience on your website. 
+              <a href="">More info.</a>
+              <button id="cookies-btn">That's fine !</button>
+            </p>
+          </div>
+        </div>
+      </div>
+     </div>
 `;
 
   main.innerHTML = mainHTML;
