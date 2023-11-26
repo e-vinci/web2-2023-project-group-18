@@ -69,7 +69,7 @@ function renderShopPage(numberCoins) {
             <div class="row">
                 <h4 class="text-left">Coins: <span id="shop-coins"></span></h4>
                 <div class="col-md-6">
-                    <div class="shop-part border rounded p-3">
+                    <div class="shop-part p-3">
                     
                         <h2 class="text-center">Characters</h1>
 
@@ -84,7 +84,7 @@ function renderShopPage(numberCoins) {
                     </div>
                 </div>
                 <div class="col-md-6">
-                    <div class="shop-part border rounded p-3">
+                    <div class="shop-part p-3">
                         <h2 class="text-center">Themes</h1>
                         
                         <div id="theme-list"></div>
