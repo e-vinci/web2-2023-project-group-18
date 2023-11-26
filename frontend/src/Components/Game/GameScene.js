@@ -1,16 +1,18 @@
 import Phaser from 'phaser';
 import ScoreLabel from './ScoreLabel';
 import BombSpawner from './BombSpawner';
-import skyAsset from '../../assets/sky.png';
 import platformAsset from '../../assets/platform.png';
 import starAsset from '../../assets/star.png';
 import bombAsset from '../../assets/bomb.png';
 import dudeAsset from '../../assets/dude.png';
+import pauseButton from '../../assets/pauseButton.png';
+import Settings from '../../utils/settings';
 
 const GROUND_KEY = 'ground';
 const DUDE_KEY = 'dude';
 const STAR_KEY = 'star';
 const BOMB_KEY = 'bomb';
+const PAUSE_BUTTON  = 'pause';
 
 class GameScene extends Phaser.Scene {
   constructor() {
@@ -21,10 +23,10 @@ class GameScene extends Phaser.Scene {
     this.stars = undefined;
     this.bombSpawner = undefined;
     this.gameOver = false;
+    this.pauseButton = undefined;
   }
 
   preload() {
-    this.load.image('sky', skyAsset);
     this.load.image(GROUND_KEY, platformAsset);
     this.load.image(STAR_KEY, starAsset);
     this.load.image(BOMB_KEY, bombAsset);
@@ -33,14 +35,15 @@ class GameScene extends Phaser.Scene {
       frameWidth: 32,
       frameHeight: 48,
     });
+    this.load.image(PAUSE_BUTTON, pauseButton);
   }
 
   create() {
-    this.add.image(400, 300, 'sky');
     const platforms = this.createPlatforms();
     this.player = this.createPlayer();
     this.stars = this.createStars();
-    this.scoreLabel = this.createScoreLabel(16, 16, 0);
+    this.scoreLabel = this.createScoreLabel(20, 20, 0);
+    this.scoreLabel.setColor('#ffffff');
     this.bombSpawner = new BombSpawner(this, BOMB_KEY);
     const bombsGroup = this.bombSpawner.group;
     this.physics.add.collider(this.stars, platforms);
@@ -49,6 +52,13 @@ class GameScene extends Phaser.Scene {
     this.physics.add.collider(this.player, bombsGroup, this.hitBomb, null, this);
     this.physics.add.overlap(this.player, this.stars, this.collectStar, null, this);
     this.cursors = this.input.keyboard.createCursorKeys();
+    this.key = this.input.keyboard.addKey('SPACE');
+    this.pauseButton = this.add.image(1480,50,PAUSE_BUTTON);
+    this.pauseButton.setInteractive({useHandCursor: true});
+    this.pauseButton.setScale(0.8);
+    this.pauseButton.on('pointerdown', () => {
+      this.pauseGame();
+    }); 
 
     /* The Collider takes two objects and tests for collision and performs separation against them.
     Note that we could call a callback in case of collision... */
@@ -57,6 +67,12 @@ class GameScene extends Phaser.Scene {
   update() {
     if (this.gameOver) {
       return;
+    }
+
+    const key = Settings.getKey();
+    if (Phaser.Input.Keyboard.KeyCodes[key] !== this.key.keyCode) {
+      this.key.destroy();
+      this.key = this.input.keyboard.addKey(key);
     }
 
     if (this.cursors.left.isDown) {
@@ -70,7 +86,7 @@ class GameScene extends Phaser.Scene {
       this.player.anims.play('turn');
     }
 
-    if (this.cursors.up.isDown && this.player.body.touching.down) {
+    if (this.key.isDown && this.player.body.touching.down) {
       this.player.setVelocityY(-330);
     }
   }
@@ -149,7 +165,6 @@ class GameScene extends Phaser.Scene {
   createScoreLabel(x, y, score) {
     const style = { fontSize: '32px', fill: '#000' };
     const label = new ScoreLabel(this, x, y, score, style);
-    console.log('score:', label);
     this.add.existing(label);
 
     return label;
@@ -164,6 +179,11 @@ class GameScene extends Phaser.Scene {
     player.anims.play('turn');
 
     this.gameOver = true;
+  }
+
+  pauseGame() {
+    this.scene.pause();
+    this.scene.launch('pause-menu');
   }
 }
 

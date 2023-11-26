@@ -1,18 +1,58 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
+    <link rel="stylesheet" href="./stylesheets/main.css">
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-
-    <title>Your page title</title>
+    <title>SantaFall</title>
     <link rel="icon" href="./img/favicon.svg" type="image/svg+xml" />
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link href="https://db.onlinewebfonts.com/c/cae9571407321e5d5e496ada719e9f63?family=Pixel" rel="stylesheet">
   </head>
 
   <body>
     <div id="background"></div>
     <header><div id="navbarWrapper"></div></header>
-    <main></main>
+    <main>
+      <div class="superWrapper">
+        <div class="wrapper">
+          <form action="">
+            <h1>Register</h1>
+            <div class="input-box">
+              <input type="text" placeholder="Username" required>
+              <i class='bx bxs-user'></i>
+            </div>
+
+            <div class="input-box">
+              <input type="email" placeholder="Email Adresse" required>
+              <i class='bx bx-envelope'></i>
+            </div>
+
+            <div class="input-box">
+              <input type="password" placeholder="Password" required>
+              <i class='bx bxs-lock-alt'></i>
+            </div>
+            <div class="input-box">
+              <input type="password" placeholder="Password Verify" required>
+              <i class='bx bxs-lock-alt'></i>
+            </div>
+
+            <div>
+            
+                <input type="checkbox" required></input> I have read and I agree to the <a  id="link" href="#" data-uri="/">Privacy Policy</a>
+              
+            </div>
+
+            <br>
+            <button type="submit" class="btn">Register</button>
+
+            <div class="register-link">
+              <p>Already have an account ?<a id="link" data-uri="/login" href ="#"> Login here </a> </p>
+            </div>
+          </form>
+        </div>
+      </div>
+    </main>
     <footer></footer>
 
   </body>
