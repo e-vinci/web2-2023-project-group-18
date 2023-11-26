@@ -5,7 +5,6 @@ const CreditPage = () => {
   const main = document.querySelector('main')
   main.innerHTML = `<div class="div-back"><button id="link" class="back" type="button" data-uri="/"><i class='bx bx-arrow-back'></i></button></div>
   
-  <div class="scrollable-text">
       <div class="superCreditPage">
       <div class="creditPage">
         <h1 class="h1Credit">Game Credits</h1>
@@ -60,7 +59,6 @@ const CreditPage = () => {
         <li>Massart Xavier</li>
         <li>Ubah Chisom</li>
       </ul>
-      </div>
       </div>
       </div>
       </div>
