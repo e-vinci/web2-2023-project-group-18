@@ -391,7 +391,7 @@ bottom: 0;
 color: #fff;
 background-color:  #3e00b3;
 z-index: 1;
-/*display : none;*/
+display : none;
 }
 
 .cookies{

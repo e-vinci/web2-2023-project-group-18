@@ -50,7 +50,7 @@ const HomePage = () => {
   isConnected(false);
   linkClick();
   // animeLinks();
-  cookie();
+   cookie();
 };
 
 function isConnected(params) {
@@ -111,14 +111,37 @@ const setCookie = (cName, cValue, expdays) => {
   document.cookie = `${cName} = ${cValue}; ${expires}; path=/`;
 };
 
+
+const getCookie = (cName) => {
+  
+  const name = `${cName}=`;
+  const cDecoded = decodeURIComponent(document.cookie)
+  const cArr = cDecoded.split(";");
+  let value;
+
+  cArr.forEach(val => {
+    if (val.indexOf(name) === 0)
+      value = val.substring(name.length);
+  })
+  return value
+};
+
 function cookie() {
-  const divCookie = document.querySelector('#cookie');
-  const cookieRGPD = document.querySelector('#cookie-btn');
+
+  const divCookie = document.querySelector('#cookies');
+  const cookieRGPD = document.querySelector('#cookies-btn');
+
   cookieRGPD.addEventListener('click', () => {
     divCookie.style.display = 'none';
     setCookie('cookie', true, 30);
   });
 }
 
+const cookieMessage = () => { 
+  if (!getCookie("cookie"))
+    document.querySelector("#cookies").style.display = "block";
 
+};
+
+window.addEventListener("load", cookieMessage);
 export default HomePage;
