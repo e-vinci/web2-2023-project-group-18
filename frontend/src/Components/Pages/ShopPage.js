@@ -1,3 +1,4 @@
+import anime from 'animejs/lib/anime.es';
 import Navigate from '../Router/Navigate';
 import templateSkinImage from '../../assets/templateSkinShopPage.png';
 import templateMapImage from '../../assets/templateMapShopPage.png';
@@ -32,11 +33,12 @@ const themesList = [
     { name: "Jungle", price: 1500 }
 ];
 
-const skinsPerPage = 6;
-const themesPerPage = 6;
+const SKINS_PER_PAGE = 6;
+const THEMES_PER_PAGE = 6;
 let currentSkinPage = 1;
 let currentThemePage = 1;
 
+// for test
 const ownedSkins = ["dragon", "viper", "hydra", "wyvern"];
 const ownedThemes = ["snow", "meadow", "forest", "plain", "rock"];
 
@@ -58,18 +60,18 @@ function renderShopPage(numberCoins) {
     const mainContent = `
     <div id="shop-page">
         <br>
-        <div class="d-flex justify-content-between align-items-center position-relative m-3">
+        <div class="d-flex justify-content-between align-items-center position-relative m-3 mt-0 mb-0">
+            <button class="store-back-button btn-lg position-absolute bx bx-arrow-back" type="button"></button>
             <h1 class="mx-auto">Store</h1>
-            <button type="button" class="back store-back-button btn btn-primary btn-lg position-absolute top-0 end-0">Back</button>
         </div>
 
-        <div class="container mt-3 mb-4">
+        <div class="container mb-4">
             <div class="row">
-                <h4 class="text-left">Coins: ${numberCoins}</h4>
+                <h4 class="text-left">Coins: <span id="shop-coins"></span></h4>
                 <div class="col-md-6">
                     <div class="shop-part border rounded p-3">
                     
-                        <h1 class="text-center">Characters</h1>
+                        <h2 class="text-center">Characters</h1>
 
                         <div id="skin-list"></div>
 
@@ -83,7 +85,7 @@ function renderShopPage(numberCoins) {
                 </div>
                 <div class="col-md-6">
                     <div class="shop-part border rounded p-3">
-                        <h1 class="text-center">Themes</h1>
+                        <h2 class="text-center">Themes</h1>
                         
                         <div id="theme-list"></div>
 
@@ -97,16 +99,28 @@ function renderShopPage(numberCoins) {
                 </div>
             </div>
         </div>
-        <br>
     </div>
     `
 
     main.innerHTML = mainContent;
+
+    const coins = document.querySelector('#shop-coins');
+
+    anime({
+        targets: coins,
+        innerHTML: [0, numberCoins],
+        easing: 'linear',
+        round: 10,
+        update(anim) {
+            coins.innerHTML = anim.animations[0].currentValue.toFixed(0); 
+        }
+    });
+
 }
 
 function displayCurrentSkinPage(ownSkins) {
-    const startIndex = (currentSkinPage - 1) * skinsPerPage;
-    const endIndex = startIndex + skinsPerPage;
+    const startIndex = (currentSkinPage - 1) * SKINS_PER_PAGE;
+    const endIndex = startIndex + SKINS_PER_PAGE;
     const currentSkins = skinsList.slice(startIndex, endIndex);
 
     const skinListPage = document.getElementById('skin-list');
@@ -137,13 +151,13 @@ function displayCurrentSkinPage(ownSkins) {
         skinHTML += '</div><br>';
     }
 
-    skinPageNumber.innerHTML = `< ${currentSkinPage} > on < ${Math.ceil(skinsList.length/skinsPerPage)} >`;
+    skinPageNumber.innerHTML = `< ${currentSkinPage} > on < ${Math.ceil(skinsList.length/SKINS_PER_PAGE)} >`;
     skinListPage.innerHTML = skinHTML;
 }
 
 function displayCurrentThemePage(ownThemes) {
-    const startIndex = (currentThemePage - 1) * themesPerPage;
-    const endIndex = startIndex + themesPerPage;
+    const startIndex = (currentThemePage - 1) * THEMES_PER_PAGE;
+    const endIndex = startIndex + THEMES_PER_PAGE;
     const currentThemes = themesList.slice(startIndex, endIndex);
 
     const themeListPage = document.getElementById('theme-list');
@@ -174,13 +188,13 @@ function displayCurrentThemePage(ownThemes) {
         themeHTML += '</div><br>';
     }
 
-    themePageNumber.innerHTML = `< ${currentThemePage} > on < ${Math.ceil(themesList.length/themesPerPage)} >`;
+    themePageNumber.innerHTML = `< ${currentThemePage} > on < ${Math.ceil(themesList.length/THEMES_PER_PAGE)} >`;
     themeListPage.innerHTML = themeHTML;
 }
 
 function changePageListenner() {
     document.querySelector('#next-change-skin-page').addEventListener('click', () => {
-        if (currentSkinPage < skinsList.length/skinsPerPage) {
+        if (currentSkinPage < skinsList.length/SKINS_PER_PAGE) {
             currentSkinPage += 1;
             displayCurrentSkinPage(ownedSkins);
         }
@@ -194,7 +208,7 @@ function changePageListenner() {
     });
 
     document.querySelector('#next-change-theme-page').addEventListener('click', () => {
-        if (currentThemePage < themesList.length/themesPerPage) {
+        if (currentThemePage < themesList.length/THEMES_PER_PAGE) {
             currentThemePage += 1;
             displayCurrentThemePage(ownedThemes);
         }
@@ -209,7 +223,7 @@ function changePageListenner() {
 }
 
 function backListenner() {
-    const backElement = document.querySelector('.back');
+    const backElement = document.querySelector('.store-back-button ');
     backElement.addEventListener('click', () =>{
         Navigate('/');
     })

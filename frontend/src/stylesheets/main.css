@@ -50,14 +50,14 @@
 }
 
 .store-back-button {
-    background-color: rgb(43, 75, 141);
+    font-size: 85px;
+    color: white;
+    background-color: transparent;
     border: 0px;
+    padding: 0px;
 }
 .store-back-button:hover {
-    background-color: rgb(29, 51, 95);
-}
-.store-back-button:not(:disabled):not(.disabled):active {
-    background-color: rgb(24, 42, 78);
+    color: rgb(193, 193, 193);
 }
 
 .store-picture {
