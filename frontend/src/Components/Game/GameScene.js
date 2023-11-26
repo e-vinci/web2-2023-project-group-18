@@ -100,15 +100,16 @@ class GameScene extends Phaser.Scene {
   createSlope() {
     const platforms = this.physics.add.staticGroup();
 
-    const tileWidth = 70; // Largeur de la tuile en pixels
-    const tileHeight = 70; // Hauteur de la tuile en pixels
-    const numColumns = 10; // Nombre de colonnes pour l'escalier
+    const tileWidth = 70; // Width of the tile in pixels
+    const tileHeight = 70; // Height of the tile in pixels
+    const numColumns = 10; // Number of columns for the slope
 
-    const x = 0; // Position horizontale initiale
-    let y = 800 - tileHeight; // Position verticale initiale
+    const x = 0; // Initial horizontal position
+    let y = 800 - tileHeight; // Desired vertical position
 
-    for (let i = numColumns; i > 0; i--) {
-        for (let j = 0; j < i; j++) {
+    for (let i = numColumns; i > 0; i -= 1) {
+        let j = 0;
+        while (j < i) {
             let key = GROUND_KEY;
 
             if (j === i - 2) {
@@ -118,16 +119,23 @@ class GameScene extends Phaser.Scene {
             }
 
             const platform = platforms.create(x + j * tileWidth, y, key);
-            platform.setOrigin(0, 0); // Ajuste l'origine de chaque tuile
+            platform.setOrigin(0, 0); // Set the origin of each tile
+            j += 1;
+
+            // Using a custom shape for the hitbox of triangles (SLOPE1_KEY)
+            if (key === SLOPE1_KEY) {
+              this.physics. add.collider(platform, null, () => new Phaser.Geom.Triangle(0, tileHeight, tileWidth, tileHeight, tileWidth / 2, 0), null, this);
+            }
+
         }
-        y -= tileHeight; // Déplace la position verticale vers le haut pour la prochaine colonne
+        y -= tileHeight; // Move the vertical position upwards for the next column
     }
 
-    return platforms; // Renvoie le groupe de plateformes (escalier)
+    return platforms; // Return the group of platforms (staircase)
 }
 
   createPlayer() {
-    const player = this.physics.add.sprite(100, 450, DUDE_KEY);
+    const player = this.physics.add.sprite(30, 30, DUDE_KEY);
     player.setBounce(0.2);
     player.setCollideWorldBounds(true);
     /* The 'left' animation uses frames 0, 1, 2 and 3 and runs at 10 frames per second.
