@@ -1,13 +1,17 @@
 import Phaser from 'phaser';
 import ScoreLabel from './ScoreLabel';
 import BombSpawner from './BombSpawner';
-import platformAsset from '../../assets/platform.png';
 import starAsset from '../../assets/star.png';
 import bombAsset from '../../assets/bomb.png';
 import dudeAsset from '../../assets/dude.png';
 import pauseButton from '../../assets/pauseButton.png';
 import Settings from '../../utils/settings';
+import slope1Asset from '../../assets/winterTiles/tundraHillRight.png';
+import slope2Asset from '../../assets/winterTiles/tundraHillRight2.png';
+import groundAsset from '../../assets/winterTiles/tundraCenter.png';
 
+const SLOPE1_KEY = 'slope1';
+const SLOPE2_KEY = 'slope2';
 const GROUND_KEY = 'ground';
 const DUDE_KEY = 'dude';
 const STAR_KEY = 'star';
@@ -27,7 +31,9 @@ class GameScene extends Phaser.Scene {
   }
 
   preload() {
-    this.load.image(GROUND_KEY, platformAsset);
+    this.load.image(SLOPE1_KEY, slope1Asset);
+    this.load.image(SLOPE2_KEY, slope2Asset);
+    this.load.image(GROUND_KEY, groundAsset);
     this.load.image(STAR_KEY, starAsset);
     this.load.image(BOMB_KEY, bombAsset);
 
@@ -39,16 +45,16 @@ class GameScene extends Phaser.Scene {
   }
 
   create() {
-    const platforms = this.createPlatforms();
+    const slope = this.createSlope();
     this.player = this.createPlayer();
     this.stars = this.createStars();
     this.scoreLabel = this.createScoreLabel(20, 20, 0);
     this.scoreLabel.setColor('#ffffff');
     this.bombSpawner = new BombSpawner(this, BOMB_KEY);
     const bombsGroup = this.bombSpawner.group;
-    this.physics.add.collider(this.stars, platforms);
-    this.physics.add.collider(this.player, platforms);
-    this.physics.add.collider(bombsGroup, platforms);
+    this.physics.add.collider(this.stars, slope);
+    this.physics.add.collider(this.player, slope);
+    this.physics.add.collider(bombsGroup, slope);
     this.physics.add.collider(this.player, bombsGroup, this.hitBomb, null, this);
     this.physics.add.overlap(this.player, this.stars, this.collectStar, null, this);
     this.cursors = this.input.keyboard.createCursorKeys();
@@ -91,19 +97,34 @@ class GameScene extends Phaser.Scene {
     }
   }
 
-  createPlatforms() {
+  createSlope() {
     const platforms = this.physics.add.staticGroup();
 
-    platforms
-      .create(400, 568, GROUND_KEY)
-      .setScale(2)
-      .refreshBody();
+    const tileWidth = 70; // Largeur de la tuile en pixels
+    const tileHeight = 70; // Hauteur de la tuile en pixels
+    const numColumns = 10; // Nombre de colonnes pour l'escalier
 
-    platforms.create(600, 400, GROUND_KEY);
-    platforms.create(50, 250, GROUND_KEY);
-    platforms.create(750, 220, GROUND_KEY);
-    return platforms;
-  }
+    const x = 0; // Position horizontale initiale
+    let y = 800 - tileHeight; // Position verticale initiale
+
+    for (let i = numColumns; i > 0; i--) {
+        for (let j = 0; j < i; j++) {
+            let key = GROUND_KEY;
+
+            if (j === i - 2) {
+                key = SLOPE2_KEY;
+            } else if (j === i - 1) {
+                key = SLOPE1_KEY;
+            }
+
+            const platform = platforms.create(x + j * tileWidth, y, key);
+            platform.setOrigin(0, 0); // Ajuste l'origine de chaque tuile
+        }
+        y -= tileHeight; // Déplace la position verticale vers le haut pour la prochaine colonne
+    }
+
+    return platforms; // Renvoie le groupe de plateformes (escalier)
+}
 
   createPlayer() {
     const player = this.physics.add.sprite(100, 450, DUDE_KEY);
