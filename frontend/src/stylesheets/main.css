@@ -16,7 +16,7 @@
     font-weight: bold;
 }
 
-.store-buy-button {
+.shop-buy-button {
     width: 100%;
     background-color: rgb(43, 75, 141);
     color: white;
@@ -25,14 +25,14 @@
     border-top-right-radius: 0px;
     border-top-left-radius: 0px;
 }
-.store-buy-button:hover {
+.shop-buy-button:hover {
     background-color: rgb(29, 51, 95);
 }
-.store-buy-button:not(:disabled):not(.disabled):active {
+.shop-buy-button:not(:disabled):not(.disabled):active {
     background-color: rgb(24, 42, 78);
 }
 
-.store-own-button {
+.shop-own-button {
     width: 100%;
     background-color: rgb(135, 135, 135);
     color: white;
@@ -41,25 +41,25 @@
     border-top-right-radius: 0px;
     border-top-left-radius: 0px;
 }
-.store-own-button:hover {
+.shop-own-button:hover {
     background-color: rgb(97, 97, 97);
 }
-.store-own-button:not(:disabled):not(.disabled):active {
+.shop-own-button:not(:disabled):not(.disabled):active {
     background-color: rgb(64, 64, 64);
 }
 
-.store-back-button {
+.shop-back-button {
     font-size: 85px;
     color: white;
     background-color: transparent;
     border: 0px;
     padding: 0px;
 }
-.store-back-button:hover {
+.shop-back-button:hover {
     color: rgb(193, 193, 193);
 }
 
-.store-picture {
+.shop-picture {
     border-top-right-radius: 5px;
     border-top-left-radius: 5px;
 }

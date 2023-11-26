@@ -61,8 +61,8 @@ function renderShopPage(numberCoins) {
     <div id="shop-page">
         <br>
         <div class="d-flex justify-content-between align-items-center position-relative m-3 mt-0 mb-0">
-            <button class="store-back-button btn-lg position-absolute bx bx-arrow-back" type="button"></button>
-            <h1 class="mx-auto">Store</h1>
+            <button class="shop-back-button btn-lg position-absolute bx bx-arrow-back" type="button"></button>
+            <h1 class="mx-auto">Shop</h1>
         </div>
 
         <div class="container mb-4">
@@ -136,14 +136,14 @@ function displayCurrentSkinPage(ownSkins) {
 
             let typeButton;
             if (ownSkins.includes(skin.name.toLowerCase()))
-                typeButton = `<button type="button" class="btn store-own-button">Choose</button>`;
+                typeButton = `<button type="button" class="btn shop-own-button">Choose</button>`;
             else
-                typeButton = `<button type="button" class="btn store-buy-button">${skin.price} coins</button>`;
+                typeButton = `<button type="button" class="btn shop-buy-button">${skin.price} coins</button>`;
 
             skinHTML += `
                 <div class="col-md-4 text-center">
                     <h3>${skin.name}</h3>
-                    <img class="w-100 store-picture" src="${templateSkinImage}" alt="skin picture ${skin.name}" draggable="false">
+                    <img class="w-100 shop-picture" src="${templateSkinImage}" alt="skin picture ${skin.name}" draggable="false">
                     ${typeButton}
                 </div>`;
         }
@@ -173,14 +173,14 @@ function displayCurrentThemePage(ownThemes) {
 
             let typeButton;
             if (ownThemes.includes(theme.name.toLowerCase()))
-                typeButton = `<button type="button" class="btn store-own-button">Choose</button>`;
+                typeButton = `<button type="button" class="btn shop-own-button">Choose</button>`;
             else
-                typeButton = `<button type="button" class="btn store-buy-button">${theme.price} coins</button>`;
+                typeButton = `<button type="button" class="btn shop-buy-button">${theme.price} coins</button>`;
 
             themeHTML += `
                 <div class="col-md-4 text-center">
                     <h3>${theme.name}</h3>
-                    <img class="w-100 store-picture" src="${templateMapImage}" alt="theme picture ${theme.name}">
+                    <img class="w-100 shop-picture" src="${templateMapImage}" alt="theme picture ${theme.name}">
                     ${typeButton}
                 </div>`;
         }
@@ -223,7 +223,7 @@ function changePageListenner() {
 }
 
 function backListenner() {
-    const backElement = document.querySelector('.store-back-button ');
+    const backElement = document.querySelector('.shop-back-button ');
     backElement.addEventListener('click', () =>{
         Navigate('/');
     })
