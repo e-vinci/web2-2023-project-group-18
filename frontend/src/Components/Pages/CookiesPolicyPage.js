@@ -77,7 +77,6 @@ const CookiesPolicyPage = () => {
 `;
    
    linkClick();
-   cookie();
 };
 function linkClick() {
   const link = document.querySelector('#link');
@@ -86,20 +85,5 @@ function linkClick() {
   });
 }
 
-const setCookie = (cName, cValue, expdays) => {
-   const date = new Date();
-   date.setTime(date.getTime() + (expdays * 24 * 60 * 60 * 1000));
-   const expires = `expires=${  date.toUTCString()}`;
-   document.cookie = `${cName} = ${cValue}; ${expires}; path=/`;
-};
-
-function cookie() {
-   const divCookie = document.querySelector('#cookie');
-   const cookieRGPD = document.querySelector('#cookie-btn');
-   cookieRGPD.addEventListener("click", () => {
-      divCookie.style.display = 'none';
-      setCookie("cookie", true, 30);
-   } )
-}
 
 export default CookiesPolicyPage;
