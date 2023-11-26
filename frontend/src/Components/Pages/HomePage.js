@@ -49,7 +49,7 @@ const HomePage = () => {
   main.innerHTML = mainHTML;
   isConnected(false);
   linkClick();
-  //  animeLinks();
+  // animeLinks();
 };
 
 function isConnected(params) {
@@ -82,14 +82,14 @@ function linkClick() {
   });
 }
 
-//  function animeLinks() {
-//    const links = document.querySelectorAll('li');
+//   function animeLinks() {
+//     const links = document.querySelectorAll('li');
 
-//     const num = 500;
-//    let cpt = 1;
-//    links.forEach((link) => {
+//      const num = 500;
+//      let cpt = 1;
+//      links.forEach((link) => {
 //      window.addEventListener(
-//        'mouseover',
+//         'mouseover',
 //        anime({
 //          targets: link,
 //          translateX: 50,
