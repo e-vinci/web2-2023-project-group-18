@@ -76,9 +76,9 @@ function renderShopPage(numberCoins) {
                         <div id="skin-list"></div>
 
                         <div class="d-flex justify-content-center mt-3">
-                            <button type="button" id="previous-change-skin-page" class="change-page-button me-2">PREVIOUS</button>
+                            <button type="button" id="previous-change-skin-page" class="shop-change-page-button me-2">PREVIOUS</button>
                             <span id="skin-page-number" class="me-2"></span>
-                            <button type="button" id="next-change-skin-page" class="change-page-button">NEXT</button>
+                            <button type="button" id="next-change-skin-page" class="shop-change-page-button">NEXT</button>
                         </div>
 
                     </div>
@@ -90,9 +90,9 @@ function renderShopPage(numberCoins) {
                         <div id="theme-list"></div>
 
                         <div class="d-flex justify-content-center mt-3">
-                            <button type="button" id="previous-change-theme-page" class="change-page-button me-2">PREVIOUS</button>
+                            <button type="button" id="previous-change-theme-page" class="shop-change-page-button me-2">PREVIOUS</button>
                             <span id="theme-page-number" class="me-2"></span>
-                            <button type="button" id="next-change-theme-page" class="change-page-button">NEXT</button>
+                            <button type="button" id="next-change-theme-page" class="shop-change-page-button">NEXT</button>
                         </div>
 
                     </div>

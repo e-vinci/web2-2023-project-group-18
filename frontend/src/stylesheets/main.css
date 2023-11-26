@@ -5,14 +5,14 @@
     font-family: "Roboto", sans-serif;
 }
 
-.change-page-button {
+.shop-change-page-button {
     color: white;
     border: none;
     background: none;
     font-weight: normal;
     transition: font-weight 0.3s ease;
 }
-.change-page-button:hover {
+.shop-change-page-button:hover {
     font-weight: bold;
 }
 
