@@ -5,6 +5,7 @@ import LoginPage from '../Pages/LoginPage';
 import RegisterPage from '../Pages/RegisterPage';
 import CreditsPage from '../Pages/CreditsPage'
 import PrivatePolicyPage from '../Pages/PrivatePolicyPage';
+import CookiesPolicyPage from '../Pages/CookiesPolicyPage';
 
 
 const routes = {
@@ -14,7 +15,8 @@ const routes = {
   '/login':LoginPage,
   '/game': GamePage,
   '/leaderboard': Leaderboard,
-  '/private-policy':PrivatePolicyPage,
+  '/private-policy': PrivatePolicyPage,
+  '/cookies-policy': CookiesPolicyPage,
 };
 
 export default routes;

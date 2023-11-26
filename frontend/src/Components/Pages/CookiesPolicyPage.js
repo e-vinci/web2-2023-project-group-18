@@ -1,7 +1,16 @@
+import Navigate from "../Router/Navigate";
+
 const CookiesPolicyPage = () => {
    
    const main = document.querySelector('main');
-   main.innerHTML = `<h1>Cookies Policy</h1>
+   main.innerHTML = `
+   <div class="div-back">
+        <button id="link" class="back" type="button" data-uri="/"><i class='bx bx-arrow-back'></i></button>
+      </div>
+<div class="superPrivatePolicyPage">
+<div class="privatePolicyPage">
+   
+   <h1>Cookies Policy</h1>
 <p>Last updated: November 26, 2023</p>
 <p>This Cookies Policy explains what Cookies are and how We use them. You should read this policy so You can understand what type of cookies We use, or the information We collect using Cookies and how that information is used. This Cookies Policy has been created with the help of the <a href="https://www.termsfeed.com/cookies-policy-generator/" target="_blank">Cookies Policy Generator</a>.</p>
 <p>Cookies do not typically contain any information that personally identifies a user, but personal information that we store about You may be linked to the information stored in and obtained from Cookies. For further information on how We use, store and keep your personal data secure, see our Privacy Policy.</p>
@@ -60,7 +69,37 @@ const CookiesPolicyPage = () => {
 <p>If you have any questions about this Cookies Policy, You can contact us:</p>
 <ul>
 <li>By email: office@santafall.com</li>
-</ul>`;
+</ul>
+
+</div>
+</div>
+
+`;
+   
+   linkClick();
+   cookie();
 };
+function linkClick() {
+  const link = document.querySelector('#link');
+  link.addEventListener('click', () => {
+    Navigate(link.dataset.uri);
+  });
+}
+
+const setCookie = (cName, cValue, expdays) => {
+   const date = new Date();
+   date.setTime(date.getTime() + (expdays * 24 * 60 * 60 * 1000));
+   const expires = `expires=${  date.toUTCString()}`;
+   document.cookie = `${cName} = ${cValue}; ${expires}; path=/`;
+};
+
+function cookie() {
+   const divCookie = document.querySelector('#cookie');
+   const cookieRGPD = document.querySelector('#cookie-btn');
+   cookieRGPD.addEventListener("click", () => {
+      divCookie.style.display = 'none';
+      setCookie("cookie", true, 30);
+   } )
+}
 
 export default CookiesPolicyPage;

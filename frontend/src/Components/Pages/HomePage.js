@@ -37,7 +37,7 @@ const HomePage = () => {
           <div class="cookies">
             <p>
               This app uses cookies to ensure you get the best experience on your website. 
-              <a href="">More info.</a>
+              <a class="nav-link" href="#" data-uri = "/cookies-policy" >More info.</a>
               <button id="cookies-btn">That's fine !</button>
             </p>
           </div>
