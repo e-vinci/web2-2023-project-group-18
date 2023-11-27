@@ -1,4 +1,6 @@
 import anime from 'animejs/lib/anime.es';
+// eslint-disable-next-line import/no-extraneous-dependencies
+import bcrypt from 'bcryptjs'
 import Navigate from '../Router/Navigate';
 
 const RegisterPage = () => {
@@ -45,6 +47,8 @@ const RegisterPage = () => {
       </div>`;
 
   linkClick();
+  errorMessage();
+  hashPassword();
 
   document.querySelector('form').addEventListener('submit', (e) => {
     e.preventDefault();
