@@ -102,34 +102,43 @@ class GameScene extends Phaser.Scene {
 
     const tileWidth = 70; // Width of the tile in pixels
     const tileHeight = 70; // Height of the tile in pixels
-    const numColumns = 10; // Number of columns for the slope
+    const numRows = 10;
 
-    const x = 0; // Initial horizontal position
-    let y = 800 - tileHeight; // Desired vertical position
+    let y = tileHeight; // Desired vertical position
 
-    for (let i = numColumns; i > 0; i -= 1) {
+    for (let i = 0; i < numRows; i += 1) {
         let j = 0;
-        while (j < i) {
+        while (j <= i) {
             let key = GROUND_KEY;
 
-            if (j === i - 2) {
+            if (j === i-1) {
                 key = SLOPE2_KEY;
-            } else if (j === i - 1) {
+            } else if (j === i) {
                 key = SLOPE1_KEY;
             }
 
-            const platform = platforms.create(x + j * tileWidth, y, key);
+            const platform = platforms.create(j * tileWidth, y, key);
             platform.setOrigin(0, 0); // Set the origin of each tile
             j += 1;
-
-            // Using a custom shape for the hitbox of triangles (SLOPE1_KEY)
-            if (key === SLOPE1_KEY) {
-              this.physics. add.collider(platform, null, () => new Phaser.Geom.Triangle(0, tileHeight, tileWidth, tileHeight, tileWidth / 2, 0), null, this);
-            }
-
         }
-        y -= tileHeight; // Move the vertical position upwards for the next column
+        y += tileHeight; // Move the vertical position upwards for the next column
     }
+
+    // Défilement des plateformes vers haut gauche
+    this.time.addEvent({
+      delay: 50, // Délai entre chaque itération de déplacement (en ms)
+      callback: () => {
+          platforms.getChildren().forEach(child => {
+              const platform = child;
+              platform.x -= 1; // Déplacement vers la gauche
+              platform.y -= 1; // Déplacement vers le haut
+              if (platform.x < -tileHeight) {
+                platform.destroy();
+            }
+    });
+      },
+      loop: true // Définir la boucle pour un défilement continu
+  });
 
     return platforms; // Return the group of platforms (staircase)
 }
