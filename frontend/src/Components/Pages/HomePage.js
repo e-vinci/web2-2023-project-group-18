@@ -50,7 +50,7 @@ const HomePage = () => {
   isConnected(false);
   linkClick();
   // animeLinks();
-   cookie();
+   // cookie();
 };
 
 function isConnected(params) {
@@ -77,6 +77,7 @@ function linkClick() {
   const links = document.querySelectorAll('.nav-link');
   links.forEach((link) => {
     link.addEventListener('click', (e) => {
+      e.preventDefault();
       Navigate(e.target.dataset.uri);
       // ou Navigate(link.dataset.uri);
     });
@@ -104,44 +105,44 @@ function linkClick() {
 
 
 
-const setCookie = (cName, cValue, expdays) => {
-  const date = new Date();
-  date.setTime(date.getTime() + expdays * 24 * 60 * 60 * 1000);
-  const expires = `expires=${date.toUTCString()}`;
-  document.cookie = `${cName} = ${cValue}; ${expires}; path=/`;
-};
+// const setCookie = (cName, cValue, expdays) => {
+//   const date = new Date();
+//   date.setTime(date.getTime() + expdays * 24 * 60 * 60 * 1000);
+//   const expires = `expires=${date.toUTCString()}`;
+//   document.cookie = `${cName} = ${cValue}; ${expires}; path=/`;
+// };
 
 
-const getCookie = (cName) => {
+// const getCookie = (cName) => {
   
-  const name = `${cName}=`;
-  const cDecoded = decodeURIComponent(document.cookie)
-  const cArr = cDecoded.split(";");
-  let value;
+//   const name = `${cName}=`;
+//   const cDecoded = decodeURIComponent(document.cookie)
+//   const cArr = cDecoded.split(";");
+//   let value;
 
-  cArr.forEach(val => {
-    if (val.indexOf(name) === 0)
-      value = val.substring(name.length);
-  })
-  return value
-};
+//   cArr.forEach(val => {
+//     if (val.indexOf(name) === 0)
+//       value = val.substring(name.length);
+//   })
+//   return value
+// };
 
-function cookie() {
+// function cookie() {
 
-  const divCookie = document.querySelector('#cookies');
-  const cookieRGPD = document.querySelector('#cookies-btn');
+//   const divCookie = document.querySelector('#cookies');
+//   const cookieRGPD = document.querySelector('#cookies-btn');
 
-  cookieRGPD.addEventListener('click', () => {
-    divCookie.style.display = 'none';
-    setCookie('cookie', true, 30);
-  });
-}
+//   cookieRGPD.addEventListener('click', () => {
+//     divCookie.style.display = 'none';
+//     setCookie('cookie', true, 30);
+//   });
+// }
 
-const cookieMessage = () => { 
-  if (!getCookie("cookie"))
-    document.querySelector("#cookies").style.display = "block";
+// const cookieMessage = () => { 
+//   if (!getCookie("cookie"))
+//     document.querySelector("#cookies").style.display = "block";
 
-};
+// };
 
-window.addEventListener("load", cookieMessage);
+// window.addEventListener("load", cookieMessage);
 export default HomePage;
