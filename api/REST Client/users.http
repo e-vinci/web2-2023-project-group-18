@@ -1,0 +1,16 @@
+
+### Basic url
+@baseUrl = http://localhost:3000/users
+
+### get user
+GET {{baseUrl}}/3
+
+
+### create new user
+POST {{baseUrl}}/
+Content-Type: application/json
+
+{
+   "username": "USUSUSUS",
+   "password": "PASSWORD_TEST"
+}
