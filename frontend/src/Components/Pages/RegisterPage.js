@@ -45,6 +45,7 @@ const RegisterPage = () => {
       </div>`;
 
   linkClick();
+  errorMessage()
 
   document.querySelector('form').addEventListener('submit', (e) => {
     e.preventDefault();
@@ -97,11 +98,10 @@ function animeLogin(isConnected) {
       translateX: [{ value: 50 }, { value: -50 }],
     });
   }
+}
 
-
-  /**
-   * en cas d'erreur;
-   */
+function errorMessage(errors) {
+  
 }
 
 export default RegisterPage;
