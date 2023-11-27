@@ -28,6 +28,9 @@ const LoginPage = () => {
             <div class="register-link">
               <p>Not register yet ? <a id="link" data-uri="/register" href ="#">Register</a> </p>
             </div>
+            <br>
+            <div class="errorMessage">
+            </div>
           </form>
         </div>
       </div>`;
@@ -69,7 +72,8 @@ function animeLogin(isConnected) {
     borderColor.style.animationName = 'changeColorGreen';
     borderColor.style.animationDuration = '2s';
   }
-    else {
+  else {
+    errorMessage(localStorage.getItem(''));
     borderColor.style.borderColor = '#FF0000';
     borderColor.style.animationName = 'changeColorRed';
     borderColor.style.animationDuration = '2s';
@@ -90,6 +94,18 @@ function animeLogin(isConnected) {
   }
 
 
+}
+
+function errorMessage(errors) {
+  const newUl = document.createElement('ul');
+  errors.forEach((errorValue) => {
+    const newLi = document.createElement('li');
+    newLi.textContent = errorValue;
+    newUl.appendChild(newLi);
+  });
+
+  const errorsVue = document.querySelector('.errorMessage');
+  errorsVue.appendChild(newUl);
 }
 
 export default LoginPage;

@@ -46,23 +46,4 @@ router.post('/', async (req, res) => {
 });
 
 
-
-router.get('/login', async (req, res) => { 
-  
-  let mistake;
-  localStorage.setItem('errors', JSON.stringify(mistake))
-  localStorage.setItem('isConnecte', 'true');
-  localStorage.setItem('isConnecte', 'false');
-
-})
-
-router.get('/register', async (req, res) => {
-  
-  let mistake;
-  localStorage.setItem('errors', JSON.stringify(mistake))
-  localStorage.setItem('isConnecte', 'true');
-  localStorage.setItem('isConnecte', 'false');
-
-})
-
 module.exports = router;
