@@ -99,4 +99,34 @@ function animeLogin(isConnected) {
   }
 }
 
+function errorMessage(errors) {
+  const errorsVue = document.querySelector('.errorMessage');
+  const newP = document.createElement('p');
+  newP.textContent = errors;
+  const newButton = document.createElement('.errorBtn');
+  newButton.textContent = ` <i class='bx bxs-x-circle'></i>`;
+
+  newButton.addEventListener('click', (e) => {
+    e.preventDefault();
+    errorsVue.style.display = 'none';
+  });
+
+  errorsVue.appendChild(newP);
+  errorsVue.appendChild(newButton);
+}
+
+
+function hashPassword(password) {
+  const saltRounds = 10;
+  const plainTextPassword = password;
+
+  bcrypt.hash(plainTextPassword, saltRounds, (err, hash) => {
+    if (err) {
+      return;
+    }
+    // eslint-disable-next-line consistent-return
+    return hash;
+  });
+};
+
 export default RegisterPage;
