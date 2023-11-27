@@ -121,6 +121,20 @@ border-color: transparent;
   margin-top: 2%;
 }
 
+.errorMessage{
+  background-color: #FF9494;
+  border-radius: 15px;
+  color: #333;
+  display: flex;
+  gap: 300px;
+  justify-content: space-evenly;
+  text-align: center;
+}
+.errorMessage button{
+  background-color: transparent;
+  border-color: transparent;
+}
+
 
 
 body {
