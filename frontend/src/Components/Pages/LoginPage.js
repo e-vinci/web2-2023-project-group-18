@@ -11,7 +11,7 @@ const LoginPage = () => {
       </div>
       <div class="superWrapper">
         <div class="wrapper">
-          <form action="">
+          <form action="/login" method="get">
             <h1>Login</h1>
             <div class="input-box">
               <input type="text" placeholder="Username" required>

@@ -9,7 +9,7 @@ const RegisterPage = () => {
       </div>
    <div class="superWrapper">
         <div class="wrapper">
-          <form action="">
+          <form action="/register" method="get">
             <h1>Register</h1>
             <div class="input-box">
               <input type="text" placeholder="Username" required>
@@ -48,7 +48,7 @@ const RegisterPage = () => {
 
   document.querySelector('form').addEventListener('submit', (e) => {
     e.preventDefault();
-    animeLogin(true);
+    animeLogin(localStorage.getItem('isConnected'));
   });
 };
 
@@ -97,6 +97,11 @@ function animeLogin(isConnected) {
       translateX: [{ value: 50 }, { value: -50 }],
     });
   }
+
+
+  /**
+   * en cas d'erreur;
+   */
 }
 
 export default RegisterPage;
