@@ -50,7 +50,7 @@ const HomePage = () => {
   isConnected(false);
   linkClick();
   // animeLinks();
-   // cookie();
+  // cookie();
 };
 
 function isConnected(params) {
@@ -83,6 +83,7 @@ function linkClick() {
     });
   });
 }
+
 
 //   function animeLinks() {
 //     const links = document.querySelectorAll('li');
@@ -145,4 +146,5 @@ function linkClick() {
 // };
 
 // window.addEventListener("load", cookieMessage);
+
 export default HomePage;
