@@ -4,10 +4,10 @@ import Navigate from '../Router/Navigate';
 const RegisterPage = () => {
   const main = document.querySelector('main');
   main.innerHTML = `
-   <div class="div-back">
+  <div class="div-back">
         <button id="link" class="back" type="button" data-uri="/"><i class='bx bx-arrow-back'></i></button>
       </div>
-      <div class="superWrapper">
+   <div class="superWrapper">
         <div class="wrapper">
           <form action="">
             <h1>Register</h1>
@@ -15,6 +15,12 @@ const RegisterPage = () => {
               <input type="text" placeholder="Username" required>
               <i class='bx bxs-user'></i>
             </div>
+
+            <div class="input-box">
+              <input type="email" placeholder="Email Adresse" required>
+              <i class='bx bx-envelope'></i>
+            </div>
+
             <div class="input-box">
               <input type="password" placeholder="Password" required>
               <i class='bx bxs-lock-alt'></i>
@@ -24,6 +30,11 @@ const RegisterPage = () => {
               <i class='bx bxs-lock-alt'></i>
             </div>
 
+            <div>
+                <input type="checkbox" required></input> I have read and I agree to the <a  id="link" href="#" data-uri="/private-policy">Privacy Policy</a>
+            </div>
+
+            <br>
             <button type="submit" class="btn">Register</button>
 
             <div class="register-link">

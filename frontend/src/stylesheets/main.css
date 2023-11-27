@@ -1,15 +1,79 @@
 
-* {
-    color: #fff;
-    font-family: 'Pixel';
-    font-size: 30px;
-    box-sizing: border-box;
-    scroll-behavior: smooth;
+#shop-page {
+    background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.8));
+    background-size: cover;
+    color: white;
+    font-family: "Roboto", sans-serif;
+}
+
+.shop-change-page-button {
+    color: white;
+    border: none;
+    background: none;
+    font-weight: normal;
+    transition: font-weight 0.3s ease;
+}
+.shop-change-page-button:hover {
+    font-weight: bold;
+}
+
+.shop-buy-button {
+    width: 100%;
+    background-color: rgb(43, 75, 141);
+    color: white;
+    border: 0px;
+ 
+    border-top-right-radius: 0px;
+    border-top-left-radius: 0px;
+}
+.shop-buy-button:hover {
+    background-color: rgb(29, 51, 95);
+}
+.shop-buy-button:not(:disabled):not(.disabled):active {
+    background-color: rgb(24, 42, 78);
+}
+
+.shop-own-button {
+    width: 100%;
+    background-color: rgb(135, 135, 135);
+    color: white;
+    border: 0px;
+ 
+    border-top-right-radius: 0px;
+    border-top-left-radius: 0px;
+}
+.shop-own-button:hover {
+    background-color: rgb(97, 97, 97);
+}
+.shop-own-button:not(:disabled):not(.disabled):active {
+    background-color: rgb(64, 64, 64);
+}
+
+.shop-back-button {
+    font-size: 85px;
+    color: white;
+    background-color: transparent;
+    border: 0px;
+    padding: 0px;
+}
+.shop-back-button:hover {
+    color: rgb(193, 193, 193);
+}
+
+.shop-picture {
+    border-top-right-radius: 5px;
+    border-top-left-radius: 5px;
+}
+
+.shop-part {
+  border: 6px solid rgba(255,255,225,.2);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 0 5px rgba(0,0,0,.2);
+  color:#fff ;
+  border-radius: 10px;
 }
 
 /*Login Page + Register Page*/
-
-
 .superWrapper {
 display: flex;
 justify-content: center;
@@ -120,7 +184,7 @@ text-decoration :underline;
 }
 
 .back{
-font-size: 85px;
+font-size: 65px;
 background-color: transparent;
 color: white;
 border-color: transparent;
@@ -152,7 +216,7 @@ body {
   z-index: -1;
 }
 
- @keyframes scrollBackground {
+@keyframes scrollBackground {
   0% {
     background-position: 0 0;
   }
@@ -161,7 +225,7 @@ body {
   }
 } 
 
-**/
+
 /*Home page*/
 
 .screen {
@@ -253,6 +317,10 @@ display:none;
   }
 }
 
+
+/* 
+Credit page + Rgbd
+*/
 .credit{
   display: flex;
   justify-content: space-evenly;
@@ -330,3 +398,146 @@ justify-content: space-evenly;
 .div-back{
   width: 100px;
 }
+
+
+/* Settings page */
+
+.settings-frame {
+  width: 50%;
+}
+#settings-key-button {
+  width: 100%;
+}
+
+.settings-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.75); /* Ajustez l'opacité selon vos besoins */
+  z-index: 9998; /* Inférieur à l'élément settings-page */
+}
+
+.settings-close-button {
+  background-color: transparent;
+  border: none;
+  font-size: 2rem;
+}
+
+.settings-page {
+  width: 100%;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: white;
+  padding: 20px;
+  border-radius: 10px;
+  z-index: 9999;
+}
+
+.settings-error-key {
+  display: none;
+  color: #fff;
+  font-family: 'Pixel';
+  font-size: 30px;
+  box-sizing: border-box;
+  scroll-behavior: smooth;
+}
+
+/*
+Cookies
+*/
+
+.container {
+  width: 1600px;
+  margin: auto;
+}
+
+.subcontainer{
+  width: 85%;
+  margin: auto;
+}
+#cookies{
+width: 100%;
+position: fixed;
+bottom: 0;
+color: #fff;
+background-color:  #3e00b3;
+z-index: 1;
+display : none;
+}
+
+.cookies{
+  min-height: 70px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.cookies a{
+  color: #fff;
+  font-weight: 500;
+  text-decoration: none;
+}
+
+#cookies-btn{
+  border-radius: 5px;
+  padding: 8px 12px 8px 12px;
+  font-size: 1rem;
+
+}
+
+@media(max-width:1600px){
+  .container {
+    width: 100%;
+  }
+}
+@media(max-width:1024px){
+  #cookies{
+     padding:10px 0;
+  }
+}
+
+/*
+Private Policy page 
+*/
+
+.privatePolicyPage{
+overflow:auto;
+height: 950px;
+width: 1400px;
+background: transparent;
+border: 6px solid rgba(255,255,225,.2);
+backdrop-filter: blur(10px);
+box-shadow: 0 0 5px rgba(0,0,0,.2);
+color:#fff ;
+border-radius: 10px;
+padding: 30px 40px;
+justify-content: space-evenly;
+}
+
+.privatePolicyPage::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+}
+ 
+.privatePolicyPage::-webkit-scrollbar-thumb {
+  background-color: darkgrey;
+  outline: 1px solid white;
+  border-radius: 20px;    
+  border: 3px solid 
+}
+.privatePolicyPage::-webkit-scrollbar {
+  width: 12px;
+}
+
+.superPrivatePolicyPage{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 50vh;
+}
+

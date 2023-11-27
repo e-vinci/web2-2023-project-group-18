@@ -5,26 +5,21 @@ import { clearPage } from '../../utils/render';
 const main = document.querySelector('main');
 
 const Leaderboard = async () => {
-  console.log("leaderbaord main 1");
   clearPage();
   await fetchAllScores();
   backListenner();
-  
 }
 
 
-// eslint-disable-next-line consistent-return
 async function fetchScores(){
-  console.log('fetch scores 3');
   try {
     const response = await fetch('api/scores/')
     if (!response.ok) throw new Error(`fetch error : ${response.status} : ${response.statusText}`);
     const allLignes = await response.json();
-    console.log('called 4');
     return allLignes;
   } catch (err) {
+      document.querySelector('main').innerHTML = `Error: API is not online`;
     return err
-    // document.querySelector('main').innerHTML = `Error: API is not online`;
   };
   
 
@@ -32,10 +27,10 @@ async function fetchScores(){
 
 
 async function fetchAllScores() {
-  console.log('fetchAllScores 2');
   const allLignes = await fetchScores();
 
-  console.log(allLignes);
+  if(allLignes instanceof Error)
+    return;
 
   let lignes = '';
   let count = 1;
@@ -50,11 +45,7 @@ async function fetchAllScores() {
     </tr>`;
     count+=1;
   });
-
-  console.log('renderLeaderboardPage');
   renderLeaderboardPage(lignes);
-
-
 }
 
 
@@ -85,10 +76,13 @@ async function renderLeaderboardPage(lignes) {
 
 function backListenner() {
   const back = document.querySelector('#back-leaderboard');
-  back.addEventListener('click', () => {
-    Navigate('/');
-  });
-}
+  console.log(typeof back);
+  if(back !== null){
+    back.addEventListener('click', () => {
+      Navigate('/');
+    });
+  }
 
+}
 
 export default Leaderboard;
