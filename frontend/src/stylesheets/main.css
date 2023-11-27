@@ -1,9 +1,10 @@
 
 #shop-page {
-    background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.8));
     background-size: cover;
     color: white;
     font-family: "Roboto", sans-serif;
+    height: 100vh;
+    overflow: auto;
 }
 
 .shop-change-page-button {
@@ -72,7 +73,15 @@
   color:#fff ;
   border-radius: 10px;
 }
-=======
+
+@media screen and (max-width:480px){
+  .shop-part {
+    height: 530px;
+    width: 350px;
+    margin-bottom: 20px;
+  }
+}
+
 /*Login Page + Register Page*/
 .superWrapper {
 display: flex;
@@ -184,10 +193,13 @@ text-decoration :underline;
 }
 
 .back{
-font-size: 65px;
-background-color: transparent;
-color: white;
-border-color: transparent;
+  font-size: 65px;
+  background-color: transparent;
+  color: white;
+  border-color: transparent;
+}
+.back:hover{
+  color: rgb(181, 178, 178);
 }
 .div-back{
   margin-left: 2%;
