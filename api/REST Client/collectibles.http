@@ -4,18 +4,21 @@
 ### Get the amount of collectibles
 GET {{baseUrl}}/1
 
+### Get the amount of collectibles
+GET {{baseUrl}}/4
+
 ### Add collectibles
-PUT {{baseUrl}}/addCollectible/1
+PUT {{baseUrl}}/addCollectible/4
+Content-Type: application/json
+
+{
+    "collectible" : 355
+}
+
+### Supp collectibles
+PUT {{baseUrl}}/suppCollectible/1
 Content-Type: application/json
 
 {
     "collectible" : 100
-}
-
-### Supp collectibles
-PUT {{baseUrl}}/suppCollectible/2
-Content-Type: application/json
-
-{
-    "collectible" : 75
 }
