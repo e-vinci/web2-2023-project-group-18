@@ -50,6 +50,8 @@ const RegisterPage = () => {
     e.preventDefault();
     animeLogin(true);
   });
+
+  
 };
 
 function linkClick() {

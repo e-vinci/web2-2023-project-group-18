@@ -2,6 +2,7 @@ import anime from 'animejs/lib/anime.es';
 
 
 import Navigate from '../Router/Navigate';
+// import { verify } from 'crypto';
 
 const LoginPage = () => {
   const main = document.querySelector('main');
@@ -14,12 +15,12 @@ const LoginPage = () => {
           <form action="">
             <h1>Login</h1>
             <div class="input-box">
-              <input type="text" placeholder="Username" required>
+              <input class="username" type="text" placeholder="Username" required>
               <i class='bx bxs-user'></i>
             </div>
 
             <div class="input-box">
-              <input type="password" placeholder="Password" required>
+              <input class="password"  type="password" placeholder="Password" required>
               <i class='bx bxs-lock-alt'></i>
             </div>
 
@@ -39,6 +40,11 @@ const LoginPage = () => {
     e.preventDefault();
     animeLogin(false);
   });
+
+  // const password = document.querySelector(".password").value;
+  // const username = document.querySelector(".username").value;
+
+  // authentifiction(password, username);
 };
 
 function linkClick() {
@@ -89,6 +95,10 @@ function animeLogin(isConnected) {
     });
   }
 
+  // function authentifiction(password,username) {
+    
+  //   fetch
+  // }
 
 }
 
