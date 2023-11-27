@@ -11,6 +11,7 @@ const RegisterPage = () => {
       </div>
    <div class="superWrapper">
         <div class="wrapper">
+        <div class = "errorMessage"></div>
           <form action="">
             <h1>Register</h1>
             <div class="input-box">
@@ -148,7 +149,7 @@ function errorMessage(errors) {
   const errorsVue = document.querySelector('.errorMessage');
   const newP = document.createElement('p');
   newP.textContent = errors;
-  const newButton = document.createElement('.errorBtn');
+  const newButton = document.createElement('button');
   newButton.textContent = ` <i class='bx bxs-x-circle'></i>`;
 
   newButton.addEventListener('click', (e) => {
