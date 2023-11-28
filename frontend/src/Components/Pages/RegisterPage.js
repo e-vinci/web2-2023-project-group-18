@@ -1,6 +1,4 @@
 import anime from 'animejs/lib/anime.es';
-// eslint-disable-next-line import/no-extraneous-dependencies
-import bcrypt from 'bcryptjs'
 import Navigate from '../Router/Navigate';
 
 const RegisterPage = () => {
@@ -51,7 +49,7 @@ const RegisterPage = () => {
 
   document.querySelector('form').addEventListener('submit', (e) => {
     e.preventDefault();
-    tryLogin();
+    tryRgister();
   });
 };
 
@@ -64,21 +62,23 @@ function linkClick() {
   });
 }
 
-async function tryLogin() {
+async function tryRgister() {
   const password1 = document.querySelector('.password1').value;
   const password2 = document.querySelector('.password2').value;
   const username = document.querySelector('.username').value;
   const email = document.querySelector(".email").value;
 
 
-  if (password1 === password2) {
-
-    const passwordHash = hashPassword(password1);
+  if (password1 !== password2) {
+    animeLogin(false);
+    errorMessage('The passwords are not matching ');
+  }
+  else{
 
     const options = {
-      method: 'PUT',
+      method: 'POST',
       body: JSON.stringify({
-        passwordHash,
+        password1,
         username,
         email,
       }),
@@ -87,7 +87,7 @@ async function tryLogin() {
       },
     };
 
-    const response = await fetch('/api/models/users.js', options);
+    const response = await fetch('/api/auths/register', options);
 
     if (!response.ok) {
       animeLogin(false);
@@ -99,11 +99,6 @@ async function tryLogin() {
       animeLogin(true);
       Navigate('/');
     }
-    // const value = await response.json(); // json() returns a promise => we wait for the data
-  }
-  else {
-    animeLogin(false);
-    errorMessage('The passwords are not matching ');
   }
 }
 
@@ -160,19 +155,5 @@ function errorMessage(errors) {
   errorsVue.appendChild(newP);
   errorsVue.appendChild(newButton);
 }
-
-
-function hashPassword(password) {
-  const saltRounds = 10;
-  const plainTextPassword = password;
-
-  bcrypt.hash(plainTextPassword, saltRounds, (err, hash) => {
-    if (err) {
-      return;
-    }
-    // eslint-disable-next-line consistent-return
-    return hash;
-  });
-};
 
 export default RegisterPage;
