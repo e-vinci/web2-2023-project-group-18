@@ -53,6 +53,8 @@ const RegisterPage = () => {
     e.preventDefault();
     tryLogin();
   });
+
+  
 };
 
 function linkClick() {

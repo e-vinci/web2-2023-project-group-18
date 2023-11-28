@@ -30,12 +30,27 @@ const HomePage = () => {
         </ul>
     </div>
   </div>
+
+   <div id="cookies">
+      <div class= "container">
+        <div class="subcontainer">
+          <div class="cookies">
+            <p>
+              This app uses cookies to ensure you get the best experience on your website. 
+              <a class="nav-link" href="#" data-uri = "/cookies-policy" >More info.</a>
+              <button id="cookies-btn">That's fine !</button>
+            </p>
+          </div>
+        </div>
+      </div>
+     </div>
 `;
 
   main.innerHTML = mainHTML;
   isConnected(false);
   linkClick();
   // animeLinks();
+  // cookie();
 };
 
 function isConnected(params) {
@@ -62,11 +77,13 @@ function linkClick() {
   const links = document.querySelectorAll('.nav-link');
   links.forEach((link) => {
     link.addEventListener('click', (e) => {
+      e.preventDefault();
       Navigate(e.target.dataset.uri);
       // ou Navigate(link.dataset.uri);
     });
   });
 }
+
 
 //   function animeLinks() {
 //     const links = document.querySelectorAll('li');
@@ -87,5 +104,47 @@ function linkClick() {
 //    });
 //  }
 
+
+
+// const setCookie = (cName, cValue, expdays) => {
+//   const date = new Date();
+//   date.setTime(date.getTime() + expdays * 24 * 60 * 60 * 1000);
+//   const expires = `expires=${date.toUTCString()}`;
+//   document.cookie = `${cName} = ${cValue}; ${expires}; path=/`;
+// };
+
+
+// const getCookie = (cName) => {
+  
+//   const name = `${cName}=`;
+//   const cDecoded = decodeURIComponent(document.cookie)
+//   const cArr = cDecoded.split(";");
+//   let value;
+
+//   cArr.forEach(val => {
+//     if (val.indexOf(name) === 0)
+//       value = val.substring(name.length);
+//   })
+//   return value
+// };
+
+// function cookie() {
+
+//   const divCookie = document.querySelector('#cookies');
+//   const cookieRGPD = document.querySelector('#cookies-btn');
+
+//   cookieRGPD.addEventListener('click', () => {
+//     divCookie.style.display = 'none';
+//     setCookie('cookie', true, 30);
+//   });
+// }
+
+// const cookieMessage = () => { 
+//   if (!getCookie("cookie"))
+//     document.querySelector("#cookies").style.display = "block";
+
+// };
+
+// window.addEventListener("load", cookieMessage);
 
 export default HomePage;
