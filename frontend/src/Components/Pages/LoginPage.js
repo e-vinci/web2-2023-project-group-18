@@ -1,9 +1,6 @@
 
 import anime from 'animejs/lib/anime.es';
-// eslint-disable-next-line import/no-extraneous-dependencies
-import bcrypt from 'bcryptjs'
 import Navigate from '../Router/Navigate';
-
 
 const LoginPage = () => {
   const main = document.querySelector('main');
@@ -48,16 +45,18 @@ const LoginPage = () => {
     
   });
 
+  
+
   async function tryLogin() {
+
     const password = document.querySelector('.password').value;
     const username = document.querySelector('.username').value;
 
-    const passwordHash = hashPassword(password);
 
     const options = {
-      method: 'GET',
+      method: 'POST',
       body: JSON.stringify({
-        passwordHash,
+        password,
         username,
       }),
       headers: {
@@ -65,7 +64,7 @@ const LoginPage = () => {
       },
     };
 
-    const response = await fetch('/api/models/users.js', options); 
+    const response = await fetch('/api/auths/login', options); 
 
     if (!response.ok) {
       animeLogin(!response.ok);
@@ -77,7 +76,6 @@ const LoginPage = () => {
       animeLogin(response.ok);
       Navigate('/');
   }
-    // const value = await response.json(); // json() returns a promise => we wait for the data
   }
 };
 
@@ -145,20 +143,6 @@ function errorMessage(errors) {
   errorsVue.appendChild(newP);
   errorsVue.appendChild(newButton);
 }
-
-
-function hashPassword(password) {
-  const saltRounds = 10;
-  const plainTextPassword = password;
-
-  bcrypt.hash(plainTextPassword, saltRounds, (err, hash) => {
-    if (err) {
-      return;
-    }
-    // eslint-disable-next-line consistent-return
-    return hash;
-  });
-};
 
 
 export default LoginPage;
