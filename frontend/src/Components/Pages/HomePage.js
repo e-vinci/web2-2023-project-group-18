@@ -65,7 +65,7 @@ function isConnected(params) {
   } else {
     document.querySelector(
       '#linkConnect1',
-    ).innerHTML = `<a class="nav-link" href="#" data-uri="/store">Store</a>`;
+    ).innerHTML = `<a class="nav-link" href="#" data-uri="/shop">Shop</a>`;
 
     document.querySelector(
       '#linkConnect2',

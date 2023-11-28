@@ -51,6 +51,8 @@ const RegisterPage = () => {
     e.preventDefault();
     tryRgister();
   });
+
+  
 };
 
 function linkClick() {
