@@ -1,4 +1,6 @@
 import anime from 'animejs/lib/anime.es';
+// eslint-disable-next-line import/no-extraneous-dependencies
+import bcrypt from 'bcryptjs'
 import Navigate from '../Router/Navigate';
 
 const RegisterPage = () => {
@@ -9,24 +11,25 @@ const RegisterPage = () => {
       </div>
    <div class="superWrapper">
         <div class="wrapper">
+        <div class = "errorMessage"></div>
           <form action="">
             <h1>Register</h1>
             <div class="input-box">
-              <input type="text" placeholder="Username" required>
+              <input class="username" type="text" placeholder="Username" required>
               <i class='bx bxs-user'></i>
             </div>
 
             <div class="input-box">
-              <input type="email" placeholder="Email Adresse" required>
+              <input class="email" type="email" placeholder="Email Adresse" required>
               <i class='bx bx-envelope'></i>
             </div>
 
             <div class="input-box">
-              <input type="password" placeholder="Password" required>
+              <input class= "password1" type="password" placeholder="Password" required>
               <i class='bx bxs-lock-alt'></i>
             </div>
             <div class="input-box">
-              <input type="password" placeholder="Password Verify" required>
+              <input class="password2" type="password" placeholder="Password Verify" required>
               <i class='bx bxs-lock-alt'></i>
             </div>
 
@@ -43,12 +46,12 @@ const RegisterPage = () => {
           </form>
         </div>
       </div>`;
-
+  
   linkClick();
 
   document.querySelector('form').addEventListener('submit', (e) => {
     e.preventDefault();
-    animeLogin(true);
+    tryLogin();
   });
 
   
@@ -61,6 +64,49 @@ function linkClick() {
       Navigate(link.dataset.uri);
     });
   });
+}
+
+async function tryLogin() {
+  const password1 = document.querySelector('.password1').value;
+  const password2 = document.querySelector('.password2').value;
+  const username = document.querySelector('.username').value;
+  const email = document.querySelector(".email").value;
+
+
+  if (password1 === password2) {
+
+    const passwordHash = hashPassword(password1);
+
+    const options = {
+      method: 'PUT',
+      body: JSON.stringify({
+        passwordHash,
+        username,
+        email,
+      }),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    };
+
+    const response = await fetch('/api/models/users.js', options);
+
+    if (!response.ok) {
+      animeLogin(false);
+      const message = 'This account already exist';
+      errorMessage(message);
+      throw new Error(`fetch error : ${response.status} : ${response.statusText}`);
+    }
+    else {
+      animeLogin(true);
+      Navigate('/');
+    }
+    // const value = await response.json(); // json() returns a promise => we wait for the data
+  }
+  else {
+    animeLogin(false);
+    errorMessage('The passwords are not matching ');
+  }
 }
 
 function animeLogin(isConnected) {
@@ -100,5 +146,35 @@ function animeLogin(isConnected) {
     });
   }
 }
+
+function errorMessage(errors) {
+  const errorsVue = document.querySelector('.errorMessage');
+  const newP = document.createElement('p');
+  newP.textContent = errors;
+  const newButton = document.createElement('button');
+  newButton.textContent = ` <i class='bx bxs-x-circle'></i>`;
+
+  newButton.addEventListener('click', (e) => {
+    e.preventDefault();
+    errorsVue.style.display = 'none';
+  });
+
+  errorsVue.appendChild(newP);
+  errorsVue.appendChild(newButton);
+}
+
+
+function hashPassword(password) {
+  const saltRounds = 10;
+  const plainTextPassword = password;
+
+  bcrypt.hash(plainTextPassword, saltRounds, (err, hash) => {
+    if (err) {
+      return;
+    }
+    // eslint-disable-next-line consistent-return
+    return hash;
+  });
+};
 
 export default RegisterPage;
