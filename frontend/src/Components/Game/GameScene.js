@@ -126,15 +126,15 @@ class GameScene extends Phaser.Scene {
 
     // Défilement des plateformes vers haut gauche
     this.time.addEvent({
-      delay: 50, // Délai entre chaque itération de déplacement (en ms)
+      delay: 10, // Délai entre chaque itération de déplacement (en ms)
       callback: () => {
           platforms.getChildren().forEach(child => {
               const platform = child;
               platform.x -= 1; // Déplacement vers la gauche
               platform.y -= 1; // Déplacement vers le haut
-              if (platform.x < -tileHeight) {
-                platform.destroy();
-            }
+             if (platform.x < -tileHeight) {
+                
+             }
     });
       },
       loop: true // Définir la boucle pour un défilement continu

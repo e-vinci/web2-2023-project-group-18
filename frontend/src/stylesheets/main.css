@@ -130,26 +130,28 @@ body {
 }
 
 /* Background and background animation */
-#background {
+.scrolling-background {
+  overflow: hidden;
+}
+
+.background {
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 200%;
   height: 100%;
-  background-image: url('../assets/BG.png');
+  width: 200%;
+  background: url('../assets/BG.png') repeat-x;
   background-size: 50% 100%;
-  animation: scrollBackground 50s linear infinite; /* Ajust the velocity of the animation */
+  animation: scrollBackground 10s linear infinite; /* Ajust the velocity of the animation */
   z-index: -1;
 }
 
 @keyframes scrollBackground {
   0% {
-    background-position: 0 0;
+    transform: translate(0);
   }
   100% {
-    background-position: -100% 0;
+    transform: translate(-50%);
   }
-} 
+}
 
 
 /*Home page*/
