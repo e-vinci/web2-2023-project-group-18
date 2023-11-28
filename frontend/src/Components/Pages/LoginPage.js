@@ -67,13 +67,13 @@ const LoginPage = () => {
     const response = await fetch('/api/auths/login', options); 
 
     if (!response.ok) {
-      animeLogin(!response.ok);
+      animeLogin(false);
       const message = 'Incorrect username or password';
       errorMessage(message);
       throw new Error(`fetch error : ${response.status} : ${response.statusText}`);
     }
     else {
-      animeLogin(response.ok);
+      animeLogin(true);
       Navigate('/');
   }
   }
