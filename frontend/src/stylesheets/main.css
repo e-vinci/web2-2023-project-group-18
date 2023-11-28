@@ -194,6 +194,19 @@ border-color: transparent;
   margin-top: 2%;
 }
 
+.errorMessage{
+  background-color: #FF9494;
+  border-radius: 15px;
+  color: #333;
+  display: flex;
+  gap: 300px;
+  justify-content: space-evenly;
+  text-align: center;
+}
+.errorMessage button{
+  background-color: transparent;
+  border-color: transparent;
+}
 
 
 body {
@@ -399,7 +412,6 @@ justify-content: space-evenly;
   width: 100px;
 }
 
-
 /* Settings page */
 
 .settings-frame {
@@ -508,7 +520,7 @@ Private Policy page
 
 .privatePolicyPage{
 overflow:auto;
-height: 950px;
+height: 750px;
 width: 1400px;
 background: transparent;
 border: 6px solid rgba(255,255,225,.2);
