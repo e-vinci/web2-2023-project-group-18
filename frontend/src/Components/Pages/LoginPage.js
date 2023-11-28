@@ -11,6 +11,7 @@ const LoginPage = () => {
       <div class="superWrapper">
         <div class="wrapper">
         <div class="errorMessage">
+        <p class = "errorVue"></p><button class ="error-btn"></button>
         </div>
           <form action="">
             <h1>Login</h1>
@@ -38,6 +39,7 @@ const LoginPage = () => {
   
 
   linkClick();
+  errorClick();
 
   document.querySelector('form').addEventListener('submit', (e) => {
     e.preventDefault();
@@ -68,8 +70,8 @@ const LoginPage = () => {
 
     if (!response.ok) {
       animeLogin(false);
-      const message = 'Incorrect username or password';
-      errorMessage(message);
+      document.querySelector('.errorVue').innerHTML = 'Incorrect username or password';
+      document.querySelector('.errorMessage').style.display = 'block';
       throw new Error(`fetch error : ${response.status} : ${response.statusText}`);
     }
     else {
@@ -86,6 +88,14 @@ function linkClick() {
       Navigate(link.dataset.uri);
     });
   });
+}
+
+function errorClick() {
+  const btn = document.querySelector('.error-btn');
+  btn.addEventListener('click', (e) => {
+    e.preventDefault();
+    document.querySelector('.errorVue').style.display = 'none';
+  })
 }
 
 function animeLogin(isConnected) {
@@ -125,24 +135,5 @@ function animeLogin(isConnected) {
     });
   }
 }
-
-
-
-function errorMessage(errors) {
-  const errorsVue = document.querySelector('.errorMessage');
-  const newP = document.createElement('p');
-  newP.textContent = errors;
-  const newButton = document.createElement('.errorBtn');
-  newButton.textContent = ` <i class='bx bxs-x-circle'></i>`;
-
-  newButton.addEventListener('click', (e) => {
-    e.preventDefault();
-    errorsVue.style.display = 'none';
-  });
-
-  errorsVue.appendChild(newP);
-  errorsVue.appendChild(newButton);
-}
-
 
 export default LoginPage;
