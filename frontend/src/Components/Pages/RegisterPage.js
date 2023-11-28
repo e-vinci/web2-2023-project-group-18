@@ -9,7 +9,9 @@ const RegisterPage = () => {
       </div>
    <div class="superWrapper">
         <div class="wrapper">
-        <div class = "errorMessage"></div>
+        <div class = "errorMessage">
+        <p class='errorVue'></p><button class = 'error-btn'><i class='bx bxs-x-circle'></i></button>
+        </div>
           <form action="">
             <h1>Register</h1>
             <div class="input-box">
@@ -46,6 +48,7 @@ const RegisterPage = () => {
       </div>`;
   
   linkClick();
+  ErrorClick();
 
   document.querySelector('form').addEventListener('submit', (e) => {
     e.preventDefault();
@@ -64,6 +67,15 @@ function linkClick() {
   });
 }
 
+function ErrorClick() {
+  const btn = document.querySelector('.error-btn');
+  btn.addEventListener('click', (e) => {
+    e.preventDefault();
+    const errorVue = document.querySelector('.errorMessage');
+    errorVue.style.display = 'none';
+  })
+}
+
 async function tryRgister() {
   const password1 = document.querySelector('.password1').value;
   const password2 = document.querySelector('.password2').value;
@@ -73,7 +85,8 @@ async function tryRgister() {
 
   if (password1 !== password2) {
     animeLogin(false);
-    errorMessage('The passwords are not matching ');
+    document.querySelector(".errorVue").innerHTML='The passwords are not matching';
+    document.querySelector('.errorMessage').style.display = 'block';
   }
   else{
 
@@ -93,8 +106,8 @@ async function tryRgister() {
 
     if (!response.ok) {
       animeLogin(false);
-      const message = 'This account already exist';
-      errorMessage(message);
+      document.querySelector('.errorVue').innerHTML = 'This account already exist';
+      document.querySelector('.errorMessage').style.display = 'block';
       throw new Error(`fetch error : ${response.status} : ${response.statusText}`);
     }
     else {
@@ -140,22 +153,6 @@ function animeLogin(isConnected) {
       translateX: [{ value: 50 }, { value: -50 }],
     });
   }
-}
-
-function errorMessage(errors) {
-  const errorsVue = document.querySelector('.errorMessage');
-  const newP = document.createElement('p');
-  newP.textContent = errors;
-  const newButton = document.createElement('button');
-  newButton.textContent = ` <i class='bx bxs-x-circle'></i>`;
-
-  newButton.addEventListener('click', (e) => {
-    e.preventDefault();
-    errorsVue.style.display = 'none';
-  });
-
-  errorsVue.appendChild(newP);
-  errorsVue.appendChild(newButton);
 }
 
 export default RegisterPage;
