@@ -11,7 +11,7 @@ const LoginPage = () => {
       <div class="superWrapper">
         <div class="wrapper">
         <div class="errorMessage">
-        <p class = "errorVue"></p><button class ="error-btn"></button>
+        <p class = "errorVue"></p><button class ="error-btn"><i class='bx bxs-x-circle'></i></button>
         </div>
           <form action="">
             <h1>Login</h1>
@@ -94,7 +94,7 @@ function errorClick() {
   const btn = document.querySelector('.error-btn');
   btn.addEventListener('click', (e) => {
     e.preventDefault();
-    document.querySelector('.errorVue').style.display = 'none';
+    document.querySelector('.errorMessage').style.display = 'none';
   })
 }
 
