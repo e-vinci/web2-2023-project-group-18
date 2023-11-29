@@ -213,8 +213,6 @@ text-decoration :underline;
   display: flex;
   justify-content: space-evenly;
   text-align: center;
-  display: none;
-  
 }
 .errorMessage button{
   background-color: transparent;
