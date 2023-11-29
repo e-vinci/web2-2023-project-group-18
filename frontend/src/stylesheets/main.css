@@ -1,3 +1,87 @@
+
+#shop-page {
+    background-size: cover;
+    color: white;
+    font-family: "Roboto", sans-serif;
+    height: 100vh;
+    overflow: auto;
+}
+
+.shop-change-page-button {
+    color: white;
+    border: none;
+    background: none;
+    font-weight: normal;
+    transition: font-weight 0.3s ease;
+}
+.shop-change-page-button:hover {
+    font-weight: bold;
+}
+
+.shop-buy-button {
+    width: 100%;
+    background-color: rgb(43, 75, 141);
+    color: white;
+    border: 0px;
+ 
+    border-top-right-radius: 0px;
+    border-top-left-radius: 0px;
+}
+.shop-buy-button:hover {
+    background-color: rgb(29, 51, 95);
+}
+.shop-buy-button:not(:disabled):not(.disabled):active {
+    background-color: rgb(24, 42, 78);
+}
+
+.shop-own-button {
+    width: 100%;
+    background-color: rgb(135, 135, 135);
+    color: white;
+    border: 0px;
+ 
+    border-top-right-radius: 0px;
+    border-top-left-radius: 0px;
+}
+.shop-own-button:hover {
+    background-color: rgb(97, 97, 97);
+}
+.shop-own-button:not(:disabled):not(.disabled):active {
+    background-color: rgb(64, 64, 64);
+}
+
+.shop-back-button {
+    font-size: 85px;
+    color: white;
+    background-color: transparent;
+    border: 0px;
+    padding: 0px;
+}
+.shop-back-button:hover {
+    color: rgb(193, 193, 193);
+}
+
+.shop-picture {
+    border-top-right-radius: 5px;
+    border-top-left-radius: 5px;
+}
+
+.shop-part {
+  border: 6px solid rgba(255,255,225,.2);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 0 5px rgba(0,0,0,.2);
+  color:#fff ;
+  border-radius: 10px;
+}
+
+@media screen and (max-width:480px){
+  .shop-part {
+    height: 530px;
+    width: 350px;
+    margin-bottom: 20px;
+  }
+}
+
 /*Login Page + Register Page*/
 .superWrapper {
 display: flex;
@@ -109,16 +193,32 @@ text-decoration :underline;
 }
 
 .back{
-font-size: 65px;
-background-color: transparent;
-color: white;
-border-color: transparent;
+  font-size: 65px;
+  background-color: transparent;
+  color: white;
+  border-color: transparent;
+}
+.back:hover{
+  color: rgb(181, 178, 178);
 }
 .div-back{
   margin-left: 2%;
   margin-top: 2%;
 }
 
+.errorMessage{
+  background-color: #FF9494;
+  border-radius: 15px;
+  color: #333;
+  display: flex;
+  gap: 300px;
+  justify-content: space-evenly;
+  text-align: center;
+}
+.errorMessage button{
+  background-color: transparent;
+  border-color: transparent;
+}
 
 
 body {
@@ -324,7 +424,6 @@ justify-content: space-evenly;
   width: 100px;
 }
 
-
 /* Settings page */
 
 .settings-frame {
@@ -391,7 +490,7 @@ bottom: 0;
 color: #fff;
 background-color:  #3e00b3;
 z-index: 1;
-/*display : none;*/
+display : none;
 }
 
 .cookies{
@@ -433,7 +532,7 @@ Private Policy page
 
 .privatePolicyPage{
 overflow:auto;
-height: 950px;
+height: 750px;
 width: 1400px;
 background: transparent;
 border: 6px solid rgba(255,255,225,.2);
@@ -465,3 +564,4 @@ justify-content: space-evenly;
   align-items: center;
   min-height: 50vh;
 }
+

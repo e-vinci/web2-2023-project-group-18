@@ -1,7 +1,9 @@
+
 import anime from 'animejs/lib/anime.es';
-
-
+// eslint-disable-next-line import/no-extraneous-dependencies
+import bcrypt from 'bcryptjs'
 import Navigate from '../Router/Navigate';
+
 
 const LoginPage = () => {
   const main = document.querySelector('main');
@@ -11,15 +13,17 @@ const LoginPage = () => {
       </div>
       <div class="superWrapper">
         <div class="wrapper">
-          <form action="/login" method="get">
+        <div class="errorMessage">
+        </div>
+          <form action="">
             <h1>Login</h1>
             <div class="input-box">
-              <input type="text" placeholder="Username" required>
+              <input class="username" type="text" placeholder="Username" required>
               <i class='bx bxs-user'></i>
             </div>
 
             <div class="input-box">
-              <input type="password" placeholder="Password" required>
+              <input class="password"  type="password" placeholder="Password" required>
               <i class='bx bxs-lock-alt'></i>
             </div>
 
@@ -37,11 +41,44 @@ const LoginPage = () => {
   
 
   linkClick();
-  
+
   document.querySelector('form').addEventListener('submit', (e) => {
     e.preventDefault();
-    animeLogin(false);
+    tryLogin();
+    
   });
+
+  async function tryLogin() {
+    const password = document.querySelector('.password').value;
+    const username = document.querySelector('.username').value;
+
+    const passwordHash = hashPassword(password);
+
+    const options = {
+      method: 'GET',
+      body: JSON.stringify({
+        passwordHash,
+        username,
+      }),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    };
+
+    const response = await fetch('/api/models/users.js', options); 
+
+    if (!response.ok) {
+      animeLogin(!response.ok);
+      const message = 'Incorrect username or password';
+      errorMessage(message);
+      throw new Error(`fetch error : ${response.status} : ${response.statusText}`);
+    }
+    else {
+      animeLogin(response.ok);
+      Navigate('/');
+  }
+    // const value = await response.json(); // json() returns a promise => we wait for the data
+  }
 };
 
 function linkClick() {
@@ -56,7 +93,7 @@ function linkClick() {
 function animeLogin(isConnected) {
   const borderColor = document.querySelector('.wrapper');
   const inputsColor = document.querySelectorAll('.input-box input');
-  
+
   if (isConnected) {
     inputsColor.forEach((input) => {
       // eslint-disable-next-line no-param-reassign
@@ -65,15 +102,12 @@ function animeLogin(isConnected) {
       input.style.animationName = 'changeColorGreen';
       // eslint-disable-next-line no-param-reassign
       input.style.animationDuration = '2s';
-
     });
-    
+
     borderColor.style.borderColor = '#00FF00';
     borderColor.style.animationName = 'changeColorGreen';
     borderColor.style.animationDuration = '2s';
-  }
-  else {
-    errorMessage(localStorage.getItem(''));
+  } else {
     borderColor.style.borderColor = '#FF0000';
     borderColor.style.animationName = 'changeColorRed';
     borderColor.style.animationDuration = '2s';
@@ -92,20 +126,39 @@ function animeLogin(isConnected) {
       translateX: [{ value: 50 }, { value: -50 }],
     });
   }
-
-
 }
+
+
 
 function errorMessage(errors) {
-  const newUl = document.createElement('ul');
-  errors.forEach((errorValue) => {
-    const newLi = document.createElement('li');
-    newLi.textContent = errorValue;
-    newUl.appendChild(newLi);
+  const errorsVue = document.querySelector('.errorMessage');
+  const newP = document.createElement('p');
+  newP.textContent = errors;
+  const newButton = document.createElement('.errorBtn');
+  newButton.textContent = ` <i class='bx bxs-x-circle'></i>`;
+
+  newButton.addEventListener('click', (e) => {
+    e.preventDefault();
+    errorsVue.style.display = 'none';
   });
 
-  const errorsVue = document.querySelector('.errorMessage');
-  errorsVue.appendChild(newUl);
+  errorsVue.appendChild(newP);
+  errorsVue.appendChild(newButton);
 }
+
+
+function hashPassword(password) {
+  const saltRounds = 10;
+  const plainTextPassword = password;
+
+  bcrypt.hash(plainTextPassword, saltRounds, (err, hash) => {
+    if (err) {
+      return;
+    }
+    // eslint-disable-next-line consistent-return
+    return hash;
+  });
+};
+
 
 export default LoginPage;

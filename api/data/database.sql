@@ -26,7 +26,7 @@ CREATE OR REPLACE FUNCTION projet.user_change_score(
 DECLARE
 BEGIN
     IF (EXISTS(SELECT * FROM projet.scores WHERE id_user = _user )) THEN
-        UPDATE projet.scores SET score =_score WHERE id_user = _user;
+        UPDATE projet.scores SET score =_score, score_date = CURRENT_DATE WHERE id_user = _user;
     ELSE
         INSERT INTO projet.scores (id_user, score) VALUES (_user, _score);
     end if;

@@ -18,10 +18,10 @@ router.get('/:id', async (req, res) => {
       return res.json(user.rows[0]);
     } catch (error) {
       console.log(`Erreur type: ${error.detail}`);
-      res.sendStatus(404);
+      return res.sendStatus(404);
     }
   } else {
-    res.sendStatus(400);
+    return res.sendStatus(400);
   }
 });
 
@@ -45,5 +45,8 @@ router.post('/', async (req, res) => {
   }
 });
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> c26dc8c7838fc1d451e16d2c0943721bb62b5ac7
 module.exports = router;

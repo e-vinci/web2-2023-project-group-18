@@ -86,5 +86,4 @@ function linkClick() {
 }
 
 
-
 export default CookiesPolicyPage;
