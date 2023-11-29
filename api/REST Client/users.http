@@ -6,8 +6,8 @@ POST {{baseUrl}}/auths/login
 Content-Type: application/json
 
 {
-    "username":"GoldKing",
-    "password":"admin"
+    "username":"Lucas",
+    "password":"abc"
 }
 
 ### Login the default admin
@@ -19,8 +19,6 @@ Content-Type: application/json
     "password":"admin"
 }
 
-
-
 ### Create the manager user
 POST {{baseUrl}}/auths/register
 Content-Type: application/json
@@ -29,6 +27,7 @@ Content-Type: application/json
     "username":"manager",
     "password":"manager"
 }
+
 
 ### Login the manager user
 POST {{baseUrl}}/auths/login

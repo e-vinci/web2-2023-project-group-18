@@ -38,7 +38,6 @@ $$ LANGUAGE plpgsql;
 
 
 
-
 /*INSERT INTO projet.users (username, password) VALUES ('GoldKing', 'mdp1');
 INSERT INTO projet.users (username, password) VALUES ('WitcherGood', 'mdp1');
 INSERT INTO projet.users (username, password) VALUES ('WarSteel', 'mdp1');
