@@ -7,6 +7,7 @@ import bombAsset from '../../assets/bomb.png';
 import dudeAsset from '../../assets/dude.png';
 import pauseButton from '../../assets/pauseButton.png';
 import Settings from '../../utils/settings';
+import CoinLabel from './CoinLabel';
 
 const GROUND_KEY = 'ground';
 const DUDE_KEY = 'dude';
@@ -20,6 +21,7 @@ class GameScene extends Phaser.Scene {
     this.player = undefined;
     this.cursors = undefined;
     this.scoreLabel = undefined;
+    this.coinsLabel = undefined;
     this.stars = undefined;
     this.bombSpawner = undefined;
     this.gameOver = false;
@@ -42,8 +44,15 @@ class GameScene extends Phaser.Scene {
     const platforms = this.createPlatforms();
     this.player = this.createPlayer();
     this.stars = this.createStars();
+    // Scores
     this.scoreLabel = this.createScoreLabel(20, 20, 0);
     this.scoreLabel.setColor('#ffffff');
+    // Coins
+    this.scoreLabel = this.createCoinsLabel(20, 40);
+    this.scoreLabel.setColor('#ffffff');
+    
+
+
     this.bombSpawner = new BombSpawner(this, BOMB_KEY);
     const bombsGroup = this.bombSpawner.group;
     this.physics.add.collider(this.stars, platforms);
@@ -167,6 +176,16 @@ class GameScene extends Phaser.Scene {
   createScoreLabel(x, y, score) {
     const style = { fontSize: '32px', fill: '#000' };
     const label = new ScoreLabel(this, x, y, score, style);
+    this.add.existing(label);
+
+    return label;
+  }
+
+  async createCoinsLabel(x, y) {
+    const style = { fontSize: '32px', fill: '#000' };
+
+    const coins = await fetch(`${process.env.API_BASE_URL}/coin`); // TODO 
+    const label = new CoinLabel(this, x, y, coins, style);
     this.add.existing(label);
 
     return label;
