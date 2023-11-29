@@ -93,7 +93,7 @@ async function tryLogin() {
       },
     };
 
-    const response = await fetch('/api/models/users.js', options);
+    const response = await fetch(`${process.env.API_BASE_URL}/models/users.js`, options);
 
     if (!response.ok) {
       animeLogin(false);
