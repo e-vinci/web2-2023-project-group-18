@@ -6,14 +6,14 @@ CREATE TABLE IF NOT EXISTS projet.collectibles(
     CHECK ( nbre_collectible >= 0 )
 );
 
-SELECT c.nbre_collectible FROM projet.collectible c WHERE c.user_id = 1;
+SELECT c.nbre_collectible FROM projet.collectibles c WHERE c.user_id = 1;
 
 CREATE OR REPLACE FUNCTION projet.add_collectible(id_user INTEGER, _collectible INTEGER)
 RETURNS VOID AS $$
     DECLARE
     BEGIN
     IF (EXISTS(SELECT * FROM projet.collectibles WHERE user_id = id_user )) THEN
-        UPDATE projet.collectible SET nbre_collectible = (nbre_collectible + _collectible) WHERE user_id = id_user;
+        UPDATE projet.collectibles SET nbre_collectible = (nbre_collectible + _collectible) WHERE user_id = id_user;
     ELSE
         INSERT INTO projet.collectibles (user_id, nbre_collectible) VALUES (id_user, _collectible);
     end if;
