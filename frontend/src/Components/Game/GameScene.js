@@ -180,7 +180,6 @@ class GameScene extends Phaser.Scene {
 
     this.gameOver = true;
 
-    addCollectibles(this.scoreLabel.score);
   }
 
   pauseGame() {
@@ -189,29 +188,4 @@ class GameScene extends Phaser.Scene {
   }
 }
 
-  async function addCollectibles (score) {
-    const data = score;
-    const user = 1;
-    console.log(data);
-
-    const options = {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        user, 
-        data
-      }),
-    };
-
-    const response = await fetch ('/api/models/collectibles.js', options);
-
-    if (!response.ok) {
-      throw new Error(`fetch error : ${response.status} : ${response.statusText}`);
-    }
-    else {
-      console.log("Collectibles enregistrés");
-    }
-  }
 export default GameScene;

@@ -1,5 +1,5 @@
 --DROP TABLE projet.collectible;
-CREATE TABLE IF NOT EXISTS projet.collectible(
+CREATE TABLE IF NOT EXISTS projet.collectibles(
     id_collectible SERIAL PRIMARY KEY NOT NULL,
     user_id INTEGER NOT NULL REFERENCES projet.users,
     nbre_collectible INTEGER NOT NULL
@@ -12,10 +12,10 @@ CREATE OR REPLACE FUNCTION projet.add_collectible(id_user INTEGER, _collectible 
 RETURNS VOID AS $$
     DECLARE
     BEGIN
-    IF (EXISTS(SELECT * FROM projet.collectible WHERE user_id = id_user )) THEN
+    IF (EXISTS(SELECT * FROM projet.collectibles WHERE user_id = id_user )) THEN
         UPDATE projet.collectible SET nbre_collectible = (nbre_collectible + _collectible) WHERE user_id = id_user;
     ELSE
-        INSERT INTO projet.collectible (user_id, nbre_collectible) VALUES (id_user, _collectible);
+        INSERT INTO projet.collectibles (user_id, nbre_collectible) VALUES (id_user, _collectible);
     end if;
     RETURN;
     END;
@@ -26,8 +26,8 @@ CREATE OR REPLACE FUNCTION projet.supp_collectible(id_user INTEGER, _collectible
 RETURNS VOID AS $$
     DECLARE
     BEGIN
-    IF (EXISTS(SELECT * FROM projet.collectible WHERE user_id = id_user )) THEN
-        UPDATE projet.collectible SET nbre_collectible = (nbre_collectible - _collectible) WHERE user_id = id_user;
+    IF (EXISTS(SELECT * FROM projet.collectibles WHERE user_id = id_user )) THEN
+        UPDATE projet.collectibles SET nbre_collectible = (nbre_collectible - _collectible) WHERE user_id = id_user;
     ELSE
         RAISE NOTICE 'No user found with this id_user';
     end if;
