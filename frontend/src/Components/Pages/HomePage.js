@@ -8,10 +8,12 @@ const HomePage = () => {
 
   const mainHTML = `
   <div class="screen">
-      <i class=" afs fa-volume-mute fa-2x" id="sound"></i>
-
-      <img class="imgSki"></img>
-    
+    <div id = "sound" class = "setting-btn">
+      <button><i class='bx bxs-cog'></i></button>
+      <button id ="volume" class = "btn2"><i class='bx bxs-volume-full'></i></button>
+      <button id = "volume" class= "btn3"><i class='bx bxs-volume-mute' ></i></button>
+    </div>
+ 
     <div class= "menu">
         <h1>SantaFall</h1>
         <h2>Let us slide</h2>
@@ -49,6 +51,8 @@ const HomePage = () => {
   main.innerHTML = mainHTML;
   isConnected(false);
   linkClick();
+  volumeClick();
+
   // animeLinks();
   // cookie();
 };
@@ -81,6 +85,22 @@ function linkClick() {
       Navigate(e.target.dataset.uri);
       // ou Navigate(link.dataset.uri);
     });
+  });
+}
+
+function volumeClick() {
+  
+  
+    document.querySelector('.btn3').addEventListener('click', (e) => {
+      e.preventDefault();
+      document.querySelector('.btn2').style.display = 'inline';
+      document.querySelector('.btn3').style.display = 'none';
+    })
+  
+  document.querySelector('.btn2').addEventListener('click', (e) => {
+    e.preventDefault();
+    document.querySelector('.btn3').style.display = 'inline';
+    document.querySelector('.btn2').style.display = 'none';
   });
 }
 
