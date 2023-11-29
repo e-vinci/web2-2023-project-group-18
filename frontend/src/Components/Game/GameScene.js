@@ -164,6 +164,24 @@ class GameScene extends Phaser.Scene {
     player.anims.play('turn');
 
     this.gameOver = true;
+
+    this.addCollectibles(this.scoreLabel.score);
+  }
+
+  addCollectibles (score) {
+    const apiUrl = 'http://localhost:3000/collectibles/addCollectible/1';
+    this.data = score;
+    console.log(this.data);
+
+    return fetch(apiUrl, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(this.data),
+    })
+      .then(response => response.json())
+      .catch(error => console.error('Error:', error));
   }
 }
 
