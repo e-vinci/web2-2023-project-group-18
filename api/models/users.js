@@ -1,25 +1,10 @@
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
-// const path = require('node:path');
 const { queryExecute } = require('../utils/db');
 
-// const { parse } = require('../utils/json');
-// const { SourceTextModule } = require('node:vm');
-
-// const jwtSecret = 'ilovemypizza!';
 const lifetimeJwt = 24 * 60 * 60 * 1000; // in ms : 24 * 60 * 60 * 1000 = 24h
 
 const saltRounds = 10;
-
-// const jsonDbPath = path.join(__dirname, '/../data/users.json');
-
-// const defaultUsers = [
-//   {
-//     id: 1,
-//     username: 'admin',
-//     password: bcrypt.hashSync('admin', saltRounds),
-//   },
-// ];
 
 function genToken(username) {
   return jwt.sign(
@@ -70,8 +55,8 @@ async function readOneUserFromUsername(username) {
 }
 
 async function createOneUser(username, password) {
-  // const users = parse(jsonDbPath, defaultUsers);
   const hashedPassword = await bcrypt.hash(password, saltRounds);
+
   await queryExecute(`INSERT INTO projet.users (username, password) VALUES ('${username}', '${hashedPassword}');`);
 
   const user = await readOneUserFromUsername(username);
@@ -81,10 +66,6 @@ async function createOneUser(username, password) {
     username: user.username,
     password: hashedPassword,
   };
-
-  // users.push(createdUser);
-
-  // serialize(jsonDbPath, users);
 
   return createdUser;
 }
