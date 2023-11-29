@@ -1,9 +1,6 @@
 
 import anime from 'animejs/lib/anime.es';
-// eslint-disable-next-line import/no-extraneous-dependencies
-import bcrypt from 'bcryptjs'
 import Navigate from '../Router/Navigate';
-
 
 const LoginPage = () => {
   const main = document.querySelector('main');
@@ -14,6 +11,7 @@ const LoginPage = () => {
       <div class="superWrapper">
         <div class="wrapper">
         <div class="errorMessage">
+        <p class = "errorVue"></p><button class ="error-btn"><i class='bx bxs-x-circle'></i></button>
         </div>
           <form action="">
             <h1>Login</h1>
@@ -41,6 +39,7 @@ const LoginPage = () => {
   
 
   linkClick();
+  errorClick();
 
   document.querySelector('form').addEventListener('submit', (e) => {
     e.preventDefault();
@@ -48,16 +47,18 @@ const LoginPage = () => {
     
   });
 
+  
+
   async function tryLogin() {
+
     const password = document.querySelector('.password').value;
     const username = document.querySelector('.username').value;
 
-    const passwordHash = hashPassword(password);
 
     const options = {
-      method: 'GET',
+      method: 'POST',
       body: JSON.stringify({
-        passwordHash,
+        password,
         username,
       }),
       headers: {
@@ -65,19 +66,18 @@ const LoginPage = () => {
       },
     };
 
-    const response = await fetch('/api/models/users.js', options); 
+    const response = await fetch('/api/auths/login', options); 
 
     if (!response.ok) {
-      animeLogin(!response.ok);
-      const message = 'Incorrect username or password';
-      errorMessage(message);
+      animeLogin(false);
+      document.querySelector('.errorVue').innerHTML = 'Incorrect username or password';
+      document.querySelector('.errorMessage').style.display = 'block';
       throw new Error(`fetch error : ${response.status} : ${response.statusText}`);
     }
     else {
-      animeLogin(response.ok);
+      animeLogin(true);
       Navigate('/');
   }
-    // const value = await response.json(); // json() returns a promise => we wait for the data
   }
 };
 
@@ -88,6 +88,14 @@ function linkClick() {
       Navigate(link.dataset.uri);
     });
   });
+}
+
+function errorClick() {
+  const btn = document.querySelector('.error-btn');
+  btn.addEventListener('click', (e) => {
+    e.preventDefault();
+    document.querySelector('.errorMessage').style.display = 'none';
+  })
 }
 
 function animeLogin(isConnected) {
@@ -127,38 +135,5 @@ function animeLogin(isConnected) {
     });
   }
 }
-
-
-
-function errorMessage(errors) {
-  const errorsVue = document.querySelector('.errorMessage');
-  const newP = document.createElement('p');
-  newP.textContent = errors;
-  const newButton = document.createElement('.errorBtn');
-  newButton.textContent = ` <i class='bx bxs-x-circle'></i>`;
-
-  newButton.addEventListener('click', (e) => {
-    e.preventDefault();
-    errorsVue.style.display = 'none';
-  });
-
-  errorsVue.appendChild(newP);
-  errorsVue.appendChild(newButton);
-}
-
-
-function hashPassword(password) {
-  const saltRounds = 10;
-  const plainTextPassword = password;
-
-  bcrypt.hash(plainTextPassword, saltRounds, (err, hash) => {
-    if (err) {
-      return;
-    }
-    // eslint-disable-next-line consistent-return
-    return hash;
-  });
-};
-
 
 export default LoginPage;

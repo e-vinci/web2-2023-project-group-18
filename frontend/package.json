@@ -39,6 +39,7 @@
     "commitizen": "^4.3.0",
     "fs": "^0.0.1-security",
     "gh-pages": "^4.0.0",
+    "jsonwebtoken": "^9.0.2",
     "path-browserify": "^1.0.1",
     "phaser": "^3.55.2",
     "terser-webpack-plugin": "^5.3.6",
