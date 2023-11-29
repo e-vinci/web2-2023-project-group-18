@@ -1,16 +1,40 @@
-
-### Basic url
-@baseUrl = http://localhost:3000/users
-
-### get user
-GET {{baseUrl}}/3
+@baseUrl = http://localhost:3000
 
 
-### create new user
-POST {{baseUrl}}/
+### Try to login an unknow user
+POST {{baseUrl}}/auths/login
 Content-Type: application/json
 
 {
-   "username": "USUSUSUS",
-   "password": "PASSWORD_TEST"
+    "username":"GoldKing",
+    "password":"admin"
+}
+
+### Login the default admin
+POST {{baseUrl}}/auths/login
+Content-Type: application/json
+
+{
+    "username":"admin",
+    "password":"admin"
+}
+
+
+
+### Create the manager user
+POST {{baseUrl}}/auths/register
+Content-Type: application/json
+
+{
+    "username":"manager",
+    "password":"manager"
+}
+
+### Login the manager user
+POST {{baseUrl}}/auths/login
+Content-Type: application/json
+
+{
+    "username":"manager",
+    "password":"manager"
 }
