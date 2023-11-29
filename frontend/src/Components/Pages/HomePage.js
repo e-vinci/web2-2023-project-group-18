@@ -30,12 +30,26 @@ const HomePage = () => {
         </ul>
     </div>
   </div>
+
+   <div id="cookies">
+      <div class= "container">
+        <div class="subcontainer">
+          <div class="cookies">
+            <p>
+              This app uses cookies to ensure you get the best experience on your website. 
+              <a class="nav-link" href="#" data-uri = "/cookies-policy" >More info.</a>
+              <button id="cookies-btn">That's fine !</button>
+            </p>
+          </div>
+        </div>
+      </div>
+     </div>
 `;
 
   main.innerHTML = mainHTML;
-  isConnected(false);
+  isConnected(localStorage.getItem('isConnecte'));
   linkClick();
-  //  animeLinks();
+  // animeLinks();
 };
 
 function isConnected(params) {
@@ -68,14 +82,14 @@ function linkClick() {
   });
 }
 
-//  function animeLinks() {
-//    const links = document.querySelectorAll('li');
+//   function animeLinks() {
+//     const links = document.querySelectorAll('li');
 
-//     const num = 500;
-//    let cpt = 1;
-//    links.forEach((link) => {
+//      const num = 500;
+//      let cpt = 1;
+//      links.forEach((link) => {
 //      window.addEventListener(
-//        'mouseover',
+//         'mouseover',
 //        anime({
 //          targets: link,
 //          translateX: 50,

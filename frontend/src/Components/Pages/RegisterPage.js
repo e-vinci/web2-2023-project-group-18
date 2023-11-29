@@ -4,17 +4,23 @@ import Navigate from '../Router/Navigate';
 const RegisterPage = () => {
   const main = document.querySelector('main');
   main.innerHTML = `
-   <div class="div-back">
+  <div class="div-back">
         <button id="link" class="back" type="button" data-uri="/"><i class='bx bx-arrow-back'></i></button>
       </div>
-      <div class="superWrapper">
+   <div class="superWrapper">
         <div class="wrapper">
-          <form action="">
+          <form action="/register" method="get">
             <h1>Register</h1>
             <div class="input-box">
               <input type="text" placeholder="Username" required>
               <i class='bx bxs-user'></i>
             </div>
+
+            <div class="input-box">
+              <input type="email" placeholder="Email Adresse" required>
+              <i class='bx bx-envelope'></i>
+            </div>
+
             <div class="input-box">
               <input type="password" placeholder="Password" required>
               <i class='bx bxs-lock-alt'></i>
@@ -24,20 +30,29 @@ const RegisterPage = () => {
               <i class='bx bxs-lock-alt'></i>
             </div>
 
+            <div>
+                <input type="checkbox" required></input> I have read and I agree to the <a  id="link" href="#" data-uri="/private-policy">Privacy Policy</a>
+            </div>
+
+            <br>
             <button type="submit" class="btn">Register</button>
 
             <div class="register-link">
               <p>Already have an account ?<a id="link" data-uri="/login" href ="#"> Login here </a> </p>
+            </div>
+            <br>
+            <div class="errorMessage">
             </div>
           </form>
         </div>
       </div>`;
 
   linkClick();
+  errorMessage()
 
   document.querySelector('form').addEventListener('submit', (e) => {
     e.preventDefault();
-    animeLogin(true);
+    animeLogin(localStorage.getItem('isConnected'));
   });
 };
 
@@ -68,6 +83,7 @@ function animeLogin(isConnected) {
     borderColor.style.animationName = 'changeColorGreen';
     borderColor.style.animationDuration = '2s';
   } else {
+    errorMessage(localStorage.setItem('errors'));
     borderColor.style.borderColor = '#FF0000';
     borderColor.style.animationName = 'changeColorRed';
     borderColor.style.animationDuration = '2s';
@@ -86,6 +102,19 @@ function animeLogin(isConnected) {
       translateX: [{ value: 50 }, { value: -50 }],
     });
   }
+}
+
+function errorMessage(errors) {
+  const newUl = document.createElement('ul');
+  errors.forEach((errorValue)=> {
+    const newLi = document.createElement('li');
+    newLi.textContent = errorValue;
+    newUl.appendChild(newLi);
+  });
+  
+  const errorsVue = document.querySelector('.errorMessage');
+  errorsVue.appendChild(newUl);
+  
 }
 
 export default RegisterPage;
