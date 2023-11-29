@@ -1,8 +1,9 @@
+--DROP TABLE projet.collectible;
 CREATE TABLE IF NOT EXISTS projet.collectible(
     id_collectible SERIAL PRIMARY KEY NOT NULL,
     user_id INTEGER NOT NULL REFERENCES projet.users,
     nbre_collectible INTEGER NOT NULL
-    CHECK ( nbre_collectible > 0 )
+    CHECK ( nbre_collectible >= 0 )
 );
 
 SELECT c.nbre_collectible FROM projet.collectible c WHERE c.user_id = 1;

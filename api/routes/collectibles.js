@@ -23,25 +23,23 @@ router.get('/:id', async (req, res) => {
   }
 });
 
-router.put('/addCollectible/:id', async (req, res) => {
+router.post('/addCollectible/:id', async (req, res) => {
   const collectible = req?.body?.collectible ? req.body.collectible : undefined;
   if (collectible) {
     try {
-      await addCollectible(req.params.id, collectible);
+      const id = await addCollectible(req.params.id, collectible);
+      console.log(`Id user ${id.rows.id}`);
       res.sendStatus(200);
-      // await res.sendStatus(200);
     } catch (error) {
-      console.error('Error in request');
-      // user doesn't exist or bad user index
+      console.log(`Erreur type: ${error.detail}`);
       res.sendStatus(404);
     }
   } else {
-    // bad parmeter
     res.sendStatus(400);
   }
 });
 
-router.put('/suppCollectible/:id', async (req, res) => {
+router.post('/suppCollectible/:id', async (req, res) => {
   const collectible = req?.body?.collectible ? req.body.collectible : undefined;
   if (collectible) {
     try {

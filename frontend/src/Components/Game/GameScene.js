@@ -165,24 +165,34 @@ class GameScene extends Phaser.Scene {
 
     this.gameOver = true;
 
-    this.addCollectibles(this.scoreLabel.score);
+    addCollectibles(this.scoreLabel.score);
   }
 
-  addCollectibles (score) {
-    const apiUrl = 'http://localhost:3000/collectibles/addCollectible/1';
-    this.data = score;
-    console.log(this.data);
+}
 
-    return fetch(apiUrl, {
-      method: 'PUT',
+  async function addCollectibles (score) {
+    const data = score;
+    const user = 1;
+    console.log(data);
+
+    const options = {
+      method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(this.data),
-    })
-      .then(response => response.json())
-      .catch(error => console.error('Error:', error));
-  }
-}
+      body: JSON.stringify({
+        user, 
+        data
+      }),
+    };
 
+    const response = await fetch ('/api/models/collectibles.js', options);
+
+    if (!response.ok) {
+      throw new Error(`fetch error : ${response.status} : ${response.statusText}`);
+    }
+    else {
+      console.log("Collectibles enregistrés");
+    }
+  }
 export default GameScene;
