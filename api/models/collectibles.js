@@ -1,7 +1,7 @@
 const { queryExecute } = require('../utils/db');
 
 function getCollectible(user) {
-  return queryExecute(`SELECT c.nbre_collectible FROM projet.collectible c WHERE c.user_id = ${user}`);
+  return queryExecute(`SELECT c.nbre_collectible FROM projet.collectibles c WHERE c.user_id = ${user}`);
 }
 
 function addCollectible(user, collectible) {
