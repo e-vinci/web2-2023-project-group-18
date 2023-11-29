@@ -5,7 +5,7 @@
 GET {{baseUrl}}/1
 
 ### Add collectibles
-POST {{baseUrl}}/addCollectible/1
+PUT {{baseUrl}}/addCollectible/1
 Content-Type: application/json
 
 {
@@ -13,12 +13,15 @@ Content-Type: application/json
 }
 
 ### Get the amount of collectibles
-GET {{baseUrl}}/4
+GET {{baseUrl}}/1
 
 ### Supp collectibles
-POST {{baseUrl}}/suppCollectible/1
+PUT {{baseUrl}}/suppCollectible/1
 Content-Type: application/json
 
 {
     "collectible" : 100
 }
+
+### Get the amount of collectibles
+GET {{baseUrl}}/1

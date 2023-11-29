@@ -23,7 +23,7 @@ router.get('/:id', async (req, res) => {
   }
 });
 
-router.post('/addCollectible/:id', async (req, res) => {
+router.put('/addCollectible/:id', async (req, res) => {
   const collectible = req?.body?.collectible ? req.body.collectible : undefined;
   if (collectible) {
     try {
@@ -39,7 +39,7 @@ router.post('/addCollectible/:id', async (req, res) => {
   }
 });
 
-router.post('/suppCollectible/:id', async (req, res) => {
+router.put('/suppCollectible/:id', async (req, res) => {
   const collectible = req?.body?.collectible ? req.body.collectible : undefined;
   if (collectible) {
     try {
