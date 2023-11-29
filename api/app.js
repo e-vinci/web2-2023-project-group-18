@@ -8,7 +8,6 @@ const corsOptions = {
 };
 
 const scoresRouter = require('./routes/scores');
-const usersRouter = require('./routes/users');
 const authsRouter = require('./routes/auths');
 
 const app = express();
@@ -19,7 +18,6 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
 app.use(cors(corsOptions));
-app.use('/users', usersRouter);
 app.use('/auths', authsRouter);
 app.use('/scores', scoresRouter);
 
