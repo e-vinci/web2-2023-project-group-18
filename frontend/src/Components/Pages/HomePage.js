@@ -2,6 +2,7 @@
 // import anime from 'animejs/lib/anime.es';
 
 import Navigate from '../Router/Navigate';
+import settings from '../../utils/settings';
 
 const HomePage = () => {
   const main = document.querySelector('main');
@@ -9,7 +10,7 @@ const HomePage = () => {
   const mainHTML = `
   <div class="screen">
     <div id = "sound" class = "setting-btn">
-      <button><i class='bx bxs-cog'></i></button>
+      <button class = "btn1"><i class='bx bxs-cog'></i></button>
       <button id ="volume" class = "btn2"><i class='bx bxs-volume-full'></i></button>
       <button id = "volume" class= "btn3"><i class='bx bxs-volume-mute' ></i></button>
     </div>
@@ -52,6 +53,7 @@ const HomePage = () => {
   isConnected(false);
   linkClick();
   volumeClick();
+  settingClick();
 
   // animeLinks();
   // cookie();
@@ -90,18 +92,28 @@ function linkClick() {
 
 function volumeClick() {
   
-  
+  // volume on
     document.querySelector('.btn3').addEventListener('click', (e) => {
       e.preventDefault();
       document.querySelector('.btn2').style.display = 'inline';
       document.querySelector('.btn3').style.display = 'none';
     })
   
+  // volume off
   document.querySelector('.btn2').addEventListener('click', (e) => {
     e.preventDefault();
     document.querySelector('.btn3').style.display = 'inline';
     document.querySelector('.btn2').style.display = 'none';
   });
+}
+
+function settingClick() {
+  const btn = document.querySelector('.btn1');
+  btn.addEventListener('click', () => {
+    settings.openSettings();
+    settings.getKey();
+  })
+
 }
 
 
