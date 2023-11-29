@@ -47,7 +47,7 @@ const HomePage = () => {
 `;
 
   main.innerHTML = mainHTML;
-  isConnected(false);
+  isConnected(localStorage.getItem('isConnecte'));
   linkClick();
   // animeLinks();
   // cookie();
