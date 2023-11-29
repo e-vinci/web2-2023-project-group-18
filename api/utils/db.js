@@ -5,7 +5,7 @@ require('dotenv').config();
 const fs = require('fs');
 const path = require('path');
 
-const filePath = path.join(__dirname, '../data/databaseProject.sql');
+const filePath = path.join(__dirname, '../data/database.sql');
 
 // Create Pool
 const pool = new Pool({
