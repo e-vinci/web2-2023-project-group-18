@@ -1,6 +1,5 @@
+
 import anime from 'animejs/lib/anime.es';
-
-
 import Navigate from '../Router/Navigate';
 
 const LoginPage = () => {
@@ -11,15 +10,18 @@ const LoginPage = () => {
       </div>
       <div class="superWrapper">
         <div class="wrapper">
+        <div class="errorMessage">
+        <p class = "errorVue"></p><button class ="error-btn"><i class='bx bxs-x-circle'></i></button>
+        </div>
           <form action="">
             <h1>Login</h1>
             <div class="input-box">
-              <input type="text" placeholder="Username" required>
+              <input class="username" type="text" placeholder="Username" required>
               <i class='bx bxs-user'></i>
             </div>
 
             <div class="input-box">
-              <input type="password" placeholder="Password" required>
+              <input class="password"  type="password" placeholder="Password" required>
               <i class='bx bxs-lock-alt'></i>
             </div>
 
@@ -28,17 +30,55 @@ const LoginPage = () => {
             <div class="register-link">
               <p>Not register yet ? <a id="link" data-uri="/register" href ="#">Register</a> </p>
             </div>
+            <br>
+            <div class="errorMessage">
+            </div>
           </form>
         </div>
       </div>`;
   
 
   linkClick();
-  
+  errorClick();
+
   document.querySelector('form').addEventListener('submit', (e) => {
     e.preventDefault();
-    animeLogin(false);
+    tryLogin();
+    
   });
+
+  
+
+  async function tryLogin() {
+
+    const password = document.querySelector('.password').value;
+    const username = document.querySelector('.username').value;
+
+
+    const options = {
+      method: 'POST',
+      body: JSON.stringify({
+        password,
+        username,
+      }),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    };
+
+    const response = await fetch(`${process.env.API_BASE_URL}/auths/login`, options); 
+
+    if (!response.ok) {
+      animeLogin(false);
+      document.querySelector('.errorVue').innerHTML = 'Incorrect username or password';
+      document.querySelector('.errorMessage').style.display = 'block';
+      throw new Error(`fetch error : ${response.status} : ${response.statusText}`);
+    }
+    else {
+      animeLogin(true);
+      Navigate('/');
+  }
+  }
 };
 
 function linkClick() {
@@ -50,10 +90,18 @@ function linkClick() {
   });
 }
 
+function errorClick() {
+  const btn = document.querySelector('.error-btn');
+  btn.addEventListener('click', (e) => {
+    e.preventDefault();
+    document.querySelector('.errorMessage').style.display = 'none';
+  })
+}
+
 function animeLogin(isConnected) {
   const borderColor = document.querySelector('.wrapper');
   const inputsColor = document.querySelectorAll('.input-box input');
-  
+
   if (isConnected) {
     inputsColor.forEach((input) => {
       // eslint-disable-next-line no-param-reassign
@@ -62,14 +110,12 @@ function animeLogin(isConnected) {
       input.style.animationName = 'changeColorGreen';
       // eslint-disable-next-line no-param-reassign
       input.style.animationDuration = '2s';
-
     });
-    
+
     borderColor.style.borderColor = '#00FF00';
     borderColor.style.animationName = 'changeColorGreen';
     borderColor.style.animationDuration = '2s';
-  }
-    else {
+  } else {
     borderColor.style.borderColor = '#FF0000';
     borderColor.style.animationName = 'changeColorRed';
     borderColor.style.animationDuration = '2s';
@@ -88,8 +134,6 @@ function animeLogin(isConnected) {
       translateX: [{ value: 50 }, { value: -50 }],
     });
   }
-
-
 }
 
 export default LoginPage;

@@ -9,7 +9,6 @@ const corsOptions = {
 
 const collectiblesRouter = require('./routes/collectibles');
 const scoresRouter = require('./routes/scores');
-const usersRouter = require('./routes/users');
 const authsRouter = require('./routes/auths');
 
 const app = express();
