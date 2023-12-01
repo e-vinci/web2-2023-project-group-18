@@ -1,9 +1,12 @@
 import Phaser from 'phaser';
 import ScoreLabel from './ScoreLabel';
-import BombSpawner from './BombSpawner';
+// import BombSpawner from './BombSpawner';
+import PineSpawner from './PineSpawner';
 import platformAsset from '../../assets/platform.png';
 import starAsset from '../../assets/star.png';
 import bombAsset from '../../assets/bomb.png';
+import pineSapling1 from '../../assets/pineSapling1.png';
+// import pineSapling2 from '../../assets/pineSapling2.png';
 import dudeAsset from '../../assets/dude.png';
 import pauseButton from '../../assets/pauseButton.png';
 import Settings from '../../utils/settings';
@@ -13,6 +16,7 @@ const DUDE_KEY = 'dude';
 const STAR_KEY = 'star';
 const BOMB_KEY = 'bomb';
 const PAUSE_BUTTON  = 'pause';
+const PINE_KEY = 'pinesapling';
 
 class GameScene extends Phaser.Scene {
   constructor() {
@@ -24,6 +28,7 @@ class GameScene extends Phaser.Scene {
     this.bombSpawner = undefined;
     this.gameOver = false;
     this.pauseButton = undefined;
+    this.pineSpawner= undefined;
   }
 
   preload() {
@@ -36,6 +41,7 @@ class GameScene extends Phaser.Scene {
       frameHeight: 48,
     });
     this.load.image(PAUSE_BUTTON, pauseButton);
+    this.load.image(PINE_KEY, pineSapling1);
   }
 
   create() {
@@ -44,12 +50,9 @@ class GameScene extends Phaser.Scene {
     this.stars = this.createStars();
     this.scoreLabel = this.createScoreLabel(20, 20, 0);
     this.scoreLabel.setColor('#ffffff');
-    this.bombSpawner = new BombSpawner(this, BOMB_KEY);
-    const bombsGroup = this.bombSpawner.group;
     this.physics.add.collider(this.stars, platforms);
     this.physics.add.collider(this.player, platforms);
-    this.physics.add.collider(bombsGroup, platforms);
-    this.physics.add.collider(this.player, bombsGroup, this.hitBomb, null, this);
+
     this.physics.add.overlap(this.player, this.stars, this.collectStar, null, this);
     this.cursors = this.input.keyboard.createCursorKeys();
     this.key = this.input.keyboard.addKey('SPACE');
@@ -59,7 +62,18 @@ class GameScene extends Phaser.Scene {
     this.pauseButton.on('pointerdown', () => {
       this.pauseGame();
     }); 
-
+    this.pineSpawner = new PineSpawner(this, PINE_KEY);
+    const pineSaplingGroup = this.pineSpawner.group;
+    this.physics.add.collider(this.player,pineSaplingGroup, this.hitPine,null,this);
+    this.pineSpawner.spawn();
+    this.physics.add.collider(pineSaplingGroup, platforms)
+    this.pineSpawner.group.getChildren().forEach((pine) => {
+      // Check if the pine is out of the left side of the screen
+      if (pine.x < 0) {
+          // If it's out of bounds, destroy the pine
+          this.pineSpawner.removePine();
+      }
+  });
     /* The Collider takes two objects and tests for collision and performs separation against them.
     Note that we could call a callback in case of collision... */
   }
@@ -68,6 +82,12 @@ class GameScene extends Phaser.Scene {
     if (this.gameOver) {
       return;
     }
+
+     this.pineSpawner.group.getChildren().forEach((pine) => {
+      if(pine.x < 10){
+        this.pineSpawner.removePine(pine);
+      }
+     });
 
     const key = Settings.getKey();
     if (Phaser.Input.Keyboard.KeyCodes[key] !== this.key.keyCode) {
@@ -87,7 +107,7 @@ class GameScene extends Phaser.Scene {
     }
 
     if (this.key.isDown && this.player.body.touching.down) {
-      this.player.setVelocityY(-330);
+      this.player.setVelocityY(-240);
     }
   }
 
@@ -95,8 +115,8 @@ class GameScene extends Phaser.Scene {
     const platforms = this.physics.add.staticGroup();
 
     platforms
-      .create(400, 568, GROUND_KEY)
-      .setScale(2)
+      .create(400, 800, GROUND_KEY)
+      .setScale(10)
       .refreshBody();
 
     platforms.create(600, 400, GROUND_KEY);
@@ -106,8 +126,7 @@ class GameScene extends Phaser.Scene {
   }
 
   createPlayer() {
-    const player = this.physics.add.sprite(100, 450, DUDE_KEY);
-    player.setBounce(0.2);
+    const player = this.physics.add.sprite(20, 600, DUDE_KEY);
     player.setCollideWorldBounds(true);
     /* The 'left' animation uses frames 0, 1, 2 and 3 and runs at 10 frames per second.
     The 'repeat -1' value tells the animation to loop.
@@ -139,7 +158,7 @@ class GameScene extends Phaser.Scene {
     const stars = this.physics.add.group({
       key: STAR_KEY,
       repeat: 11,
-      setXY: { x: 12, y: 0, stepX: 70 },
+      setXY: { x: 12, y: 630, stepX: 150 },
     });
 
     stars.children.iterate((child) => {
@@ -158,8 +177,6 @@ class GameScene extends Phaser.Scene {
         child.enableBody(true, child.x, 0, true, true);
       });
     }
-
-    this.bombSpawner.spawn(player.x);
   }
 
   createScoreLabel(x, y, score) {
@@ -180,6 +197,19 @@ class GameScene extends Phaser.Scene {
 
     this.gameOver = true;
 
+  }
+
+  hitPine(player){
+    this.scoreLabel.setText(`GAME OVER : ( \nYour Score = ${this.scoreLabel.score}`);
+    this.physics.pause();
+
+    player.setTint(0xff0000);
+
+    player.anims.play('turn');
+
+    this.gameOver = true;
+
+    this.pineSpawner.stopSpawning();
   }
 
   pauseGame() {
