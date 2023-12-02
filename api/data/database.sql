@@ -20,15 +20,18 @@ CREATE OR REPLACE VIEW  projet.display_scores AS
     ORDER BY 2 DESC, 3 DESC;
 
 CREATE OR REPLACE FUNCTION projet.user_change_score(
-    _user INT,
+    _user VARCHAR(255),
     _score INT
 ) RETURNS VOID AS $$
 DECLARE
+    id_current_user INTEGER;
 BEGIN
-    IF (EXISTS(SELECT * FROM projet.scores WHERE id_user = _user )) THEN
-        UPDATE projet.scores SET score =_score, score_date = CURRENT_DATE WHERE id_user = _user;
+    id_current_user := (SELECT s.id_user FROM projet.scores s, projet.users u WHERE s.id_user = u.id_user AND u.username = _user);
+
+    IF (FOUND) THEN
+        UPDATE projet.scores SET score =_score, score_date = CURRENT_DATE WHERE id_user = id_current_user;
     ELSE
-        INSERT INTO projet.scores (id_user, score) VALUES (_user, _score);
+        INSERT INTO projet.scores (id_user, score) VALUES (id_current_user, _score);
     end if;
 RETURN;
 END;
