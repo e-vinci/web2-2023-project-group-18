@@ -39,6 +39,21 @@ END;
 $$ LANGUAGE plpgsql;
 
 
+CREATE OR REPLACE FUNCTION projet.insert_user(
+    _username VARCHAR(255),
+    _password VARCHAR(255)
+) RETURNS INTEGER AS $$
+DECLARE
+    id INTEGER;
+BEGIN
+    INSERT INTO projet.users (username, password) 
+    VALUES (_username, _password)
+    RETURNING id_user INTO  id;
+    
+RETURN id;
+END;
+
+$$ LANGUAGE plpgsql;
 
 
 
