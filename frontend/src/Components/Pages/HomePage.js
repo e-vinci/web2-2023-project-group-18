@@ -50,7 +50,8 @@ const HomePage = () => {
 `;
 
   main.innerHTML = mainHTML;
-  isConnected(false);
+  const token =false;
+  isConnected(token);
   linkClick();
   volumeClick();
   settingClick();
@@ -59,8 +60,8 @@ const HomePage = () => {
   // cookie();
 };
 
-function isConnected(params) {
-  if (params === false) {
+function isConnected(token) {
+  if (token === false) {
     document.querySelector(
       '#linkNotConnect1',
     ).innerHTML = `<a class="nav-link" href="#" data-uri="/login">Login</a>`;

@@ -1,6 +1,4 @@
 import anime from 'animejs/lib/anime.es';
-// eslint-disable-next-line import/no-extraneous-dependencies
-import bcrypt from 'bcryptjs'
 import Navigate from '../Router/Navigate';
 
 const RegisterPage = () => {
@@ -11,7 +9,9 @@ const RegisterPage = () => {
       </div>
    <div class="superWrapper">
         <div class="wrapper">
-        <div class = "errorMessage"></div>
+        <div class = "errorMessage">
+        <p class='errorVue'></p><button class = 'error-btn'><i class='bx bxs-x-circle'></i></button>
+        </div>
           <form action="">
             <h1>Register</h1>
             <div class="input-box">
@@ -43,15 +43,19 @@ const RegisterPage = () => {
             <div class="register-link">
               <p>Already have an account ?<a id="link" data-uri="/login" href ="#"> Login here </a> </p>
             </div>
+            <br>
+            <div class="errorMessage">
+            </div>
           </form>
         </div>
       </div>`;
   
   linkClick();
+  ErrorClick();
 
   document.querySelector('form').addEventListener('submit', (e) => {
     e.preventDefault();
-    tryLogin();
+    tryRgister();
   });
 
   
@@ -66,21 +70,33 @@ function linkClick() {
   });
 }
 
-async function tryLogin() {
+function ErrorClick() {
+  const btn = document.querySelector('.error-btn');
+  btn.addEventListener('click', (e) => {
+    e.preventDefault();
+    const errorVue = document.querySelector('.errorMessage');
+    errorVue.style.display = 'none';
+  })
+}
+
+async function tryRgister() {
   const password1 = document.querySelector('.password1').value;
   const password2 = document.querySelector('.password2').value;
   const username = document.querySelector('.username').value;
   const email = document.querySelector(".email").value;
 
 
-  if (password1 === password2) {
-
-    const passwordHash = hashPassword(password1);
+  if (password1 !== password2) {
+    animeLogin(false);
+    document.querySelector(".errorVue").innerHTML='The passwords are not matching';
+    document.querySelector('.errorMessage').style.display = 'block';
+  }
+  else{
 
     const options = {
-      method: 'PUT',
+      method: 'POST',
       body: JSON.stringify({
-        passwordHash,
+        password1,
         username,
         email,
       }),
@@ -89,23 +105,19 @@ async function tryLogin() {
       },
     };
 
-    const response = await fetch('/api/models/users.js', options);
+    const response = await fetch(`${process.env.API_BASE_URL}/auths/register`, options);
+
 
     if (!response.ok) {
       animeLogin(false);
-      const message = 'This account already exist';
-      errorMessage(message);
+      document.querySelector('.errorVue').innerHTML = 'This account already exist';
+      document.querySelector('.errorMessage').style.display = 'block';
       throw new Error(`fetch error : ${response.status} : ${response.statusText}`);
     }
     else {
       animeLogin(true);
       Navigate('/');
     }
-    // const value = await response.json(); // json() returns a promise => we wait for the data
-  }
-  else {
-    animeLogin(false);
-    errorMessage('The passwords are not matching ');
   }
 }
 
@@ -127,6 +139,7 @@ function animeLogin(isConnected) {
     borderColor.style.animationName = 'changeColorGreen';
     borderColor.style.animationDuration = '2s';
   } else {
+    // errorMessage(localStorage.setItem('errors'));
     borderColor.style.borderColor = '#FF0000';
     borderColor.style.animationName = 'changeColorRed';
     borderColor.style.animationDuration = '2s';
@@ -146,35 +159,5 @@ function animeLogin(isConnected) {
     });
   }
 }
-
-function errorMessage(errors) {
-  const errorsVue = document.querySelector('.errorMessage');
-  const newP = document.createElement('p');
-  newP.textContent = errors;
-  const newButton = document.createElement('button');
-  newButton.textContent = ` <i class='bx bxs-x-circle'></i>`;
-
-  newButton.addEventListener('click', (e) => {
-    e.preventDefault();
-    errorsVue.style.display = 'none';
-  });
-
-  errorsVue.appendChild(newP);
-  errorsVue.appendChild(newButton);
-}
-
-
-function hashPassword(password) {
-  const saltRounds = 10;
-  const plainTextPassword = password;
-
-  bcrypt.hash(plainTextPassword, saltRounds, (err, hash) => {
-    if (err) {
-      return;
-    }
-    // eslint-disable-next-line consistent-return
-    return hash;
-  });
-};
 
 export default RegisterPage;
