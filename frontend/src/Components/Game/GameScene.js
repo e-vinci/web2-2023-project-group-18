@@ -184,7 +184,7 @@ class GameScene extends Phaser.Scene {
   async createCoinsLabel(x, y) {
     const style = { fontSize: '32px', fill: '#000' };
 
-    const coins = await fetch(`${process.env.API_BASE_URL}/coin`); // TODO 
+    const coins = await fetch(`${process.env.API_BASE_URL}/collectibles/1`).nbre_collectible; // TODO 
     const label = new CoinLabel(this, x, y, coins, style);
     this.add.existing(label);
 

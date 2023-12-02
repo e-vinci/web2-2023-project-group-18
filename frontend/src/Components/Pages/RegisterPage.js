@@ -1,6 +1,6 @@
 import anime from 'animejs/lib/anime.es';
 // eslint-disable-next-line import/no-extraneous-dependencies
-import bcrypt from 'bcryptjs'
+// import bcrypt from 'bcryptjs'
 import Navigate from '../Router/Navigate';
 
 const RegisterPage = () => {
@@ -169,17 +169,17 @@ function errorMessage(errors) {
 }
 
 
-function hashPassword(password) {
-  const saltRounds = 10;
-  const plainTextPassword = password;
+function hashPassword(){ // password) {
+  // const saltRounds = 10;
+  // const plainTextPassword = password;
 
-  bcrypt.hash(plainTextPassword, saltRounds, (err, hash) => {
-    if (err) {
-      return;
-    }
-    // eslint-disable-next-line consistent-return
-    return hash;
-  });
+  // bcrypt.hash(plainTextPassword, saltRounds, (err, hash) => {
+  //   if (err) {
+  //     return;
+  //   }
+  //   // eslint-disable-next-line consistent-return
+  //   return hash;
+  // });
 };
 
 export default RegisterPage;
