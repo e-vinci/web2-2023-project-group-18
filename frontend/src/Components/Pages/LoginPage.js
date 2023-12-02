@@ -75,6 +75,7 @@ const LoginPage = () => {
       throw new Error(`fetch error : ${response.status} : ${response.statusText}`);
     }
     else {
+      localStorage.setItem('token',response.token)
       animeLogin(true);
       Navigate('/');
   }
