@@ -50,8 +50,7 @@ const HomePage = () => {
 `;
 
   main.innerHTML = mainHTML;
-  const token =false;
-  isConnected(token);
+  isConnected(false);
   linkClick();
   volumeClick();
   settingClick();
