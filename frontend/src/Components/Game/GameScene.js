@@ -181,6 +181,7 @@ class GameScene extends Phaser.Scene {
     player.anims.play('turn');
 
     this.gameOver = true;
+
   }
 
   pauseGame() {
