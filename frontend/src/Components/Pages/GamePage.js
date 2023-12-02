@@ -19,6 +19,9 @@ const GamePage = () => {
       mode: Phaser.Scale.FIT,
       autoCenter: Phaser.Scale.CENTER_BOTH,
       parent: 'GamePage',
+      height: 800,
+      width: 1600
+
   },
     physics: {
       default: 'arcade',
@@ -38,6 +41,7 @@ const GamePage = () => {
   // therefore destroy any started game prior to recreate it
   if (game) game.destroy(true);
   game = new Phaser.Game(config);
+  window.focus();
 
 };
 

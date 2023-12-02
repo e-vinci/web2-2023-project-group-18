@@ -18,6 +18,15 @@ const STAR_KEY = 'star';
 const BOMB_KEY = 'bomb';
 const PAUSE_BUTTON  = 'pause';
 
+const gameOptions = {
+  startTerrainHeight: 0.5,
+  amplitude: 200,
+  slopeLength: [100, 350],
+  slicesAmount: 2,
+  slopesPerSlice: 5,
+  terrainSpeed: 200
+};
+
 class GameScene extends Phaser.Scene {
   constructor() {
     super('game-scene');
@@ -28,6 +37,8 @@ class GameScene extends Phaser.Scene {
     this.bombSpawner = undefined;
     this.gameOver = false;
     this.pauseButton = undefined;
+    this.slopeGraphics = [];
+    this.sliceStart = undefined;
   }
 
   preload() {
@@ -45,16 +56,22 @@ class GameScene extends Phaser.Scene {
   }
 
   create() {
-    const slope = this.createSlope();
+    this.slopeGraphics = [];
+    this.sliceStart = new Phaser.Math.Vector2(0, Math.random());
+    for(let i = 0; i < gameOptions.slicesAmount; i+=1){
+      this.slopeGraphics[i] = this.add.graphics();
+      this.sliceStart = this.createSlope(this.slopeGraphics[i], this.sliceStart);
+    }
+
     this.player = this.createPlayer();
     this.stars = this.createStars();
     this.scoreLabel = this.createScoreLabel(20, 20, 0);
     this.scoreLabel.setColor('#ffffff');
     this.bombSpawner = new BombSpawner(this, BOMB_KEY);
     const bombsGroup = this.bombSpawner.group;
-    this.physics.add.collider(this.stars, slope);
-    this.physics.add.collider(this.player, slope);
-    this.physics.add.collider(bombsGroup, slope);
+    // this.physics.add.collider(this.stars, sliceStart);
+    // this.physics.add.collider(this.player, sliceStart);
+    // this.physics.add.collider(bombsGroup, sliceStart);
     this.physics.add.collider(this.player, bombsGroup, this.hitBomb, null, this);
     this.physics.add.overlap(this.player, this.stars, this.collectStar, null, this);
     this.cursors = this.input.keyboard.createCursorKeys();
@@ -65,12 +82,65 @@ class GameScene extends Phaser.Scene {
     this.pauseButton.on('pointerdown', () => {
       this.pauseGame();
     }); 
-
-    /* The Collider takes two objects and tests for collision and performs separation against them.
-    Note that we could call a callback in case of collision... */
   }
 
-  update() {
+  createSlope(graphics, sliceStart){
+    const slopePoints = [];
+    let slopes = 0;
+    let slopeStart = 0;
+    let slopeStartHeight = sliceStart.y;
+    let currentSlopeLength = Phaser.Math.Between(gameOptions.slopeLength[0], gameOptions.slopeLength[1]);
+    let slopeEnd = slopeStart + currentSlopeLength;
+    let slopeEndHeight = Math.random();
+    let currentPoint = 0;
+    while(slopes < gameOptions.slopesPerSlice){
+      let y;
+        if(currentPoint === slopeEnd){
+            slopes +=1;
+            slopeStartHeight = slopeEndHeight;
+            slopeEndHeight = Math.random();
+            y = 800 * gameOptions.startTerrainHeight + slopeStartHeight * gameOptions.amplitude;
+            slopeStart = currentPoint;
+            currentSlopeLength = Phaser.Math.Between(gameOptions.slopeLength[0], gameOptions.slopeLength[1]);
+            slopeEnd += currentSlopeLength;
+        }
+        else{
+            y = (800 * gameOptions.startTerrainHeight) + this.interpolate(slopeStartHeight, slopeEndHeight, (currentPoint - slopeStart) / (slopeEnd - slopeStart)) * gameOptions.amplitude;
+        }
+        slopePoints.push(new Phaser.Math.Vector2(currentPoint, y))
+        currentPoint +=1;
+    }
+    // eslint-disable-next-line no-param-reassign
+    graphics.x = sliceStart.x;
+    graphics.clear();
+    graphics.moveTo(0, 800);
+    graphics.fillStyle(0x654b35);
+    graphics.beginPath();
+    slopePoints.forEach(point => {
+      graphics.lineTo(point.x, point.y);
+  });
+    graphics.lineTo(currentPoint, 800);
+    graphics.lineTo(0, 800);
+    graphics.closePath();
+    graphics.fillPath();
+    graphics.lineStyle(16, 0x6b9b1e);
+    graphics.beginPath();
+    slopePoints.forEach(point => {
+      graphics.lineTo(point.x, point.y);
+  });
+    graphics.strokePath();
+    // eslint-disable-next-line no-param-reassign
+    graphics.width = (currentPoint - 1) * -1;
+    return new Phaser.Math.Vector2(graphics.x + currentPoint - 1, slopeStartHeight);
+}
+
+// eslint-disable-next-line class-methods-use-this
+interpolate(vFrom, vTo, delta) {
+  const interpolation = (1 - Math.cos(delta * Math.PI)) * 0.5;
+  return vFrom * (1 - interpolation) + vTo * interpolation;
+}
+
+update(t, dt) {
     if (this.gameOver) {
       return;
     }
@@ -95,52 +165,16 @@ class GameScene extends Phaser.Scene {
     if (this.key.isDown && this.player.body.touching.down) {
       this.player.setVelocityY(-330);
     }
-  }
 
-  createSlope() {
-    const platforms = this.physics.add.staticGroup();
-
-    const tileWidth = 70; // Width of the tile in pixels
-    const tileHeight = 70; // Height of the tile in pixels
-    const numRows = 10;
-
-    let y = tileHeight; // Desired vertical position
-
-    for (let i = 0; i < numRows; i += 1) {
-        let j = 0;
-        while (j <= i) {
-            let key = GROUND_KEY;
-
-            if (j === i-1) {
-                key = SLOPE2_KEY;
-            } else if (j === i) {
-                key = SLOPE1_KEY;
-            }
-
-            const platform = platforms.create(j * tileWidth, y, key);
-            platform.setOrigin(0, 0); // Set the origin of each tile
-            j += 1;
-        }
-        y += tileHeight; // Move the vertical position upwards for the next column
-    }
-
-    // Défilement des plateformes vers haut gauche
-    this.time.addEvent({
-      delay: 10, // Délai entre chaque itération de déplacement (en ms)
-      callback: () => {
-          platforms.getChildren().forEach(child => {
-              const platform = child;
-              platform.x -= 1; // Déplacement vers la gauche
-              platform.y -= 1; // Déplacement vers le haut
-             if (platform.x < -tileHeight) {
-                
-             }
-    });
-      },
-      loop: true // Définir la boucle pour un défilement continu
+    const offset = dt / 1000 * gameOptions.terrainSpeed;
+    this.sliceStart.x -= offset;
+    this.slopeGraphics.forEach(item => {
+      // eslint-disable-next-line no-param-reassign
+      item.x -= offset;
+      if (item.x < item.width) {
+          this.sliceStart = this.createSlope(item, this.sliceStart)
+      }
   });
-
-    return platforms; // Return the group of platforms (staircase)
 }
 
   createPlayer() {
