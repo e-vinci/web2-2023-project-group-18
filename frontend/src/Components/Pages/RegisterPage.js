@@ -53,7 +53,6 @@ const RegisterPage = () => {
   linkClick();
   ErrorClick();
 
-
   document.querySelector('form').addEventListener('submit', (e) => {
     e.preventDefault();
     tryRgister();
@@ -140,7 +139,7 @@ function animeLogin(isConnected) {
     borderColor.style.animationName = 'changeColorGreen';
     borderColor.style.animationDuration = '2s';
   } else {
-    errorMessage(localStorage.setItem('errors'));
+    // errorMessage(localStorage.setItem('errors'));
     borderColor.style.borderColor = '#FF0000';
     borderColor.style.animationName = 'changeColorRed';
     borderColor.style.animationDuration = '2s';
