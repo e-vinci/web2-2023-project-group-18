@@ -1,9 +1,10 @@
 
 #shop-page {
-    background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.8));
     background-size: cover;
     color: white;
     font-family: "Roboto", sans-serif;
+    height: 100vh;
+    overflow: auto;
 }
 
 .shop-change-page-button {
@@ -71,6 +72,14 @@
   box-shadow: 0 0 5px rgba(0,0,0,.2);
   color:#fff ;
   border-radius: 10px;
+}
+
+@media screen and (max-width:480px){
+  .shop-part {
+    height: 530px;
+    width: 350px;
+    margin-bottom: 20px;
+  }
 }
 
 /*Login Page + Register Page*/
@@ -184,16 +193,32 @@ text-decoration :underline;
 }
 
 .back{
-font-size: 65px;
-background-color: transparent;
-color: white;
-border-color: transparent;
+  font-size: 65px;
+  background-color: transparent;
+  color: white;
+  border-color: transparent;
+}
+.back:hover{
+  color: rgb(181, 178, 178);
 }
 .div-back{
   margin-left: 2%;
   margin-top: 2%;
 }
 
+.errorMessage{
+  background-color: #FF9494;
+  border-radius: 15px;
+  color: #333;
+  display: flex;
+  justify-content: space-evenly;
+  text-align: center;
+  display: none;
+}
+.errorMessage button{
+  background-color: transparent;
+  border-color: transparent;
+}
 
 
 body {
@@ -228,6 +253,21 @@ body {
 
 /*Home page*/
 
+.setting-btn{
+  font-size: 55px;
+  border-color: transparent;
+  height: 40px;
+  color: transparent;
+}
+.setting-btn button{
+  background-color: transparent;
+  border-color: transparent;
+  color: white;
+}
+
+.btn3{
+  display: none;
+}
 .screen {
   height: 100vh;
   width: 99%;
@@ -399,7 +439,6 @@ justify-content: space-evenly;
   width: 100px;
 }
 
-
 /* Settings page */
 
 .settings-frame {
@@ -508,7 +547,7 @@ Private Policy page
 
 .privatePolicyPage{
 overflow:auto;
-height: 950px;
+height: 750px;
 width: 1400px;
 background: transparent;
 border: 6px solid rgba(255,255,225,.2);

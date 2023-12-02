@@ -33,42 +33,49 @@ const themesList = [
     { name: "Jungle", price: 1500 }
 ];
 
-const SKINS_PER_PAGE = 6;
-const THEMES_PER_PAGE = 6;
+let skinsPerPage = 6;
+let themesPerPage = 6;
 let currentSkinPage = 1;
 let currentThemePage = 1;
 
-// for test
-const ownedSkins = ["dragon", "viper", "hydra", "wyvern"];
-const ownedThemes = ["snow", "meadow", "forest", "plain", "rock"];
+let coins = 0;
+let ownedSkins = [];
+let ownedThemes = [];
 
 const ShopPage = () => {
-    const numberCoins = 458; 
+    coins = 458;
+    ownedSkins = ["dragon", "viper", "hydra", "wyvern"];
+    ownedThemes = ["snow", "meadow", "forest", "plain", "rock"];
 
-    renderShopPage(numberCoins);
+    renderShopPage();
 
-    displayCurrentSkinPage(ownedSkins);
-    displayCurrentThemePage(ownedThemes);
+    displayCurrentSkinPage();
+    displayCurrentThemePage();
 
     changePageListenner();
     backListenner();
 }
 
-function renderShopPage(numberCoins) {
+function renderShopPage() {
     const main = document.querySelector('main');
 
-    const mainContent = `
+    if (window.innerWidth <= 480) {
+        skinsPerPage = 1;
+        themesPerPage = 1;
+    }
+
+    main.innerHTML = `
     <div id="shop-page">
         <br>
-        <div class="d-flex justify-content-between align-items-center position-relative m-3 mt-0 mb-0">
-            <button class="shop-back-button btn-lg position-absolute bx bx-arrow-back" type="button"></button>
+        <div class="d-flex justify-content-between align-items-center position-relative m-3 mt-0 mb-3">
+            <button class="back btn-lg position-absolute bx bx-arrow-back" type="button"></button>
             <h1 class="mx-auto">Shop</h1>
         </div>
 
         <div class="container mb-4">
             <div class="row">
                 <h4 class="text-left">Coins: <span id="shop-coins"></span></h4>
-                <div class="col-md-6">
+                <div class="col-md-6 d-flex justify-content-center">
                     <div class="shop-part p-3">
                     
                         <h2 class="text-center">Characters</h1>
@@ -83,7 +90,7 @@ function renderShopPage(numberCoins) {
 
                     </div>
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-6 d-flex justify-content-center">
                     <div class="shop-part p-3">
                         <h2 class="text-center">Themes</h1>
                         
@@ -102,25 +109,21 @@ function renderShopPage(numberCoins) {
     </div>
     `
 
-    main.innerHTML = mainContent;
-
-    const coins = document.querySelector('#shop-coins');
-
+    const coinsDiv = document.querySelector('#shop-coins');
     anime({
-        targets: coins,
-        innerHTML: [0, numberCoins],
+        targets: coinsDiv,
+        innerHTML: [0, coins],
         easing: 'linear',
         round: 10,
         update(anim) {
-            coins.innerHTML = anim.animations[0].currentValue.toFixed(0); 
+            coinsDiv.innerHTML = anim.animations[0].currentValue.toFixed(0); 
         }
     });
-
 }
 
-function displayCurrentSkinPage(ownSkins) {
-    const startIndex = (currentSkinPage - 1) * SKINS_PER_PAGE;
-    const endIndex = startIndex + SKINS_PER_PAGE;
+function displayCurrentSkinPage() {
+    const startIndex = (currentSkinPage - 1) * skinsPerPage;
+    const endIndex = startIndex + skinsPerPage;
     const currentSkins = skinsList.slice(startIndex, endIndex);
 
     const skinListPage = document.getElementById('skin-list');
@@ -134,11 +137,9 @@ function displayCurrentSkinPage(ownSkins) {
         for (let j = i; j < i+3 && j < currentSkins.length; j+= 1) {
             const skin = currentSkins[j];
 
-            let typeButton;
-            if (ownSkins.includes(skin.name.toLowerCase()))
+            let typeButton = `<button type="button" class="btn shop-buy-button">${skin.price} coins</button>`;
+            if (ownedSkins.includes(skin.name.toLowerCase()))
                 typeButton = `<button type="button" class="btn shop-own-button">Choose</button>`;
-            else
-                typeButton = `<button type="button" class="btn shop-buy-button">${skin.price} coins</button>`;
 
             skinHTML += `
                 <div class="col-md-4 text-center">
@@ -151,13 +152,13 @@ function displayCurrentSkinPage(ownSkins) {
         skinHTML += '</div><br>';
     }
 
-    skinPageNumber.innerHTML = `< ${currentSkinPage} > on < ${Math.ceil(skinsList.length/SKINS_PER_PAGE)} >`;
+    skinPageNumber.innerHTML = `< ${currentSkinPage} > on < ${Math.ceil(skinsList.length/skinsPerPage)} >`;
     skinListPage.innerHTML = skinHTML;
 }
 
-function displayCurrentThemePage(ownThemes) {
-    const startIndex = (currentThemePage - 1) * THEMES_PER_PAGE;
-    const endIndex = startIndex + THEMES_PER_PAGE;
+function displayCurrentThemePage() {
+    const startIndex = (currentThemePage - 1) * themesPerPage;
+    const endIndex = startIndex + themesPerPage;
     const currentThemes = themesList.slice(startIndex, endIndex);
 
     const themeListPage = document.getElementById('theme-list');
@@ -171,11 +172,9 @@ function displayCurrentThemePage(ownThemes) {
         for (let j = i; j < i+3 && j < currentThemes.length; j+= 1) {
             const theme = currentThemes[j];
 
-            let typeButton;
-            if (ownThemes.includes(theme.name.toLowerCase()))
+            let typeButton = `<button type="button" class="btn shop-buy-button">${theme.price} coins</button>`;
+            if (ownedThemes.includes(theme.name.toLowerCase()))
                 typeButton = `<button type="button" class="btn shop-own-button">Choose</button>`;
-            else
-                typeButton = `<button type="button" class="btn shop-buy-button">${theme.price} coins</button>`;
 
             themeHTML += `
                 <div class="col-md-4 text-center">
@@ -188,42 +187,41 @@ function displayCurrentThemePage(ownThemes) {
         themeHTML += '</div><br>';
     }
 
-    themePageNumber.innerHTML = `< ${currentThemePage} > on < ${Math.ceil(themesList.length/THEMES_PER_PAGE)} >`;
+    themePageNumber.innerHTML = `< ${currentThemePage} > on < ${Math.ceil(themesList.length/themesPerPage)} >`;
     themeListPage.innerHTML = themeHTML;
 }
 
 function changePageListenner() {
     document.querySelector('#next-change-skin-page').addEventListener('click', () => {
-        if (currentSkinPage < skinsList.length/SKINS_PER_PAGE) {
+        if (currentSkinPage < skinsList.length/skinsPerPage) {
             currentSkinPage += 1;
-            displayCurrentSkinPage(ownedSkins);
+            displayCurrentSkinPage();
         }
     });
-
     document.querySelector('#previous-change-skin-page').addEventListener('click', () => {
         if (currentSkinPage > 1) {
             currentSkinPage -= 1;
-            displayCurrentSkinPage(ownedSkins);
+            displayCurrentSkinPage();
         }
     });
 
     document.querySelector('#next-change-theme-page').addEventListener('click', () => {
-        if (currentThemePage < themesList.length/THEMES_PER_PAGE) {
+        if (currentThemePage < themesList.length/themesPerPage) {
             currentThemePage += 1;
-            displayCurrentThemePage(ownedThemes);
+            displayCurrentThemePage();
         }
     });
 
     document.querySelector('#previous-change-theme-page').addEventListener('click', () => {
         if (currentThemePage > 1) {
             currentThemePage -= 1;
-            displayCurrentThemePage(ownedThemes);
+            displayCurrentThemePage();
         }
     });
 }
 
 function backListenner() {
-    const backElement = document.querySelector('.shop-back-button ');
+    const backElement = document.querySelector('.back ');
     backElement.addEventListener('click', () =>{
         Navigate('/');
     })

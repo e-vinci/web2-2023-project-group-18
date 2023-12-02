@@ -2,16 +2,19 @@
 // import anime from 'animejs/lib/anime.es';
 
 import Navigate from '../Router/Navigate';
+import settings from '../../utils/settings';
 
 const HomePage = () => {
   const main = document.querySelector('main');
 
   const mainHTML = `
   <div class="screen">
-      <i class=" afs fa-volume-mute fa-2x" id="sound"></i>
-
-      <img class="imgSki"></img>
-    
+    <div id = "sound" class = "setting-btn">
+      <button class = "btn1"><i class='bx bxs-cog'></i></button>
+      <button id ="volume" class = "btn2"><i class='bx bxs-volume-full'></i></button>
+      <button id = "volume" class= "btn3"><i class='bx bxs-volume-mute' ></i></button>
+    </div>
+ 
     <div class= "menu">
         <h1>SantaFall</h1>
         <h2>Let us slide</h2>
@@ -47,14 +50,19 @@ const HomePage = () => {
 `;
 
   main.innerHTML = mainHTML;
-  isConnected(false);
+
+  // eslint-disable-next-line no-unused-expressions
+  (localStorage.getItem('token') !== null) ? isConnected(true) : isConnected(false) ;
   linkClick();
+  volumeClick();
+  settingClick();
+
   // animeLinks();
   // cookie();
 };
 
-function isConnected(params) {
-  if (params === false) {
+function isConnected(token) {
+  if (token === false) {
     document.querySelector(
       '#linkNotConnect1',
     ).innerHTML = `<a class="nav-link" href="#" data-uri="/login">Login</a>`;
@@ -65,7 +73,7 @@ function isConnected(params) {
   } else {
     document.querySelector(
       '#linkConnect1',
-    ).innerHTML = `<a class="nav-link" href="#" data-uri="/store">Store</a>`;
+    ).innerHTML = `<a class="nav-link" href="#" data-uri="/shop">Shop</a>`;
 
     document.querySelector(
       '#linkConnect2',
@@ -82,6 +90,32 @@ function linkClick() {
       // ou Navigate(link.dataset.uri);
     });
   });
+}
+
+function volumeClick() {
+  
+  // volume on
+    document.querySelector('.btn3').addEventListener('click', (e) => {
+      e.preventDefault();
+      document.querySelector('.btn2').style.display = 'inline';
+      document.querySelector('.btn3').style.display = 'none';
+    })
+  
+  // volume off
+  document.querySelector('.btn2').addEventListener('click', (e) => {
+    e.preventDefault();
+    document.querySelector('.btn3').style.display = 'inline';
+    document.querySelector('.btn2').style.display = 'none';
+  });
+}
+
+function settingClick() {
+  const btn = document.querySelector('.btn1');
+  btn.addEventListener('click', () => {
+    settings.openSettings();
+    settings.getKey();
+  })
+
 }
 
 

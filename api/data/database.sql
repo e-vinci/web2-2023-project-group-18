@@ -55,8 +55,6 @@ END;
 
 $$ LANGUAGE plpgsql;
 
-
-
 /*INSERT INTO projet.users (username, password) VALUES ('GoldKing', 'mdp1');
 INSERT INTO projet.users (username, password) VALUES ('WitcherGood', 'mdp1');
 INSERT INTO projet.users (username, password) VALUES ('WarSteel', 'mdp1');
@@ -68,3 +66,46 @@ SELECT projet.user_change_score(3, 120);
 SELECT projet.user_change_score(4, 150);*/
 
 
+--DROP TABLE projet.collectible;
+CREATE TABLE IF NOT EXISTS projet.collectibles(
+    id_collectible SERIAL PRIMARY KEY NOT NULL,
+    user_id INTEGER NOT NULL REFERENCES projet.users,
+    nbre_collectible INTEGER NOT NULL
+    CHECK ( nbre_collectible >= 0 )
+);
+
+SELECT c.nbre_collectible FROM projet.collectibles c WHERE c.user_id = 1;
+
+CREATE OR REPLACE FUNCTION projet.add_collectible(id_user INTEGER, _collectible INTEGER)
+RETURNS VOID AS $$
+    DECLARE
+    BEGIN
+    IF (EXISTS(SELECT * FROM projet.collectibles WHERE user_id = id_user )) THEN
+        UPDATE projet.collectibles SET nbre_collectible = (nbre_collectible + _collectible) WHERE user_id = id_user;
+    ELSE
+        INSERT INTO projet.collectibles (user_id, nbre_collectible) VALUES (id_user, _collectible);
+
+    end if;
+    RETURN;
+    END;
+
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION projet.supp_collectible(id_user INTEGER, _collectible INTEGER)
+RETURNS VOID AS $$
+    DECLARE
+    BEGIN
+    IF (EXISTS(SELECT * FROM projet.collectibles WHERE user_id = id_user )) THEN
+        UPDATE projet.collectibles SET nbre_collectible = (nbre_collectible - _collectible) WHERE user_id = id_user;
+    ELSE
+        RAISE NOTICE 'No user found with this id_user';
+    end if;
+    RETURN;
+    END;
+
+$$ LANGUAGE plpgsql;
+
+
+
+--INSERT INTO projet.collectible(user_id, nbre_collectible) VALUES (1,100);
+--INSERT INTO projet.collectible(user_id, nbre_collectible) VALUES (2,215);

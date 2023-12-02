@@ -53,7 +53,9 @@ class GameScene extends Phaser.Scene {
     this.physics.add.overlap(this.player, this.stars, this.collectStar, null, this);
     this.cursors = this.input.keyboard.createCursorKeys();
     this.key = this.input.keyboard.addKey('SPACE');
-    this.pauseButton = this.add.image(1480,50,PAUSE_BUTTON);
+
+    // pause btn
+    this.pauseButton = this.add.image((this.scale.width-75),50,PAUSE_BUTTON);
     this.pauseButton.setInteractive({useHandCursor: true});
     this.pauseButton.setScale(0.8);
     this.pauseButton.on('pointerdown', () => {
@@ -179,6 +181,7 @@ class GameScene extends Phaser.Scene {
     player.anims.play('turn');
 
     this.gameOver = true;
+
   }
 
   pauseGame() {
