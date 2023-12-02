@@ -66,7 +66,7 @@ const LoginPage = () => {
       },
     };
 
-    const response = await fetch('/api/auths/login', options); 
+    const response = await fetch(`${process.env.API_BASE_URL}/auths/login`, options); 
 
     if (!response.ok) {
       animeLogin(false);

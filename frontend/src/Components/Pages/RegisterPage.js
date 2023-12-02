@@ -43,12 +43,16 @@ const RegisterPage = () => {
             <div class="register-link">
               <p>Already have an account ?<a id="link" data-uri="/login" href ="#"> Login here </a> </p>
             </div>
+            <br>
+            <div class="errorMessage">
+            </div>
           </form>
         </div>
       </div>`;
   
   linkClick();
   ErrorClick();
+
 
   document.querySelector('form').addEventListener('submit', (e) => {
     e.preventDefault();
@@ -102,7 +106,8 @@ async function tryRgister() {
       },
     };
 
-    const response = await fetch('/api/auths/register', options);
+    const response = await fetch(`${process.env.API_BASE_URL}/auths/register`, options);
+
 
     if (!response.ok) {
       animeLogin(false);
@@ -135,6 +140,7 @@ function animeLogin(isConnected) {
     borderColor.style.animationName = 'changeColorGreen';
     borderColor.style.animationDuration = '2s';
   } else {
+    errorMessage(localStorage.setItem('errors'));
     borderColor.style.borderColor = '#FF0000';
     borderColor.style.animationName = 'changeColorRed';
     borderColor.style.animationDuration = '2s';
