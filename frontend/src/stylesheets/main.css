@@ -253,6 +253,21 @@ body {
 
 /*Home page*/
 
+.setting-btn{
+  font-size: 55px;
+  border-color: transparent;
+  height: 40px;
+  color: transparent;
+}
+.setting-btn button{
+  background-color: transparent;
+  border-color: transparent;
+  color: white;
+}
+
+.btn3{
+  display: none;
+}
 .screen {
   height: 100vh;
   width: 99%;
