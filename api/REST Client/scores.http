@@ -1,13 +1,17 @@
 
 ### Basic url
-@baseUrl = http://localhost:3000/scores
+@baseUrl = http://localhost:3000
+
+
+
+
 
 ### Get all score in order [id, score]
-GET {{baseUrl}}/
+GET {{baseUrl}}/scores
 
 
 ### put socres
-PUT {{baseUrl}}/2
+PUT {{baseUrl}}/scores
 Content-Type: application/json
 
 {
