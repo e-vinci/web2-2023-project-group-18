@@ -14,14 +14,13 @@ const GamePage = () => {
 
   const config = {
     type: Phaser.AUTO,
+    width: '100%',
+    height: '100%',
     transparent: true,
     scale: {
       mode: Phaser.Scale.FIT,
       autoCenter: Phaser.Scale.CENTER_BOTH,
       parent: 'GamePage',
-      height: 800,
-      width: 1600
-
   },
     physics: {
       default: 'arcade',
