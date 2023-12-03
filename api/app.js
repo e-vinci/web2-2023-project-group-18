@@ -20,7 +20,6 @@ app.use(cookieParser());
 
 app.use(cors(corsOptions));
 app.use('/collectibles', collectiblesRouter);
-app.use('/users', usersRouter);
 app.use('/auths', authsRouter);
 app.use('/scores', scoresRouter);
 
