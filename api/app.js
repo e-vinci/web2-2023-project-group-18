@@ -9,6 +9,8 @@ const corsOptions = {
 
 const scoresRouter = require('./routes/scores');
 const authsRouter = require('./routes/auths');
+const skinsRouter = require('./routes/skins');
+const themesRouter = require('./routes/themes');
 
 const app = express();
 
@@ -20,5 +22,7 @@ app.use(cookieParser());
 app.use(cors(corsOptions));
 app.use('/auths', authsRouter);
 app.use('/scores', scoresRouter);
+app.use('/skins', skinsRouter);
+app.use('/themes', themesRouter);
 
 module.exports = app;
