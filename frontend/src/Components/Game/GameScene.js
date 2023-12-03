@@ -19,12 +19,11 @@ const BOMB_KEY = 'bomb';
 const PAUSE_BUTTON  = 'pause';
 
 const gameOptions = {
-  startTerrainHeight: 0.5,
-  amplitude: 200,
-  slopeLength: [100, 350],
-  slicesAmount: 2,
+  amplitude: 300,
+  slopeLength: [200, 500],
+  slicesAmount: 3,
   slopesPerSlice: 5,
-  terrainSpeed: 200
+  terrainSpeed: 300
 };
 
 class GameScene extends Phaser.Scene {
@@ -57,7 +56,7 @@ class GameScene extends Phaser.Scene {
 
   create() {
     this.slopeGraphics = [];
-    this.sliceStart = new Phaser.Math.Vector2(0, Math.random());
+    this.sliceStart = new Phaser.Math.Vector2(0, 0);
     for(let i = 0; i < gameOptions.slicesAmount; i+=1){
       this.slopeGraphics[i] = this.add.graphics();
       this.sliceStart = this.createSlope(this.slopeGraphics[i], this.sliceStart);
@@ -68,11 +67,11 @@ class GameScene extends Phaser.Scene {
     this.scoreLabel = this.createScoreLabel(20, 20, 0);
     this.scoreLabel.setColor('#ffffff');
     this.bombSpawner = new BombSpawner(this, BOMB_KEY);
-    const bombsGroup = this.bombSpawner.group;
+    // const bombsGroup = this.bombSpawner.group;
     // this.physics.add.collider(this.stars, sliceStart);
     // this.physics.add.collider(this.player, sliceStart);
     // this.physics.add.collider(bombsGroup, sliceStart);
-    this.physics.add.collider(this.player, bombsGroup, this.hitBomb, null, this);
+    // this.physics.add.collider(this.player, bombsGroup, this.hitBomb, null, this);
     this.physics.add.overlap(this.player, this.stars, this.collectStar, null, this);
     this.cursors = this.input.keyboard.createCursorKeys();
     this.key = this.input.keyboard.addKey('SPACE');
@@ -93,21 +92,21 @@ class GameScene extends Phaser.Scene {
     let slopeStartHeight = sliceStart.y;
     let currentSlopeLength = Phaser.Math.Between(gameOptions.slopeLength[0], gameOptions.slopeLength[1]);
     let slopeEnd = slopeStart + currentSlopeLength;
-    let slopeEndHeight = Math.random();
+    let slopeEndHeight = slopeStartHeight + Math.random();
     let currentPoint = 0;
     while(slopes < gameOptions.slopesPerSlice){
       let y;
         if(currentPoint === slopeEnd){
             slopes +=1;
             slopeStartHeight = slopeEndHeight;
-            slopeEndHeight = Math.random();
-            y = 800 * gameOptions.startTerrainHeight + slopeStartHeight * gameOptions.amplitude;
+            slopeEndHeight = slopeStartHeight + Math.random();
+            y = slopeStartHeight * gameOptions.amplitude;
             slopeStart = currentPoint;
             currentSlopeLength = Phaser.Math.Between(gameOptions.slopeLength[0], gameOptions.slopeLength[1]);
             slopeEnd += currentSlopeLength;
         }
         else{
-            y = (800 * gameOptions.startTerrainHeight) + this.interpolate(slopeStartHeight, slopeEndHeight, (currentPoint - slopeStart) / (slopeEnd - slopeStart)) * gameOptions.amplitude;
+            y = this.interpolate(slopeStartHeight, slopeEndHeight, (currentPoint - slopeStart) / (slopeEnd - slopeStart)) * gameOptions.amplitude;
         }
         slopePoints.push(new Phaser.Math.Vector2(currentPoint, y))
         currentPoint +=1;
@@ -115,17 +114,17 @@ class GameScene extends Phaser.Scene {
     // eslint-disable-next-line no-param-reassign
     graphics.x = sliceStart.x;
     graphics.clear();
-    graphics.moveTo(0, 800);
-    graphics.fillStyle(0x654b35);
+    graphics.moveTo(sliceStart.x, sliceStart.y);
+    graphics.fillStyle(0xdefbff);
     graphics.beginPath();
     slopePoints.forEach(point => {
       graphics.lineTo(point.x, point.y);
   });
-    graphics.lineTo(currentPoint, 800);
-    graphics.lineTo(0, 800);
+    graphics.lineTo(currentPoint, sliceStart.y + 3000);
+    graphics.lineTo(0, sliceStart.y + 3000);
     graphics.closePath();
     graphics.fillPath();
-    graphics.lineStyle(16, 0x6b9b1e);
+    graphics.lineStyle(16, 0xc9edf0);
     graphics.beginPath();
     slopePoints.forEach(point => {
       graphics.lineTo(point.x, point.y);
@@ -137,10 +136,12 @@ class GameScene extends Phaser.Scene {
 }
 
 // eslint-disable-next-line class-methods-use-this
-interpolate(vFrom, vTo, delta) {
+interpolate(vFrom, vTo, delta){
   const interpolation = (1 - Math.cos(delta * Math.PI)) * 0.5;
   return vFrom * (1 - interpolation) + vTo * interpolation;
 }
+
+
 
 update(t, dt) {
     if (this.gameOver) {
@@ -169,14 +170,21 @@ update(t, dt) {
     }
 
     const offset = dt / 1000 * gameOptions.terrainSpeed;
+    const verticalOffset = offset * 0.5;
     this.sliceStart.x -= offset;
+
+    // trouver la valeur de y pour continuer le chemin
+    this.sliceStart.y += verticalOffset;
+
     this.slopeGraphics.forEach(item => {
-      // eslint-disable-next-line no-param-reassign
-      item.x -= offset;
-      if (item.x < item.width) {
-          this.sliceStart = this.createSlope(item, this.sliceStart)
-      }
-  });
+        // eslint-disable-next-line no-param-reassign
+        item.x -= offset;
+        // eslint-disable-next-line no-param-reassign
+        item.y -= verticalOffset;
+        if (item.x < item.width) {
+            this.sliceStart = this.createSlope(item, this.sliceStart);
+        }
+    });
 }
 
   createPlayer() {
