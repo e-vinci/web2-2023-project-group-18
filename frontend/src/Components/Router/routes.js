@@ -8,10 +8,12 @@ import RegisterPage from '../Pages/RegisterPage';
 import CreditsPage from '../Pages/CreditsPage'
 import PrivatePolicyPage from '../Pages/PrivatePolicyPage';
 import CookiesPolicyPage from '../Pages/CookiesPolicyPage';
+import LogoutPage from '../Pages/LogoutPage';
 
 
 const routes = {
   '/': HomePage,
+  '/logout': LogoutPage,
   '/credits' : CreditsPage,
   '/register': RegisterPage,
   '/login':LoginPage,
