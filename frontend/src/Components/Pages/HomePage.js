@@ -56,7 +56,6 @@ const HomePage = () => {
   linkClick();
   volumeClick();
   settingClick();
-  logOut();
 
   // animeLinks();
   // cookie();
@@ -78,7 +77,7 @@ function isConnected(token) {
 
     document.querySelector(
       '#linkConnect2',
-    ).innerHTML = `<button>Log-out</button>`;
+    ).innerHTML = `<a class="nav-link" href="#" data-uri="/logout">Log-out</a>`;
   }
 }
 
@@ -116,10 +115,6 @@ function settingClick() {
     settings.openSettings();
     settings.getKey();
   })
-
-}
-
-function logOut(){
 
 }
 
