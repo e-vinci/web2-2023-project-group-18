@@ -19,7 +19,7 @@ const PAUSE_BUTTON  = 'pause';
 const gameOptions = {
   amplitude: 300,
   slopeLength: [200, 500],
-  slicesAmount: 1,
+  slicesAmount: 2,
   slopesPerSlice: 5,
   terrainSpeed: 200
 };
@@ -126,14 +126,14 @@ class GameScene extends Phaser.Scene {
     // eslint-disable-next-line no-param-reassign
     graphics.x = sliceStart.x;
     graphics.clear();
-    graphics.moveTo(sliceStart.x, sliceStart.y);
+    graphics.moveTo(0, 800);
     graphics.fillStyle(0xdefbff);
     graphics.beginPath();
     slopePoints.forEach(point => {
       graphics.lineTo(point.x, point.y);
   });
-    graphics.lineTo(currentPoint, sliceStart.y + 1000);
-    graphics.lineTo(0, sliceStart.y + 1000);
+    graphics.lineTo(currentPoint, sliceStart.y + 2000);
+    graphics.lineTo(0, sliceStart.y + 2000);
     graphics.closePath();
     graphics.fillPath();
     graphics.lineStyle(16, 0xc9edf0);
@@ -155,7 +155,7 @@ interpolate(vFrom, vTo, delta){
 
 
 
-update(dt) {
+update(t, dt) {
     if (this.gameOver) {
       return;
     }
@@ -188,16 +188,14 @@ update(dt) {
     }
 
     const offset = dt / 1000 * gameOptions.terrainSpeed;
-    const verticalOffset = offset * 0.5;
+    const verticalOffset = offset * 0.6;
     this.sliceStart.x -= offset;
-
     this.slopeGraphics.forEach(item => {
         // eslint-disable-next-line no-param-reassign
         item.x -= offset;
         // eslint-disable-next-line no-param-reassign
         item.y -= verticalOffset;
         if (item.x < item.width) {
-          this.sliceStart.y = item.y;
             this.sliceStart = this.createSlope(item, this.sliceStart);
         }
     });
