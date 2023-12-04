@@ -15,9 +15,9 @@ const PAUSE_BUTTON  = 'pause';
 const gameOptions = {
   amplitude: 300,
   slopeLength: [200, 500],
-  slicesAmount: 3,
+  slicesAmount: 1,
   slopesPerSlice: 5,
-  terrainSpeed: 300
+  terrainSpeed: 200
 };
 
 class GameScene extends Phaser.Scene {
@@ -111,8 +111,8 @@ class GameScene extends Phaser.Scene {
     slopePoints.forEach(point => {
       graphics.lineTo(point.x, point.y);
   });
-    graphics.lineTo(currentPoint, sliceStart.y + 3000);
-    graphics.lineTo(0, sliceStart.y + 3000);
+    graphics.lineTo(currentPoint, sliceStart.y + 1000);
+    graphics.lineTo(0, sliceStart.y + 1000);
     graphics.closePath();
     graphics.fillPath();
     graphics.lineStyle(16, 0xc9edf0);
@@ -164,15 +164,13 @@ update(dt) {
     const verticalOffset = offset * 0.5;
     this.sliceStart.x -= offset;
 
-    // trouver la valeur de y pour continuer le chemin
-    this.sliceStart.y += verticalOffset;
-
     this.slopeGraphics.forEach(item => {
         // eslint-disable-next-line no-param-reassign
         item.x -= offset;
         // eslint-disable-next-line no-param-reassign
         item.y -= verticalOffset;
         if (item.x < item.width) {
+          this.sliceStart.y = item.y;
             this.sliceStart = this.createSlope(item, this.sliceStart);
         }
     });
