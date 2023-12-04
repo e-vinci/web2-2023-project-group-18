@@ -2,7 +2,7 @@ import Phaser from 'phaser';
 import ScoreLabel from './ScoreLabel';
 // import BombSpawner from './BombSpawner';
 import PineSpawner from './PineSpawner';
-import platformAsset from '../../assets/platform.png';
+// import platformAsset from '../../assets/platform.png';
 import starAsset from '../../assets/star.png';
 import bombAsset from '../../assets/bomb.png';
 import pineSapling1 from '../../assets/pineSapling1.png';
@@ -64,14 +64,14 @@ class GameScene extends Phaser.Scene {
     this.stars = this.createStars();
     this.scoreLabel = this.createScoreLabel(20, 20, 0);
     this.scoreLabel.setColor('#ffffff');
-    this.bombSpawner = new BombSpawner(this, BOMB_KEY);
+    // this.bombSpawner = new BombSpawner(this, BOMB_KEY);
     // const bombsGroup = this.bombSpawner.group;
     // this.physics.add.collider(this.stars, sliceStart);
     // this.physics.add.collider(this.player, sliceStart);
     // this.physics.add.collider(bombsGroup, sliceStart);
     // this.physics.add.collider(this.player, bombsGroup, this.hitBomb, null, this);
-    this.physics.add.collider(this.stars, platforms);
-    this.physics.add.collider(this.player, platforms);
+    // this.physics.add.collider(this.stars, platforms);
+    // this.physics.add.collider(this.player, platforms);
 
     this.physics.add.overlap(this.player, this.stars, this.collectStar, null, this);
     this.cursors = this.input.keyboard.createCursorKeys();
@@ -88,7 +88,7 @@ class GameScene extends Phaser.Scene {
     const pineSaplingGroup = this.pineSpawner.group;
     this.physics.add.collider(this.player,pineSaplingGroup, this.hitPine,null,this);
     this.pineSpawner.spawn();
-    this.physics.add.collider(pineSaplingGroup, platforms)
+    // this.physics.add.collider(pineSaplingGroup, platforms)
     this.pineSpawner.group.getChildren().forEach((pine) => {
       // Check if the pine is out of the left side of the screen
       if (pine.x < 0) {
