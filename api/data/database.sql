@@ -113,31 +113,31 @@ RETURN;
 END;
 $$ LANGUAGE plpgsql;
 
-INSERT INTO projet.skins (name_skin, price) VALUES ('Dragon', 100);
-INSERT INTO projet.skins (name_skin, price) VALUES ('Phoenix', 200);
-INSERT INTO projet.skins (name_skin, price) VALUES ('Spectre', 300);
-INSERT INTO projet.skins (name_skin, price) VALUES ('Viper', 400);
-INSERT INTO projet.skins (name_skin, price) VALUES ('Raven', 500);
-INSERT INTO projet.skins (name_skin, price) VALUES ('Hydra', 600);
-INSERT INTO projet.skins (name_skin, price) VALUES ('Banshee', 700);
-INSERT INTO projet.skins (name_skin, price) VALUES ('Serpent', 800);
-INSERT INTO projet.skins (name_skin, price) VALUES ('Gorgon', 900);
-INSERT INTO projet.skins (name_skin, price) VALUES ('Chimera', 1000);
-INSERT INTO projet.skins (name_skin, price) VALUES ('Wyvern', 1250);
-INSERT INTO projet.skins (name_skin, price) VALUES ('Harpy', 1500);
+INSERT INTO projet.skins (name_skin, price) VALUES ('dragon', 100);
+INSERT INTO projet.skins (name_skin, price) VALUES ('phoenix', 200);
+INSERT INTO projet.skins (name_skin, price) VALUES ('spectre', 300);
+INSERT INTO projet.skins (name_skin, price) VALUES ('viper', 400);
+INSERT INTO projet.skins (name_skin, price) VALUES ('raven', 500);
+INSERT INTO projet.skins (name_skin, price) VALUES ('hydra', 600);
+INSERT INTO projet.skins (name_skin, price) VALUES ('banshee', 700);
+INSERT INTO projet.skins (name_skin, price) VALUES ('serpent', 800);
+INSERT INTO projet.skins (name_skin, price) VALUES ('gorgon', 900);
+INSERT INTO projet.skins (name_skin, price) VALUES ('chimera', 1000);
+INSERT INTO projet.skins (name_skin, price) VALUES ('wyvern', 1250);
+INSERT INTO projet.skins (name_skin, price) VALUES ('harpy', 1500);
 
-INSERT INTO projet.themes (name_theme, price) VALUES ('Snow', 100);
-INSERT INTO projet.themes (name_theme, price) VALUES ('Meadow', 200);
-INSERT INTO projet.themes (name_theme, price) VALUES ('Desert', 300);
-INSERT INTO projet.themes (name_theme, price) VALUES ('Taiga', 400);
-INSERT INTO projet.themes (name_theme, price) VALUES ('Forest', 500);
-INSERT INTO projet.themes (name_theme, price) VALUES ('Tundra', 600);
-INSERT INTO projet.themes (name_theme, price) VALUES ('Ocean', 700);
-INSERT INTO projet.themes (name_theme, price) VALUES ('Swamp', 800);
-INSERT INTO projet.themes (name_theme, price) VALUES ('Mountain', 900);
-INSERT INTO projet.themes (name_theme, price) VALUES ('Plain', 1000);
-INSERT INTO projet.themes (name_theme, price) VALUES ('Rock', 1250);
-INSERT INTO projet.themes (name_theme, price) VALUES ('Jungle', 1500);
+INSERT INTO projet.themes (name_theme, price) VALUES ('snow', 100);
+INSERT INTO projet.themes (name_theme, price) VALUES ('meadow', 200);
+INSERT INTO projet.themes (name_theme, price) VALUES ('desert', 300);
+INSERT INTO projet.themes (name_theme, price) VALUES ('taiga', 400);
+INSERT INTO projet.themes (name_theme, price) VALUES ('forest', 500);
+INSERT INTO projet.themes (name_theme, price) VALUES ('tundra', 600);
+INSERT INTO projet.themes (name_theme, price) VALUES ('ocean', 700);
+INSERT INTO projet.themes (name_theme, price) VALUES ('swamp', 800);
+INSERT INTO projet.themes (name_theme, price) VALUES ('mountain', 900);
+INSERT INTO projet.themes (name_theme, price) VALUES ('plain', 1000);
+INSERT INTO projet.themes (name_theme, price) VALUES ('rock', 1250);
+INSERT INTO projet.themes (name_theme, price) VALUES ('jungle', 1500);
 
 
 
