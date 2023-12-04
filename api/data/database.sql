@@ -47,6 +47,16 @@ SELECT projet.user_change_score(3, 120);
 SELECT projet.user_change_score(4, 150);*/
 
 
+
+
+
+
+
+DROP TABLE IF EXISTS projet.users_skins;
+DROP TABLE IF EXISTS projet.users_themes;
+DROP TABLE IF EXISTS projet.skins CASCADE;
+DROP TABLE IF EXISTS projet.themes CASCADE;
+
 CREATE TABLE IF NOT EXISTS projet.skins(
     id_skin SERIAL PRIMARY KEY,
     name_skin VARCHAR(255) UNIQUE NOT NULL,
@@ -102,6 +112,32 @@ BEGIN
 RETURN;
 END;
 $$ LANGUAGE plpgsql;
+
+INSERT INTO projet.skins (name_skin, price) VALUES ('Dragon', 100);
+INSERT INTO projet.skins (name_skin, price) VALUES ('Phoenix', 200);
+INSERT INTO projet.skins (name_skin, price) VALUES ('Spectre', 300);
+INSERT INTO projet.skins (name_skin, price) VALUES ('Viper', 400);
+INSERT INTO projet.skins (name_skin, price) VALUES ('Raven', 500);
+INSERT INTO projet.skins (name_skin, price) VALUES ('Hydra', 600);
+INSERT INTO projet.skins (name_skin, price) VALUES ('Banshee', 700);
+INSERT INTO projet.skins (name_skin, price) VALUES ('Serpent', 800);
+INSERT INTO projet.skins (name_skin, price) VALUES ('Gorgon', 900);
+INSERT INTO projet.skins (name_skin, price) VALUES ('Chimera', 1000);
+INSERT INTO projet.skins (name_skin, price) VALUES ('Wyvern', 1250);
+INSERT INTO projet.skins (name_skin, price) VALUES ('Harpy', 1500);
+
+INSERT INTO projet.skins (name_skin, price) VALUES ('Snow', 100);
+INSERT INTO projet.skins (name_skin, price) VALUES ('Meadow', 200);
+INSERT INTO projet.skins (name_skin, price) VALUES ('Desert', 300);
+INSERT INTO projet.skins (name_skin, price) VALUES ('Taiga', 400);
+INSERT INTO projet.skins (name_skin, price) VALUES ('Forest', 500);
+INSERT INTO projet.skins (name_skin, price) VALUES ('Tundra', 600);
+INSERT INTO projet.skins (name_skin, price) VALUES ('Ocean', 700);
+INSERT INTO projet.skins (name_skin, price) VALUES ('Swamp', 800);
+INSERT INTO projet.skins (name_skin, price) VALUES ('Mountain', 900);
+INSERT INTO projet.skins (name_skin, price) VALUES ('Plain', 1000);
+INSERT INTO projet.skins (name_skin, price) VALUES ('Rock', 1250);
+INSERT INTO projet.skins (name_skin, price) VALUES ('Jungle', 1500);
 
 
 

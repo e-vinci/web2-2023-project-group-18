@@ -18,8 +18,8 @@ router.get('/:id', async (req, res) => {
 
   if (skin) {
     try {
-      await getUserSkins(skin);
-      return res.sendStatus(200);
+      const skins = await getUserSkins(skin);
+      return res.json(skins.rows);
     } catch (error) {
       return res.sendStatus(404);
     }
