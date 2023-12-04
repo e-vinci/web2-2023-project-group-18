@@ -6,13 +6,7 @@ import bombAsset from '../../assets/bomb.png';
 import dudeAsset from '../../assets/dude.png';
 import pauseButton from '../../assets/pauseButton.png';
 import Settings from '../../utils/settings';
-import slope1Asset from '../../assets/winterTiles/tundraHillRight.png';
-import slope2Asset from '../../assets/winterTiles/tundraHillRight2.png';
-import groundAsset from '../../assets/winterTiles/tundraCenter.png';
 
-const SLOPE1_KEY = 'slope1';
-const SLOPE2_KEY = 'slope2';
-const GROUND_KEY = 'ground';
 const DUDE_KEY = 'dude';
 const STAR_KEY = 'star';
 const BOMB_KEY = 'bomb';
@@ -41,9 +35,6 @@ class GameScene extends Phaser.Scene {
   }
 
   preload() {
-    this.load.image(SLOPE1_KEY, slope1Asset);
-    this.load.image(SLOPE2_KEY, slope2Asset);
-    this.load.image(GROUND_KEY, groundAsset);
     this.load.image(STAR_KEY, starAsset);
     this.load.image(BOMB_KEY, bombAsset);
 
@@ -143,7 +134,7 @@ interpolate(vFrom, vTo, delta){
 
 
 
-update(t, dt) {
+update(dt) {
     if (this.gameOver) {
       return;
     }
