@@ -112,12 +112,12 @@ async function tryRgister() {
       animeLogin(false);
       document.querySelector('.errorVue').innerHTML = 'This account already exist';
       document.querySelector('.errorMessage').style.display = 'block';
-      throw new Error(`fetch error : ${response.status} : ${response.statusText}`);
+      
     }
     else {
       localStorage.setItem('token', response.token);
       animeLogin(true);
-      Navigate('/');
+      setTimeout(()=>Navigate('/'),1000)
     }
   }
 }
