@@ -14,13 +14,18 @@ const GamePage = () => {
 
   const config = {
     type: Phaser.AUTO,
-    width: 1536,
-    height: 650,
+    width: '100%',
+    height: '100%',
     transparent: true,
+    scale: {
+      mode: Phaser.Scale.FIT,
+      autoCenter: Phaser.Scale.CENTER_BOTH,
+      parent: 'GamePage',
+  },
     physics: {
       default: 'arcade',
       arcade: {
-        gravity: { y: 300 },
+        gravity: { y: 500 },
         debug: false,
       },
     },
@@ -35,8 +40,8 @@ const GamePage = () => {
   // therefore destroy any started game prior to recreate it
   if (game) game.destroy(true);
   game = new Phaser.Game(config);
+  window.focus();
 
 };
-
 
 export default GamePage;

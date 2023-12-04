@@ -10,12 +10,25 @@ import pineSapling1 from '../../assets/pineSapling1.png';
 import dudeAsset from '../../assets/dude.png';
 import pauseButton from '../../assets/pauseButton.png';
 import Settings from '../../utils/settings';
+import slope1Asset from '../../assets/winterTiles/tundraHillRight.png';
+import slope2Asset from '../../assets/winterTiles/tundraHillRight2.png';
+import groundAsset from '../../assets/winterTiles/tundraCenter.png';
 
+const SLOPE1_KEY = 'slope1';
+const SLOPE2_KEY = 'slope2';
 const GROUND_KEY = 'ground';
 const DUDE_KEY = 'dude';
 const STAR_KEY = 'star';
 const BOMB_KEY = 'bomb';
 const PAUSE_BUTTON  = 'pause';
+
+const gameOptions = {
+  amplitude: 300,
+  slopeLength: [200, 500],
+  slicesAmount: 3,
+  slopesPerSlice: 5,
+  terrainSpeed: 300
+};
 const PINE_KEY = 'pinesapling';
 
 class GameScene extends Phaser.Scene {
@@ -29,10 +42,14 @@ class GameScene extends Phaser.Scene {
     this.gameOver = false;
     this.pauseButton = undefined;
     this.pineSpawner= undefined;
+    this.slopeGraphics = [];
+    this.sliceStart = undefined;
   }
 
   preload() {
-    this.load.image(GROUND_KEY, platformAsset);
+    this.load.image(SLOPE1_KEY, slope1Asset);
+    this.load.image(SLOPE2_KEY, slope2Asset);
+    this.load.image(GROUND_KEY, groundAsset);
     this.load.image(STAR_KEY, starAsset);
     this.load.image(BOMB_KEY, bombAsset);
 
@@ -45,18 +62,32 @@ class GameScene extends Phaser.Scene {
   }
 
   create() {
-    const platforms = this.createPlatforms();
+    this.slopeGraphics = [];
+    this.sliceStart = new Phaser.Math.Vector2(0, 0);
+    for(let i = 0; i < gameOptions.slicesAmount; i+=1){
+      this.slopeGraphics[i] = this.add.graphics();
+      this.sliceStart = this.createSlope(this.slopeGraphics[i], this.sliceStart);
+    }
+
     this.player = this.createPlayer();
     this.stars = this.createStars();
     this.scoreLabel = this.createScoreLabel(20, 20, 0);
     this.scoreLabel.setColor('#ffffff');
+    this.bombSpawner = new BombSpawner(this, BOMB_KEY);
+    // const bombsGroup = this.bombSpawner.group;
+    // this.physics.add.collider(this.stars, sliceStart);
+    // this.physics.add.collider(this.player, sliceStart);
+    // this.physics.add.collider(bombsGroup, sliceStart);
+    // this.physics.add.collider(this.player, bombsGroup, this.hitBomb, null, this);
     this.physics.add.collider(this.stars, platforms);
     this.physics.add.collider(this.player, platforms);
 
     this.physics.add.overlap(this.player, this.stars, this.collectStar, null, this);
     this.cursors = this.input.keyboard.createCursorKeys();
     this.key = this.input.keyboard.addKey('SPACE');
-    this.pauseButton = this.add.image(1480,50,PAUSE_BUTTON);
+
+    // pause btn
+    this.pauseButton = this.add.image((this.scale.width-75),50,PAUSE_BUTTON);
     this.pauseButton.setInteractive({useHandCursor: true});
     this.pauseButton.setScale(0.8);
     this.pauseButton.on('pointerdown', () => {
@@ -73,12 +104,67 @@ class GameScene extends Phaser.Scene {
           // If it's out of bounds, destroy the pine
           this.pineSpawner.removePine();
       }
-  });
-    /* The Collider takes two objects and tests for collision and performs separation against them.
-    Note that we could call a callback in case of collision... */
-  }
+  });  }
 
-  update() {
+  createSlope(graphics, sliceStart){
+    const slopePoints = [];
+    let slopes = 0;
+    let slopeStart = 0;
+    let slopeStartHeight = sliceStart.y;
+    let currentSlopeLength = Phaser.Math.Between(gameOptions.slopeLength[0], gameOptions.slopeLength[1]);
+    let slopeEnd = slopeStart + currentSlopeLength;
+    let slopeEndHeight = slopeStartHeight + Math.random();
+    let currentPoint = 0;
+    while(slopes < gameOptions.slopesPerSlice){
+      let y;
+        if(currentPoint === slopeEnd){
+            slopes +=1;
+            slopeStartHeight = slopeEndHeight;
+            slopeEndHeight = slopeStartHeight + Math.random();
+            y = slopeStartHeight * gameOptions.amplitude;
+            slopeStart = currentPoint;
+            currentSlopeLength = Phaser.Math.Between(gameOptions.slopeLength[0], gameOptions.slopeLength[1]);
+            slopeEnd += currentSlopeLength;
+        }
+        else{
+            y = this.interpolate(slopeStartHeight, slopeEndHeight, (currentPoint - slopeStart) / (slopeEnd - slopeStart)) * gameOptions.amplitude;
+        }
+        slopePoints.push(new Phaser.Math.Vector2(currentPoint, y))
+        currentPoint +=1;
+    }
+    // eslint-disable-next-line no-param-reassign
+    graphics.x = sliceStart.x;
+    graphics.clear();
+    graphics.moveTo(sliceStart.x, sliceStart.y);
+    graphics.fillStyle(0xdefbff);
+    graphics.beginPath();
+    slopePoints.forEach(point => {
+      graphics.lineTo(point.x, point.y);
+  });
+    graphics.lineTo(currentPoint, sliceStart.y + 3000);
+    graphics.lineTo(0, sliceStart.y + 3000);
+    graphics.closePath();
+    graphics.fillPath();
+    graphics.lineStyle(16, 0xc9edf0);
+    graphics.beginPath();
+    slopePoints.forEach(point => {
+      graphics.lineTo(point.x, point.y);
+  });
+    graphics.strokePath();
+    // eslint-disable-next-line no-param-reassign
+    graphics.width = (currentPoint - 1) * -1;
+    return new Phaser.Math.Vector2(graphics.x + currentPoint - 1, slopeStartHeight);
+}
+
+// eslint-disable-next-line class-methods-use-this
+interpolate(vFrom, vTo, delta){
+  const interpolation = (1 - Math.cos(delta * Math.PI)) * 0.5;
+  return vFrom * (1 - interpolation) + vTo * interpolation;
+}
+
+
+
+update(t, dt) {
     if (this.gameOver) {
       return;
     }
@@ -109,24 +195,28 @@ class GameScene extends Phaser.Scene {
     if (this.key.isDown && this.player.body.touching.down) {
       this.player.setVelocityY(-240);
     }
-  }
 
-  createPlatforms() {
-    const platforms = this.physics.add.staticGroup();
+    const offset = dt / 1000 * gameOptions.terrainSpeed;
+    const verticalOffset = offset * 0.5;
+    this.sliceStart.x -= offset;
 
-    platforms
-      .create(400, 800, GROUND_KEY)
-      .setScale(10)
-      .refreshBody();
+    // trouver la valeur de y pour continuer le chemin
+    this.sliceStart.y += verticalOffset;
 
-    platforms.create(600, 400, GROUND_KEY);
-    platforms.create(50, 250, GROUND_KEY);
-    platforms.create(750, 220, GROUND_KEY);
-    return platforms;
-  }
+    this.slopeGraphics.forEach(item => {
+        // eslint-disable-next-line no-param-reassign
+        item.x -= offset;
+        // eslint-disable-next-line no-param-reassign
+        item.y -= verticalOffset;
+        if (item.x < item.width) {
+            this.sliceStart = this.createSlope(item, this.sliceStart);
+        }
+    });
+}
 
   createPlayer() {
-    const player = this.physics.add.sprite(20, 600, DUDE_KEY);
+    const player = this.physics.add.sprite(30, 30, DUDE_KEY);
+    player.setBounce(0.2);
     player.setCollideWorldBounds(true);
     /* The 'left' animation uses frames 0, 1, 2 and 3 and runs at 10 frames per second.
     The 'repeat -1' value tells the animation to loop.

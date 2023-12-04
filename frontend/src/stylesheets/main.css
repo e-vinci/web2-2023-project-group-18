@@ -1,9 +1,10 @@
 
 #shop-page {
-    background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.8));
     background-size: cover;
     color: white;
     font-family: "Roboto", sans-serif;
+    height: 100vh;
+    overflow: auto;
 }
 
 .shop-change-page-button {
@@ -73,6 +74,14 @@
   border-radius: 10px;
 }
 
+@media screen and (max-width:480px){
+  .shop-part {
+    height: 530px;
+    width: 350px;
+    margin-bottom: 20px;
+  }
+}
+
 /*Login Page + Register Page*/
 .superWrapper {
 display: flex;
@@ -91,6 +100,7 @@ color:#fff ;
 border-radius: 10px;
 padding: 30px 40px;
 }
+
 .wrapper hl {
 font-size: 36px;
 text-align: center;
@@ -126,12 +136,12 @@ border-radius: 40px;
 font-size: 16px;
 color: white;
 padding: 20px,45px,20px,20px;
-
 }
 
 .input-box input::placeholder {
 color :#fff ;
 }
+
 .input-box i {
 position: absolute;
 right: 20px;
@@ -140,11 +150,11 @@ transform:translateY(-50%);
 font-size: 20px;
 }
 
-
 .remember-forgot label input {
 accent-color:#fff ;
 margin-right: 3px;
 }
+
 .remember-forgot a{
 color :#fff ;
 text-decoration:
@@ -154,13 +164,13 @@ none;
 .remember-forgot a:hover {
 text-decoration:underline;
 }
+
 .wrapper .btn {
 width: 100%;
 height: 45px;
 background :#fff ;
 border: none;
 outline: none;
-
 border-radius: 40px;
 box-shadow: 0 0 10px rgba(0,0,0,.1);
 cursor: pointer;
@@ -174,60 +184,95 @@ font-size: 14.5px;
 text-align: center;
 margin: 20px 0 15px;
 }
+
 .register-link p a {
 color:#fff ;
 text-decoration: none;
 font-weight: 600;
 }
+
 .register-link p a:hover {
 text-decoration :underline;
 }
 
 .back{
-font-size: 65px;
-background-color: transparent;
-color: white;
-border-color: transparent;
+  font-size: 65px;
+  background-color: transparent;
+  color: white;
+  border-color: transparent;
 }
+.back:hover{
+  color: rgb(181, 178, 178);
+}
+
 .div-back{
   margin-left: 2%;
   margin-top: 2%;
 }
 
+.errorMessage{
+  background-color: #FF9494;
+  border-radius: 15px;
+  color: #333;
+  display: flex;
+  justify-content: space-evenly;
+  text-align: center;
+  display: none;
+}
+.errorMessage button{
+  background-color: transparent;
+  border-color: transparent;
+}
 
 
 body {
   margin: 0;
   padding: 0;
   overflow: hidden;
+  background-color: #16274b;
 }
 
-
 /* Background and background animation */
-#background {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 200%;
+.scrolling-background {
+  overflow: hidden;
+}
+
+.background {
+  position:fixed;
   height: 100%;
-  background-image: url('../assets/BG.png');
-  background-size: 50% 100%;
-  animation: scrollBackground 50s linear infinite; /* Ajust the velocity of the animation */
+  width: 200%;
+  background-size: cover;
+  background: url('../assets/BG.png') repeat-x;
+  animation: scrollBackground 20s linear infinite; /* Ajust the velocity of the animation */
   z-index: -1;
 }
 
 @keyframes scrollBackground {
   0% {
-    background-position: 0 0;
+    transform: translate(0);
   }
   100% {
-    background-position: -100% 0;
+    transform: translate(-50%);
   }
-} 
+}
 
 
 /*Home page*/
+.setting-btn{
+  font-size: 55px;
+  border-color: transparent;
+  height: 40px;
+  color: transparent;
+}
+.setting-btn button{
+  background-color: transparent;
+  border-color: transparent;
+  color: white;
+}
 
+.btn3{
+  display: none;
+}
 .screen {
   height: 100vh;
   width: 99%;
@@ -238,18 +283,19 @@ body {
   align-items: center;
 }
 
-
 .menu{
   color: #ebebeb;
   margin-left: 4em;
   text-transform: uppercase;
 }
+
 .menu h1{
   font-size: 3em;
   letter-spacing: 30px;
   display: block;
   margin-bottom: 0.5em;
 }
+
 .menu h3{
   font-weight: 250;
   font-size: 2.5em;
@@ -257,7 +303,6 @@ body {
   letter-spacing: 10px;
   position: relative;
 }
-
 
 .menu h3 ::before{
   left: 0;
@@ -271,9 +316,11 @@ body {
   list-style: none;
   padding: 0;
 }
+
 .menu li{
   margin: 1em 0;
 }
+
 .menu li a {
   text-decoration: none;
   color: #ebebeb;
@@ -288,6 +335,7 @@ margin : 1em;
 color: #ebebeb;
 cursor : pointer;
 }
+
 .menu li
 a:hover,
 #sound:hover {
@@ -295,22 +343,23 @@ color: #dbdbdb;
 }
 
 @media screen and (max-width:800px){
-.menu hl {
+  .menu hl {
 font-size: 2em;
 }
 .menu h3 {
 font-size : 1.5em;
 }
 }
+
 @media screen and (max-width:500px){
 .menu h2 {
 letter-spacing: 5px;
 }
-
 .menu h3::before,
 .menu h3::after {
 display:none;
 }}
+
 @media screen and (max-height:45px) {
   .screen, img{
     height: 35em;
@@ -318,39 +367,38 @@ display:none;
 }
 
 
-/* 
-Credit page + Rgbd
-*/
+/* Credit page + Rgbd */
 .credit{
   display: flex;
   justify-content: space-evenly;
 }
+
 .credit li{
   margin: 0.5em 0;
 }
+
 .credit li a {
   text-decoration: none;
   color: #ebebeb;
   font-weight: 70;
 }
+
 .credit li
 a:hover,
 #sound:hover {
 color: #dbdbdb;
 }
+
 .credit ul{
   list-style: none;
   padding: 0;
 }
-
 
 .superCreditPage{
   display: flex;
   justify-content: center;
   align-items: center;
 }
-
-
 
 .creditPage::-webkit-scrollbar {
   width: 12px;
@@ -366,8 +414,8 @@ color: #dbdbdb;
   border-radius: 20px;    
   border: 3px solid 
 }
+
 .creditPage {
-  
 overflow:auto;
 height: 650px;
 width: 800px;
@@ -399,12 +447,11 @@ justify-content: space-evenly;
   width: 100px;
 }
 
-
 /* Settings page */
-
 .settings-frame {
   width: 50%;
 }
+
 #settings-key-button {
   width: 100%;
 }
@@ -508,7 +555,7 @@ Private Policy page
 
 .privatePolicyPage{
 overflow:auto;
-height: 950px;
+height: 750px;
 width: 1400px;
 background: transparent;
 border: 6px solid rgba(255,255,225,.2);
@@ -530,6 +577,7 @@ justify-content: space-evenly;
   border-radius: 20px;    
   border: 3px solid 
 }
+
 .privatePolicyPage::-webkit-scrollbar {
   width: 12px;
 }
