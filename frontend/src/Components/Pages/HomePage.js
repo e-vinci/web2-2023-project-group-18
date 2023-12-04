@@ -50,6 +50,7 @@ const HomePage = () => {
 `;
 
   main.innerHTML = mainHTML;
+
   // eslint-disable-next-line no-unused-expressions
   (localStorage.getItem('token') !== null) ? isConnected(true) : isConnected(false) ;
   linkClick();
@@ -76,7 +77,7 @@ function isConnected(token) {
 
     document.querySelector(
       '#linkConnect2',
-    ).innerHTML = `<a class="nav-link" href="#" data-uri="/">Log-out</a>`;
+    ).innerHTML = `<a class="nav-link" href="#" data-uri="/logout">Log-out</a>`;
   }
 }
 
@@ -116,7 +117,6 @@ function settingClick() {
   })
 
 }
-
 
 //   function animeLinks() {
 //     const links = document.querySelectorAll('li');

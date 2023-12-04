@@ -69,14 +69,17 @@ const LoginPage = () => {
     const response = await fetch(`${process.env.API_BASE_URL}/auths/login`, options); 
 
     if (!response.ok) {
+
       animeLogin(false);
       document.querySelector('.errorVue').innerHTML = 'Incorrect username or password';
       document.querySelector('.errorMessage').style.display = 'block';
-      throw new Error(`fetch error : ${response.status} : ${response.statusText}`);
+      
     }
     else {
+      localStorage.setItem('token', response.token)
+      localStorage.setItem('user',response.username)
       animeLogin(true);
-      Navigate('/');
+      setTimeout(()=>Navigate('/'),1000)
   }
   }
 };
