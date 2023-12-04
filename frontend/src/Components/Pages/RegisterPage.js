@@ -9,24 +9,27 @@ const RegisterPage = () => {
       </div>
    <div class="superWrapper">
         <div class="wrapper">
+        <div class = "errorMessage">
+        <p class='errorVue'></p><button class = 'error-btn'><i class='bx bxs-x-circle'></i></button>
+        </div>
           <form action="">
             <h1>Register</h1>
             <div class="input-box">
-              <input type="text" placeholder="Username" required>
+              <input class="username" type="text" placeholder="Username" required>
               <i class='bx bxs-user'></i>
             </div>
 
             <div class="input-box">
-              <input type="email" placeholder="Email Adresse" required>
+              <input class="email" type="email" placeholder="Email Adresse" required>
               <i class='bx bx-envelope'></i>
             </div>
 
             <div class="input-box">
-              <input type="password" placeholder="Password" required>
+              <input class= "password1" type="password" placeholder="Password" required>
               <i class='bx bxs-lock-alt'></i>
             </div>
             <div class="input-box">
-              <input type="password" placeholder="Password Verify" required>
+              <input class="password2" type="password" placeholder="Password Verify" required>
               <i class='bx bxs-lock-alt'></i>
             </div>
 
@@ -40,16 +43,22 @@ const RegisterPage = () => {
             <div class="register-link">
               <p>Already have an account ?<a id="link" data-uri="/login" href ="#"> Login here </a> </p>
             </div>
+            <br>
+            <div class="errorMessage">
+            </div>
           </form>
         </div>
       </div>`;
-
+  
   linkClick();
+  ErrorClick();
 
   document.querySelector('form').addEventListener('submit', (e) => {
     e.preventDefault();
-    animeLogin(true);
+    tryRgister();
   });
+
+  
 };
 
 function linkClick() {
@@ -59,6 +68,58 @@ function linkClick() {
       Navigate(link.dataset.uri);
     });
   });
+}
+
+function ErrorClick() {
+  const btn = document.querySelector('.error-btn');
+  btn.addEventListener('click', (e) => {
+    e.preventDefault();
+    const errorVue = document.querySelector('.errorMessage');
+    errorVue.style.display = 'none';
+  })
+}
+
+async function tryRgister() {
+  const password1 = document.querySelector('.password1').value;
+  const password2 = document.querySelector('.password2').value;
+  const username = document.querySelector('.username').value;
+  const email = document.querySelector(".email").value;
+
+
+  if (password1 !== password2) {
+    animeLogin(false);
+    document.querySelector(".errorVue").innerHTML='The passwords are not matching';
+    document.querySelector('.errorMessage').style.display = 'block';
+  }
+  else{
+
+    const options = {
+      method: 'POST',
+      body: JSON.stringify({
+        password1,
+        username,
+        email,
+      }),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    };
+
+    const response = await fetch(`${process.env.API_BASE_URL}/auths/register`, options);
+
+
+    if (!response.ok) {
+      animeLogin(false);
+      document.querySelector('.errorVue').innerHTML = 'This account already exist';
+      document.querySelector('.errorMessage').style.display = 'block';
+      throw new Error(`fetch error : ${response.status} : ${response.statusText}`);
+    }
+    else {
+      localStorage.setItem('token', response.token);
+      animeLogin(true);
+      Navigate('/');
+    }
+  }
 }
 
 function animeLogin(isConnected) {
@@ -79,6 +140,7 @@ function animeLogin(isConnected) {
     borderColor.style.animationName = 'changeColorGreen';
     borderColor.style.animationDuration = '2s';
   } else {
+    // errorMessage(localStorage.setItem('errors'));
     borderColor.style.borderColor = '#FF0000';
     borderColor.style.animationName = 'changeColorRed';
     borderColor.style.animationDuration = '2s';

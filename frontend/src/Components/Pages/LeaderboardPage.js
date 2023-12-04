@@ -13,7 +13,7 @@ const Leaderboard = async () => {
 
 async function fetchScores(){
   try {
-    const response = await fetch('api/scores/')
+    const response = await fetch(`${process.env.API_BASE_URL}/scores/`)
     if (!response.ok) throw new Error(`fetch error : ${response.status} : ${response.statusText}`);
     const allLignes = await response.json();
     return allLignes;

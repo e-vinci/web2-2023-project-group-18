@@ -14,8 +14,8 @@ const GamePage = () => {
 
   const config = {
     type: Phaser.AUTO,
-    width: 1536,
-    height: 650,
+    width: '100%',
+    height: '100%',
     transparent: true,
     physics: {
       default: 'arcade',

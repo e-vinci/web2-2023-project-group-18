@@ -54,7 +54,7 @@ const openSettings = () => {
         // this is a function to be able to remove the listener once executed
         function handleKeyDown(event) {
             const borderColor = document.querySelector('.settings-frame');
-            const errorText = document.querySelector('.error-key-settings');
+            const errorText = document.querySelector('.settings-error-key');
 
             if(!keyNotSupported.includes(event.key)) {
                 key = event.key.toUpperCase();
