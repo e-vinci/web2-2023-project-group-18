@@ -18,7 +18,7 @@ async function fetchScores(){
     const allLignes = await response.json();
     return allLignes;
   } catch (err) {
-      document.querySelector('main').innerHTML = `Error: API is not online`;
+      document.querySelector('main').innerHTML = `<p class="text-white">Error: API is not online</p>`;
     return err
   };
   
@@ -56,7 +56,7 @@ async function renderLeaderboardPage(lignes) {
   </div>
   <div class="d-flex justify-content-center">
     <div class="container p-2 border rounded">
-        <h2 class="text-center my-2">LeaderBoard</h2>
+        <h2 class="text-center my-2 text-white">LeaderBoard</h2>
         <div class="table-responsive mx-4">
           <table class="table table-striped mx-auto">
           <tr>
