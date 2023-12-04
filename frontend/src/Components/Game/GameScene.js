@@ -213,6 +213,7 @@ class GameScene extends Phaser.Scene {
   pauseGame() {
     this.scene.pause();
     this.scene.launch('pause-menu');
+    this.gameOver = false;
   }
 
   // eslint-disable-next-line class-methods-use-this
