@@ -253,6 +253,14 @@ body {
 
 /*Home page*/
 
+.btn2{
+  font-size: 65px;
+  display: none;
+}
+
+.btn1{
+  font-size: 65px;
+}
 .setting-btn{
   font-size: 55px;
   border-color: transparent;
@@ -265,7 +273,7 @@ body {
   color: white;
 }
 
-.btn3{
+.btn4{
   display: none;
 }
 .screen {
