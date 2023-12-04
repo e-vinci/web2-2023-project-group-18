@@ -18,8 +18,8 @@ router.get('/:id', async (req, res) => {
 
   if (theme) {
     try {
-      await getUserThemes(theme);
-      return res.sendStatus(200);
+      const themes = await getUserThemes(theme);
+      return res.json(themes.rows);
     } catch (error) {
       return res.sendStatus(404);
     }

@@ -126,18 +126,18 @@ INSERT INTO projet.skins (name_skin, price) VALUES ('Chimera', 1000);
 INSERT INTO projet.skins (name_skin, price) VALUES ('Wyvern', 1250);
 INSERT INTO projet.skins (name_skin, price) VALUES ('Harpy', 1500);
 
-INSERT INTO projet.skins (name_skin, price) VALUES ('Snow', 100);
-INSERT INTO projet.skins (name_skin, price) VALUES ('Meadow', 200);
-INSERT INTO projet.skins (name_skin, price) VALUES ('Desert', 300);
-INSERT INTO projet.skins (name_skin, price) VALUES ('Taiga', 400);
-INSERT INTO projet.skins (name_skin, price) VALUES ('Forest', 500);
-INSERT INTO projet.skins (name_skin, price) VALUES ('Tundra', 600);
-INSERT INTO projet.skins (name_skin, price) VALUES ('Ocean', 700);
-INSERT INTO projet.skins (name_skin, price) VALUES ('Swamp', 800);
-INSERT INTO projet.skins (name_skin, price) VALUES ('Mountain', 900);
-INSERT INTO projet.skins (name_skin, price) VALUES ('Plain', 1000);
-INSERT INTO projet.skins (name_skin, price) VALUES ('Rock', 1250);
-INSERT INTO projet.skins (name_skin, price) VALUES ('Jungle', 1500);
+INSERT INTO projet.themes (name_theme, price) VALUES ('Snow', 100);
+INSERT INTO projet.themes (name_theme, price) VALUES ('Meadow', 200);
+INSERT INTO projet.themes (name_theme, price) VALUES ('Desert', 300);
+INSERT INTO projet.themes (name_theme, price) VALUES ('Taiga', 400);
+INSERT INTO projet.themes (name_theme, price) VALUES ('Forest', 500);
+INSERT INTO projet.themes (name_theme, price) VALUES ('Tundra', 600);
+INSERT INTO projet.themes (name_theme, price) VALUES ('Ocean', 700);
+INSERT INTO projet.themes (name_theme, price) VALUES ('Swamp', 800);
+INSERT INTO projet.themes (name_theme, price) VALUES ('Mountain', 900);
+INSERT INTO projet.themes (name_theme, price) VALUES ('Plain', 1000);
+INSERT INTO projet.themes (name_theme, price) VALUES ('Rock', 1250);
+INSERT INTO projet.themes (name_theme, price) VALUES ('Jungle', 1500);
 
 
 
