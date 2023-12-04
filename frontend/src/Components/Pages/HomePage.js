@@ -50,8 +50,9 @@ const HomePage = () => {
 `;
 
   main.innerHTML = mainHTML;
-  const token =false;
-  isConnected(token);
+
+  // eslint-disable-next-line no-unused-expressions
+  (localStorage.getItem('token') !== null) ? isConnected(true) : isConnected(false) ;
   linkClick();
   volumeClick();
   settingClick();
