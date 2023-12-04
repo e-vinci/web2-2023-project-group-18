@@ -10,13 +10,7 @@ import pineSapling1 from '../../assets/pineSapling1.png';
 import dudeAsset from '../../assets/dude.png';
 import pauseButton from '../../assets/pauseButton.png';
 import Settings from '../../utils/settings';
-import slope1Asset from '../../assets/winterTiles/tundraHillRight.png';
-import slope2Asset from '../../assets/winterTiles/tundraHillRight2.png';
-import groundAsset from '../../assets/winterTiles/tundraCenter.png';
 
-const SLOPE1_KEY = 'slope1';
-const SLOPE2_KEY = 'slope2';
-const GROUND_KEY = 'ground';
 const DUDE_KEY = 'dude';
 const STAR_KEY = 'star';
 const BOMB_KEY = 'bomb';
@@ -25,9 +19,9 @@ const PAUSE_BUTTON  = 'pause';
 const gameOptions = {
   amplitude: 300,
   slopeLength: [200, 500],
-  slicesAmount: 3,
+  slicesAmount: 1,
   slopesPerSlice: 5,
-  terrainSpeed: 300
+  terrainSpeed: 200
 };
 const PINE_KEY = 'pinesapling';
 
@@ -47,9 +41,6 @@ class GameScene extends Phaser.Scene {
   }
 
   preload() {
-    this.load.image(SLOPE1_KEY, slope1Asset);
-    this.load.image(SLOPE2_KEY, slope2Asset);
-    this.load.image(GROUND_KEY, groundAsset);
     this.load.image(STAR_KEY, starAsset);
     this.load.image(BOMB_KEY, bombAsset);
 
@@ -141,8 +132,8 @@ class GameScene extends Phaser.Scene {
     slopePoints.forEach(point => {
       graphics.lineTo(point.x, point.y);
   });
-    graphics.lineTo(currentPoint, sliceStart.y + 3000);
-    graphics.lineTo(0, sliceStart.y + 3000);
+    graphics.lineTo(currentPoint, sliceStart.y + 1000);
+    graphics.lineTo(0, sliceStart.y + 1000);
     graphics.closePath();
     graphics.fillPath();
     graphics.lineStyle(16, 0xc9edf0);
@@ -164,7 +155,7 @@ interpolate(vFrom, vTo, delta){
 
 
 
-update(t, dt) {
+update(dt) {
     if (this.gameOver) {
       return;
     }
@@ -200,15 +191,13 @@ update(t, dt) {
     const verticalOffset = offset * 0.5;
     this.sliceStart.x -= offset;
 
-    // trouver la valeur de y pour continuer le chemin
-    this.sliceStart.y += verticalOffset;
-
     this.slopeGraphics.forEach(item => {
         // eslint-disable-next-line no-param-reassign
         item.x -= offset;
         // eslint-disable-next-line no-param-reassign
         item.y -= verticalOffset;
         if (item.x < item.width) {
+          this.sliceStart.y = item.y;
             this.sliceStart = this.createSlope(item, this.sliceStart);
         }
     });
