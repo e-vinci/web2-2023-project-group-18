@@ -305,6 +305,7 @@ update(t, dt) {
   pauseGame() {
     this.scene.pause();
     this.scene.launch('pause-menu');
+    this.gameOver = false;
   }
 }
 
