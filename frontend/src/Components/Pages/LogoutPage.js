@@ -1,7 +1,7 @@
 import Navigate from "../Router/Navigate";
 
 const LogoutPage = () => { 
-   localStorage.removeItem('username')
+   localStorage.removeItem('user')
    localStorage.removeItem('token')
    Navigate('/')
 };
