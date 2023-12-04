@@ -3,57 +3,46 @@ import Navigate from '../Router/Navigate';
 import templateSkinImage from '../../assets/templateSkinShopPage.png';
 import templateMapImage from '../../assets/templateMapShopPage.png';
 
-const skinsList = [
-    { name: "Dragon", price: 100 },
-    { name: "Phoenix", price: 200 },
-    { name: "Spectre", price: 300 },
-    { name: "Viper", price: 400 },
-    { name: "Raven", price: 500 },
-    { name: "Hydra", price: 600 },
-    { name: "Banshee", price: 700 },
-    { name: "Serpent", price: 800 },
-    { name: "Gorgon", price: 900 },
-    { name: "Chimera", price: 1000 },
-    { name: "Wyvern", price: 1250 },
-    { name: "Harpy", price: 1500 }
-];
+let coins = 0;
 
-const themesList = [
-    { name: "Snow", price: 100 },
-    { name: "Meadow", price: 200 },
-    { name: "Desert", price: 300 },
-    { name: "Taiga", price: 400 },
-    { name: "Forest", price: 500 },
-    { name: "Tundra", price: 600 },
-    { name: "Ocean", price: 700 },
-    { name: "Swamp", price: 800 },
-    { name: "Mountain", price: 900 },
-    { name: "Plain", price: 1000 },
-    { name: "Rock", price: 1250 },
-    { name: "Jungle", price: 1500 }
-];
+let skinsList;
+let themesList;
+let ownedSkins;
+let ownedThemes;
 
 let skinsPerPage = 6;
 let themesPerPage = 6;
 let currentSkinPage = 1;
 let currentThemePage = 1;
 
-let coins = 0;
-let ownedSkins = [];
-let ownedThemes = [];
-
-const ShopPage = () => {
+const ShopPage = async () => {
     coins = 458;
-    ownedSkins = ["dragon", "viper", "hydra", "wyvern"];
-    ownedThemes = ["snow", "meadow", "forest", "plain", "rock"];
 
-    renderShopPage();
+    try {
+        // To avoid redoing queries each time the page loads
+        if(!skinsList || !themesPerPage || !currentSkinPage || !currentThemePage) {
+            skinsList = await fetchData(`/skins/`);
+            themesList = await fetchData(`/themes/`);
+            ownedSkins = await fetchData(`/skins/1`);
+            ownedThemes = await fetchData(`/themes/1`);
+        }
 
-    displayCurrentSkinPage();
-    displayCurrentThemePage();
+        renderShopPage();
 
-    changePageListenner();
-    backListenner();
+        displayCurrentSkinPage();
+        displayCurrentThemePage();
+
+        changePageListenner();
+        chooseListenner();
+        buyListenner();
+        backListenner();
+
+    } catch {
+        document.querySelector('main').innerHTML = `
+        <div class="container text-center text-white mt-5">
+            <p class="display-5">Error: API is not online</p>
+        </div>`;
+    }
 }
 
 function renderShopPage() {
@@ -121,6 +110,7 @@ function renderShopPage() {
     });
 }
 
+// Display skins page
 function displayCurrentSkinPage() {
     const startIndex = (currentSkinPage - 1) * skinsPerPage;
     const endIndex = startIndex + skinsPerPage;
@@ -137,14 +127,15 @@ function displayCurrentSkinPage() {
         for (let j = i; j < i+3 && j < currentSkins.length; j+= 1) {
             const skin = currentSkins[j];
 
-            let typeButton = `<button type="button" class="btn shop-buy-button">${skin.price} coins</button>`;
-            if (ownedSkins.includes(skin.name.toLowerCase()))
-                typeButton = `<button type="button" class="btn shop-own-button">Choose</button>`;
+            let typeButton = `<button type="button" class="btn shop-buy-button shop-buy-skin">${skin.price} coins</button>`;
+            
+            if (ownedSkins.some(s => s.name_skin === skin.name_skin))
+                typeButton = `<button type="button" class="btn shop-own-button shop-own-skin">Choose</button>`;
 
             skinHTML += `
                 <div class="col-md-4 text-center">
-                    <h3>${skin.name}</h3>
-                    <img class="w-100 shop-picture" src="${templateSkinImage}" alt="skin picture ${skin.name}" draggable="false">
+                    <h3>${skin.name_skin.charAt(0).toUpperCase() + skin.name_skin.slice(1)}</h3>
+                    <img class="w-100 shop-picture" src="${templateSkinImage}" alt="skin picture ${skin.name_skin}" draggable="false">
                     ${typeButton}
                 </div>`;
         }
@@ -156,6 +147,7 @@ function displayCurrentSkinPage() {
     skinListPage.innerHTML = skinHTML;
 }
 
+// Display themes page
 function displayCurrentThemePage() {
     const startIndex = (currentThemePage - 1) * themesPerPage;
     const endIndex = startIndex + themesPerPage;
@@ -172,14 +164,14 @@ function displayCurrentThemePage() {
         for (let j = i; j < i+3 && j < currentThemes.length; j+= 1) {
             const theme = currentThemes[j];
 
-            let typeButton = `<button type="button" class="btn shop-buy-button">${theme.price} coins</button>`;
-            if (ownedThemes.includes(theme.name.toLowerCase()))
-                typeButton = `<button type="button" class="btn shop-own-button">Choose</button>`;
+            let typeButton = `<button type="button" class="btn shop-buy-button shop-buy-theme">${theme.price} coins</button>`;
+            if (ownedThemes.some(t => t.name_theme === theme.name_theme))
+                typeButton = `<button type="button" class="btn shop-own-button shop-own-theme">Choose</button>`;
 
             themeHTML += `
                 <div class="col-md-4 text-center">
-                    <h3>${theme.name}</h3>
-                    <img class="w-100 shop-picture" src="${templateMapImage}" alt="theme picture ${theme.name}">
+                    <h3>${theme.name_theme.charAt(0).toUpperCase() + theme.name_theme.slice(1)}</h3>
+                    <img class="w-100 shop-picture" src="${templateMapImage}" alt="theme picture ${theme.name_theme}">
                     ${typeButton}
                 </div>`;
         }
@@ -191,6 +183,7 @@ function displayCurrentThemePage() {
     themeListPage.innerHTML = themeHTML;
 }
 
+// The listenner to change pages (skins or themes)
 function changePageListenner() {
     document.querySelector('#next-change-skin-page').addEventListener('click', () => {
         if (currentSkinPage < skinsList.length/skinsPerPage) {
@@ -220,11 +213,54 @@ function changePageListenner() {
     });
 }
 
+function chooseListenner() {
+    const skinButton = document.querySelector('.shop-own-skin');
+    const themeButton = document.querySelector('.shop-own-theme');
+
+    if(skinButton) {
+        skinButton.addEventListener('click', () =>{
+            Navigate('/');
+        })
+    }
+
+    if(skinButton) {
+        themeButton.addEventListener('click', () =>{
+            Navigate('/');
+        })
+    }
+}
+
+function buyListenner() {
+    const skinButton = document.querySelector('.shop-buy-skin');
+    const themeButton = document.querySelector('.shop-buy-theme');
+
+    if(skinButton) {
+        skinButton.addEventListener('click', () =>{
+            Navigate('/');
+        })
+    }
+
+    if(skinButton) {
+        themeButton.addEventListener('click', () =>{
+            Navigate('/');
+        })
+    }
+}
+
+// The listenner to go back
 function backListenner() {
     const backElement = document.querySelector('.back ');
     backElement.addEventListener('click', () =>{
         Navigate('/');
     })
+}
+
+// Fetch data from API
+async function fetchData(url) {
+    const response = await fetch(process.env.API_BASE_URL + url)
+    if (!response.ok) throw new Error(`fetch error : ${response.status} : ${response.statusText}`);
+    const finalResponse = await response.json();
+    return finalResponse;
 }
 
 // No right click on picture
