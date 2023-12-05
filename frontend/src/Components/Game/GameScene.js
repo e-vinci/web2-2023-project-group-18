@@ -45,11 +45,9 @@ class GameScene extends Phaser.Scene {
     this.player = this.createPlayer();
     this.stars = this.createStars();
     // Scores
-    this.scoreLabel = this.createScoreLabel(20, 20, 0);
+    this.scoreLabel = this.createScoreLabel(20, 20);
     this.scoreLabel.setColor('#ffffff');
-    // Coins
-    this.scoreLabel = this.createCoinsLabel(20, 40);
-    this.scoreLabel.setColor('#ffffff');
+
     
 
 
@@ -173,8 +171,9 @@ class GameScene extends Phaser.Scene {
     this.bombSpawner.spawn(player.x);
   }
 
-  createScoreLabel(x, y, score) {
+  async createScoreLabel(x, y) {
     const style = { fontSize: '32px', fill: '#000' };
+    const score = 10;
     const label = new ScoreLabel(this, x, y, score, style);
     this.add.existing(label);
 
