@@ -7,7 +7,7 @@ import bombAsset from '../../assets/bomb.png';
 import dudeAsset from '../../assets/dude.png';
 import pauseButton from '../../assets/pauseButton.png';
 import Settings from '../../utils/settings';
-import TimeLabel from './TimeLabel';
+import MeterLabel from './MeterLabel';
 
 const GROUND_KEY = 'ground';
 const DUDE_KEY = 'dude';
@@ -21,11 +21,12 @@ class GameScene extends Phaser.Scene {
     this.player = undefined;
     this.cursors = undefined;
     // this.scoreLabel = undefined;
-    this.timeLabel = undefined;
+    this.meterLabel = undefined;
     this.stars = undefined;
     this.bombSpawner = undefined;
     this.gameOver = false;
     this.pauseButton = undefined;
+    this.replay = undefined;
   }
 
   preload() {
@@ -45,9 +46,9 @@ class GameScene extends Phaser.Scene {
     this.player = this.createPlayer();
     this.stars = this.createStars();
     // this.scoreLabel = this.createScoreLabel(20, 20, 0);
-    this.timeLabel = this.createTimeLabel(20,20);
+    this.meterLabel = this.createMeterLabel(20, 20);
     // this.scoreLabel.setColor('#ffffff');
-    this.timeLabel.setColor('#ffffff');
+    this.meterLabel.setColor('#ffffff');
 
     this.bombSpawner = new BombSpawner(this, BOMB_KEY);
     const bombsGroup = this.bombSpawner.group;
@@ -60,13 +61,13 @@ class GameScene extends Phaser.Scene {
     this.key = this.input.keyboard.addKey('SPACE');
 
     // pause btn
-    this.pauseButton = this.add.image((this.scale.width-75),50,PAUSE_BUTTON);
-    this.pauseButton.setInteractive({useHandCursor: true});
+    this.pauseButton = this.add.image(this.scale.width - 75, 50, PAUSE_BUTTON);
+    this.pauseButton.setInteractive({ useHandCursor: true });
     this.pauseButton.setScale(0.8);
+
     this.pauseButton.on('pointerdown', () => {
-      this.timeLabel.pauseOrResumeTimer();
       this.pauseGame();
-    }); 
+    });
 
     /* The Collider takes two objects and tests for collision and performs separation against them.
     Note that we could call a callback in case of collision... */
@@ -173,25 +174,25 @@ class GameScene extends Phaser.Scene {
   // createScoreLabel(x, y, score) {
   //   const style = { fontSize: '32px', fill: '#000', position: 'absolute',right : '0',top: '0', margin : '1em'};
   //   const label = new ScoreLabel(this, x, y, score, style);
-    
 
   //   return label;
   // }
 
-  createTimeLabel(x, y) {
-    
-    const label = new TimeLabel(this, x, y);
+  createMeterLabel(x, y) {
+    const label = new MeterLabel(this, x, y);
     this.add.existing(label);
-
     return label;
-  };
+  }
 
   hitBomb(player) {
-    this.timeLabel.pauseOrResumeTimer();
-    this.timeLabel.setText(`GAME OVER :  \nYour Score was ${this.timeFormat(this.timeLabel.timeElapsed)}`);
-    localStorage.setItem('score', this.timeFormat(this.timeLabel.timeElapsed));
+    this.meterLabel.pauseMeter();
+    this.meterLabel.setText(
+      `GAME OVER :  \nYour Score is ${this.meterLabel.formatDistance(this.meterLabel.timeElapsed)}`,
+    );
+    localStorage.setItem('score', this.timeFormat(this.meterLabel.timeElapsed));
+
     if (localStorage.getItem('token')) {
-      this.updateScore(this.timeFormat(this.timeLabel.timeElapsed));
+      this.updateScore(this.formatDistance(this.meterLabel.timeElapsed));
     }
     this.physics.pause();
 
@@ -200,35 +201,48 @@ class GameScene extends Phaser.Scene {
     player.anims.play('turn');
 
     this.gameOver = true;
-
+    this.meterLabel.destroy();
   }
 
   // eslint-disable-next-line class-methods-use-this
-  timeFormat(timeElapsed){
-  const minutes = `0${Math.floor(timeElapsed / 60)}`.slice(-2);
-  const seconds = `0${Math.floor(timeElapsed % 60)}`.slice(-2);
-  return `${minutes}:${seconds}`;
-};
+  formatDistance(distance) {
+  // Assuming distance is in meters
+  // const kilometers = Math.floor(distance / 1000);
+  const meters = distance % 1000;
+
+  // const formattedKilometers = String(kilometers).padStart(3, '0');
+  const formattedMeters = String(meters).padStart(3, '0');
+
+  return `${formattedMeters} m`;
+}
 
   pauseGame() {
+    this.meterLabel.pauseMeter();
     this.scene.pause();
     this.scene.launch('pause-menu');
+
+    setTimeout(() => {
+      this.scene.get('pause-menu').events.on('shutdown', () => {
+        this.meterLabel.resumeMeter();
+      }, this);
+    },100);
+    
     this.gameOver = false;
   }
 
+
   // eslint-disable-next-line class-methods-use-this
   async updateScore(score) {
-
-    const user = localStorage.getItem('username') ;
+    const token = localStorage.getItem('token');
 
     const options = {
       method: 'PUT',
       body: JSON.stringify({
-        user,
         score,
       }),
       headers: {
         'Content-Type': 'application/json',
+        Authorization: token,
       },
     };
     await fetch(`${process.env.API_BASE_URL}/scores/`, options);
