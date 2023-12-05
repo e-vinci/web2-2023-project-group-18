@@ -1,7 +1,6 @@
 import Phaser from 'phaser';
 // import ScoreLabel from './ScoreLabel';
 import BombSpawner from './BombSpawner';
-import platformAsset from '../../assets/platform.png';
 import starAsset from '../../assets/star.png';
 import bombAsset from '../../assets/bomb.png';
 import dudeAsset from '../../assets/dude.png';
@@ -9,11 +8,18 @@ import pauseButton from '../../assets/pauseButton.png';
 import Settings from '../../utils/settings';
 import MeterLabel from './MeterLabel';
 
-const GROUND_KEY = 'ground';
 const DUDE_KEY = 'dude';
 const STAR_KEY = 'star';
 const BOMB_KEY = 'bomb';
 const PAUSE_BUTTON  = 'pause';
+
+const gameOptions = {
+  amplitude: 300,
+  slopeLength: [200, 500],
+  slicesAmount: 3,
+  slopesPerSlice: 5,
+  terrainSpeed: 200
+};
 
 class GameScene extends Phaser.Scene {
   constructor() {
@@ -26,11 +32,12 @@ class GameScene extends Phaser.Scene {
     this.bombSpawner = undefined;
     this.gameOver = false;
     this.pauseButton = undefined;
+    this.slopeGraphics = [];
+    this.sliceStart = undefined;
     this.replay = undefined;
   }
 
   preload() {
-    this.load.image(GROUND_KEY, platformAsset);
     this.load.image(STAR_KEY, starAsset);
     this.load.image(BOMB_KEY, bombAsset);
 
@@ -42,7 +49,13 @@ class GameScene extends Phaser.Scene {
   }
 
   create() {
-    const platforms = this.createPlatforms();
+    this.slopeGraphics = [];
+    this.sliceStart = new Phaser.Math.Vector2(0, 2);
+    for(let i = 0; i < gameOptions.slicesAmount; i+=1){
+      this.slopeGraphics[i] = this.add.graphics();
+      // this.sliceStart = this.createSlope(this.slopeGraphics[i], this.sliceStart);
+    }
+
     this.player = this.createPlayer();
     this.stars = this.createStars();
     // this.scoreLabel = this.createScoreLabel(20, 20, 0);
@@ -51,14 +64,14 @@ class GameScene extends Phaser.Scene {
     this.meterLabel.setColor('#ffffff');
 
     this.bombSpawner = new BombSpawner(this, BOMB_KEY);
-    const bombsGroup = this.bombSpawner.group;
-    this.physics.add.collider(this.stars, platforms);
-    this.physics.add.collider(this.player, platforms);
-    this.physics.add.collider(bombsGroup, platforms);
-    this.physics.add.collider(this.player, bombsGroup, this.hitBomb, null, this);
+    // const bombsGroup = this.bombSpawner.group;
+    // this.physics.add.collider(this.stars, sliceStart);
+    // this.physics.add.collider(this.player, sliceStart);
+    // this.physics.add.collider(bombsGroup, sliceStart);
+    // this.physics.add.collider(this.player, bombsGroup, this.hitBomb, null, this);
     this.physics.add.overlap(this.player, this.stars, this.collectStar, null, this);
     this.cursors = this.input.keyboard.createCursorKeys();
-    this.key = this.input.keyboard.addKey('SPACE');
+    this.key = this.input.keyboard.addKey(localStorage.getItem('selectedKey'))
 
     // pause btn
     this.pauseButton = this.add.image(this.scale.width - 75, 50, PAUSE_BUTTON);
@@ -67,7 +80,7 @@ class GameScene extends Phaser.Scene {
 
     this.pauseButton.on('pointerdown', () => {
       this.pauseGame();
-    });
+    }); 
 
     /* The Collider takes two objects and tests for collision and performs separation against them.
     Note that we could call a callback in case of collision... */
@@ -98,24 +111,25 @@ class GameScene extends Phaser.Scene {
     if (this.key.isDown && this.player.body.touching.down) {
       this.player.setVelocityY(-330);
     }
-  }
 
-  createPlatforms() {
-    const platforms = this.physics.add.staticGroup();
-
-    platforms
-      .create(400, 568, GROUND_KEY)
-      .setScale(2)
-      .refreshBody();
-
-    platforms.create(600, 400, GROUND_KEY);
-    platforms.create(50, 250, GROUND_KEY);
-    platforms.create(750, 220, GROUND_KEY);
-    return platforms;
-  }
+    
+    const dt = 10;
+    const offset = dt / 1000 * gameOptions.terrainSpeed;
+    const verticalOffset = offset * 0.5;
+    this.sliceStart.x -= offset;
+    this.slopeGraphics.forEach(item => {
+        // eslint-disable-next-line no-param-reassign
+        item.x -= offset;
+        // eslint-disable-next-line no-param-reassign
+        item.y -= verticalOffset;
+        if (item.x < item.width) {
+            this.sliceStart = this.createSlope(item, this.sliceStart);
+        }
+    });
+}
 
   createPlayer() {
-    const player = this.physics.add.sprite(100, 450, DUDE_KEY);
+    const player = this.physics.add.sprite(30, 30, DUDE_KEY);
     player.setBounce(0.2);
     player.setCollideWorldBounds(true);
     /* The 'left' animation uses frames 0, 1, 2 and 3 and runs at 10 frames per second.
