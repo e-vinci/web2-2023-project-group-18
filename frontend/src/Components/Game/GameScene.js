@@ -15,7 +15,7 @@ const PAUSE_BUTTON  = 'pause';
 const gameOptions = {
   amplitude: 300,
   slopeLength: [200, 500],
-  slicesAmount: 2,
+  slicesAmount: 3,
   slopesPerSlice: 5,
   terrainSpeed: 200
 };
@@ -47,7 +47,7 @@ class GameScene extends Phaser.Scene {
 
   create() {
     this.slopeGraphics = [];
-    this.sliceStart = new Phaser.Math.Vector2(0, 0);
+    this.sliceStart = new Phaser.Math.Vector2(0, 2);
     for(let i = 0; i < gameOptions.slicesAmount; i+=1){
       this.slopeGraphics[i] = this.add.graphics();
       this.sliceStart = this.createSlope(this.slopeGraphics[i], this.sliceStart);
@@ -105,14 +105,14 @@ class GameScene extends Phaser.Scene {
     // eslint-disable-next-line no-param-reassign
     graphics.x = sliceStart.x;
     graphics.clear();
-    graphics.moveTo(0, 800);
+    graphics.moveTo(0, 1000);
     graphics.fillStyle(0xdefbff);
     graphics.beginPath();
     slopePoints.forEach(point => {
       graphics.lineTo(point.x, point.y);
   });
-    graphics.lineTo(currentPoint, sliceStart.y + 2000);
-    graphics.lineTo(0, sliceStart.y + 2000);
+    graphics.lineTo(currentPoint, sliceStart.y *  1000);
+    graphics.lineTo(0, sliceStart.y * 1000);
     graphics.closePath();
     graphics.fillPath();
     graphics.lineStyle(16, 0xc9edf0);
@@ -161,7 +161,7 @@ update(t, dt) {
     }
 
     const offset = dt / 1000 * gameOptions.terrainSpeed;
-    const verticalOffset = offset * 0.6;
+    const verticalOffset = offset * 0.5;
     this.sliceStart.x -= offset;
     this.slopeGraphics.forEach(item => {
         // eslint-disable-next-line no-param-reassign
