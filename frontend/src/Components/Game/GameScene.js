@@ -34,7 +34,6 @@ class GameScene extends Phaser.Scene {
     this.pauseButton = undefined;
     this.slopeGraphics = [];
     this.sliceStart = undefined;
-    this.replay = undefined;
   }
 
   preload() {
@@ -51,9 +50,9 @@ class GameScene extends Phaser.Scene {
   create() {
     this.slopeGraphics = [];
     this.sliceStart = new Phaser.Math.Vector2(0, 2);
-    for(let i = 0; i < gameOptions.slicesAmount; i+=1){
+    for (let i = 0; i < gameOptions.slicesAmount; i += 1) {
       this.slopeGraphics[i] = this.add.graphics();
-      // this.sliceStart = this.createSlope(this.slopeGraphics[i], this.sliceStart);
+      this.sliceStart = this.createSlope(this.slopeGraphics[i], this.sliceStart);
     }
 
     this.player = this.createPlayer();
@@ -71,7 +70,7 @@ class GameScene extends Phaser.Scene {
     // this.physics.add.collider(this.player, bombsGroup, this.hitBomb, null, this);
     this.physics.add.overlap(this.player, this.stars, this.collectStar, null, this);
     this.cursors = this.input.keyboard.createCursorKeys();
-    this.key = this.input.keyboard.addKey(localStorage.getItem('selectedKey'))
+    this.key = this.input.keyboard.addKey(localStorage.getItem('selectedKey'));
 
     // pause btn
     this.pauseButton = this.add.image(this.scale.width - 75, 50, PAUSE_BUTTON);
@@ -80,13 +79,79 @@ class GameScene extends Phaser.Scene {
 
     this.pauseButton.on('pointerdown', () => {
       this.pauseGame();
-    }); 
+    });
 
     /* The Collider takes two objects and tests for collision and performs separation against them.
     Note that we could call a callback in case of collision... */
   }
 
-  update() {
+  createSlope(graphics, sliceStart) {
+    const slopePoints = [];
+    let slopes = 0;
+    let slopeStart = 0;
+    let slopeStartHeight = sliceStart.y;
+    let currentSlopeLength = Phaser.Math.Between(
+      gameOptions.slopeLength[0],
+      gameOptions.slopeLength[1],
+    );
+    let slopeEnd = slopeStart + currentSlopeLength;
+    let slopeEndHeight = slopeStartHeight + Math.random();
+    let currentPoint = 0;
+    while (slopes < gameOptions.slopesPerSlice) {
+      let y;
+      if (currentPoint === slopeEnd) {
+        slopes += 1;
+        slopeStartHeight = slopeEndHeight;
+        slopeEndHeight = slopeStartHeight + Math.random();
+        y = slopeStartHeight * gameOptions.amplitude;
+        slopeStart = currentPoint;
+        currentSlopeLength = Phaser.Math.Between(
+          gameOptions.slopeLength[0],
+          gameOptions.slopeLength[1],
+        );
+        slopeEnd += currentSlopeLength;
+      } else {
+        y =
+          this.interpolate(
+            slopeStartHeight,
+            slopeEndHeight,
+            (currentPoint - slopeStart) / (slopeEnd - slopeStart),
+          ) * gameOptions.amplitude;
+      }
+      slopePoints.push(new Phaser.Math.Vector2(currentPoint, y));
+      currentPoint += 1;
+    }
+    // eslint-disable-next-line no-param-reassign
+    graphics.x = sliceStart.x;
+    graphics.clear();
+    graphics.moveTo(0, 1000);
+    graphics.fillStyle(0xdefbff);
+    graphics.beginPath();
+    slopePoints.forEach((point) => {
+      graphics.lineTo(point.x, point.y);
+    });
+    graphics.lineTo(currentPoint, sliceStart.y * 1000);
+    graphics.lineTo(0, sliceStart.y * 1000);
+    graphics.closePath();
+    graphics.fillPath();
+    graphics.lineStyle(16, 0xc9edf0);
+    graphics.beginPath();
+    slopePoints.forEach((point) => {
+      graphics.lineTo(point.x, point.y);
+    });
+    graphics.strokePath();
+    // eslint-disable-next-line no-param-reassign
+    graphics.width = (currentPoint - 1) * -1;
+    return new Phaser.Math.Vector2(graphics.x + currentPoint - 1, slopeStartHeight);
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  interpolate(vFrom, vTo, delta) {
+    const interpolation = (1 - Math.cos(delta * Math.PI)) * 0.5;
+    return vFrom * (1 - interpolation) + vTo * interpolation;
+  }
+
+  update(t, dt) {
     if (this.gameOver) {
       return;
     }
@@ -112,21 +177,19 @@ class GameScene extends Phaser.Scene {
       this.player.setVelocityY(-330);
     }
 
-    
-    const dt = 10;
-    const offset = dt / 1000 * gameOptions.terrainSpeed;
+    const offset = (dt / 1000) * gameOptions.terrainSpeed;
     const verticalOffset = offset * 0.5;
     this.sliceStart.x -= offset;
-    this.slopeGraphics.forEach(item => {
-        // eslint-disable-next-line no-param-reassign
-        item.x -= offset;
-        // eslint-disable-next-line no-param-reassign
-        item.y -= verticalOffset;
-        if (item.x < item.width) {
-            this.sliceStart = this.createSlope(item, this.sliceStart);
-        }
+    this.slopeGraphics.forEach((item) => {
+      // eslint-disable-next-line no-param-reassign
+      item.x -= offset;
+      // eslint-disable-next-line no-param-reassign
+      item.y -= verticalOffset;
+      if (item.x < item.width) {
+        this.sliceStart = this.createSlope(item, this.sliceStart);
+      }
     });
-}
+  }
 
   createPlayer() {
     const player = this.physics.add.sprite(30, 30, DUDE_KEY);
@@ -220,15 +283,15 @@ class GameScene extends Phaser.Scene {
 
   // eslint-disable-next-line class-methods-use-this
   formatDistance(distance) {
-  // Assuming distance is in meters
-  // const kilometers = Math.floor(distance / 1000);
-  const meters = distance % 1000;
+    // Assuming distance is in meters
+    // const kilometers = Math.floor(distance / 1000);
+    const meters = distance % 1000;
 
-  // const formattedKilometers = String(kilometers).padStart(3, '0');
-  const formattedMeters = String(meters).padStart(3, '0');
+    // const formattedKilometers = String(kilometers).padStart(3, '0');
+    const formattedMeters = String(meters).padStart(3, '0');
 
-  return `${formattedMeters} m`;
-}
+    return `${formattedMeters} m`;
+  }
 
   pauseGame() {
     this.meterLabel.pauseMeter();
@@ -236,14 +299,17 @@ class GameScene extends Phaser.Scene {
     this.scene.launch('pause-menu');
 
     setTimeout(() => {
-      this.scene.get('pause-menu').events.on('shutdown', () => {
-        this.meterLabel.resumeMeter();
-      }, this);
-    },100);
-    
+      this.scene.get('pause-menu').events.on(
+        'shutdown',
+        () => {
+          this.meterLabel.resumeMeter();
+        },
+        this,
+      );
+    }, 100);
+
     this.gameOver = false;
   }
-
 
   // eslint-disable-next-line class-methods-use-this
   async updateScore(score) {
