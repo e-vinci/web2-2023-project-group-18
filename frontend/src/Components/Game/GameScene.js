@@ -2,7 +2,7 @@ import Phaser from 'phaser';
 import CoinLabel from './CoinLabel';
 import BombSpawner from './BombSpawner';
 import platformAsset from '../../assets/platform.png';
-import starAsset from '../../assets/star.png';
+import coinAsset from '../../assets/star.png';
 import bombAsset from '../../assets/bomb.png';
 import dudeAsset from '../../assets/dude.png';
 import pauseButton from '../../assets/pauseButton.png';
@@ -10,7 +10,7 @@ import Settings from '../../utils/settings';
 
 const GROUND_KEY = 'ground';
 const DUDE_KEY = 'dude';
-const STAR_KEY = 'star';
+const COIN_KEY = 'coin';
 const BOMB_KEY = 'bomb';
 const PAUSE_BUTTON  = 'pause';
 
@@ -20,7 +20,7 @@ class GameScene extends Phaser.Scene {
     this.player = undefined;
     this.cursors = undefined;
     this.coinLabel = undefined;
-    this.stars = undefined;
+    this.coins = undefined;
     this.bombSpawner = undefined;
     this.gameOver = false;
     this.pauseButton = undefined;
@@ -28,7 +28,7 @@ class GameScene extends Phaser.Scene {
 
   preload() {
     this.load.image(GROUND_KEY, platformAsset);
-    this.load.image(STAR_KEY, starAsset);
+    this.load.image(COIN_KEY, coinAsset);
     this.load.image(BOMB_KEY, bombAsset);
 
     this.load.spritesheet(DUDE_KEY, dudeAsset, {
@@ -41,21 +41,20 @@ class GameScene extends Phaser.Scene {
   create() {
     const platforms = this.createPlatforms();
     this.player = this.createPlayer();
-    this.stars = this.createStars();
+    this.coins = this.createCoins();
 
-    this.createCoinLabelAsync(20, 20).then((coinLabel) => {
-      // La fonction asynchrone est résolue, vous pouvez utiliser le label ici
+    this.createCoinLabel(20, 20).then((coinLabel) => {
       this.coinLabel = coinLabel;
       console.log(this.coinLabel);
     });
 
     this.bombSpawner = new BombSpawner(this, BOMB_KEY);
     const bombsGroup = this.bombSpawner.group;
-    this.physics.add.collider(this.stars, platforms);
+    this.physics.add.collider(this.coins, platforms);
     this.physics.add.collider(this.player, platforms);
     this.physics.add.collider(bombsGroup, platforms);
     this.physics.add.collider(this.player, bombsGroup, this.hitBomb, null, this);
-    this.physics.add.overlap(this.player, this.stars, this.collectStar, null, this);
+    this.physics.add.overlap(this.player, this.coins, this.collectCoin, null, this);
     this.cursors = this.input.keyboard.createCursorKeys();
     this.key = this.input.keyboard.addKey('SPACE');
 
@@ -142,35 +141,34 @@ class GameScene extends Phaser.Scene {
     return player;
   }
 
-  createStars() {
-    const stars = this.physics.add.group({
-      key: STAR_KEY,
+  createCoins() {
+    const coins = this.physics.add.group({
+      key: COIN_KEY,
       repeat: 11,
       setXY: { x: 12, y: 0, stepX: 70 },
     });
 
-    stars.children.iterate((child) => {
+    coins.children.iterate((child) => {
       child.setBounceY(Phaser.Math.FloatBetween(0.4, 0.8));
     });
 
-    return stars;
+    return coins;
   }
 
-  collectStar(player, star) {
-    star.disableBody(true, true);
+  collectCoin(player, coin) {
+    coin.disableBody(true, true);
     this.coinLabel.add(10)
   
-    if (this.stars.countActive(true) === 0) {
-      //  A new batch of stars to collect
-      this.stars.children.iterate((child) => {
+    if (this.coins.countActive(true) === 0) {
+      this.coins.children.iterate((child) => {
         child.enableBody(true, child.x, 0, true, true);
       });
     }
-  
+
     this.bombSpawner.spawn(player.x);
   }
   
-  async createCoinLabelAsync(x, y) {
+  async createCoinLabel(x, y) {
     // Attendez la valeur asynchrone
     const coin = 100;// await this.getDBCoinValue();
 
