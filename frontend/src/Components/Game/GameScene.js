@@ -1,11 +1,12 @@
 import Phaser from 'phaser';
-import ScoreLabel from './ScoreLabel';
+// import ScoreLabel from './ScoreLabel';
 import BombSpawner from './BombSpawner';
 import starAsset from '../../assets/star.png';
 import bombAsset from '../../assets/bomb.png';
 import dudeAsset from '../../assets/dude.png';
 import pauseButton from '../../assets/pauseButton.png';
 import Settings from '../../utils/settings';
+import TimeLabel from './TimeLabel';
 
 const DUDE_KEY = 'dude';
 const STAR_KEY = 'star';
@@ -25,7 +26,8 @@ class GameScene extends Phaser.Scene {
     super('game-scene');
     this.player = undefined;
     this.cursors = undefined;
-    this.scoreLabel = undefined;
+    // this.scoreLabel = undefined;
+    this.timeLabel = undefined;
     this.stars = undefined;
     this.bombSpawner = undefined;
     this.gameOver = false;
@@ -55,8 +57,11 @@ class GameScene extends Phaser.Scene {
 
     this.player = this.createPlayer();
     this.stars = this.createStars();
-    this.scoreLabel = this.createScoreLabel(20, 20, 0);
-    this.scoreLabel.setColor('#ffffff');
+    // this.scoreLabel = this.createScoreLabel(20, 20, 0);
+    this.timeLabel = this.createTimeLabel(20,20);
+    // this.scoreLabel.setColor('#ffffff');
+    this.timeLabel.setColor('#ffffff');
+
     this.bombSpawner = new BombSpawner(this, BOMB_KEY);
     // const bombsGroup = this.bombSpawner.group;
     // this.physics.add.collider(this.stars, sliceStart);
@@ -72,6 +77,7 @@ class GameScene extends Phaser.Scene {
     this.pauseButton.setInteractive({useHandCursor: true});
     this.pauseButton.setScale(0.8);
     this.pauseButton.on('pointerdown', () => {
+      this.timeLabel.pauseOrResumeTimer();
       this.pauseGame();
     }); 
   }
@@ -220,7 +226,7 @@ update(t, dt) {
 
   collectStar(player, star) {
     star.disableBody(true, true);
-    this.scoreLabel.add(10);
+    // this.scoreLabel.add(10);
     if (this.stars.countActive(true) === 0) {
       //  A new batch of stars to collect
       this.stars.children.iterate((child) => {
@@ -231,16 +237,29 @@ update(t, dt) {
     this.bombSpawner.spawn(player.x);
   }
 
-  createScoreLabel(x, y, score) {
-    const style = { fontSize: '32px', fill: '#000' };
-    const label = new ScoreLabel(this, x, y, score, style);
+  // createScoreLabel(x, y, score) {
+  //   const style = { fontSize: '32px', fill: '#000', position: 'absolute',right : '0',top: '0', margin : '1em'};
+  //   const label = new ScoreLabel(this, x, y, score, style);
+    
+
+  //   return label;
+  // }
+
+  createTimeLabel(x, y) {
+    
+    const label = new TimeLabel(this, x, y);
     this.add.existing(label);
 
     return label;
-  }
+  };
 
   hitBomb(player) {
-    this.scoreLabel.setText(`GAME OVER : ( \nYour Score = ${this.scoreLabel.score}`);
+    this.timeLabel.pauseOrResumeTimer();
+    this.timeLabel.setText(`GAME OVER :  \nYour Score was ${this.timeFormat(this.timeLabel.timeElapsed)}`);
+    localStorage.setItem('score', this.timeFormat(this.timeLabel.timeElapsed));
+    if (localStorage.getItem('token')) {
+      this.updateScore(this.timeFormat(this.timeLabel.timeElapsed));
+    }
     this.physics.pause();
 
     player.setTint(0xff0000);
@@ -251,9 +270,35 @@ update(t, dt) {
 
   }
 
+  // eslint-disable-next-line class-methods-use-this
+  timeFormat(timeElapsed){
+  const minutes = `0${Math.floor(timeElapsed / 60)}`.slice(-2);
+  const seconds = `0${Math.floor(timeElapsed % 60)}`.slice(-2);
+  return `${minutes}:${seconds}`;
+};
+
   pauseGame() {
     this.scene.pause();
     this.scene.launch('pause-menu');
+    this.gameOver = false;
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  async updateScore(score) {
+
+    const user = localStorage.getItem('username') ;
+
+    const options = {
+      method: 'PUT',
+      body: JSON.stringify({
+        user,
+        score,
+      }),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    };
+    await fetch(`${process.env.API_BASE_URL}/scores/`, options);
   }
 }
 
