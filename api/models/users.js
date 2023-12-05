@@ -1,5 +1,6 @@
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
+const escape = require('escape-html');
 const { queryExecute } = require('../utils/db');
 
 const lifetimeJwt = 24 * 60 * 60 * 1000; // in ms : 24 * 60 * 60 * 1000 = 24h
@@ -56,10 +57,10 @@ async function readOneUserFromUsername(username) {
 
 async function createOneUser(username, password) {
   const hashedPassword = await bcrypt.hash(password, saltRounds);
+  const cUsername = escape(username);
+  await queryExecute(`INSERT INTO projet.users (username, password) VALUES ('${cUsername}', '${hashedPassword}');`);
 
-  await queryExecute(`INSERT INTO projet.users (username, password) VALUES ('${username}', '${hashedPassword}');`);
-
-  const user = await readOneUserFromUsername(username);
+  const user = await readOneUserFromUsername(cUsername);
 
   const createdUser = {
     id: user.id_user,
