@@ -21,6 +21,7 @@ Content-Type: application/json
 Authorization: {{test.response.body.token}}
 
 
+
 {
     "score": 20
 }
