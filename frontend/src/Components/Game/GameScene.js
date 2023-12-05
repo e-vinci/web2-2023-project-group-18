@@ -1,5 +1,5 @@
 import Phaser from 'phaser';
-import ScoreLabel from './ScoreLabel';
+import CoinLabel from './CoinLabel';
 import BombSpawner from './BombSpawner';
 import platformAsset from '../../assets/platform.png';
 import starAsset from '../../assets/star.png';
@@ -7,7 +7,6 @@ import bombAsset from '../../assets/bomb.png';
 import dudeAsset from '../../assets/dude.png';
 import pauseButton from '../../assets/pauseButton.png';
 import Settings from '../../utils/settings';
-import CoinLabel from './CoinLabel';
 
 const GROUND_KEY = 'ground';
 const DUDE_KEY = 'dude';
@@ -20,8 +19,7 @@ class GameScene extends Phaser.Scene {
     super('game-scene');
     this.player = undefined;
     this.cursors = undefined;
-    this.scoreLabel = undefined;
-    this.coinsLabel = undefined;
+    this.coinLabel = undefined;
     this.stars = undefined;
     this.bombSpawner = undefined;
     this.gameOver = false;
@@ -44,11 +42,9 @@ class GameScene extends Phaser.Scene {
     const platforms = this.createPlatforms();
     this.player = this.createPlayer();
     this.stars = this.createStars();
-    // Scores
-    this.scoreLabel = this.createScoreLabel(20, 20);
-    this.scoreLabel.setColor('#ffffff');
+    this.coinLabel = this.createCoinLabel(20, 20);
+    this.coinLabel.setColor('#ffffff');
 
-    
 
 
     this.bombSpawner = new BombSpawner(this, BOMB_KEY);
@@ -160,38 +156,41 @@ class GameScene extends Phaser.Scene {
 
   collectStar(player, star) {
     star.disableBody(true, true);
-    this.scoreLabel.add(10);
+    this.coinLabel.add(10);
+  
     if (this.stars.countActive(true) === 0) {
       //  A new batch of stars to collect
       this.stars.children.iterate((child) => {
         child.enableBody(true, child.x, 0, true, true);
       });
     }
-
+  
     this.bombSpawner.spawn(player.x);
   }
-
-  async createScoreLabel(x, y) {
+  
+  async createCoinLabel(x, y) {
     const style = { fontSize: '32px', fill: '#000' };
-    const score = 10;
-    const label = new ScoreLabel(this, x, y, score, style);
-    this.add.existing(label);
-
+    // const coin = 100;
+    // const token =  localStorage.getItem('token');
+    // const options = {
+    //   method: 'POST',
+    //   headers: {
+    //     Authorization: token,
+    //     'Content-Type': 'application/json',
+    //   },
+    // };
+    const coin = 100; // a wait fetch(`${process.env.API_BASE_URL}/collectibles/`, options).coin; 
+    const label = new CoinLabel(this, x, y, coin, style);
+    this.add.existing(label); // Utilisez la variable correcte "label" ici
+  
     return label;
   }
 
-  async createCoinsLabel(x, y) {
-    const style = { fontSize: '32px', fill: '#000' };
+  // TODO UPDATE DB When die 
 
-    const coins = await fetch(`${process.env.API_BASE_URL}/collectibles/1`).nbre_collectible; // TODO 
-    const label = new CoinLabel(this, x, y, coins, style);
-    this.add.existing(label);
-
-    return label;
-  }
 
   hitBomb(player) {
-    this.scoreLabel.setText(`GAME OVER : ( \nYour Score = ${this.scoreLabel.score}`);
+    this.coinLabel.setText(`GAME OVER : ( \nYour Coin = ${this.coinLabel.score}`);
     this.physics.pause();
 
     player.setTint(0xff0000);
