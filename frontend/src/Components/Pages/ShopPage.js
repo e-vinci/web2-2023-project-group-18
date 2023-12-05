@@ -33,8 +33,8 @@ const ShopPage = async () => {
         displayCurrentThemePage();
 
         changePageListenner();
-        chooseListenner();
-        buyListenner();
+        skinsListenner();
+        themesListenner();
         backListenner();
 
     } catch {
@@ -127,10 +127,10 @@ function displayCurrentSkinPage() {
         for (let j = i; j < i+3 && j < currentSkins.length; j+= 1) {
             const skin = currentSkins[j];
 
-            let typeButton = `<button type="button" class="btn shop-buy-button shop-buy-skin">${skin.price} coins</button>`;
+            let typeButton = `<button type="button" class="btn shop-buy-button shop-buy-skin" data-id="${skin.id_skin}">${skin.price} coins</button>`;
             
             if (ownedSkins.some(s => s.name_skin === skin.name_skin))
-                typeButton = `<button type="button" class="btn shop-own-button shop-own-skin">Choose</button>`;
+                typeButton = `<button type="button" class="btn shop-own-button shop-own-skin" data-id="${skin.id_skin}">Choose</button>`;
 
             skinHTML += `
                 <div class="col-md-4 text-center">
@@ -145,6 +145,8 @@ function displayCurrentSkinPage() {
 
     skinPageNumber.innerHTML = `< ${currentSkinPage} > on < ${Math.ceil(skinsList.length/skinsPerPage)} >`;
     skinListPage.innerHTML = skinHTML;
+
+    skinsListenner();
 }
 
 // Display themes page
@@ -164,9 +166,9 @@ function displayCurrentThemePage() {
         for (let j = i; j < i+3 && j < currentThemes.length; j+= 1) {
             const theme = currentThemes[j];
 
-            let typeButton = `<button type="button" class="btn shop-buy-button shop-buy-theme">${theme.price} coins</button>`;
+            let typeButton = `<button type="button" class="btn shop-buy-button shop-buy-theme" data-id="${theme.id_theme}">${theme.price} coins</button>`;
             if (ownedThemes.some(t => t.name_theme === theme.name_theme))
-                typeButton = `<button type="button" class="btn shop-own-button shop-own-theme">Choose</button>`;
+                typeButton = `<button type="button" class="btn shop-own-button shop-own-theme" data-id="${theme.id_theme}">Choose</button>`;
 
             themeHTML += `
                 <div class="col-md-4 text-center">
@@ -181,6 +183,8 @@ function displayCurrentThemePage() {
 
     themePageNumber.innerHTML = `< ${currentThemePage} > on < ${Math.ceil(themesList.length/themesPerPage)} >`;
     themeListPage.innerHTML = themeHTML;
+
+    themesListenner();
 }
 
 // The listenner to change pages (skins or themes)
@@ -213,37 +217,47 @@ function changePageListenner() {
     });
 }
 
-function chooseListenner() {
-    const skinButton = document.querySelector('.shop-own-skin');
-    const themeButton = document.querySelector('.shop-own-theme');
+// The listenner to click on buy and choose skin
+function skinsListenner() {
+    const skinsBuyButtons = document.querySelectorAll('.shop-buy-skin');
+    const skinsOwnButtons = document.querySelectorAll('.shop-own-skin');
 
-    if(skinButton) {
-        skinButton.addEventListener('click', () =>{
-            Navigate('/');
-        })
+    if(skinsBuyButtons) {
+        skinsBuyButtons.forEach((btn) => {
+            btn.addEventListener('click', () =>{
+                console.log(btn.getAttribute('data-id'));
+            })
+        });
     }
 
-    if(skinButton) {
-        themeButton.addEventListener('click', () =>{
-            Navigate('/');
-        })
+    if(skinsOwnButtons) {
+        skinsOwnButtons.forEach((btn) => {
+            btn.addEventListener('click', () =>{
+                console.log(btn.getAttribute('data-id'));
+            })
+        });
     }
 }
 
-function buyListenner() {
-    const skinButton = document.querySelector('.shop-buy-skin');
-    const themeButton = document.querySelector('.shop-buy-theme');
+// The listenner to click on buy and choose theme
+function themesListenner() {
+    const themesBuyButtons = document.querySelectorAll('.shop-buy-theme');
+    const themesOwnButtons = document.querySelectorAll('.shop-own-theme');
 
-    if(skinButton) {
-        skinButton.addEventListener('click', () =>{
-            Navigate('/');
-        })
+    if(themesBuyButtons) {
+        themesBuyButtons.forEach((btn) => {
+            btn.addEventListener('click', () =>{
+                console.log(btn.getAttribute('data-id'));
+            })
+        });
     }
 
-    if(skinButton) {
-        themeButton.addEventListener('click', () =>{
-            Navigate('/');
-        })
+    if(themesOwnButtons) {
+        themesOwnButtons.forEach((btn) => {
+            btn.addEventListener('click', () =>{
+                console.log(btn.getAttribute('data-id'));
+            })
+        });
     }
 }
 
