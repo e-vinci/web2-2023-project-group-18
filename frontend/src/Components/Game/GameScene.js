@@ -1,5 +1,4 @@
 import Phaser from 'phaser';
-import ScoreLabel from './ScoreLabel';
 // import BombSpawner from './BombSpawner';
 import PineSpawner from './PineSpawner';
 // import platformAsset from '../../assets/platform.png';
