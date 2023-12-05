@@ -20,4 +20,8 @@ export default class CoinLabel extends Phaser.GameObjects.Text {
   updateCoinText() {
     this.setText(formatCoin(this.coin));
   }
+
+  getCoin(){
+    return this.coin;
+  }
 }

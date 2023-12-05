@@ -42,10 +42,12 @@ class GameScene extends Phaser.Scene {
     const platforms = this.createPlatforms();
     this.player = this.createPlayer();
     this.stars = this.createStars();
-    this.coinLabel = this.createCoinLabel(20, 20);
-    this.coinLabel.setColor('#ffffff');
 
-
+    this.createCoinLabelAsync(20, 20).then((coinLabel) => {
+      // La fonction asynchrone est résolue, vous pouvez utiliser le label ici
+      this.coinLabel = coinLabel;
+      console.log(this.coinLabel);
+    });
 
     this.bombSpawner = new BombSpawner(this, BOMB_KEY);
     const bombsGroup = this.bombSpawner.group;
@@ -98,7 +100,7 @@ class GameScene extends Phaser.Scene {
 
   createPlatforms() {
     const platforms = this.physics.add.staticGroup();
-
+    
     platforms
       .create(400, 568, GROUND_KEY)
       .setScale(2)
@@ -156,7 +158,7 @@ class GameScene extends Phaser.Scene {
 
   collectStar(player, star) {
     star.disableBody(true, true);
-    this.coinLabel.add(10);
+    this.coinLabel.add(10)
   
     if (this.stars.countActive(true) === 0) {
       //  A new batch of stars to collect
@@ -168,35 +170,61 @@ class GameScene extends Phaser.Scene {
     this.bombSpawner.spawn(player.x);
   }
   
-  async createCoinLabel(x, y) {
+  async createCoinLabelAsync(x, y) {
+    // Attendez la valeur asynchrone
+    const coin = 100;// await this.getDBCoinValue();
+
     const style = { fontSize: '32px', fill: '#000' };
-    // const coin = 100;
-    // const token =  localStorage.getItem('token');
+    const label = new CoinLabel(this, x, y, coin, style);
+    this.add.existing(label);
+    
+    return label;
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  async getDBCoinValue() {
+    const token = localStorage.getItem('token');
+    const options = {
+      method: 'GET',
+      headers: {
+        Authorization: token,
+        'Content-Type': 'application/json',
+      },
+    };
+
+    const response = await fetch(`${process.env.API_BASE_URL}/collectibles/`, options);
+    const data = await response;
+    return data.coin;  
+  }
+
+
+
+  async updateDBCoins() {
+    const coin = this.coinLabel.getCoin(); 
+    console.log(`you have ${coin}`);
+    // const token = localStorage.getItem('token');
     // const options = {
-    //   method: 'POST',
+    //   method: 'PUT',
+    //   body: JSON.stringify({
+    //     coin,
+    //   }),
     //   headers: {
     //     Authorization: token,
     //     'Content-Type': 'application/json',
     //   },
     // };
-    const coin = 100; // a wait fetch(`${process.env.API_BASE_URL}/collectibles/`, options).coin; 
-    const label = new CoinLabel(this, x, y, coin, style);
-    this.add.existing(label); // Utilisez la variable correcte "label" ici
-  
-    return label;
+    // await fetch(`${process.env.API_BASE_URL}/collectibles/`, options);
   }
-
-  // TODO UPDATE DB When die 
 
 
   hitBomb(player) {
-    this.coinLabel.setText(`GAME OVER : ( \nYour Coin = ${this.coinLabel.score}`);
+    this.coinLabel.setText(`GAME OVER : ( \nYour Coins = ${this.coinLabel.coin}`);
     this.physics.pause();
 
     player.setTint(0xff0000);
 
     player.anims.play('turn');
-
+    this.updateDBCoins();
     this.gameOver = true;
   }
 
