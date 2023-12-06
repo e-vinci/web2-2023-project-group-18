@@ -5,7 +5,7 @@ const { authorize } = require('../utils/auths');
 const router = express.Router();
 
 router.get('/', authorize, async (req, res) => {
-  const username = req.user;
+  const { username } = req.user;
   try {
     const countCollectible = await getCollectible(username);
 
@@ -25,8 +25,8 @@ router.get('/', authorize, async (req, res) => {
   }
 });
 
-router.put('/addCollectible', authorize, async (req, res) => {
-  const username = req.user;
+router.put('/addCollectible/', authorize, async (req, res) => {
+  const { username } = req.user;
   const collectible = req?.body?.collectible ? req.body.collectible : undefined;
   if (collectible) {
     try {
@@ -42,8 +42,8 @@ router.put('/addCollectible', authorize, async (req, res) => {
   }
 });
 
-router.put('/suppCollectible', authorize, async (req, res) => {
-  const username = req.user;
+router.put('/suppCollectible/', authorize, async (req, res) => {
+  const { username } = req.user;
   const collectible = req?.body?.collectible ? req.body.collectible : undefined;
   if (collectible) {
     try {

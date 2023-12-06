@@ -1,6 +1,7 @@
 ### Basic url
 @baseUrl = http://localhost:3000
 
+
 # @name test
 ### Login as test user
 POST {{baseUrl}}/auths/login
@@ -23,7 +24,7 @@ Authorization: {{test.response.body.token}}
 }
 
 ### Add collectibles
-PUT {{baseUrl}}/addCollectible
+PUT {{baseUrl}}/collectibles/addCollectible/
 Content-Type: application/json
 Authorization: {{test.response.body.token}}
 
@@ -34,7 +35,7 @@ Authorization: {{test.response.body.token}}
 }
 
 ### Supp collectibles
-PUT {{baseUrl}}/suppCollectible
+PUT {{baseUrl}}/collectibles/suppCollectible/
 Content-Type: application/json
 Authorization: {{test.response.body.token}}
 
