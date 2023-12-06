@@ -75,8 +75,9 @@ class PauseMenuScene extends Phaser.Scene {
     }
 
     goHome() {
-        this.game.resume('game-scene');
-        Navigate('/');
+      this.scene.stop('pause-menu');
+      this.game.destroy(true);
+      Navigate('/');
     }
 
     replayGame() {
