@@ -80,7 +80,7 @@ RETURNS VOID AS $$
     DECLARE
         id_current_user INTEGER;
     BEGIN
-        id_current_user := (SELECT c.user_id FROM projet.collectibles c, projet.users u WHERE c.user_id = u.id_user AND u.username = _user)
+        id_current_user := (SELECT c.user_id FROM projet.collectibles c, projet.users u WHERE c.user_id = u.id_user AND u.username = _user);
     
     IF (FOUND) THEN
         UPDATE projet.collectibles SET nbre_collectible = (nbre_collectible + _collectible) WHERE user_id = id_current_user;
@@ -99,7 +99,7 @@ RETURNS VOID AS $$
         id_current_user INTEGER;
     BEGIN
 
-        id_current_user := (SELECT c.user_id FROM projet.collectibles c, projet.users u WHERE c.user_id = u.id_user AND u.username = _user)
+        id_current_user := (SELECT c.user_id FROM projet.collectibles c, projet.users u WHERE c.user_id = u.id_user AND u.username = _user);
     
         IF (FOUND) THEN
             UPDATE projet.collectibles SET nbre_collectible = (nbre_collectible - _collectible) WHERE user_id = id_current_user;
