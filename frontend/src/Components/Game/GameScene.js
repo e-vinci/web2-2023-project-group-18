@@ -50,13 +50,11 @@ class GameScene extends Phaser.Scene {
     this.coins = this.createCoins();
 
     // hud coin
-    this.add.image(30, 38, HUD_COIN_KEY);
+    this.add.image(20, 38, HUD_COIN_KEY);
     this.createCoinLabel(30, 20).then((coinLabel) => {
       this.coinLabel = coinLabel;
-      this.coinLabel.setColor("#FFFFFF")
-      // console.log(this.coinLabel);
     });
-    
+     
     
 
     this.bombSpawner = new BombSpawner(this, BOMB_KEY);
@@ -183,7 +181,7 @@ class GameScene extends Phaser.Scene {
     // Attendez la valeur asynchrone
     const coin = 100;// await this.getDBCoinValue();
 
-    const style = { fontSize: '32px', fill: '#000' };
+    const style = { fontSize: '32px', fill: '#ffffff', fontFamily: 'Arial, sans-serif' };
     const label = new CoinLabel(this, x, y, coin, style);
     this.add.existing(label);
     
