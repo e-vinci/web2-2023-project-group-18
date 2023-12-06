@@ -1,27 +1,45 @@
 ### Basic url
-@baseUrl = http://localhost:3000/collectibles
+@baseUrl = http://localhost:3000
+
+# @name test
+### Login as test user
+POST {{baseUrl}}/auths/login
+Content-Type: application/json
+
+{
+    "username":"test",
+    "password":"test"
+}
 
 ### Get the amount of collectibles
-GET {{baseUrl}}/1
+GET {{baseUrl}}/collectibles
+Content-Type: application/json
+Authorization: {{test.response.body.token}}
+
+
+
+{
+    "collectible" : 100
+}
 
 ### Add collectibles
-PUT {{baseUrl}}/addCollectible/1
+PUT {{baseUrl}}/addCollectible
 Content-Type: application/json
+Authorization: {{test.response.body.token}}
+
+
 
 {
     "collectible" : 100
 }
-
-### Get the amount of collectibles
-GET {{baseUrl}}/1
 
 ### Supp collectibles
-PUT {{baseUrl}}/suppCollectible/1
+PUT {{baseUrl}}/suppCollectible
 Content-Type: application/json
+Authorization: {{test.response.body.token}}
+
+
 
 {
-    "collectible" : 100
+    "collectible" : 900
 }
-
-### Get the amount of collectibles
-GET {{baseUrl}}/1

@@ -74,16 +74,18 @@ CREATE TABLE IF NOT EXISTS projet.collectibles(
     CHECK ( nbre_collectible >= 0 )
 );
 
-SELECT c.nbre_collectible FROM projet.collectibles c WHERE c.user_id = 1;
 
-CREATE OR REPLACE FUNCTION projet.add_collectible(id_user INTEGER, _collectible INTEGER)
+CREATE OR REPLACE FUNCTION projet.add_collectible(_user VARCHAR(255), _collectible INTEGER)
 RETURNS VOID AS $$
     DECLARE
+        id_current_user INTEGER;
     BEGIN
-    IF (EXISTS(SELECT * FROM projet.collectibles WHERE user_id = id_user )) THEN
-        UPDATE projet.collectibles SET nbre_collectible = (nbre_collectible + _collectible) WHERE user_id = id_user;
+        id_current_user := (SELECT c.user_id FROM projet.collectibles c, projet.users u WHERE c.user_id = u.id_user AND u.username = _user)
+    
+    IF (FOUND) THEN
+        UPDATE projet.collectibles SET nbre_collectible = (nbre_collectible + _collectible) WHERE user_id = id_current_user;
     ELSE
-        INSERT INTO projet.collectibles (user_id, nbre_collectible) VALUES (id_user, _collectible);
+        INSERT INTO projet.collectibles (user_id, nbre_collectible) VALUES (id_current_user, _collectible);
 
     end if;
     RETURN;
@@ -91,15 +93,19 @@ RETURNS VOID AS $$
 
 $$ LANGUAGE plpgsql;
 
-CREATE OR REPLACE FUNCTION projet.supp_collectible(id_user INTEGER, _collectible INTEGER)
+CREATE OR REPLACE FUNCTION projet.supp_collectible(_user VARCHAR(255), _collectible INTEGER)
 RETURNS VOID AS $$
     DECLARE
+        id_current_user INTEGER;
     BEGIN
-    IF (EXISTS(SELECT * FROM projet.collectibles WHERE user_id = id_user )) THEN
-        UPDATE projet.collectibles SET nbre_collectible = (nbre_collectible - _collectible) WHERE user_id = id_user;
-    ELSE
-        RAISE NOTICE 'No user found with this id_user';
-    end if;
+
+        id_current_user := (SELECT c.user_id FROM projet.collectibles c, projet.users u WHERE c.user_id = u.id_user AND u.username = _user)
+    
+        IF (FOUND) THEN
+            UPDATE projet.collectibles SET nbre_collectible = (nbre_collectible - _collectible) WHERE user_id = id_current_user;
+        ELSE
+            RAISE NOTICE 'No user found with this id_user';
+        end if;
     RETURN;
     END;
 
