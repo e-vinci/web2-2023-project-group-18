@@ -2,7 +2,8 @@ import Phaser from 'phaser';
 import CoinLabel from './CoinLabel';
 import BombSpawner from './BombSpawner';
 import platformAsset from '../../assets/platform.png';
-import coinAsset from '../../assets/star.png';
+import coinAsset from '../../assets/coin.png';
+import coinHudAsset from '../../assets/hudcoin.png';
 import bombAsset from '../../assets/bomb.png';
 import dudeAsset from '../../assets/dude.png';
 import pauseButton from '../../assets/pauseButton.png';
@@ -11,6 +12,7 @@ import Settings from '../../utils/settings';
 const GROUND_KEY = 'ground';
 const DUDE_KEY = 'dude';
 const COIN_KEY = 'coin';
+const HUD_COIN_KEY = 'hudcoin';
 const BOMB_KEY = 'bomb';
 const PAUSE_BUTTON  = 'pause';
 
@@ -28,7 +30,7 @@ class GameScene extends Phaser.Scene {
 
   preload() {
     this.load.image(GROUND_KEY, platformAsset);
-    this.load.image(COIN_KEY, coinAsset);
+    
     this.load.image(BOMB_KEY, bombAsset);
 
     this.load.spritesheet(DUDE_KEY, dudeAsset, {
@@ -36,6 +38,10 @@ class GameScene extends Phaser.Scene {
       frameHeight: 48,
     });
     this.load.image(PAUSE_BUTTON, pauseButton);
+
+    // coins
+    this.load.image(HUD_COIN_KEY, coinHudAsset);
+    this.load.image(COIN_KEY, coinAsset);
   }
 
   create() {
@@ -43,10 +49,15 @@ class GameScene extends Phaser.Scene {
     this.player = this.createPlayer();
     this.coins = this.createCoins();
 
-    this.createCoinLabel(20, 20).then((coinLabel) => {
+    // hud coin
+    this.add.image(30, 38, HUD_COIN_KEY);
+    this.createCoinLabel(30, 20).then((coinLabel) => {
       this.coinLabel = coinLabel;
-      console.log(this.coinLabel);
+      this.coinLabel.setColor("#FFFFFF")
+      // console.log(this.coinLabel);
     });
+    
+    
 
     this.bombSpawner = new BombSpawner(this, BOMB_KEY);
     const bombsGroup = this.bombSpawner.group;
@@ -148,9 +159,9 @@ class GameScene extends Phaser.Scene {
       setXY: { x: 12, y: 0, stepX: 70 },
     });
 
-    coins.children.iterate((child) => {
-      child.setBounceY(Phaser.Math.FloatBetween(0.4, 0.8));
-    });
+    // coins.children.iterate((child) => {
+    //   child.setBounceY(Phaser.Math.FloatBetween(0.4, 0.8));
+    // });
 
     return coins;
   }
@@ -165,7 +176,7 @@ class GameScene extends Phaser.Scene {
       });
     }
 
-    this.bombSpawner.spawn(player.x);
+    // this.bombSpawner.spawn(player.x);
   }
   
   async createCoinLabel(x, y) {

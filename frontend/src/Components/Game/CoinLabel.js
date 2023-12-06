@@ -1,6 +1,6 @@
 import Phaser from 'phaser';
 
-const formatCoin = (coin) => `Coins: ${coin}`;
+const formatCoin = (coin) => ` :${coin}`;
 
 export default class CoinLabel extends Phaser.GameObjects.Text {
   constructor(scene, x, y, coin, style) {
@@ -24,4 +24,6 @@ export default class CoinLabel extends Phaser.GameObjects.Text {
   getCoin(){
     return this.coin;
   }
+
+
 }
