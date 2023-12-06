@@ -79,7 +79,7 @@ const LoginPage = () => {
       localStorage.setItem('token', response.token)
       localStorage.setItem('user',response.username)
       animeLogin(true);
-      setTimeout(()=>Navigate('/'),1000)
+      setTimeout(()=>Navigate('/'),2000)
   }
   }
 };
