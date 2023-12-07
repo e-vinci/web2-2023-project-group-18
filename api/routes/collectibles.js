@@ -25,13 +25,12 @@ router.get('/', authorize, async (req, res) => {
   }
 });
 
-router.put('/addCollectible/', authorize, async (req, res) => {
+router.put('/', authorize, async (req, res) => {
   const { username } = req.user;
   const collectible = req?.body?.collectible ? req.body.collectible : undefined;
   if (collectible) {
     try {
-      const id = await addCollectible(username, collectible);
-      console.log(`Id user ${id.rows.id}`);
+      await addCollectible(username, collectible);
       res.sendStatus(200);
     } catch (error) {
       console.log(`Erreur type: ${error.detail}`);
@@ -42,7 +41,7 @@ router.put('/addCollectible/', authorize, async (req, res) => {
   }
 });
 
-router.put('/suppCollectible/', authorize, async (req, res) => {
+router.put('/supp/', authorize, async (req, res) => {
   const { username } = req.user;
   const collectible = req?.body?.collectible ? req.body.collectible : undefined;
   if (collectible) {

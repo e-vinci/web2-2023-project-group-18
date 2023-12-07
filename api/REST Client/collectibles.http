@@ -2,45 +2,40 @@
 @baseUrl = http://localhost:3000
 
 
-# @name test
+# @name test2
 ### Login as test user
 POST {{baseUrl}}/auths/login
 Content-Type: application/json
 
 {
-    "username":"test",
-    "password":"test"
+    "username":"test2",
+    "password":"test2"
 }
 
 ### Get the amount of collectibles
 GET {{baseUrl}}/collectibles
 Content-Type: application/json
-Authorization: {{test.response.body.token}}
+Authorization: {{test2.response.body.token}}
 
-
-
-{
-    "collectible" : 100
-}
 
 ### Add collectibles
-PUT {{baseUrl}}/collectibles/addCollectible/
+PUT {{baseUrl}}/collectibles
 Content-Type: application/json
-Authorization: {{test.response.body.token}}
-
-
-
-{
-    "collectible" : 100
-}
-
-### Supp collectibles
-PUT {{baseUrl}}/collectibles/suppCollectible/
-Content-Type: application/json
-Authorization: {{test.response.body.token}}
+Authorization: {{test2.response.body.token}}
 
 
 
 {
     "collectible" : 900
+}
+
+### Supp collectibles
+PUT {{baseUrl}}/collectibles/supp/
+Content-Type: application/json
+Authorization: {{test2.response.body.token}}
+
+
+
+{
+    "collectible" : 100
 }
