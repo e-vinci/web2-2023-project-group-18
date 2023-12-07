@@ -33,8 +33,6 @@ const ShopPage = async () => {
         displayCurrentThemePage();
 
         changePageListenner();
-        skinsListenner();
-        themesListenner();
         backListenner();
 
     } catch {
@@ -218,7 +216,7 @@ function changePageListenner() {
 }
 
 // The listenner to click on buy and choose skin
-function skinsListenner() {
+async function skinsListenner() {
     const skinsBuyButtons = document.querySelectorAll('.shop-buy-skin');
     const skinsOwnButtons = document.querySelectorAll('.shop-own-skin');
 
@@ -233,7 +231,12 @@ function skinsListenner() {
     if(skinsOwnButtons) {
         skinsOwnButtons.forEach((btn) => {
             btn.addEventListener('click', () =>{
-                console.log(btn.getAttribute('data-id'));
+                // check if html is not modified in devtools (the data-id)
+                const idSkin = parseInt(btn.getAttribute('data-id'), 10);
+                ownedSkins.forEach((skin) => {
+                    if(skin.id_skin === idSkin)
+                        console.log(`a le skin ${  skin.name_skin}`)
+                });
             })
         });
     }
@@ -255,7 +258,12 @@ function themesListenner() {
     if(themesOwnButtons) {
         themesOwnButtons.forEach((btn) => {
             btn.addEventListener('click', () =>{
-                console.log(btn.getAttribute('data-id'));
+                // check if html is not modified in devtools (the data-id)
+                const idTheme = parseInt(btn.getAttribute('data-id'), 10);
+                ownedThemes.forEach((theme) => {
+                    if(theme.id_theme === idTheme)
+                        console.log(`a le skin ${  theme.name_theme}`)
+                });
             })
         });
     }
