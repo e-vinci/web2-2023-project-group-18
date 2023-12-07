@@ -263,14 +263,14 @@ class GameScene extends Phaser.Scene {
 
   hitBomb(player) {
     this.meterLabel.pauseMeter();
-    /* this.meterLabel.setText(
+    this.meterLabel.setText(
       `GAME OVER :  \nYour Score is ${this.meterLabel.formatDistance(this.meterLabel.timeElapsed)}`,
     );
     localStorage.setItem('score', this.timeFormat(this.meterLabel.timeElapsed));
 
     if (localStorage.getItem('token')) {
       this.updateScore(this.formatDistance(this.meterLabel.timeElapsed));
-    } */
+    }
     this.physics.pause();
 
     player.setTint(0xff0000);
