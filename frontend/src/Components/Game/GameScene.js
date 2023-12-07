@@ -63,11 +63,11 @@ class GameScene extends Phaser.Scene {
     this.meterLabel.setColor('#ffffff');
 
     this.bombSpawner = new BombSpawner(this, BOMB_KEY);
-    // const bombsGroup = this.bombSpawner.group;
+    const bombsGroup = this.bombSpawner.group;
     // this.physics.add.collider(this.stars, sliceStart);
     // this.physics.add.collider(this.player, sliceStart);
     // this.physics.add.collider(bombsGroup, sliceStart);
-    // this.physics.add.collider(this.player, bombsGroup, this.hitBomb, null, this);
+    this.physics.add.collider(this.player, bombsGroup, this.hitBomb, null, this);
     this.physics.add.overlap(this.player, this.stars, this.collectStar, null, this);
     this.cursors = this.input.keyboard.createCursorKeys();
     this.key = this.input.keyboard.addKey(localStorage.getItem('selectedKey'));
@@ -263,14 +263,14 @@ class GameScene extends Phaser.Scene {
 
   hitBomb(player) {
     this.meterLabel.pauseMeter();
-    this.meterLabel.setText(
+    /* this.meterLabel.setText(
       `GAME OVER :  \nYour Score is ${this.meterLabel.formatDistance(this.meterLabel.timeElapsed)}`,
     );
     localStorage.setItem('score', this.timeFormat(this.meterLabel.timeElapsed));
 
     if (localStorage.getItem('token')) {
       this.updateScore(this.formatDistance(this.meterLabel.timeElapsed));
-    }
+    } */
     this.physics.pause();
 
     player.setTint(0xff0000);
@@ -279,6 +279,7 @@ class GameScene extends Phaser.Scene {
 
     this.gameOver = true;
     this.meterLabel.destroy();
+    this.scene.launch('game-over');
   }
 
   // eslint-disable-next-line class-methods-use-this
