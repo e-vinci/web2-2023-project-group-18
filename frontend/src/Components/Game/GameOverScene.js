@@ -91,7 +91,7 @@ class GameOverScene extends Phaser.Scene {
 
   replayGame() {
     this.scene.stop('game-over');
-    this.events.emit('restart-game');
+    this.scene.launch('game-scene');
   }
 }
 
