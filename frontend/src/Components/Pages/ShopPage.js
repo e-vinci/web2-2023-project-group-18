@@ -250,6 +250,8 @@ async function skinsListenner() {
                 if (!ownThisSkin) {
                     try {
                         await fetchBuy(`/skins/${idSkin}`);
+                        ownedSkins = await fetchData(`/skins/1`);
+                        displayCurrentSkinPage();
                     } catch {
                         alert("Une erreur est survenue lors de l'achat de ce skin...");
                     }
@@ -293,6 +295,8 @@ function themesListenner() {
                 if (!ownThisTheme) {
                     try {
                         await fetchBuy(`/themes/${idTheme}`);
+                        ownedThemes = await fetchData(`/themes/1`);
+                        displayCurrentThemePage();
                     } catch {
                         alert("Une erreur est survenue lors de l'achat de ce thème...");
                     }
