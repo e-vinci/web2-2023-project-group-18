@@ -235,27 +235,6 @@ class GameScene extends Phaser.Scene {
     return label;
   }
 
-  hitBomb(player) {
-    
-    this.meterLabel.pauseMeter();
-    this.meterLabel.setText(
-      `GAME OVER :  \nYour Score is ${this.meterLabel.formatDistance(this.meterLabel.timeElapsed)}`,
-    );
-    localStorage.setItem('score', this.timeFormat(this.meterLabel.timeElapsed));
-
-    if (localStorage.getItem('token')) {
-      this.updateScore(this.formatDistance(this.meterLabel.timeElapsed));
-    }
-    this.physics.pause();
-
-    player.setTint(0xff0000);
-
-    player.anims.play('turn');
-
-    this.gameOver = true;
-    this.meterLabel.destroy();
-  }
-
   // eslint-disable-next-line class-methods-use-this
   formatDistance(distance) {
   // Assuming distance is in meters
@@ -268,19 +247,15 @@ class GameScene extends Phaser.Scene {
   return `${formattedMeters} m`;
 }
 
-  async pauseGame() {
+  pauseGame() {
     this.meterLabel.pauseMeter();
     this.scene.pause();
-     await this.scene.launch('pause-menu');
+    this.scene.launch('pause-menu');
 
     setTimeout(() => {
       this.scene.get('pause-menu').events.on(
         'shutdown',
         () => {
-          if (localStorage.getItem('replay')) {
-            this.meterLabel.destroy();
-            return;
-          }
           this.meterLabel.resumeMeter();
         },
         this,

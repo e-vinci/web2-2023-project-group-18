@@ -61,7 +61,8 @@ class PauseMenuScene extends Phaser.Scene {
 
                this.replayButton = this.add.image(this.scale.width / 2 + 100, 350, REPLAY_BUTTON);
                this.replayButton.setInteractive({ useHandCursor: true });
-               this.replayButton.on('pointerdown', () => {
+      this.replayButton.on('pointerdown', () => {
+                 
                  this.replayGame();
                });
         
