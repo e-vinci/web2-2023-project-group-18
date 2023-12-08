@@ -222,8 +222,19 @@ async function skinsListenner() {
 
     if(skinsBuyButtons) {
         skinsBuyButtons.forEach((btn) => {
-            btn.addEventListener('click', () =>{
-                console.log(btn.getAttribute('data-id'));
+            btn.addEventListener('click', async () =>{
+                const idSkin = parseInt(btn.getAttribute('data-id'), 10);
+                let ownThisSkin = false;
+
+                // check if html is not modified in devtools (the data-id)
+                ownedSkins.forEach((skin) => {
+                    if(skin.id_skin === idSkin)
+                        ownThisSkin = true;
+                });
+
+                if (!ownThisSkin) {
+                    fetchBuy(`/skins/${idSkin}`);
+                }
             })
         });
     }
@@ -249,8 +260,19 @@ function themesListenner() {
 
     if(themesBuyButtons) {
         themesBuyButtons.forEach((btn) => {
-            btn.addEventListener('click', () =>{
-                console.log(btn.getAttribute('data-id'));
+            btn.addEventListener('click', async () =>{
+                const idTheme = parseInt(btn.getAttribute('data-id'), 10);
+                let ownThisTheme = false;
+
+                // check if html is not modified in devtools (the data-id)
+                ownedThemes.forEach((theme) => {
+                    if(theme.id_theme === idTheme)
+                        ownThisTheme = true;
+                });
+
+                if (!ownThisTheme) {
+                    fetchBuy(`/themes/${idTheme}`);
+                }
             })
         });
     }
@@ -284,6 +306,23 @@ async function fetchData(url) {
     const finalResponse = await response.json();
     return finalResponse;
 }
+
+// Fetch data from API
+async function fetchBuy(url) {
+    // const token = localStorage.getItem('token');
+
+    const options = {
+      method: 'PUT',
+      body: JSON.stringify({
+      }),
+      headers: {
+        'Content-Type': 'application/json',
+        // Authorization: token,
+      },
+    };
+    await fetch(process.env.API_BASE_URL + url, options);
+}
+
 
 // No right click on picture
 document.addEventListener('contextmenu', (e) => {
