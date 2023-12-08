@@ -29,10 +29,11 @@ router.get('/:id', async (req, res) => {
 });
 
 router.put('/:id', async (req, res) => {
+  const user = req?.params?.id >= 0 ? req.params.id : undefined;
   const theme = req?.body?.theme ? req.body.theme : undefined;
-  if (theme) {
+  if (user && theme) {
     try {
-      await addUserTheme(req.params.id, theme);
+      await addUserTheme(user, theme);
       return res.sendStatus(200);
     } catch (error) {
       return res.sendStatus(404);

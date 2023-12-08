@@ -29,10 +29,11 @@ router.get('/:id', async (req, res) => {
 });
 
 router.put('/:id', async (req, res) => {
+  const user = req?.params?.id >= 0 ? req.params.id : undefined;
   const skin = req?.body?.skin ? req.body.skin : undefined;
-  if (skin) {
+  if (user && skin) {
     try {
-      await addUserSkin(req.params.id, skin);
+      await addUserSkin(user, skin);
       return res.sendStatus(200);
     } catch (error) {
       return res.sendStatus(404);

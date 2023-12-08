@@ -5,13 +5,19 @@ import templateMapImage from '../../assets/templateMapShopPage.png';
 
 let coins = 0;
 
+// List from database
 let skinsList;
 let themesList;
+
+// Owned list for this user from database
 let ownedSkins;
 let ownedThemes;
 
+// The number of skin or theme per page for desktop (for phone it is 1)
 let skinsPerPage = 6;
 let themesPerPage = 6;
+
+// Current page for skin or theme
 let currentSkinPage = 1;
 let currentThemePage = 1;
 
@@ -33,7 +39,7 @@ const ShopPage = async () => {
         displayCurrentThemePage();
 
         changePageListenner();
-        backListenner();
+        backButtonListenner();
 
     } catch {
         document.querySelector('main').innerHTML = `
@@ -46,6 +52,7 @@ const ShopPage = async () => {
 function renderShopPage() {
     const main = document.querySelector('main');
 
+    // For phone the number of skins or themes is 1 per page
     if (window.innerWidth <= 480) {
         skinsPerPage = 1;
         themesPerPage = 1;
@@ -187,32 +194,40 @@ function displayCurrentThemePage() {
 
 // The listenner to change pages (skins or themes)
 function changePageListenner() {
-    document.querySelector('#next-change-skin-page').addEventListener('click', () => {
+    const nextChangeSkinPage = document.querySelector('#next-change-skin-page');
+    const previousChangeSkinPage = document.querySelector('#previous-change-skin-page');
+    const nextChangeThemePage = document.querySelector('#next-change-theme-page');
+    const previousChangeThemePage = document.querySelector('#previous-change-theme-page');
+
+
+    nextChangeSkinPage.addEventListener('click', () => {
         if (currentSkinPage < skinsList.length/skinsPerPage) {
             currentSkinPage += 1;
             displayCurrentSkinPage();
         }
     });
-    document.querySelector('#previous-change-skin-page').addEventListener('click', () => {
+
+    previousChangeSkinPage.addEventListener('click', () => {
         if (currentSkinPage > 1) {
             currentSkinPage -= 1;
             displayCurrentSkinPage();
         }
     });
 
-    document.querySelector('#next-change-theme-page').addEventListener('click', () => {
+    nextChangeThemePage.addEventListener('click', () => {
         if (currentThemePage < themesList.length/themesPerPage) {
             currentThemePage += 1;
             displayCurrentThemePage();
         }
     });
 
-    document.querySelector('#previous-change-theme-page').addEventListener('click', () => {
+    previousChangeThemePage.addEventListener('click', () => {
         if (currentThemePage > 1) {
             currentThemePage -= 1;
             displayCurrentThemePage();
         }
     });
+
 }
 
 // The listenner to click on buy and choose skin
@@ -233,7 +248,11 @@ async function skinsListenner() {
                 });
 
                 if (!ownThisSkin) {
-                    fetchBuy(`/skins/${idSkin}`);
+                    try {
+                        await fetchBuy(`/skins/${idSkin}`);
+                    } catch {
+                        alert("Une erreur est survenue lors de l'achat de ce skin...");
+                    }
                 }
             })
         });
@@ -251,6 +270,7 @@ async function skinsListenner() {
             })
         });
     }
+
 }
 
 // The listenner to click on buy and choose theme
@@ -271,7 +291,11 @@ function themesListenner() {
                 });
 
                 if (!ownThisTheme) {
-                    fetchBuy(`/themes/${idTheme}`);
+                    try {
+                        await fetchBuy(`/themes/${idTheme}`);
+                    } catch {
+                        alert("Une erreur est survenue lors de l'achat de ce thème...");
+                    }
                 }
             })
         });
@@ -292,7 +316,7 @@ function themesListenner() {
 }
 
 // The listenner to go back
-function backListenner() {
+function backButtonListenner() {
     const backElement = document.querySelector('.back ');
     backElement.addEventListener('click', () =>{
         Navigate('/');
@@ -320,7 +344,12 @@ async function fetchBuy(url) {
         // Authorization: token,
       },
     };
-    await fetch(process.env.API_BASE_URL + url, options);
+    const response = await fetch(process.env.API_BASE_URL + url, options);
+
+    if (!response.ok) throw new Error(`fetch error : ${response.status} : ${response.statusText}`);
+
+    const finalResponse = await response.json();
+    return finalResponse;
 }
 
 

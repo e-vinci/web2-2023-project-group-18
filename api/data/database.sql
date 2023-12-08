@@ -139,6 +139,7 @@ INSERT INTO projet.themes (name_theme, price) VALUES ('plain', 1000);
 INSERT INTO projet.themes (name_theme, price) VALUES ('rock', 1250);
 INSERT INTO projet.themes (name_theme, price) VALUES ('jungle', 1500);
 
-
+INSERT INTO projet.users_skins (id_user, id_skin) VALUES (1, 1);
+INSERT INTO projet.users_skins (id_user, id_skin) VALUES (1, 5);
 
 
