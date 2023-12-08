@@ -21,16 +21,20 @@ const GamePage = () => {
       mode: Phaser.Scale.FIT,
       autoCenter: Phaser.Scale.CENTER_BOTH,
       parent: 'GamePage',
-  },
+    },
     physics: {
-      default: 'arcade',
+      default: 'matter',
       arcade: {
         gravity: { y: 500 },
         debug: false,
       },
     },
 
-    scene: [StartMenuScene, GameScene,PauseSceneMenu],
+    scene: [
+      StartMenuScene,
+      GameScene,
+      PauseSceneMenu,
+    ],
 
     //  parent DOM element into which the canvas created by the renderer will be injected.
     parent: 'gameDiv',
