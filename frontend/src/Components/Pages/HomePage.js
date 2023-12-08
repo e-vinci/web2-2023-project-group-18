@@ -2,16 +2,26 @@
 // import anime from 'animejs/lib/anime.es';
 
 import Navigate from '../Router/Navigate';
+import settings from '../../utils/settings';
+import music from '../../assets/backgroundMusic.mp3'
+
+
+const audio = new Audio(music);
 
 const HomePage = () => {
+  
   const main = document.querySelector('main');
 
   const mainHTML = `
   <div class="screen">
-      <i class=" afs fa-volume-mute fa-2x" id="sound"></i>
-
-      <img class="imgSki"></img>
-    
+    <div id = "sound" class = "setting-btn">
+      <button class = "btn0"><i class='bx bxs-cog'></i></button>
+      <button class = "btn1"><i class='bx bx-play'></i></button>
+      <button class = "btn2"><i class='bx bx-pause' ></i></button>
+      <button id = "volume" class = "btn3"><i class='bx bxs-volume-full'></i></button>
+      <button id = "volume" class = "btn4"><i class='bx bxs-volume-mute'></i></button>
+    </div>
+ 
     <div class= "menu">
         <h1>SantaFall</h1>
         <h2>Let us slide</h2>
@@ -47,14 +57,22 @@ const HomePage = () => {
 `;
 
   main.innerHTML = mainHTML;
-  isConnected(localStorage.getItem('isConnecte'));
+
+  // eslint-disable-next-line no-unused-expressions
+  (localStorage.getItem('token') !== null) ? isConnected(true) : isConnected(false) ;
   linkClick();
+  startClick();
+  pauseClick();
+  volumeClick();
+  settingClick();
+
+
   // animeLinks();
   // cookie();
 };
 
-function isConnected(params) {
-  if (params === false) {
+function isConnected(token) {
+  if (token === false) {
     document.querySelector(
       '#linkNotConnect1',
     ).innerHTML = `<a class="nav-link" href="#" data-uri="/login">Login</a>`;
@@ -69,7 +87,7 @@ function isConnected(params) {
 
     document.querySelector(
       '#linkConnect2',
-    ).innerHTML = `<a class="nav-link" href="#" data-uri="/">Log-out</a>`;
+    ).innerHTML = `<a class="nav-link" href="#" data-uri="/logout">Log-out</a>`;
   }
 }
 
@@ -84,6 +102,59 @@ function linkClick() {
   });
 }
 
+function startClick() {
+
+  const btnPause = document.querySelector('.btn2')
+  const btnStart = document.querySelector('.btn1');
+  btnStart.addEventListener('click', () => {
+    audio.loop = true;
+    audio.play();
+    btnStart.style.display = 'none';
+    btnPause.style.display = 'inline';
+  })
+}
+
+function pauseClick() {
+
+  const btnStart = document.querySelector('.btn1');
+  const btnPause = document.querySelector('.btn2');
+  btnPause.addEventListener('click', () => {
+    audio.pause();
+    btnPause.style.display = 'none';
+    btnStart.style.display = 'inline';
+  });
+}
+
+function volumeClick() {
+
+  // volume off
+  document.querySelector('.btn4').addEventListener('click', (e) => {
+
+      audio.muted = false;
+      e.preventDefault();
+      document.querySelector('.btn3').style.display = 'inline';
+      document.querySelector('.btn4').style.display = 'none';
+    })
+  
+  // volume on
+  document.querySelector('.btn3').addEventListener('click', (e) => {
+
+    audio.muted = true;
+    e.preventDefault();
+    document.querySelector('.btn4').style.display = 'inline';
+    document.querySelector('.btn3').style.display = 'none';
+  });
+}
+
+
+function settingClick() {
+  const btn = document.querySelector('.btn0');
+  btn.addEventListener('click', () => {
+    settings.openSettings();
+    settings.getKey();
+  })
+
+}
 
 //   function animeLinks() {
 //     const links = document.querySelectorAll('li');

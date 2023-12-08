@@ -1,5 +1,6 @@
 const express = require('express');
 const { getAllScores, updateScore } = require('../models/scores');
+const { authorize } = require('../utils/auths');
 
 const router = express.Router();
 
@@ -14,11 +15,12 @@ router.get('/', async (req, res) => {
   }
 });
 
-router.put('/:id', async (req, res) => {
+router.put('/', authorize, async (req, res) => {
+  const { username } = req.user;
   const score = req?.body?.score ? req.body.score : undefined;
   if (score) {
     try {
-      await updateScore(req.params.id, score);
+      await updateScore(username, score);
       return res.sendStatus(200);
       // await res.sendStatus(200);
     } catch (error) {
