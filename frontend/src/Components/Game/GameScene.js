@@ -262,7 +262,7 @@ class GameScene extends Phaser.Scene {
   }
 
   hitBomb(player) {
-    this.meterLabel.pauseMeter();
+    // this.meterLabel.pauseMeter();
     this.meterLabel.setText(
       `GAME OVER :  \nYour Score is ${this.meterLabel.formatDistance(this.meterLabel.timeElapsed)}`,
     );
@@ -293,15 +293,19 @@ class GameScene extends Phaser.Scene {
     return `${formattedMeters} m`;
   }
 
-  pauseGame() {
+  async pauseGame() {
     this.meterLabel.pauseMeter();
     this.scene.pause();
-    this.scene.launch('pause-menu');
+     await this.scene.launch('pause-menu');
 
     setTimeout(() => {
       this.scene.get('pause-menu').events.on(
         'shutdown',
         () => {
+          if (localStorage.getItem('replay')) {
+            this.meterLabel.destroy();
+            return;
+          }
           this.meterLabel.resumeMeter();
         },
         this,
