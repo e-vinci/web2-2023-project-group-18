@@ -249,7 +249,6 @@ class GameScene extends Phaser.Scene {
   }
 
 
-// ...
 
 collectCoin(player, coin) {
   coin.disableBody(true, true);
