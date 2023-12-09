@@ -66,7 +66,7 @@ SELECT projet.user_change_score(4, 150);*/
 
 --DROP TABLE projet.collectible;
 CREATE TABLE IF NOT EXISTS projet.collectibles(
-    user_id INTEGER PRIMARY KEY NOT NULL REFERENCES projet.users,
+    user_id INTEGER PRIMARY KEY NOT NULL REFERENCES projet.users(id_user),
     nbre_collectible INTEGER NOT NULL
     CHECK ( nbre_collectible >= 0 )
 );
