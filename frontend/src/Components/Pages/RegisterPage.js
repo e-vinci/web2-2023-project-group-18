@@ -1,9 +1,4 @@
 import anime from 'animejs/lib/anime.es';
-<<<<<<< HEAD
-// eslint-disable-next-line import/no-extraneous-dependencies
-// import bcrypt from 'bcryptjs'
-=======
->>>>>>> 83661d4a6c1ee151ffba8972294133f37f019098
 import Navigate from '../Router/Navigate';
 
 const RegisterPage = () => {
@@ -166,38 +161,6 @@ function animeLogin(isConnected) {
     });
   }
 }
+;
 
-<<<<<<< HEAD
-function errorMessage(errors) {
-  const errorsVue = document.querySelector('.errorMessage');
-  const newP = document.createElement('p');
-  newP.textContent = errors;
-  const newButton = document.createElement('button');
-  newButton.textContent = ` <i class='bx bxs-x-circle'></i>`;
-
-  newButton.addEventListener('click', (e) => {
-    e.preventDefault();
-    errorsVue.style.display = 'none';
-  });
-
-  errorsVue.appendChild(newP);
-  errorsVue.appendChild(newButton);
-}
-
-
-function hashPassword(){ // password) {
-  // const saltRounds = 10;
-  // const plainTextPassword = password;
-
-  // bcrypt.hash(plainTextPassword, saltRounds, (err, hash) => {
-  //   if (err) {
-  //     return;
-  //   }
-  //   // eslint-disable-next-line consistent-return
-  //   return hash;
-  // });
-};
-
-=======
->>>>>>> 83661d4a6c1ee151ffba8972294133f37f019098
 export default RegisterPage;

@@ -1,7 +1,7 @@
 import Phaser from 'phaser';
 import CoinLabel from './CoinLabel';
 import BombSpawner from './BombSpawner';
-import platformAsset from '../../assets/platform.png';
+// import platformAsset from '../../assets/platform.png';
 import coinAsset from '../../assets/coin.png';
 import coinHudAsset from '../../assets/hudcoin.png';
 import bombAsset from '../../assets/bomb.png';
@@ -14,7 +14,8 @@ const DUDE_KEY = 'dude';
 const COIN_KEY = 'coin';
 const HUD_COIN_KEY = 'hudcoin';
 const BOMB_KEY = 'bomb';
-const PAUSE_BUTTON  = 'pause';
+const PAUSE_BUTTON = 'pause';
+const STAR_KEY = '';
 
 const gameOptions = {
   amplitude: 300,
@@ -42,6 +43,7 @@ class GameScene extends Phaser.Scene {
   }
 
   preload() {
+    // eslint-disable-next-line no-undef
     this.load.image(STAR_KEY, starAsset);
     this.load.image(BOMB_KEY, bombAsset);
 
@@ -83,9 +85,9 @@ class GameScene extends Phaser.Scene {
 
     this.bombSpawner = new BombSpawner(this, BOMB_KEY);
     const bombsGroup = this.bombSpawner.group;
-    this.physics.add.collider(this.stars, platforms);
-    this.physics.add.collider(this.player, platforms);
-    this.physics.add.collider(bombsGroup, platforms);
+    // this.physics.add.collider(this.stars, platforms);
+    // this.physics.add.collider(this.player, platforms);
+    // this.physics.add.collider(bombsGroup, platforms);
     this.physics.add.collider(this.player, bombsGroup, this.hitBomb, null, this);
     this.physics.add.overlap(this.player, this.coins, this.collectCoin, null, this);
     this.cursors = this.input.keyboard.createCursorKeys();
@@ -213,14 +215,14 @@ class GameScene extends Phaser.Scene {
   createPlatforms() {
     const platforms = this.physics.add.staticGroup();
     
-    platforms
-      .create(400, 568, GROUND_KEY)
-      .setScale(2)
-      .refreshBody();
+    // platforms
+    //   .create(400, 568, GROUND_KEY)
+    //   .setScale(2)
+    //   .refreshBody();
 
-    platforms.create(600, 400, GROUND_KEY);
-    platforms.create(50, 250, GROUND_KEY);
-    platforms.create(750, 220, GROUND_KEY);
+    // platforms.create(600, 400, GROUND_KEY);
+    // platforms.create(50, 250, GROUND_KEY);
+    // platforms.create(750, 220, GROUND_KEY);
     return platforms;
   }
 
@@ -292,8 +294,9 @@ class GameScene extends Phaser.Scene {
     //   const style = { fontSize: '32px', fill: '#000', position: 'absolute',right : '0',top: '0', margin : '1em'};
     //   const label = new ScoreLabel(this, x, y, score, style);
 
-    //   return label;
-    // }
+      return label;
+    }
+  
 
     createMeterLabel(x, y) {
       const label = new MeterLabel(this, x, y);
@@ -403,5 +406,4 @@ class GameScene extends Phaser.Scene {
       await fetch(`${process.env.API_BASE_URL}/scores/`, options);
     }
   }
-}
 export default GameScene;
