@@ -80,8 +80,9 @@ class PauseMenuScene extends Phaser.Scene {
     }
 
     replayGame() {
-        this.scene.stop('pause-menu');
-        this.scene.launch('game-scene');
+      this.scene.stop('pause-menu');
+      localStorage.setItem("replay", true);
+      this.scene.launch('game-scene');
     }
 
 }
