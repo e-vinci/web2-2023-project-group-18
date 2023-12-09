@@ -279,6 +279,7 @@ class GameScene extends Phaser.Scene {
 
     this.gameOver = true;
     this.meterLabel.destroy();
+    this.gameOver = false;
     this.scene.launch('game-over');
   }
 
