@@ -5,8 +5,10 @@
 ### Get all scores in correct order
 GET {{baseUrl}}/scores
 
-# @name test
+
+
 ### Login as test user
+# @name test
 POST {{baseUrl}}/auths/login
 Content-Type: application/json
 
@@ -19,7 +21,6 @@ Content-Type: application/json
 PUT {{baseUrl}}/scores
 Content-Type: application/json
 Authorization: {{test.response.body.token}}
-
 
 
 {
