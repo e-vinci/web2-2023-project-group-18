@@ -13,7 +13,8 @@ const DUDE_KEY = 'dude';
 const COIN_KEY = 'coin';
 const HUD_COIN_KEY = 'hudcoin';
 const BOMB_KEY = 'bomb';
-const PAUSE_BUTTON  = 'pause';
+const PAUSE_BUTTON = 'pause';
+const STAR_KEY = '';
 
 const gameOptions = {
   amplitude: 300,
@@ -272,9 +273,11 @@ collectCoin(player, coin) {
     const style = { fontSize: '32px', fill: '#ffffff', fontFamily: 'Arial, sans-serif' };
     const label = new CoinLabel(this, x, y, coin, style);
 
+
     return label;
   
   }
+
 
   createMeterLabel(x, y) {
     const label = new MeterLabel(this, x, y);
@@ -367,6 +370,7 @@ collectCoin(player, coin) {
       };
       await fetch(`${process.env.API_BASE_URL}/scores/`, options);
   }
+
 }
 
 export default GameScene;
