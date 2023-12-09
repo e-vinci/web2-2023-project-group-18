@@ -3,62 +3,56 @@ import Navigate from '../Router/Navigate';
 import templateSkinImage from '../../assets/templateSkinShopPage.png';
 import templateMapImage from '../../assets/templateMapShopPage.png';
 
-const skinsList = [
-    { name: "Dragon", price: 100 },
-    { name: "Phoenix", price: 200 },
-    { name: "Spectre", price: 300 },
-    { name: "Viper", price: 400 },
-    { name: "Raven", price: 500 },
-    { name: "Hydra", price: 600 },
-    { name: "Banshee", price: 700 },
-    { name: "Serpent", price: 800 },
-    { name: "Gorgon", price: 900 },
-    { name: "Chimera", price: 1000 },
-    { name: "Wyvern", price: 1250 },
-    { name: "Harpy", price: 1500 }
-];
+let coins = 0;
 
-const themesList = [
-    { name: "Snow", price: 100 },
-    { name: "Meadow", price: 200 },
-    { name: "Desert", price: 300 },
-    { name: "Taiga", price: 400 },
-    { name: "Forest", price: 500 },
-    { name: "Tundra", price: 600 },
-    { name: "Ocean", price: 700 },
-    { name: "Swamp", price: 800 },
-    { name: "Mountain", price: 900 },
-    { name: "Plain", price: 1000 },
-    { name: "Rock", price: 1250 },
-    { name: "Jungle", price: 1500 }
-];
+// List from database
+let skinsList;
+let themesList;
 
+// Owned list for this user from database
+let ownedSkins;
+let ownedThemes;
+
+// The number of skin or theme per page for desktop (for phone it is 1)
 let skinsPerPage = 6;
 let themesPerPage = 6;
+
+// Current page for skin or theme
 let currentSkinPage = 1;
 let currentThemePage = 1;
 
-let coins = 0;
-let ownedSkins = [];
-let ownedThemes = [];
-
-const ShopPage = () => {
+const ShopPage = async () => {
     coins = 458;
-    ownedSkins = ["dragon", "viper", "hydra", "wyvern"];
-    ownedThemes = ["snow", "meadow", "forest", "plain", "rock"];
 
-    renderShopPage();
+    try {
+        // To avoid redoing queries each time the page loads
+        if(!skinsList || !themesPerPage || !currentSkinPage || !currentThemePage) {
+            skinsList = await fetchData(`/skins/`);
+            themesList = await fetchData(`/themes/`);
+            ownedSkins = await fetchData(`/skins/1`);
+            ownedThemes = await fetchData(`/themes/1`);
+        }
 
-    displayCurrentSkinPage();
-    displayCurrentThemePage();
+        renderShopPage();
 
-    changePageListenner();
-    backListenner();
+        displayCurrentSkinPage();
+        displayCurrentThemePage();
+
+        changePageListenner();
+        backButtonListenner();
+
+    } catch {
+        document.querySelector('main').innerHTML = `
+        <div class="container text-center text-white mt-5">
+            <p class="display-5">Error: API is not online</p>
+        </div>`;
+    }
 }
 
 function renderShopPage() {
     const main = document.querySelector('main');
 
+    // For phone the number of skins or themes is 1 per page
     if (window.innerWidth <= 480) {
         skinsPerPage = 1;
         themesPerPage = 1;
@@ -121,6 +115,7 @@ function renderShopPage() {
     });
 }
 
+// Display skins page
 function displayCurrentSkinPage() {
     const startIndex = (currentSkinPage - 1) * skinsPerPage;
     const endIndex = startIndex + skinsPerPage;
@@ -137,14 +132,15 @@ function displayCurrentSkinPage() {
         for (let j = i; j < i+3 && j < currentSkins.length; j+= 1) {
             const skin = currentSkins[j];
 
-            let typeButton = `<button type="button" class="btn shop-buy-button">${skin.price} coins</button>`;
-            if (ownedSkins.includes(skin.name.toLowerCase()))
-                typeButton = `<button type="button" class="btn shop-own-button">Choose</button>`;
+            let typeButton = `<button type="button" class="btn shop-buy-button shop-buy-skin" data-id="${skin.id_skin}">${skin.price} coins</button>`;
+            
+            if (ownedSkins.some(s => s.name_skin === skin.name_skin))
+                typeButton = `<button type="button" class="btn shop-own-button shop-own-skin" data-id="${skin.id_skin}">Choose</button>`;
 
             skinHTML += `
                 <div class="col-md-4 text-center">
-                    <h3>${skin.name}</h3>
-                    <img class="w-100 shop-picture" src="${templateSkinImage}" alt="skin picture ${skin.name}" draggable="false">
+                    <h3>${skin.name_skin.charAt(0).toUpperCase() + skin.name_skin.slice(1)}</h3>
+                    <img class="w-100 shop-picture" src="${templateSkinImage}" alt="skin picture ${skin.name_skin}" draggable="false">
                     ${typeButton}
                 </div>`;
         }
@@ -154,8 +150,11 @@ function displayCurrentSkinPage() {
 
     skinPageNumber.innerHTML = `< ${currentSkinPage} > on < ${Math.ceil(skinsList.length/skinsPerPage)} >`;
     skinListPage.innerHTML = skinHTML;
+
+    skinsListenner();
 }
 
+// Display themes page
 function displayCurrentThemePage() {
     const startIndex = (currentThemePage - 1) * themesPerPage;
     const endIndex = startIndex + themesPerPage;
@@ -172,14 +171,14 @@ function displayCurrentThemePage() {
         for (let j = i; j < i+3 && j < currentThemes.length; j+= 1) {
             const theme = currentThemes[j];
 
-            let typeButton = `<button type="button" class="btn shop-buy-button">${theme.price} coins</button>`;
-            if (ownedThemes.includes(theme.name.toLowerCase()))
-                typeButton = `<button type="button" class="btn shop-own-button">Choose</button>`;
+            let typeButton = `<button type="button" class="btn shop-buy-button shop-buy-theme" data-id="${theme.id_theme}">${theme.price} coins</button>`;
+            if (ownedThemes.some(t => t.name_theme === theme.name_theme))
+                typeButton = `<button type="button" class="btn shop-own-button shop-own-theme" data-id="${theme.id_theme}">Choose</button>`;
 
             themeHTML += `
                 <div class="col-md-4 text-center">
-                    <h3>${theme.name}</h3>
-                    <img class="w-100 shop-picture" src="${templateMapImage}" alt="theme picture ${theme.name}">
+                    <h3>${theme.name_theme.charAt(0).toUpperCase() + theme.name_theme.slice(1)}</h3>
+                    <img class="w-100 shop-picture" src="${templateMapImage}" alt="theme picture ${theme.name_theme}">
                     ${typeButton}
                 </div>`;
         }
@@ -189,43 +188,174 @@ function displayCurrentThemePage() {
 
     themePageNumber.innerHTML = `< ${currentThemePage} > on < ${Math.ceil(themesList.length/themesPerPage)} >`;
     themeListPage.innerHTML = themeHTML;
+
+    themesListenner();
 }
 
+// The listenner to change pages (skins or themes)
 function changePageListenner() {
-    document.querySelector('#next-change-skin-page').addEventListener('click', () => {
+    const nextChangeSkinPage = document.querySelector('#next-change-skin-page');
+    const previousChangeSkinPage = document.querySelector('#previous-change-skin-page');
+    const nextChangeThemePage = document.querySelector('#next-change-theme-page');
+    const previousChangeThemePage = document.querySelector('#previous-change-theme-page');
+
+
+    nextChangeSkinPage.addEventListener('click', () => {
         if (currentSkinPage < skinsList.length/skinsPerPage) {
             currentSkinPage += 1;
             displayCurrentSkinPage();
         }
     });
-    document.querySelector('#previous-change-skin-page').addEventListener('click', () => {
+
+    previousChangeSkinPage.addEventListener('click', () => {
         if (currentSkinPage > 1) {
             currentSkinPage -= 1;
             displayCurrentSkinPage();
         }
     });
 
-    document.querySelector('#next-change-theme-page').addEventListener('click', () => {
+    nextChangeThemePage.addEventListener('click', () => {
         if (currentThemePage < themesList.length/themesPerPage) {
             currentThemePage += 1;
             displayCurrentThemePage();
         }
     });
 
-    document.querySelector('#previous-change-theme-page').addEventListener('click', () => {
+    previousChangeThemePage.addEventListener('click', () => {
         if (currentThemePage > 1) {
             currentThemePage -= 1;
             displayCurrentThemePage();
         }
     });
+
 }
 
-function backListenner() {
+// The listenner to click on buy and choose skin
+async function skinsListenner() {
+    const skinsBuyButtons = document.querySelectorAll('.shop-buy-skin');
+    const skinsOwnButtons = document.querySelectorAll('.shop-own-skin');
+
+    if(skinsBuyButtons) {
+        skinsBuyButtons.forEach((btn) => {
+            btn.addEventListener('click', async () =>{
+                const idSkin = parseInt(btn.getAttribute('data-id'), 10);
+                let ownThisSkin = false;
+
+                // check if html is not modified in devtools (the data-id)
+                ownedSkins.forEach((skin) => {
+                    if(skin.id_skin === idSkin)
+                        ownThisSkin = true;
+                });
+
+                if (!ownThisSkin) {
+                    try {
+                        await fetchBuy(`/skins/${idSkin}`);
+                        ownedSkins = await fetchData(`/skins/1`);
+                        displayCurrentSkinPage();
+                    } catch {
+                        alert("Une erreur est survenue lors de l'achat de ce skin...");
+                    }
+                }
+            })
+        });
+    }
+
+    if(skinsOwnButtons) {
+        skinsOwnButtons.forEach((btn) => {
+            btn.addEventListener('click', () =>{
+                // check if html is not modified in devtools (the data-id)
+                const idSkin = parseInt(btn.getAttribute('data-id'), 10);
+                ownedSkins.forEach((skin) => {
+                    if(skin.id_skin === idSkin)
+                        console.log(`a le skin ${  skin.name_skin}`)
+                });
+            })
+        });
+    }
+
+}
+
+// The listenner to click on buy and choose theme
+function themesListenner() {
+    const themesBuyButtons = document.querySelectorAll('.shop-buy-theme');
+    const themesOwnButtons = document.querySelectorAll('.shop-own-theme');
+
+    if(themesBuyButtons) {
+        themesBuyButtons.forEach((btn) => {
+            btn.addEventListener('click', async () =>{
+                const idTheme = parseInt(btn.getAttribute('data-id'), 10);
+                let ownThisTheme = false;
+
+                // check if html is not modified in devtools (the data-id)
+                ownedThemes.forEach((theme) => {
+                    if(theme.id_theme === idTheme)
+                        ownThisTheme = true;
+                });
+
+                if (!ownThisTheme) {
+                    try {
+                        await fetchBuy(`/themes/${idTheme}`);
+                        ownedThemes = await fetchData(`/themes/1`);
+                        displayCurrentThemePage();
+                    } catch {
+                        alert("Une erreur est survenue lors de l'achat de ce thème...");
+                    }
+                }
+            })
+        });
+    }
+
+    if(themesOwnButtons) {
+        themesOwnButtons.forEach((btn) => {
+            btn.addEventListener('click', () =>{
+                // check if html is not modified in devtools (the data-id)
+                const idTheme = parseInt(btn.getAttribute('data-id'), 10);
+                ownedThemes.forEach((theme) => {
+                    if(theme.id_theme === idTheme)
+                        console.log(`a le skin ${  theme.name_theme}`)
+                });
+            })
+        });
+    }
+}
+
+// The listenner to go back
+function backButtonListenner() {
     const backElement = document.querySelector('.back ');
     backElement.addEventListener('click', () =>{
         Navigate('/');
     })
 }
+
+// Fetch data from API
+async function fetchData(url) {
+    const response = await fetch(process.env.API_BASE_URL + url)
+    if (!response.ok) throw new Error(`fetch error : ${response.status} : ${response.statusText}`);
+    const finalResponse = await response.json();
+    return finalResponse;
+}
+
+// Fetch data from API
+async function fetchBuy(url) {
+    // const token = localStorage.getItem('token');
+
+    const options = {
+      method: 'PUT',
+      body: JSON.stringify({
+      }),
+      headers: {
+        'Content-Type': 'application/json',
+        // Authorization: token,
+      },
+    };
+    const response = await fetch(process.env.API_BASE_URL + url, options);
+
+    if (!response.ok) throw new Error(`fetch error : ${response.status} : ${response.statusText}`);
+
+    const finalResponse = await response.json();
+    return finalResponse;
+}
+
 
 // No right click on picture
 document.addEventListener('contextmenu', (e) => {

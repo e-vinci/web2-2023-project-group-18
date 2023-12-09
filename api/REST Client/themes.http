@@ -1,0 +1,16 @@
+### Basic url
+@baseUrl = http://localhost:3000/themes
+
+### Get all themes in order by price
+GET {{baseUrl}}/
+
+### Get all themes of a player
+GET {{baseUrl}}/1
+
+### Give a theme to a player
+PUT {{baseUrl}}/1
+Content-Type: application/json
+
+{
+    "theme": 5
+}
