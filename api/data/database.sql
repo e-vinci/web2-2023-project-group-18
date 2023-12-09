@@ -7,7 +7,7 @@ CREATE TABLE IF NOT EXISTS projet.users(
 );
 
 CREATE TABLE IF NOT EXISTS projet.scores(
-    id_user INTEGER REFERENCES projet.users(id_user) PRIMARY KEY ,
+    id_user INTEGER REFERENCES projet.users(id_user) PRIMARY KEY,
     score INTEGER NOT NULL,
     score_date DATE NOT NULL DEFAULT CURRENT_DATE
     CHECK ( score >= 0 )
@@ -34,8 +34,7 @@ BEGIN
         INSERT INTO projet.scores (id_user, score) VALUES (id_current_user, _score);
     end if;
 RETURN;
-END;
-
+END
 $$ LANGUAGE plpgsql;
 
 
@@ -51,8 +50,7 @@ BEGIN
     RETURNING id_user INTO  id;
     
 RETURN id;
-END;
-
+END
 $$ LANGUAGE plpgsql;
 
 /*INSERT INTO projet.users (username, password) VALUES ('GoldKing', 'mdp1');
@@ -68,8 +66,7 @@ SELECT projet.user_change_score(4, 150);*/
 
 --DROP TABLE projet.collectible;
 CREATE TABLE IF NOT EXISTS projet.collectibles(
-    id_collectible SERIAL PRIMARY KEY NOT NULL,
-    user_id INTEGER NOT NULL REFERENCES projet.users,
+    user_id INTEGER PRIMARY KEY NOT NULL REFERENCES projet.users,
     nbre_collectible INTEGER NOT NULL
     CHECK ( nbre_collectible >= 0 )
 );
@@ -77,21 +74,23 @@ CREATE TABLE IF NOT EXISTS projet.collectibles(
 
 CREATE OR REPLACE FUNCTION projet.add_collectible(_user VARCHAR(255), _collectible INTEGER)
 RETURNS VOID AS $$
-    DECLARE
-        id_current_user INTEGER;
-    BEGIN
-        id_current_user := (SELECT c.user_id FROM projet.collectibles c, projet.users u WHERE c.user_id = u.id_user AND u.username = _user);
-    
-    IF (FOUND) THEN
-        UPDATE projet.collectibles SET nbre_collectible = (nbre_collectible + _collectible) WHERE user_id = id_current_user;
-    ELSE
-        INSERT INTO projet.collectibles (user_id, nbre_collectible) VALUES (id_current_user, _collectible);
+DECLARE
+    id_current_user INTEGER :=NULL;
+BEGIN
+    id_current_user := (SELECT c.user_id FROM projet.collectibles c, projet.users u WHERE c.user_id = u.id_user AND u.username = _user);
 
-    end if;
+    IF (id_current_user IS NOT NULL) THEN
+        UPDATE projet.collectibles SET nbre_collectible = (nbre_collectible + _collectible) WHERE user_id = id_current_user;
+        RETURN;
+    END IF;
+
+    id_current_user := (SELECT u.id_user FROM projet.users u WHERE  u.username = _user);
+    INSERT INTO projet.collectibles (user_id, nbre_collectible) VALUES (id_current_user, _collectible);
     RETURN;
-    END;
+END;
 
 $$ LANGUAGE plpgsql;
+
 
 CREATE OR REPLACE FUNCTION projet.supp_collectible(_user VARCHAR(255), _collectible INTEGER)
 RETURNS VOID AS $$
