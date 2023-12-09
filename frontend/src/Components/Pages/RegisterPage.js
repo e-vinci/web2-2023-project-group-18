@@ -1,6 +1,9 @@
 import anime from 'animejs/lib/anime.es';
+<<<<<<< HEAD
 // eslint-disable-next-line import/no-extraneous-dependencies
 // import bcrypt from 'bcryptjs'
+=======
+>>>>>>> 83661d4a6c1ee151ffba8972294133f37f019098
 import Navigate from '../Router/Navigate';
 
 const RegisterPage = () => {
@@ -11,7 +14,9 @@ const RegisterPage = () => {
       </div>
    <div class="superWrapper">
         <div class="wrapper">
-        <div class = "errorMessage"></div>
+        <div class = "errorMessage">
+        <p class='errorVue'></p><button class = 'error-btn'><i class='bx bxs-x-circle'></i></button>
+        </div>
           <form action="">
             <h1>Register</h1>
             <div class="input-box">
@@ -51,11 +56,11 @@ const RegisterPage = () => {
       </div>`;
   
   linkClick();
-  errorMessage()
+  ErrorClick();
 
   document.querySelector('form').addEventListener('submit', (e) => {
     e.preventDefault();
-    tryLogin();
+    tryRgister();
   });
 
   
@@ -70,46 +75,56 @@ function linkClick() {
   });
 }
 
-async function tryLogin() {
+function ErrorClick() {
+  const btn = document.querySelector('.error-btn');
+  btn.addEventListener('click', (e) => {
+    e.preventDefault();
+    const errorVue = document.querySelector('.errorMessage');
+    errorVue.style.display = 'none';
+  })
+}
+
+async function tryRgister() {
   const password1 = document.querySelector('.password1').value;
   const password2 = document.querySelector('.password2').value;
   const username = document.querySelector('.username').value;
-  const email = document.querySelector(".email").value;
+  // const email = document.querySelector(".email").value;
 
 
-  if (password1 === password2) {
-
-    const passwordHash = hashPassword(password1);
-
+  if (password1 !== password2) {
+    animeLogin(false);
+    document.querySelector(".errorVue").innerHTML='The passwords are not matching';
+    document.querySelector('.errorMessage').style.display = 'block';
+  }
+  else {
+    const password = password1;
     const options = {
-      method: 'PUT',
+      method: 'POST',
       body: JSON.stringify({
-        passwordHash,
+        password,
         username,
-        email,
+        // email
       }),
       headers: {
         'Content-Type': 'application/json',
       },
     };
 
-    const response = await fetch(`${process.env.API_BASE_URL}/models/users.js`, options);
+    const response = await fetch(`${process.env.API_BASE_URL}/auths/register`, options);
+
 
     if (!response.ok) {
       animeLogin(false);
-      const message = 'This account already exist';
-      errorMessage(message);
-      throw new Error(`fetch error : ${response.status} : ${response.statusText}`);
+      document.querySelector('.errorVue').innerHTML = 'This account already exist';
+      document.querySelector('.errorMessage').style.display = 'block';
+      
     }
     else {
+      localStorage.setItem('token', response.token);
+      localStorage.setItem('user',response.username)
       animeLogin(true);
-      Navigate('/');
+      setTimeout(()=>Navigate('/'),2000)
     }
-    // const value = await response.json(); // json() returns a promise => we wait for the data
-  }
-  else {
-    animeLogin(false);
-    errorMessage('The passwords are not matching ');
   }
 }
 
@@ -131,7 +146,7 @@ function animeLogin(isConnected) {
     borderColor.style.animationName = 'changeColorGreen';
     borderColor.style.animationDuration = '2s';
   } else {
-    errorMessage(localStorage.setItem('errors'));
+    // errorMessage(localStorage.setItem('errors'));
     borderColor.style.borderColor = '#FF0000';
     borderColor.style.animationName = 'changeColorRed';
     borderColor.style.animationDuration = '2s';
@@ -152,6 +167,7 @@ function animeLogin(isConnected) {
   }
 }
 
+<<<<<<< HEAD
 function errorMessage(errors) {
   const errorsVue = document.querySelector('.errorMessage');
   const newP = document.createElement('p');
@@ -182,4 +198,6 @@ function hashPassword(){ // password) {
   // });
 };
 
+=======
+>>>>>>> 83661d4a6c1ee151ffba8972294133f37f019098
 export default RegisterPage;

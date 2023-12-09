@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
 const { readOneUserFromUsername } = require('../models/users');
 
-const authorize = (req, res, next) => {
+const authorize = async (req, res, next) => {
   const token = req.get('authorization');
   if (!token) return res.sendStatus(401);
 
@@ -10,7 +10,7 @@ const authorize = (req, res, next) => {
     console.log('decoded', decoded);
     const { username } = decoded;
 
-    const existingUser = readOneUserFromUsername(username);
+    const existingUser = await readOneUserFromUsername(username);
 
     if (!existingUser) return res.sendStatus(401);
 
@@ -22,11 +22,11 @@ const authorize = (req, res, next) => {
   }
 };
 
-const isAdmin = (req, res, next) => {
-  const { username } = req.user;
+// const isAdmin = (req, res, next) => {
+//   const { username } = req.user;
 
-  if (username !== 'admin') return res.sendStatus(403);
-  return next();
-};
+//   if (username !== 'admin') return res.sendStatus(403);
+//   return next();
+// };
 
-module.exports = { authorize, isAdmin };
+module.exports = { authorize };
