@@ -1,16 +1,18 @@
 import Phaser from 'phaser';
-import dudeAsset from '../../assets/penguin.png';
+// import dudeAsset from '../../assets/penguin.png';
+import dudeAsset from '../../assets/santa.png'
 import pauseButton from '../../assets/pauseButton.png';
 import Settings from '../../utils/settings';
 import MeterLabel from './MeterLabel';
-import dudeAssetJSON from '../../assets/penguin.json';
+// import dudeAssetJSON from '../../assets/penguin.json';
+import dudeAssetJSON from '../../assets/santa.json';
 import sheet from '../../assets/sheet.png'
 import mapSheet from '../../assets/map.json'
 
 const PAUSE_BUTTON  = 'pause';
 
 class GameScene extends Phaser.Scene {
-  penguin = Phaser.Physics.Matter.Sprite;
+  santa = Phaser.Physics.Matter.Sprite;
 
   constructor() {
     super('game-scene');
@@ -30,7 +32,7 @@ class GameScene extends Phaser.Scene {
   }
 
   preload() {
-    this.load.atlas('penguin', dudeAsset, dudeAssetJSON);
+    this.load.atlas('santa', dudeAsset, dudeAssetJSON);
     this.load.image('tiles', sheet);
     this.load.tilemapTiledJSON('tileMap', mapSheet);
 
@@ -52,17 +54,17 @@ class GameScene extends Phaser.Scene {
 
       // eslint-disable-next-line default-case
       switch (name) {
-        case 'penguin-spawn': {
-          this.penguin = this.matter.add
-            .sprite(x, y, 'penguin')
-            .play('player-walk')
+        case 'player-spawn': {
+          this.santa = this.matter.add
+            .sprite(x, y, 'santa')
+            .play('player-idle')
             .setFixedRotation();
 
-          this.penguin.setOnCollide(() => {
+          this.santa.setOnCollide(() => {
             this.isTouchingGround = true;
           });
 
-          this.cameras.main.startFollow(this.penguin);
+          this.cameras.main.startFollow(this.santa);
           break;
         }
       }
@@ -85,40 +87,87 @@ class GameScene extends Phaser.Scene {
     });
   }
 
-  hitObstacle(player) {
-    this.meterLabel.pauseMeter();
-    this.meterLabel.setText(
-      `GAME OVER :  \nYour Score is ${this.formatDistance(this.meterLabel.timeElapsed)}`,
-    );
-    localStorage.setItem('score', this.formatDistance(this.meterLabel.timeElapsed));
+  update() {
+    const santa1 = this.santa;
+    const groundLayer = this.ground;
 
-    if (localStorage.getItem('token')) {
-      this.updateScore(this.formatDistance(this.meterLabel.timeElapsed));
+    santa1.x += 2;
+    santa1.play('player-run', true);
+    const spaceJustPressed = Phaser.Input.Keyboard.JustDown(this.cursors.space);
+
+    if (spaceJustPressed && this.isTouchingGround) {
+      this.santa.play('player-jump', true);
+      this.santa.setVelocityY(-17);
+      this.isTouchingGround = false;
     }
-    this.matter.pause();
 
-    player.setTint(0xff0000);
+    while (this.cursors.down.isDown) santa1.play('player-slide', true);
+    while (this.cursors.right.isDown) santa1.play('', true);
 
-    player.anims.play('turn');
+    const key = Settings.getKey();
+    if (Phaser.Input.Keyboard.KeyCodes[key] !== this.key.keyCode) {
+      this.key.destroy();
+      this.key = this.input.keyboard.addKey(key);
+    }
 
-    this.gameOver = true;
+    // Check if the penguin and groundLayer are defined
+    if (santa1 && groundLayer) {
+      // Filter tiles with the 'obstacles' property
+      const obstacleTiles = groundLayer.filterTiles(
+        (tile) => tile.properties && tile.properties.obstacles,
+      );
+
+      // Check if the penguin and its body are defined
+      if (santa1.body) {
+        // Check if the penguin overlaps with any obstacle tiles
+        const overlappingTiles = obstacleTiles.filter((tile) => {
+          const tileBounds = tile.getBounds();
+          return (
+            tileBounds &&
+            Phaser.Geom.Intersects.RectangleToRectangle(santa1.getBounds(), tileBounds)
+          );
+        });
+
+        // If there are overlapping tiles, set gameOver to true
+        if (overlappingTiles.length > 0) {
+          this.hitObstacle(this.santa);
+        }
+      }
+    }
   }
+
+  // eslint-disable-next-line class-methods-use-this
+  //   async updateScore(score) {
+  //     const token = localStorage.getItem('token');
+
+  //     const options = {
+  //       method: 'PUT',
+  //       body: JSON.stringify({
+  //         score,
+  //       }),
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //         Authorization: token,
+  //       },
+  //     };
+  //     await fetch(`${process.env.API_BASE_URL}/scores/`, options);
+  //   }
 
   createDudeAnimations() {
     this.anims.create({
       key: 'player-idle',
-      frames: [{ key: 'penguin', frame: 'penguin_walk01.png' }],
+      frames: [{ key: 'santa', frame: 'Idle (1).png' }],
     });
 
-    // work animation
+    // run animation
     this.anims.create({
-      key: 'player-walk',
+      key: 'player-run',
       frameRate: 10,
-      frames: this.anims.generateFrameNames('penguin', {
+      frames: this.anims.generateFrameNames('santa', {
         start: 1,
         end: 4,
-        prefix: 'penguin_walk0',
-        suffix: '.png',
+        prefix: 'Run (',
+        suffix: ').png',
       }),
       repeat: -1,
     });
@@ -128,11 +177,11 @@ class GameScene extends Phaser.Scene {
     this.anims.create({
       key: 'player-slide',
       frameRate: 10,
-      frames: this.anims.generateFrameNames('penguin', {
+      frames: this.anims.generateFrameNames('santa', {
         start: 1,
-        end: 2,
-        prefix: 'penguin_slide0',
-        suffix: '.png',
+        end: 5,
+        prefix: 'Slide (',
+        suffix: ').png',
       }),
       repeat: -1,
     });
@@ -142,91 +191,14 @@ class GameScene extends Phaser.Scene {
     this.anims.create({
       key: 'player-jump',
       frameRate: 10,
-      frames: this.anims.generateFrameNames('penguin', {
+      frames: this.anims.generateFrameNames('santa', {
         start: 1,
-        end: 3,
-        prefix: 'penguin_jump0',
-        suffix: '.png',
+        end: 8,
+        prefix: 'Jump (',
+        suffix: ').png',
       }),
       repeat: -1,
     });
-
-    // died animation
-
-    this.anims.create({
-      key: 'player-die',
-      frameRate: 10,
-      frames: this.anims.generateFrameNames('penguin', {
-        start: 1,
-        end: 4,
-        prefix: 'penguin_die0',
-        suffix: '.png',
-      }),
-      repeat: -1,
-    });
-  }
-
-  update() {
-    if (!this.penguin || this.gameOver) {
-
-      this.penguin.play('player-die', true);
-      
-      setTimeout(() => {
-        this.scene.launch('pause-menu');
-      },2000)
-    }
-
-    const penguin1 = this.penguin;
-    const groundLayer = this.ground;
-
-    // Check if the penguin and groundLayer are defined
-    if (penguin1 && groundLayer) {
-      // Filter tiles with the 'obstacles' property
-      const obstacleTiles = groundLayer.filterTiles(
-        (tile) => tile.properties && tile.properties.obstacles,
-      );
-
-      // Check if the penguin and its body are defined
-      if (penguin1.body) {
-        // Check if the penguin overlaps with any obstacle tiles
-        const overlappingTiles = obstacleTiles.filter((tile) => {
-          const tileBounds = tile.getBounds();
-          return (
-            tileBounds &&
-            Phaser.Geom.Intersects.RectangleToRectangle(penguin1.getBounds(), tileBounds)
-          );
-        });
-
-        // If there are overlapping tiles, set gameOver to true
-        if (overlappingTiles.length > 0) {
-          this.hitObstacle(this.penguin)
-        }
-      }
-    }
-
-    const speed = 5;
-
-    if (this.cursors.right.isDown) {
-      this.penguin.flipX = false;
-      this.penguin.setVelocityX(speed);
-      this.penguin.play('player-slide', true);
-    } else {
-      this.penguin.setVelocityX(0);
-      this.penguin.play('player-idle', true);
-    }
-    const spaceJustPressed = Phaser.Input.Keyboard.JustDown(this.cursors.space);
-
-    if (spaceJustPressed && this.isTouchingGround) {
-      this.penguin.play('player-jump', true);
-      this.penguin.setVelocityY(-15);
-      this.isTouchingGround = false;
-    }
-
-    const key = Settings.getKey();
-    if (Phaser.Input.Keyboard.KeyCodes[key] !== this.key.keyCode) {
-      this.key.destroy();
-      this.key = this.input.keyboard.addKey(key);
-    }
   }
 
   createMeterLabel(x, y) {
@@ -237,50 +209,40 @@ class GameScene extends Phaser.Scene {
 
   // eslint-disable-next-line class-methods-use-this
   formatDistance(distance) {
-  // Assuming distance is in meters
-  // const kilometers = Math.floor(distance / 1000);
-  const meters = distance % 1000;
+    // Assuming distance is in meters
+    // const kilometers = Math.floor(distance / 1000);
+    const meters = distance % 1000;
 
-  // const formattedKilometers = String(kilometers).padStart(3, '0');
-  const formattedMeters = String(meters).padStart(3, '0');
+    // const formattedKilometers = String(kilometers).padStart(3, '0');
+    const formattedMeters = String(meters).padStart(3, '0');
 
-  return `${formattedMeters} m`;
-}
+    return `${formattedMeters} m`;
+  }
+
+  hitObstacle(player) {
+    this.scene.pause();
+    this.meterLabel.pauseMeter();
+    this.meterLabel.setText(
+      `GAME OVER :  \nYour Score is ${this.formatDistance(this.meterLabel.timeElapsed)}`,
+    );
+    localStorage.setItem('score', this.formatDistance(this.meterLabel.timeElapsed));
+
+    // if (localStorage.getItem('token')) {
+    //   this.updateScore(this.formatDistance(this.meterLabel.timeElapsed));
+    // }
+
+    this.matter.pause();
+    player.setTint(0xff0000);
+
+    this.scene.pause();
+    this.scene.launch('game-over');
+
+  }
 
   pauseGame() {
     this.meterLabel.pauseMeter();
     this.scene.pause();
     this.scene.launch('pause-menu');
-
-    setTimeout(() => {
-      this.scene.get('pause-menu').events.on(
-        'shutdown',
-        () => {
-          this.meterLabel.resumeMeter();
-        },
-        this,
-      );
-    }, 100);
-
-    this.gameOver = false;
-  }
-
-  // eslint-disable-next-line class-methods-use-this
-  async updateScore(score) {
-    const token = localStorage.getItem('token');
-
-    const options = {
-      method: 'PUT',
-      body: JSON.stringify({
-        score,
-      }),
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: token,
-      },
-    };
-    await fetch(`${process.env.API_BASE_URL}/scores/`, options);
   }
 }
-
 export default GameScene;

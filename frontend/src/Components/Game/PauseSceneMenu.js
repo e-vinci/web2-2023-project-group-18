@@ -4,7 +4,6 @@ import homeButton from '../../assets/homeButton.png';
 import restartButton from '../../assets/restartButton.png';
 import Navigate from '../Router/Navigate';
 
-
 const REPLAY_BUTTON = 'replay';
 const HOME_BUTTON = 'home';
 const RESTART_BUTTON = 'restart';
@@ -81,10 +80,11 @@ class PauseMenuScene extends Phaser.Scene {
     }
 
     replayGame() {
-      this.scene.stop('pause-menu');
-      localStorage.setItem("replay", true);
-      this.scene.launch('game-scene');
-    }
+       
+    this.scene.stop('pause-menu');
+
+    this.scene.run('game-scene');
+  }
 
 }
 
