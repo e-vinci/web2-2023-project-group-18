@@ -24,20 +24,24 @@ CREATE OR REPLACE FUNCTION projet.user_change_score(
     _score INT
 ) RETURNS VOID AS $$
 DECLARE
-    id_current_user INTEGER;
+    id_current_user INTEGER := NULL;
 BEGIN
     id_current_user := (SELECT s.id_user FROM projet.scores s, projet.users u WHERE s.id_user = u.id_user AND u.username = _user);
 
-    IF (FOUND) THEN
+    IF (id_current_user IS NOT NULL) THEN
         UPDATE projet.scores SET score =_score, score_date = CURRENT_DATE WHERE id_user = id_current_user;
-    ELSE
-        INSERT INTO projet.scores (id_user, score) VALUES (id_current_user, _score);
-    end if;
+        RETURN;
+
+    END IF;
+
+     id_current_user := (SELECT u.id_user FROM projet.users u WHERE  u.username = _user);
+
+    INSERT INTO projet.scores (id_user, score) VALUES (id_current_user, _score);
+
 RETURN;
 END;
 
 $$ LANGUAGE plpgsql;
-
 
 CREATE OR REPLACE FUNCTION projet.insert_user(
     _username VARCHAR(255),
@@ -46,10 +50,10 @@ CREATE OR REPLACE FUNCTION projet.insert_user(
 DECLARE
     id INTEGER;
 BEGIN
-    INSERT INTO projet.users (username, password) 
+    INSERT INTO projet.users (username, password)
     VALUES (_username, _password)
     RETURNING id_user INTO  id;
-    
+
 RETURN id;
 END;
 
