@@ -1,7 +1,9 @@
 import Phaser from 'phaser';
-// import ScoreLabel from './ScoreLabel';
+import CoinLabel from './CoinLabel';
 import BombSpawner from './BombSpawner';
-import starAsset from '../../assets/star.png';
+import platformAsset from '../../assets/platform.png';
+import coinAsset from '../../assets/coin.png';
+import coinHudAsset from '../../assets/hudcoin.png';
 import bombAsset from '../../assets/bomb.png';
 import dudeAsset from '../../assets/dude.png';
 import pauseButton from '../../assets/pauseButton.png';
@@ -9,7 +11,8 @@ import Settings from '../../utils/settings';
 import MeterLabel from './MeterLabel';
 
 const DUDE_KEY = 'dude';
-const STAR_KEY = 'star';
+const COIN_KEY = 'coin';
+const HUD_COIN_KEY = 'hudcoin';
 const BOMB_KEY = 'bomb';
 const PAUSE_BUTTON  = 'pause';
 
@@ -29,6 +32,8 @@ class GameScene extends Phaser.Scene {
     // this.scoreLabel = undefined;
     this.meterLabel = undefined;
     this.stars = undefined;
+    this.coinLabel = undefined;
+    this.coins = undefined;
     this.bombSpawner = undefined;
     this.gameOver = false;
     this.pauseButton = undefined;
@@ -45,6 +50,10 @@ class GameScene extends Phaser.Scene {
       frameHeight: 48,
     });
     this.load.image(PAUSE_BUTTON, pauseButton);
+
+    // coins
+    this.load.image(HUD_COIN_KEY, coinHudAsset);
+    this.load.image(COIN_KEY, coinAsset);
   }
 
   create() {
@@ -56,6 +65,16 @@ class GameScene extends Phaser.Scene {
     }
 
     this.player = this.createPlayer();
+    this.coins = this.createCoins();
+
+    // hud coin
+    this.add.image(20, 38, HUD_COIN_KEY);
+    this.createCoinLabel(30, 20).then((coinLabel) => {
+      this.coinLabel = coinLabel;
+    });
+     
+    
+
     this.stars = this.createStars();
     // this.scoreLabel = this.createScoreLabel(20, 20, 0);
     this.meterLabel = this.createMeterLabel(20, 20);
@@ -64,11 +83,11 @@ class GameScene extends Phaser.Scene {
 
     this.bombSpawner = new BombSpawner(this, BOMB_KEY);
     const bombsGroup = this.bombSpawner.group;
-    // this.physics.add.collider(this.stars, sliceStart);
-    // this.physics.add.collider(this.player, sliceStart);
-    // this.physics.add.collider(bombsGroup, sliceStart);
+    this.physics.add.collider(this.stars, platforms);
+    this.physics.add.collider(this.player, platforms);
+    this.physics.add.collider(bombsGroup, platforms);
     this.physics.add.collider(this.player, bombsGroup, this.hitBomb, null, this);
-    this.physics.add.overlap(this.player, this.stars, this.collectStar, null, this);
+    this.physics.add.overlap(this.player, this.coins, this.collectCoin, null, this);
     this.cursors = this.input.keyboard.createCursorKeys();
     this.key = this.input.keyboard.addKey(localStorage.getItem('selectedKey'));
 
@@ -191,6 +210,20 @@ class GameScene extends Phaser.Scene {
     });
   }
 
+  createPlatforms() {
+    const platforms = this.physics.add.staticGroup();
+    
+    platforms
+      .create(400, 568, GROUND_KEY)
+      .setScale(2)
+      .refreshBody();
+
+    platforms.create(600, 400, GROUND_KEY);
+    platforms.create(50, 250, GROUND_KEY);
+    platforms.create(750, 220, GROUND_KEY);
+    return platforms;
+  }
+
   createPlayer() {
     const player = this.physics.add.sprite(30, 30, DUDE_KEY);
     player.setBounce(0.2);
@@ -221,18 +254,18 @@ class GameScene extends Phaser.Scene {
     return player;
   }
 
-  createStars() {
-    const stars = this.physics.add.group({
-      key: STAR_KEY,
+  createCoins() {
+    const coins = this.physics.add.group({
+      key: COIN_KEY,
       repeat: 11,
       setXY: { x: 12, y: 0, stepX: 70 },
     });
 
-    stars.children.iterate((child) => {
-      child.setBounceY(Phaser.Math.FloatBetween(0.4, 0.8));
-    });
+    // coins.children.iterate((child) => {
+    //   child.setBounceY(Phaser.Math.FloatBetween(0.4, 0.8));
+    // });
 
-    return stars;
+    return coins;
   }
 
   collectStar(player, star) {
@@ -245,94 +278,130 @@ class GameScene extends Phaser.Scene {
       });
     }
 
-    this.bombSpawner.spawn(player.x);
+    // this.bombSpawner.spawn(player.x);
   }
+  
+  async createCoinLabel(x, y) {
+    // Attendez la valeur asynchrone
+    const coin = 100;// await this.getDBCoinValue();
 
-  // createScoreLabel(x, y, score) {
-  //   const style = { fontSize: '32px', fill: '#000', position: 'absolute',right : '0',top: '0', margin : '1em'};
-  //   const label = new ScoreLabel(this, x, y, score, style);
+    const style = { fontSize: '32px', fill: '#ffffff', fontFamily: 'Arial, sans-serif' };
+    const label = new CoinLabel(this, x, y, coin, style);
 
-  //   return label;
-  // }
+    // createScoreLabel(x, y, score) {
+    //   const style = { fontSize: '32px', fill: '#000', position: 'absolute',right : '0',top: '0', margin : '1em'};
+    //   const label = new ScoreLabel(this, x, y, score, style);
 
-  createMeterLabel(x, y) {
-    const label = new MeterLabel(this, x, y);
-    this.add.existing(label);
-    return label;
-  }
+    //   return label;
+    // }
 
-  hitBomb(player) {
-    // this.meterLabel.pauseMeter();
-    this.meterLabel.setText(
-      `GAME OVER :  \nYour Score is ${this.meterLabel.formatDistance(this.meterLabel.timeElapsed)}`,
-    );
-    localStorage.setItem('score', this.timeFormat(this.meterLabel.timeElapsed));
+    createMeterLabel(x, y) {
+      const label = new MeterLabel(this, x, y);
+      this.add.existing(label);
 
-    if (localStorage.getItem('token')) {
-      this.updateScore(this.formatDistance(this.meterLabel.timeElapsed));
+      return label;
     }
-    this.physics.pause();
-
-    player.setTint(0xff0000);
-
-    player.anims.play('turn');
-
-    this.gameOver = true;
-    this.meterLabel.destroy();
-    this.gameOver = false;
-    this.scene.launch('game-over');
-  }
 
   // eslint-disable-next-line class-methods-use-this
-  formatDistance(distance) {
-    // Assuming distance is in meters
-    // const kilometers = Math.floor(distance / 1000);
-    const meters = distance % 1000;
+  async getDBCoinValue() {
+      const token = localStorage.getItem('token');
+      const options = {
+        method: 'GET',
+        headers: {
+          Authorization: token,
+          'Content-Type': 'application/json',
+        },
+      };
 
-    // const formattedKilometers = String(kilometers).padStart(3, '0');
-    const formattedMeters = String(meters).padStart(3, '0');
+      const response = await fetch(`${process.env.API_BASE_URL}/collectibles/`, options);
+      const data = await response;
+      return data.coin;
+    }
 
-    return `${formattedMeters} m`;
-  }
+
+
+  async updateDBCoins() {
+      const coin = this.coinLabel.getCoin();
+      console.log(`you have ${coin}`);
+      // const token = localStorage.getItem('token');
+      // const options = {
+      //   method: 'PUT',
+      //   body: JSON.stringify({
+      //     coin,
+      //   }),
+      //   headers: {
+      //     Authorization: token,
+      //     'Content-Type': 'application/json',
+      //   },
+      // };
+      // await fetch(`${process.env.API_BASE_URL}/collectibles/`, options);
+    }
+
+
+    hitBomb(player) {
+      this.scoreLabel.setText(`GAME OVER : ( \nYour Score = ${this.scoreLabel.score}`);
+      this.physics.pause();
+
+      player.setTint(0xff0000);
+
+      player.anims.play('turn');
+      this.updateDBCoins();
+      this.gameOver = true;
+      this.meterLabel.destroy();
+      this.gameOver = false;
+      this.scene.launch('game-over');
+    }
+
+    // eslint-disable-next-line class-methods-use-this
+     formatDistance(distance) {
+      // Assuming distance is in meters
+      // const kilometers = Math.floor(distance / 1000);
+      const meters = distance % 1000;
+
+      // const formattedKilometers = String(kilometers).padStart(3, '0');
+      const formattedMeters = String(meters).padStart(3, '0');
+
+      return `${formattedMeters} m`;
+    }
 
   async pauseGame() {
-    this.meterLabel.pauseMeter();
-    this.scene.pause();
-     await this.scene.launch('pause-menu');
+      this.meterLabel.pauseMeter();
+      this.scene.pause();
+      await this.scene.launch('pause-menu');
 
-    setTimeout(() => {
-      this.scene.get('pause-menu').events.on(
-        'shutdown',
-        () => {
-          if (localStorage.getItem('replay')) {
-            this.meterLabel.destroy();
-            return;
-          }
-          this.meterLabel.resumeMeter();
-        },
-        this,
-      );
-    }, 100);
+      setTimeout(() => {
+        this.scene.get('pause-menu').events.on(
+          'shutdown',
+          () => {
+            if (localStorage.getItem('replay')) {
+              this.meterLabel.destroy();
+              return;
+            }
+            this.meterLabel.resumeMeter();
+          },
+          this,
+        );
+      }, 100);
 
-    this.gameOver = false;
-  }
+      this.gameOver = false;
+    }
 
   // eslint-disable-next-line class-methods-use-this
   async updateScore(score) {
-    const token = localStorage.getItem('token');
+      const token = localStorage.getItem('token');
 
-    const options = {
-      method: 'PUT',
-      body: JSON.stringify({
-        score,
-      }),
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: token,
-      },
-    };
-    await fetch(`${process.env.API_BASE_URL}/scores/`, options);
+      const options = {
+        method: 'PUT',
+        body: JSON.stringify({
+          score,
+        }),
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: token,
+        },
+      };
+      await fetch(`${process.env.API_BASE_URL}/scores/`, options);
+    }
   }
 }
-
 export default GameScene;
