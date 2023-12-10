@@ -1,3 +1,4 @@
+// eslint-disable-next-line max-classes-per-file
 import Phaser from 'phaser';
 // import dudeAsset from '../../assets/penguin.png';
 import dudeAsset from '../../assets/santa.png'
@@ -6,8 +7,8 @@ import Settings from '../../utils/settings';
 import MeterLabel from './MeterLabel';
 // import dudeAssetJSON from '../../assets/penguin.json';
 import dudeAssetJSON from '../../assets/santa.json';
-import sheet from '../../assets/sheet.png'
-import mapSheet from '../../assets/map.json'
+import sheet from '../../assets/sheet.png';
+import mapSheet from '../../assets/map.json';
 
 const PAUSE_BUTTON  = 'pause';
 
@@ -18,29 +19,30 @@ class GameScene extends Phaser.Scene {
     super('game-scene');
     this.player = undefined;
     this.cursors = undefined;
-    this.meterLabel = undefined;
     this.stars = undefined;
     this.bombSpawner = undefined;
     this.gameOver = false;
-    this.pauseButton = undefined;
     this.ground = undefined;
     this.obstacles = undefined;
+    this.scorePauseScene = undefined;
+
   }
 
   init() {
     this.cursors = this.input.keyboard.createCursorKeys();
+    // eslint-disable-next-line no-use-before-define
+    this.scorePauseScene = this.scene.add('pause-score', ScorePauseScene, true);
   }
 
   preload() {
     this.load.atlas('santa', dudeAsset, dudeAssetJSON);
     this.load.image('tiles', sheet);
     this.load.tilemapTiledJSON('tileMap', mapSheet);
-
-    this.load.image(PAUSE_BUTTON, pauseButton);
   }
 
   create() {
-    this.createDudeAnimations();
+
+    this.createDudeAnimations(); 
 
     const map = this.make.tilemap({ key: 'tileMap' });
     const tileset = map.addTilesetImage('iceworld', 'tiles');
@@ -71,38 +73,44 @@ class GameScene extends Phaser.Scene {
     });
 
     this.matter.world.convertTilemapLayer(this.ground);
-
-    this.meterLabel = this.createMeterLabel(20, 20);
-    this.meterLabel.setColor('#ffffff');
-
+    
     this.key = this.input.keyboard.addKey(localStorage.getItem('selectedKey'));
 
-    // pause btn
-    this.pauseButton = this.add.image(this.scale.width - 75, 50, PAUSE_BUTTON);
-    this.pauseButton.setInteractive({ useHandCursor: true });
-    this.pauseButton.setScale(0.8);
-
-    this.pauseButton.on('pointerdown', () => {
-      this.pauseGame();
+    this.scorePauseScene.pauseButton.on('pointerdown', () => {
+      this.scene.run('pause-menu');
     });
+  
   }
 
   update() {
     const santa1 = this.santa;
     const groundLayer = this.ground;
 
-    santa1.x += 2;
-    santa1.play('player-run', true);
+    santa1.x += 1;
+    santa1.play('player-slide', true);
     const spaceJustPressed = Phaser.Input.Keyboard.JustDown(this.cursors.space);
 
-    if (spaceJustPressed && this.isTouchingGround) {
+    const scorePauseScene = this.scene.get('pause-score');
+
+    if (localStorage.getItem('resume')) {
+      scorePauseScene.meterLabel.resumeMeter();
+      localStorage.removeItem('resume');
+    } 
+
+    // if (localStorage.getItem('replay')) {
+    //   this.scorePauseScene.meterLabel.destroyMeter();
+    //   localStorage.removeItem('replay');
+    // }
+
+    if (this.cursors.space.isDown) this.santa.play('player-jump', true);
+
+    if (this.isTouchingGround&&spaceJustPressed) {
       this.santa.play('player-jump', true);
-      this.santa.setVelocityY(-17);
+        this.santa.setVelocityY(-17);
+        this.santa.setVelocityX(2);
       this.isTouchingGround = false;
     }
 
-    while (this.cursors.down.isDown) santa1.play('player-slide', true);
-    while (this.cursors.right.isDown) santa1.play('', true);
 
     const key = Settings.getKey();
     if (Phaser.Input.Keyboard.KeyCodes[key] !== this.key.keyCode) {
@@ -133,7 +141,7 @@ class GameScene extends Phaser.Scene {
           this.hitObstacle(this.santa);
         }
       }
-    }
+   }
   }
 
   // eslint-disable-next-line class-methods-use-this
@@ -162,7 +170,7 @@ class GameScene extends Phaser.Scene {
     // run animation
     this.anims.create({
       key: 'player-run',
-      frameRate: 10,
+      frameRate: 5,
       frames: this.anims.generateFrameNames('santa', {
         start: 1,
         end: 4,
@@ -176,7 +184,7 @@ class GameScene extends Phaser.Scene {
 
     this.anims.create({
       key: 'player-slide',
-      frameRate: 10,
+      frameRate: 5,
       frames: this.anims.generateFrameNames('santa', {
         start: 1,
         end: 5,
@@ -190,7 +198,7 @@ class GameScene extends Phaser.Scene {
 
     this.anims.create({
       key: 'player-jump',
-      frameRate: 10,
+      frameRate: 5,
       frames: this.anims.generateFrameNames('santa', {
         start: 1,
         end: 8,
@@ -201,31 +209,24 @@ class GameScene extends Phaser.Scene {
     });
   }
 
-  createMeterLabel(x, y) {
-    const label = new MeterLabel(this, x, y);
-    this.add.existing(label);
-    return label;
-  }
 
   // eslint-disable-next-line class-methods-use-this
   formatDistance(distance) {
-    // Assuming distance is in meters
-    // const kilometers = Math.floor(distance / 1000);
+
     const meters = distance % 1000;
-
-    // const formattedKilometers = String(kilometers).padStart(3, '0');
     const formattedMeters = String(meters).padStart(3, '0');
-
     return `${formattedMeters} m`;
   }
 
   hitObstacle(player) {
+    this.scorePauseScene.meterLabel.pauseMeter();
     this.scene.pause();
-    this.meterLabel.pauseMeter();
-    this.meterLabel.setText(
-      `GAME OVER :  \nYour Score is ${this.formatDistance(this.meterLabel.timeElapsed)}`,
+    this.scorePauseScene.meterLabel.setText(
+      `GAME OVER :  \nYour Score is ${this.formatDistance(
+        this.scorePauseScene.meterLabel.timeElapsed,
+      )}`,
     );
-    localStorage.setItem('score', this.formatDistance(this.meterLabel.timeElapsed));
+    localStorage.setItem('score', this.formatDistance(this.meterLabel));
 
     // if (localStorage.getItem('token')) {
     //   this.updateScore(this.formatDistance(this.meterLabel.timeElapsed));
@@ -234,15 +235,59 @@ class GameScene extends Phaser.Scene {
     this.matter.pause();
     player.setTint(0xff0000);
 
-    this.scene.pause();
+    this.scene.pause('pause-score');
+    this.scene.pause('game-scene');
     this.scene.launch('game-over');
-
   }
 
   pauseGame() {
     this.meterLabel.pauseMeter();
     this.scene.pause();
-    this.scene.launch('pause-menu');
+    this.scene.run('pause-menu');
   }
 }
+
+
+
+class ScorePauseScene extends Phaser.Scene {
+  constructor() {
+    super('pause-score');
+    this.meterLabel = undefined;
+    this.pauseButton = undefined;
+  }
+
+  preload() {
+    this.load.image(PAUSE_BUTTON, pauseButton);
+  }
+
+  create() {
+    this.meterLabel = this.createMeterLabel(20, 20);
+    this.meterLabel.setColor('#ffffff');
+
+    // pause btn
+    this.pauseButton = this.add.image(this.scale.width - 75, 50, PAUSE_BUTTON);
+    this.pauseButton.setInteractive({ useHandCursor: true });
+    this.pauseButton.setScale(0.8);
+
+    this.pauseButton.on('pointerdown', () => {
+      this.pauseGame();
+    });
+   }
+
+  createMeterLabel(x, y) {
+    const label = new MeterLabel(this, x, y);
+    this.add.existing(label);
+    return label;
+  }
+
+  pauseGame() {
+    this.meterLabel.pauseMeter();
+    this.scene.pause('pause-score');
+    this.scene.pause('game-scene');
+    this.scene.run('pause-menu');
+  }
+}
+
+
 export default GameScene;
+

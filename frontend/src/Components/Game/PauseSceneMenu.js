@@ -70,8 +70,10 @@ class PauseMenuScene extends Phaser.Scene {
              }
 
     restartGame() {
-        this.scene.stop('pause-menu');
-        this.scene.resume('game-scene');
+      this.scene.stop('pause-menu');
+      localStorage.setItem('resume', true);
+      this.scene.resume('pause-score');
+      this.scene.resume('game-scene');
     }
 
     goHome() {
@@ -80,10 +82,9 @@ class PauseMenuScene extends Phaser.Scene {
     }
 
     replayGame() {
-       
-    this.scene.stop('pause-menu');
-
-    this.scene.run('game-scene');
+       this.scene.remove('game-over');
+       this.scene.remove('pause-score');
+       this.scene.start('game-scene');
   }
 
 }

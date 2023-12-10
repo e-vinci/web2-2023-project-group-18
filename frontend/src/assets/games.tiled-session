@@ -18,10 +18,10 @@
         },
         "map.json": {
             "scale": 1,
-            "selectedLayer": 1,
+            "selectedLayer": 0,
             "viewCenter": {
-                "x": 1326,
-                "y": 620.5
+                "x": -157,
+                "y": 441.5
             }
         },
         "map.json#iceworld": {
