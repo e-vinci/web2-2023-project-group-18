@@ -1,8 +1,9 @@
 import Phaser from 'phaser';
+// eslint-disable-next-line import/no-named-as-default, import/no-named-as-default-member
 import GameScene from '../Game/GameScene';
 import PauseSceneMenu from '../Game/PauseSceneMenu';
 import StartMenuScene from '../Game/StartMenuScene';
-import GameOverScene from '../Game/GameOverMenu';
+import GameOverScene from '../Game/GameOverScene';
 
 let game;
 
