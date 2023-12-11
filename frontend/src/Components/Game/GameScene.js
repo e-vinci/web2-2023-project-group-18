@@ -14,7 +14,6 @@ const COIN_KEY = 'coin';
 const HUD_COIN_KEY = 'hudcoin';
 const BOMB_KEY = 'bomb';
 const PAUSE_BUTTON = 'pause';
-const STAR_KEY = '';
 
 const gameOptions = {
   amplitude: 300,
