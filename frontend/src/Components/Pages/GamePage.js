@@ -31,7 +31,7 @@ const GamePage = () => {
       },
     },
 
-    scene: [StartMenuScene,GameScene, PauseSceneMenu, GameOverScene],
+    scene: [StartMenuScene,GameScene,GameOverScene,PauseSceneMenu],
 
     //  parent DOM element into which the canvas created by the renderer will be injected.
     parent: 'gameDiv',

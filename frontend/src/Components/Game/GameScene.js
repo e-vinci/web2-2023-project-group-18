@@ -78,9 +78,6 @@ class GameScene extends Phaser.Scene {
 
     this.key = this.input.keyboard.addKey(localStorage.getItem('selectedKey'));
 
-    this.scorePauseScene.pauseButton.on('pointerdown', () => {
-      this.scene.run('pause-menu');
-    });
   }
 
   createSlope(graphics, sliceStart){
@@ -313,8 +310,8 @@ interpolate(vFrom, vTo, delta){
     this.matter.pause();
     player.setTint(0xff0000);
 
-    this.scene.remove('pause-score');
-    this.scene.pause('game-scene');
+    this.scene.stop('pause-score');
+    this.scene.stop('game-scene');
     this.scene.run('game-over');
   }
 
@@ -341,12 +338,6 @@ interpolate(vFrom, vTo, delta){
       console.log(response.status);
       throw new Error();
     }
-  }
-
-  pauseGame() {
-    this.meterLabel.pauseMeter();
-    this.scene.pause();
-    this.scene.run('pause-menu');
   }
 
   addCoin(x, slopeStartHeight) {
