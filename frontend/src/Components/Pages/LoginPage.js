@@ -3,6 +3,12 @@ import anime from 'animejs/lib/anime.es';
 import Navigate from '../Router/Navigate';
 
 const LoginPage = () => {
+
+  if (localStorage.getItem('token') != null) {  
+  Navigate('/');
+  return;
+}
+  
   const main = document.querySelector('main');
   main.innerHTML = `
    <div class="div-back">
@@ -67,6 +73,7 @@ const LoginPage = () => {
     };
 
     const response = await fetch(`${process.env.API_BASE_URL}/auths/login`, options); 
+    const finalResponse = await response.json();
 
     if (!response.ok) {
 
@@ -76,10 +83,10 @@ const LoginPage = () => {
       
     }
     else {
-      localStorage.setItem('token', response.token)
-      localStorage.setItem('user',response.username)
+      localStorage.setItem('token', finalResponse.token);
+      localStorage.setItem('user', finalResponse.username);
       animeLogin(true);
-      setTimeout(()=>Navigate('/'),2000)
+      setTimeout(() => Navigate('/'), 2000);
   }
   }
 };
