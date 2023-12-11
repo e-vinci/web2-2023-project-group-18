@@ -102,14 +102,13 @@ class GameScene extends Phaser.Scene {
     this.scorePauseScene.pauseButton.on('pointerdown', () => {
       this.scene.run('pause-menu');
     });
-
   }
 
   update() {
     const santa1 = this.santa;
     const groundLayer = this.ground;
 
-    santa1.x += 3;
+    santa1.x += 2;
     santa1.play('player-slide', true);
     const spaceJustPressed = Phaser.Input.Keyboard.JustDown(this.cursors.space);
 
@@ -120,16 +119,11 @@ class GameScene extends Phaser.Scene {
       localStorage.removeItem('resume');
     }
 
-    // if (localStorage.getItem('replay')) {
-    //   this.scorePauseScene.meterLabel.destroyMeter();
-    //   localStorage.removeItem('replay');
-    // }
-
     if (this.cursors.space.isDown) this.santa.play('player-jump', true);
 
     if (this.isTouchingGround && spaceJustPressed) {
       this.santa.play('player-jump', true);
-      this.santa.setVelocityY(-10);
+      this.santa.setVelocityY(-15);
       this.santa.setVelocityX(2);
       this.isTouchingGround = false;
     }
@@ -165,23 +159,6 @@ class GameScene extends Phaser.Scene {
       }
     }
   }
-
-  // eslint-disable-next-line class-methods-use-this
-  //   async updateScore(score) {
-  //     const token = localStorage.getItem('token');
-
-  //     const options = {
-  //       method: 'PUT',
-  //       body: JSON.stringify({
-  //         score,
-  //       }),
-  //       headers: {
-  //         'Content-Type': 'application/json',
-  //         Authorization: token,
-  //       },
-  //     };
-  //     await fetch(`${process.env.API_BASE_URL}/scores/`, options);
-  //   }
 
   createDudeAnimations() {
     this.anims.create({
@@ -248,9 +225,9 @@ class GameScene extends Phaser.Scene {
     );
     localStorage.setItem('score', this.formatDistance(this.meterLabel));
 
-    // if (localStorage.getItem('token')) {
-    //   this.updateScore(this.formatDistance(this.meterLabel.timeElapsed));
-    // }
+    if (localStorage.getItem('token')) {
+      this.updateScore(this.scorePauseScene.meterLabel.timeElapsed);
+    }
 
     this.matter.pause();
     player.setTint(0xff0000);
@@ -258,6 +235,30 @@ class GameScene extends Phaser.Scene {
     this.scene.remove('pause-score');
     this.scene.pause('game-scene');
     this.scene.run('game-over');
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  async updateScore(newScore) {
+    const token = localStorage.getItem('token');
+    const user = localStorage.getItem('user')
+
+    const options = {
+      method: 'PUT',
+      body: JSON.stringify({
+        user,
+        score: newScore
+      }),
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: token,
+      },
+    };
+    const response = await fetch(`${process.env.API_BASE_URL}/scores/`, options);
+
+    if (!response.ok) {
+      console.log(response.status);
+      throw new Error();
+    }
   }
 
   pauseGame() {
