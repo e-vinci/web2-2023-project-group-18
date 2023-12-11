@@ -31,9 +31,7 @@ const ShopPage = async () => {
     }
 
     try {
-        // const coinsResult = await fetchData(`/collectibles/1`);
-        // coins = coinsResult.nbre_collectible;
-        coins = 400;
+        coins = await fetchData(`/collectibles`);
 
         skinsList = await fetchData(`/skins/`);
         themesList = await fetchData(`/themes/`);

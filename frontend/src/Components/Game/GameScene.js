@@ -1,7 +1,11 @@
 // eslint-disable-next-line max-classes-per-file
 import Phaser from 'phaser';
-// import dudeAsset from '../../assets/penguin.png';
-import dudeAsset from '../../assets/santa.png'
+
+import santaAsset from '../../assets/santa.png';
+import redhatboyAsset from '../../assets/redhatboy.png';
+import santaAssetJSON from '../../assets/santa.json';
+import redhatboyAssetJSON from '../../assets/redhatboy.json';
+
 import CoinLabel from './CoinLabel';
 import coinAsset from '../../assets/coin.png';
 import coinHudAsset from '../../assets/hudcoin.png';
@@ -9,8 +13,6 @@ import bombAsset from '../../assets/bomb.png';
 import pauseButton from '../../assets/pauseButton.png';
 import Settings from '../../utils/settings';
 import MeterLabel from './MeterLabel';
-// import dudeAssetJSON from '../../assets/penguin.json';
-import dudeAssetJSON from '../../assets/santa.json';
 import sheet from '../../assets/sheet.png';
 import mapSheet from '../../assets/map.json';
 
@@ -19,6 +21,8 @@ const HUD_COIN_KEY = 'hudcoin';
 const BOMB_KEY = 'bomb';
 const PAUSE_BUTTON = 'pause';
 
+let dudeAsset = santaAsset;
+let dudeAssetJSON = santaAssetJSON;
 
 const gameOptions = {
   amplitude: 300,
@@ -27,7 +31,6 @@ const gameOptions = {
   slopesPerSlice: 5,
   terrainSpeed: 200,
 };
-
 
 class GameScene extends Phaser.Scene {
   santa = Phaser.Physics.Matter.Sprite;
@@ -56,6 +59,7 @@ class GameScene extends Phaser.Scene {
   }
 
   preload() {
+    changeSkin();
     this.load.atlas('santa', dudeAsset, dudeAssetJSON);
     this.load.image('tiles', sheet);
     this.load.tilemapTiledJSON('tileMap', mapSheet);
@@ -323,61 +327,82 @@ class GameScene extends Phaser.Scene {
     // await fetch(`${process.env.API_BASE_URL}/collectibles/`, options);
   }
 }
-  class ScorePauseScene extends Phaser.Scene {
-    constructor() {
-      super('pause-score');
-      this.meterLabel = undefined;
-      this.pauseButton = undefined;
-      this.coinLabel = undefined;
-    }
 
-    preload() {
-      this.load.image(PAUSE_BUTTON, pauseButton);
+class ScorePauseScene extends Phaser.Scene {
+  constructor() {
+    super('pause-score');
+    this.meterLabel = undefined;
+    this.pauseButton = undefined;
+    this.coinLabel = undefined;
+  }
 
-      // coins
-      this.load.image(HUD_COIN_KEY, coinHudAsset);
-      this.load.image(COIN_KEY, coinAsset);
-    }
+  preload() {
+    this.load.image(PAUSE_BUTTON, pauseButton);
 
-    create() {
-      this.meterLabel = this.createMeterLabel(20, 20);
-      this.meterLabel.setColor('#ffffff');
+    // coins
+    this.load.image(HUD_COIN_KEY, coinHudAsset);
+    this.load.image(COIN_KEY, coinAsset);
+  }
 
-      // pause btn
-      this.pauseButton = this.add.image(this.scale.width - 75, 50, PAUSE_BUTTON);
-      this.pauseButton.setInteractive({ useHandCursor: true });
-      this.pauseButton.setScale(0.8);
+  create() {
+    this.meterLabel = this.createMeterLabel(20, 20);
+    this.meterLabel.setColor('#ffffff');
 
-      this.pauseButton.on('pointerdown', () => {
-        this.pauseGame();
-      });
+    // pause btn
+    this.pauseButton = this.add.image(this.scale.width - 75, 50, PAUSE_BUTTON);
+    this.pauseButton.setInteractive({ useHandCursor: true });
+    this.pauseButton.setScale(0.8);
 
-      // coins 
-      this.add.image(30, 88, HUD_COIN_KEY);
-      this.coinLabel = this.createCoinLabel(45, 70);
-      this.add.existing(this.coinLabel);
-    }
+    this.pauseButton.on('pointerdown', () => {
+      this.pauseGame();
+    });
 
-    createMeterLabel(x, y) {
-      const label = new MeterLabel(this, x, y);
-      this.add.existing(label);
+    // coins 
+    this.add.image(30, 88, HUD_COIN_KEY);
+    this.coinLabel = this.createCoinLabel(45, 70);
+    this.add.existing(this.coinLabel);
+  }
 
-      return label;
-    }
+  createMeterLabel(x, y) {
+    const label = new MeterLabel(this, x, y);
+    this.add.existing(label);
 
-    pauseGame() {
-      this.meterLabel.pauseMeter();
-      this.scene.pause('pause-score');
-      this.scene.pause('game-scene');
-      this.scene.run('pause-menu');
-    }
+    return label;
+  }
 
-    createCoinLabel(x, y) {
-      const coin = 100; // await this.getDBCoinValue();
-      const style = { fontSize: '32px', fill: '#ffffff', fontFamily: 'Arial, sans-serif' };
-      const label = new CoinLabel(this, x, y, coin, style);
-      return label;
+  pauseGame() {
+    this.meterLabel.pauseMeter();
+    this.scene.pause('pause-score');
+    this.scene.pause('game-scene');
+    this.scene.run('pause-menu');
+  }
+
+  createCoinLabel(x, y) {
+    const coin = 100; // await this.getDBCoinValue();
+    const style = { fontSize: '32px', fill: '#ffffff', fontFamily: 'Arial, sans-serif' };
+    const label = new CoinLabel(this, x, y, coin, style);
+    return label;
+  }
+}
+
+function changeSkin() {
+  const skinName = localStorage.getItem("skin");
+
+  if (skinName) {
+    switch (skinName) {
+
+      case "red hat":
+        dudeAsset = redhatboyAsset;
+        dudeAssetJSON = redhatboyAssetJSON;
+        return;
+
+      default:
+        dudeAsset = santaAsset;
+        dudeAssetJSON = santaAssetJSON;
+        break;
     }
   }
+}
+
 export default GameScene;
 
