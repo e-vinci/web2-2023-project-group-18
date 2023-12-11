@@ -5,7 +5,7 @@ node_modules
 # ignore the specific packages versions installed by the developper
 package-lock.json
 # ignore the development environment variables (if any)
-process.env
+.env
 # ignore all dist directories files (and subdirectories) from .gitignore
 dist/*
 # ignore all the JSON data files within data directories
