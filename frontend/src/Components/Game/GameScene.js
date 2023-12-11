@@ -38,10 +38,8 @@ class GameScene extends Phaser.Scene {
     this.cursors = undefined;
     this.stars = undefined;
     this.meterLabel = undefined;
-
     this.coinLabel = undefined;
     this.coins = undefined;
-
     this.bombSpawner = undefined;
     this.gameOver = false;
     this.ground = undefined;
@@ -99,9 +97,6 @@ class GameScene extends Phaser.Scene {
 
     this.key = this.input.keyboard.addKey(localStorage.getItem('selectedKey'));
 
-    this.scorePauseScene.pauseButton.on('pointerdown', () => {
-      this.scene.run('pause-menu');
-    });
   }
 
   update() {
@@ -232,8 +227,8 @@ class GameScene extends Phaser.Scene {
     this.matter.pause();
     player.setTint(0xff0000);
 
-    this.scene.remove('pause-score');
-    this.scene.pause('game-scene');
+    this.scene.stop('pause-score');
+    this.scene.stop('game-scene');
     this.scene.run('game-over');
   }
 
@@ -259,12 +254,6 @@ class GameScene extends Phaser.Scene {
       console.log(response.status);
       throw new Error();
     }
-  }
-
-  pauseGame() {
-    this.meterLabel.pauseMeter();
-    this.scene.pause();
-    this.scene.run('pause-menu');
   }
 
   addCoin(x, slopeStartHeight) {
