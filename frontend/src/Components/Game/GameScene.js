@@ -109,7 +109,7 @@ class GameScene extends Phaser.Scene {
     const santa1 = this.santa;
     const groundLayer = this.ground;
 
-    santa1.x += 1;
+    santa1.x += 3;
     santa1.play('player-slide', true);
     const spaceJustPressed = Phaser.Input.Keyboard.JustDown(this.cursors.space);
 
@@ -129,7 +129,7 @@ class GameScene extends Phaser.Scene {
 
     if (this.isTouchingGround && spaceJustPressed) {
       this.santa.play('player-jump', true);
-      this.santa.setVelocityY(-17);
+      this.santa.setVelocityY(-10);
       this.santa.setVelocityX(2);
       this.isTouchingGround = false;
     }
