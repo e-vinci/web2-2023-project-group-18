@@ -2,12 +2,15 @@ import Phaser from 'phaser';
 import replayButton from '../../assets/replayButton.png';
 import homeButton from '../../assets/homeButton.png';
 import restartButton from '../../assets/restartButton.png';
+import settings from '../../utils/settings';
+import settingsButton from '../../assets/settingsAssest.png'
 import Navigate from '../Router/Navigate';
 
 
 const REPLAY_BUTTON = 'replay';
 const HOME_BUTTON = 'home';
 const RESTART_BUTTON = 'restart';
+const SETTINGS_ASSET = 'settings';
 
 
 class PauseMenuScene extends Phaser.Scene {
@@ -16,12 +19,14 @@ class PauseMenuScene extends Phaser.Scene {
         this.replayButton = undefined;
         this.homeButton = undefined;
         this.restartButton = undefined;
+        this.settingsButton = undefined;
     }
 
     preload () {
         this.load.image(REPLAY_BUTTON, replayButton);
         this.load.image(HOME_BUTTON, homeButton);
         this.load.image(RESTART_BUTTON, restartButton);
+        this.load.image(SETTINGS_ASSET, settingsButton);
     }
 
     create() {
@@ -64,6 +69,12 @@ class PauseMenuScene extends Phaser.Scene {
                this.replayButton.on('pointerdown', () => {
                  this.replayGame();
                });
+
+               this.settingsButton = this.add.image(this.scale.width/2 + 700, this.scale.height - 40, SETTINGS_ASSET);
+               this.settingsButton.setInteractive({ useHandCursor: true});
+               this.settingsButton.on('pointerdown', () => {
+                settings.openSettings();
+               })
         
                // Emit a custom event when creation is complete
                this.events.emit('create-complete');
@@ -75,13 +86,16 @@ class PauseMenuScene extends Phaser.Scene {
     }
 
     goHome() {
-        this.game.resume('game-scene');
-        Navigate('/');
+      this.scene.stop('pause-menu');
+      this.game.destroy(true);
+      Navigate('/');
     }
 
     replayGame() {
-        this.scene.stop('pause-menu');
-        this.scene.launch('game-scene');
+      this.scene.stop('pause-menu');
+      localStorage.setItem("replay", true);
+      this.scene.launch('game-scene');
+
     }
 
 }

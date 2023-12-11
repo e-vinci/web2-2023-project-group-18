@@ -63,11 +63,11 @@ class GameScene extends Phaser.Scene {
     this.meterLabel.setColor('#ffffff');
 
     this.bombSpawner = new BombSpawner(this, BOMB_KEY);
-    // const bombsGroup = this.bombSpawner.group;
+    const bombsGroup = this.bombSpawner.group;
     // this.physics.add.collider(this.stars, sliceStart);
     // this.physics.add.collider(this.player, sliceStart);
     // this.physics.add.collider(bombsGroup, sliceStart);
-    // this.physics.add.collider(this.player, bombsGroup, this.hitBomb, null, this);
+    this.physics.add.collider(this.player, bombsGroup, this.hitBomb, null, this);
     this.physics.add.overlap(this.player, this.stars, this.collectStar, null, this);
     this.cursors = this.input.keyboard.createCursorKeys();
     this.key = this.input.keyboard.addKey(localStorage.getItem('selectedKey'));
@@ -262,7 +262,7 @@ class GameScene extends Phaser.Scene {
   }
 
   hitBomb(player) {
-    this.meterLabel.pauseMeter();
+    // this.meterLabel.pauseMeter();
     this.meterLabel.setText(
       `GAME OVER :  \nYour Score is ${this.meterLabel.formatDistance(this.meterLabel.timeElapsed)}`,
     );
@@ -279,6 +279,8 @@ class GameScene extends Phaser.Scene {
 
     this.gameOver = true;
     this.meterLabel.destroy();
+    this.gameOver = false;
+    this.scene.launch('game-over');
   }
 
   // eslint-disable-next-line class-methods-use-this
@@ -293,15 +295,19 @@ class GameScene extends Phaser.Scene {
     return `${formattedMeters} m`;
   }
 
-  pauseGame() {
+  async pauseGame() {
     this.meterLabel.pauseMeter();
     this.scene.pause();
-    this.scene.launch('pause-menu');
+     await this.scene.launch('pause-menu');
 
     setTimeout(() => {
       this.scene.get('pause-menu').events.on(
         'shutdown',
         () => {
+          if (localStorage.getItem('replay')) {
+            this.meterLabel.destroy();
+            return;
+          }
           this.meterLabel.resumeMeter();
         },
         this,

@@ -21,10 +21,11 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
 app.use(cors(corsOptions));
-app.use('/collectibles', cors(corsOptions), collectiblesRouter);
-app.use('/auths', cors(corsOptions), authsRouter);
-app.use('/scores', cors(corsOptions), scoresRouter);
-app.use('/skins', cors(corsOptions), skinsRouter);
-app.use('/themes', cors(corsOptions), themesRouter);
+
+app.use('/collectibles', collectiblesRouter);
+app.use('/auths', authsRouter);
+app.use('/scores', scoresRouter);
+app.use('/skins', skinsRouter);
+app.use('/themes', themesRouter);
 
 module.exports = app;
