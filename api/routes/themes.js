@@ -1,4 +1,6 @@
+/* eslint-disable camelcase */
 const express = require('express');
+const { authorize } = require('../utils/auths');
 const { getAllThemes, getUserThemes, addUserTheme } = require('../models/themes');
 
 const router = express.Router();
@@ -13,27 +15,24 @@ router.get('/', async (req, res) => {
   }
 });
 
-router.get('/:id', async (req, res) => {
-  const theme = req?.params?.id >= 0 ? req.params.id : undefined;
+router.get('/getuserthemes', authorize, async (req, res) => {
+  const { id_user } = req.user;
 
-  if (theme) {
-    try {
-      const themes = await getUserThemes(theme);
-      return res.json(themes.rows);
-    } catch (error) {
-      return res.sendStatus(404);
-    }
-  } else {
-    return res.sendStatus(400);
+  try {
+    const themes = await getUserThemes(id_user);
+    return res.json(themes.rows);
+  } catch (error) {
+    return res.sendStatus(404);
   }
 });
 
-router.put('/:id', async (req, res) => {
-  const user = req?.params?.id >= 0 ? req.params.id : undefined;
-  const theme = req?.body?.theme ? req.body.theme : undefined;
-  if (user && theme) {
+router.put('/', authorize, async (req, res) => {
+  const { id_user } = req.user;
+  const theme = req?.body?.item ? req.body.item : undefined;
+
+  if (theme) {
     try {
-      await addUserTheme(user, theme);
+      await addUserTheme(id_user, theme);
       return res.sendStatus(200);
     } catch (error) {
       return res.sendStatus(404);

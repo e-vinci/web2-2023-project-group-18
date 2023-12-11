@@ -5,7 +5,7 @@ function getAllThemes() {
 }
 
 function getUserThemes(user) {
-  return queryExecute(`SELECT * FROM projet.themes t, projet.users_themes ut WHERE ut.id_user = ${user} AND t.id_theme = ut.id_theme`);
+  return queryExecute(`SELECT t.* FROM projet.themes t, projet.users_themes ut WHERE ut.id_user = ${user} AND t.id_theme = ut.id_theme`);
 }
 
 function addUserTheme(user, theme) {

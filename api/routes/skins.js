@@ -1,4 +1,6 @@
+/* eslint-disable camelcase */
 const express = require('express');
+const { authorize } = require('../utils/auths');
 const { getAllSkins, getUserSkins, addUserSkin } = require('../models/skins');
 
 const router = express.Router();
@@ -13,27 +15,23 @@ router.get('/', async (req, res) => {
   }
 });
 
-router.get('/:id', async (req, res) => {
-  const skin = req?.params?.id >= 0 ? req.params.id : undefined;
+router.get('/getuserskins', authorize, async (req, res) => {
+  const { id_user } = req.user;
 
-  if (skin) {
-    try {
-      const skins = await getUserSkins(skin);
-      return res.json(skins.rows);
-    } catch (error) {
-      return res.sendStatus(404);
-    }
-  } else {
-    return res.sendStatus(400);
+  try {
+    const skins = await getUserSkins(id_user);
+    return res.json(skins.rows);
+  } catch (error) {
+    return res.sendStatus(404);
   }
 });
 
-router.put('/:id', async (req, res) => {
-  const user = req?.params?.id >= 0 ? req.params.id : undefined;
-  const skin = req?.body?.skin ? req.body.skin : undefined;
-  if (user && skin) {
+router.put('/', authorize, async (req, res) => {
+  const { id_user } = req.user;
+  const skin = req?.body?.item ? req.body.item : undefined;
+  if (skin) {
     try {
-      await addUserSkin(user, skin);
+      await addUserSkin(id_user, skin);
       return res.sendStatus(200);
     } catch (error) {
       return res.sendStatus(404);

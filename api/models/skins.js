@@ -5,7 +5,7 @@ function getAllSkins() {
 }
 
 function getUserSkins(user) {
-  return queryExecute(`SELECT * FROM projet.skins s, projet.users_skins us WHERE us.id_user = ${user} AND s.id_skin = us.id_skin`);
+  return queryExecute(`SELECT s.* FROM projet.skins s, projet.users_skins us WHERE us.id_user = ${user} AND s.id_skin = us.id_skin`);
 }
 
 function addUserSkin(user, skin) {

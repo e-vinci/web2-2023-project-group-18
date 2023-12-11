@@ -24,22 +24,24 @@ let currentThemePage = 1;
 const ShopPage = async () => {
 
     // if not connected
-    /* if (localStorage.getItem('token') == null) {
+    const token = localStorage.getItem('token');
+    if (token === "undefined") {
         Navigate('/');
         return;
-    } */
+    }
 
     try {
-        const coinsResult = await fetchData(`/collectibles/1`);
-        coins = coinsResult.nbre_collectible;
+        // const coinsResult = await fetchData(`/collectibles/1`);
+        // coins = coinsResult.nbre_collectible;
+        coins = 400;
 
         // To avoid redoing queries each time the page loads
-        if(!skinsList || !themesPerPage || !currentSkinPage || !currentThemePage) {
+        if(!skinsList || !themesList || !ownedSkins || !ownedThemes) {
 
             skinsList = await fetchData(`/skins/`);
             themesList = await fetchData(`/themes/`);
-            ownedSkins = await fetchData(`/skins/1`);
-            ownedThemes = await fetchData(`/themes/1`);
+            ownedSkins = await fetchData(`/skins/getuserskins`);
+            ownedThemes = await fetchData(`/themes/getuserthemes`);
         }
 
         renderShopPage();
@@ -272,8 +274,8 @@ async function skinsListenner() {
 
                 if (!ownThisSkin) {
                     try {
-                        await fetchBuy(`/skins`);
-                        ownedSkins = await fetchData(`/skins/1`);
+                        await fetchBuy(`/skins`, idSkin);
+                        ownedSkins = await fetchData(`/skins/getuserskins`);
                         displayCurrentSkinPage();
                     } catch {
                         alert("Une erreur est survenue lors de l'achat de ce skin...");
@@ -319,8 +321,8 @@ function themesListenner() {
 
                 if (!ownThisTheme) {
                     try {
-                        await fetchBuy(`/themes/${idTheme}`);
-                        ownedThemes = await fetchData(`/themes/1`);
+                        await fetchBuy(`/themes`, idTheme);
+                        ownedThemes = await fetchData(`/themes/getuserthemes`);
                         displayCurrentThemePage();
                     } catch {
                         alert("Une erreur est survenue lors de l'achat de ce thème...");
@@ -355,7 +357,17 @@ function backButtonListenner() {
 
 // Fetch data from API
 async function fetchData(url) {
-    const response = await fetch(process.env.API_BASE_URL + url)
+    const token = localStorage.getItem('token');
+
+    const options = {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: token,
+      },
+    };
+
+    const response = await fetch(`${process.env.API_BASE_URL}${url}`, options);
     if (!response.ok) throw new Error(`fetch error : ${response.status} : ${response.statusText}`);
     const finalResponse = await response.json();
     return finalResponse;
@@ -379,7 +391,6 @@ async function fetchBuy(url, item) {
     const response = await fetch(`${process.env.API_BASE_URL}${url}`, options);
 
     if (!response.ok) throw new Error(`fetch error : ${response.status} : ${response.statusText}`);
-
     const finalResponse = await response.json();
     return finalResponse;
 }

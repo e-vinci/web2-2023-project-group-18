@@ -1,16 +1,30 @@
 ### Basic url
-@baseUrl = http://localhost:3000/skins
+@baseUrl = http://localhost:3000
 
-### Get all skins in order by price
-GET {{baseUrl}}/
-
-### Get all skins of a player
-GET {{baseUrl}}/1
-
-### Give a skin to a player
-PUT {{baseUrl}}/1
+### Login as test user
+# @name test
+POST {{baseUrl}}/auths/login
 Content-Type: application/json
 
 {
-    "skin": 5
+    "username":"test",
+    "password":"test"
+}
+
+### Get all skins in order by price
+GET {{baseUrl}}/skins
+
+### Get all skins of a player
+GET {{baseUrl}}/skins/getuserskins
+Content-Type: application/jsnpm on
+Authorization: {{test.response.body.token}}
+
+
+### Give a skin to a player
+PUT {{baseUrl}}/skins/
+Content-Type: application/json
+Authorization: {{test.response.body.token}}
+
+{
+    "item": 5
 }

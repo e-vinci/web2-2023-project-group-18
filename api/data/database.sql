@@ -111,23 +111,27 @@ CREATE OR REPLACE VIEW  projet.get_all_themes AS
     ORDER BY t.price;
 
 CREATE OR REPLACE FUNCTION projet.add_user_skin(
-    _user INT,
+    _username VARCHAR(255),
     _skin INT
 ) RETURNS VOID AS $$
 DECLARE
+    _user_id INT;
 BEGIN
-    INSERT INTO projet.users_skins(id_user, id_skin) VALUES (_user, _skin);
+    SELECT u.id_user FROM projet.users u WHERE u.username = _username INTO _user_id;
+    INSERT INTO projet.users_skins(id_user, id_skin) VALUES (_user_id, _skin);
 RETURN;
 END;
 $$ LANGUAGE plpgsql;
 
 CREATE OR REPLACE FUNCTION projet.add_user_theme(
-    _user INT,
+    _username VARCHAR(255),
     _theme INT
 ) RETURNS VOID AS $$
 DECLARE
+    _user_id INT;
 BEGIN
-    INSERT INTO projet.users_themes(id_user, id_theme) VALUES (_user, _theme);
+    SELECT u.id_user FROM projet.users u WHERE u.username = _username INTO _user_id;
+    INSERT INTO projet.users_themes(id_user, id_theme) VALUES (_user_id, _theme);
 RETURN;
 END;
 $$ LANGUAGE plpgsql;

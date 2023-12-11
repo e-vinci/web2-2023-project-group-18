@@ -76,8 +76,10 @@ const LoginPage = () => {
       
     }
     else {
-      localStorage.setItem('token', response.token)
-      localStorage.setItem('user',response.username)
+      const responseJSON = await response.json();
+
+      localStorage.setItem('token', responseJSON.token)
+      localStorage.setItem('user',responseJSON.username)
       animeLogin(true);
       setTimeout(()=>Navigate('/'),2000)
   }

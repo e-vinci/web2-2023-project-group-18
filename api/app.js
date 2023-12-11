@@ -24,7 +24,7 @@ app.use(cors(corsOptions));
 app.use('/collectibles', cors(corsOptions), collectiblesRouter);
 app.use('/auths', cors(corsOptions), authsRouter);
 app.use('/scores', cors(corsOptions), scoresRouter);
-app.use('/skins', skinsRouter);
-app.use('/themes', themesRouter);
+app.use('/skins', cors(corsOptions), skinsRouter);
+app.use('/themes', cors(corsOptions), themesRouter);
 
 module.exports = app;
