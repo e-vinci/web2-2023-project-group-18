@@ -16,23 +16,23 @@ const GamePage = () => {
 
   const config = {
     type: Phaser.AUTO,
-    width: '100%',
     height: '100%',
+    width: '100%',
     transparent: true,
     scale: {
       mode: Phaser.Scale.FIT,
       autoCenter: Phaser.Scale.CENTER_BOTH,
       parent: 'GamePage',
-  },
+    },
     physics: {
-      default: 'arcade',
+      default: 'matter',
       arcade: {
         gravity: { y: 500 },
         debug: false,
       },
     },
 
-    scene: [StartMenuScene, GameScene,PauseSceneMenu, GameOverScene],
+    scene: [StartMenuScene,GameScene, PauseSceneMenu, GameOverScene],
 
     //  parent DOM element into which the canvas created by the renderer will be injected.
     parent: 'gameDiv',
