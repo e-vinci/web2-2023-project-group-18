@@ -48,9 +48,8 @@ router.put('/add', authorize, async (req, res) => {
         res.status(500).json({ error: 'Erreur interne du serveur.' });
       }
     }
-  } else {
-    return res.sendStatus(400);
   }
+  return res.sendStatus(400);
 });
 
 router.put('/supp', authorize, async (req, res) => {
@@ -60,14 +59,14 @@ router.put('/supp', authorize, async (req, res) => {
     try {
       await suppCollectible(username, collectible);
       res.sendStatus(200);
-      // await res.sendStatus(200);
     } catch (error) {
-      // console.error('Error in request');
+      console.error('Error in request');
       // user doesn't exist or bad user index
-      return res.sendStatus(404);
+      res.sendStatus(404);
     }
+  } else {
+    res.sendStatus(400);
   }
-  return res.sendStatus(400);
 });
 
 module.exports = router;
