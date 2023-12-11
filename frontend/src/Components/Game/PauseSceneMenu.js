@@ -6,7 +6,6 @@ import settings from '../../utils/settings';
 import settingsButton from '../../assets/settingsAssest.png'
 import Navigate from '../Router/Navigate';
 
-
 const REPLAY_BUTTON = 'replay';
 const HOME_BUTTON = 'home';
 const RESTART_BUTTON = 'restart';
@@ -66,7 +65,8 @@ class PauseMenuScene extends Phaser.Scene {
 
                this.replayButton = this.add.image(this.scale.width / 2 + 100, 350, REPLAY_BUTTON);
                this.replayButton.setInteractive({ useHandCursor: true });
-               this.replayButton.on('pointerdown', () => {
+      this.replayButton.on('pointerdown', () => {
+                 
                  this.replayGame();
                });
 
@@ -81,8 +81,10 @@ class PauseMenuScene extends Phaser.Scene {
              }
 
     restartGame() {
-        this.scene.stop('pause-menu');
-        this.scene.resume('game-scene');
+      this.scene.stop('pause-menu');
+      localStorage.setItem('resume', true);
+      this.scene.resume('pause-score');
+      this.scene.resume('game-scene');
     }
 
     goHome() {
@@ -92,11 +94,10 @@ class PauseMenuScene extends Phaser.Scene {
     }
 
     replayGame() {
-      this.scene.stop('pause-menu');
-      localStorage.setItem("replay", true);
-      this.scene.launch('game-scene');
-
-    }
+       this.scene.remove('game-over');
+       this.scene.remove('pause-score');
+       this.scene.start('game-scene');
+  }
 
 }
 
