@@ -35,14 +35,10 @@ const ShopPage = async () => {
         // coins = coinsResult.nbre_collectible;
         coins = 400;
 
-        // To avoid redoing queries each time the page loads
-        if(!skinsList || !themesList || !ownedSkins || !ownedThemes) {
-
-            skinsList = await fetchData(`/skins/`);
-            themesList = await fetchData(`/themes/`);
-            ownedSkins = await fetchData(`/skins/getuserskins`);
-            ownedThemes = await fetchData(`/themes/getuserthemes`);
-        }
+        skinsList = await fetchData(`/skins/`);
+        themesList = await fetchData(`/themes/`);
+        ownedSkins = await fetchData(`/skins/getuserskins`);
+        ownedThemes = await fetchData(`/themes/getuserthemes`);
 
         renderShopPage();
 
@@ -56,7 +52,7 @@ const ShopPage = async () => {
         console.log(e);
         document.querySelector('main').innerHTML = `
         <div class="container text-center text-white mt-5">
-            <p class="display-5">Error: API is not online</p>
+            <p class="display-5">Error: API ERROR</p>
         </div>`;
     }
 }
@@ -277,7 +273,8 @@ async function skinsListenner() {
                         await fetchBuy(`/skins`, idSkin);
                         ownedSkins = await fetchData(`/skins/getuserskins`);
                         displayCurrentSkinPage();
-                    } catch {
+                    } catch(e) {
+                        console.log(e);
                         alert("Une erreur est survenue lors de l'achat de ce skin...");
                     }
                 }
@@ -391,8 +388,6 @@ async function fetchBuy(url, item) {
     const response = await fetch(`${process.env.API_BASE_URL}${url}`, options);
 
     if (!response.ok) throw new Error(`fetch error : ${response.status} : ${response.statusText}`);
-    const finalResponse = await response.json();
-    return finalResponse;
 }
 
 

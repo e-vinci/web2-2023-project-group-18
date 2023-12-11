@@ -111,32 +111,29 @@ CREATE OR REPLACE VIEW  projet.get_all_themes AS
     ORDER BY t.price;
 
 CREATE OR REPLACE FUNCTION projet.add_user_skin(
-    _username VARCHAR(255),
+    _user INT,
     _skin INT
 ) RETURNS VOID AS $$
 DECLARE
-    _user_id INT;
 BEGIN
-    SELECT u.id_user FROM projet.users u WHERE u.username = _username INTO _user_id;
-    INSERT INTO projet.users_skins(id_user, id_skin) VALUES (_user_id, _skin);
+    INSERT INTO projet.users_skins(id_user, id_skin) VALUES (_user, _skin);
 RETURN;
 END;
 $$ LANGUAGE plpgsql;
 
 CREATE OR REPLACE FUNCTION projet.add_user_theme(
-    _username VARCHAR(255),
+    _user INT,
     _theme INT
 ) RETURNS VOID AS $$
 DECLARE
-    _user_id INT;
 BEGIN
-    SELECT u.id_user FROM projet.users u WHERE u.username = _username INTO _user_id;
-    INSERT INTO projet.users_themes(id_user, id_theme) VALUES (_user_id, _theme);
+    INSERT INTO projet.users_themes(id_user, id_theme) VALUES (_user, _theme);
 RETURN;
 END;
 $$ LANGUAGE plpgsql;
 
-/* INSERT INTO projet.skins (name_skin, price) VALUES ('dragon', 100);
+/*
+INSERT INTO projet.skins (name_skin, price) VALUES ('dragon', 100);
 INSERT INTO projet.skins (name_skin, price) VALUES ('phoenix', 200);
 INSERT INTO projet.skins (name_skin, price) VALUES ('spectre', 300);
 INSERT INTO projet.skins (name_skin, price) VALUES ('viper', 400);
@@ -161,10 +158,7 @@ INSERT INTO projet.themes (name_theme, price) VALUES ('mountain', 900);
 INSERT INTO projet.themes (name_theme, price) VALUES ('plain', 1000);
 INSERT INTO projet.themes (name_theme, price) VALUES ('rock', 1250);
 INSERT INTO projet.themes (name_theme, price) VALUES ('jungle', 1500);
-
-INSERT INTO projet.users_skins (id_user, id_skin) VALUES (1, 1);
-INSERT INTO projet.users_skins (id_user, id_skin) VALUES (1, 5); */
-
+*/
 
 --DROP TABLE projet.collectible;
 CREATE TABLE IF NOT EXISTS projet.collectibles(
