@@ -39,7 +39,7 @@ BEGIN
     INSERT INTO projet.scores (id_user, score) VALUES (id_current_user, _score);
 
 RETURN;
-END
+END;
 $$ LANGUAGE plpgsql;
 
 CREATE OR REPLACE FUNCTION projet.insert_user(
@@ -54,7 +54,7 @@ BEGIN
     RETURNING id_user INTO  id;
 
 RETURN id;
-END
+END;
 $$ LANGUAGE plpgsql;
 
 /*INSERT INTO projet.users (username, password) VALUES ('GoldKing', 'mdp1');
