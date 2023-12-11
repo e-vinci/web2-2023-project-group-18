@@ -25,7 +25,7 @@ const ShopPage = async () => {
 
     // if not connected
     const token = localStorage.getItem('token');
-    if (token === "undefined") {
+    if (!token) {
         Navigate('/');
         return;
     }
@@ -49,7 +49,6 @@ const ShopPage = async () => {
         backButtonListenner();
 
     } catch(e) {
-        console.log(e);
         document.querySelector('main').innerHTML = `
         <div class="container text-center text-white mt-5">
             <p class="display-5">Error: API ERROR</p>
@@ -274,8 +273,7 @@ async function skinsListenner() {
                         ownedSkins = await fetchData(`/skins/getuserskins`);
                         displayCurrentSkinPage();
                     } catch(e) {
-                        console.log(e);
-                        alert("Une erreur est survenue lors de l'achat de ce skin...");
+                        alert("An error occurred while purchasing this skin...");
                     }
                 }
             })
@@ -322,7 +320,7 @@ function themesListenner() {
                         ownedThemes = await fetchData(`/themes/getuserthemes`);
                         displayCurrentThemePage();
                     } catch {
-                        alert("Une erreur est survenue lors de l'achat de ce thème...");
+                        alert("An error occurred while purchasing this theme...");
                     }
                 }
             })
@@ -386,7 +384,6 @@ async function fetchBuy(url, item) {
     };
 
     const response = await fetch(`${process.env.API_BASE_URL}${url}`, options);
-
     if (!response.ok) throw new Error(`fetch error : ${response.status} : ${response.statusText}`);
 }
 
