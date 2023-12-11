@@ -173,21 +173,40 @@ CREATE TABLE IF NOT EXISTS projet.collectibles(
     nbre_collectible INTEGER NOT NULL
     CHECK ( nbre_collectible >= 0 )
 );
+--DROP FUNCTION projet.get_collectible;
+
+CREATE OR REPLACE FUNCTION projet.get_collectible(_user VARCHAR(255))
+RETURNS INTEGER AS $$
+DECLARE
+    id_current_user INTEGER := NULL;
+    collectibles_count INTEGER := 0;
+BEGIN
+    id_current_user := (SELECT c.nbre_collectible FROM projet.collectibles c, projet.users u WHERE c.user_id = u.id_user AND u.username = _user);
+
+    IF (id_current_user IS NOT NULL) THEN
+        collectibles_count := id_current_user;
+    END IF;
+
+    RETURN collectibles_count;
+END;
+$$ LANGUAGE plpgsql;
 
 
 CREATE OR REPLACE FUNCTION projet.add_collectible(_user VARCHAR(255), _collectible INTEGER)
 RETURNS VOID AS $$
     DECLARE
-        id_current_user INTEGER;
+        id_current_user INTEGER := NULL;
     BEGIN
         id_current_user := (SELECT c.user_id FROM projet.collectibles c, projet.users u WHERE c.user_id = u.id_user AND u.username = _user);
     
-    IF (FOUND) THEN
+    IF (id_current_user IS NOT NULL) THEN
         UPDATE projet.collectibles SET nbre_collectible = (nbre_collectible + _collectible) WHERE user_id = id_current_user;
-    ELSE
+        RETURN;
+    end if;
+        id_current_user := (SELECT u.id_user FROM projet.users u WHERE  u.username = _user);
+    
         INSERT INTO projet.collectibles (user_id, nbre_collectible) VALUES (id_current_user, _collectible);
 
-    end if;
     RETURN;
     END;
 
@@ -196,16 +215,18 @@ $$ LANGUAGE plpgsql;
 CREATE OR REPLACE FUNCTION projet.supp_collectible(_user VARCHAR(255), _collectible INTEGER)
 RETURNS VOID AS $$
     DECLARE
-        id_current_user INTEGER;
+        id_current_user INTEGER := NULL;
     BEGIN
 
         id_current_user := (SELECT c.user_id FROM projet.collectibles c, projet.users u WHERE c.user_id = u.id_user AND u.username = _user);
     
-        IF (FOUND) THEN
+        IF (id_current_user IS NOT NULL) THEN
             UPDATE projet.collectibles SET nbre_collectible = (nbre_collectible - _collectible) WHERE user_id = id_current_user;
-        ELSE
+            RETURN;
+        end if;  
+
             RAISE NOTICE 'No user found with this id_user';
-        end if;
+        
     RETURN;
     END;
 

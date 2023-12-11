@@ -45,4 +45,4 @@ async function queryExecute(query) {
 const dbInit = fs.readFileSync(filePath).toString();
 queryExecute(dbInit);
 
-module.exports = { queryExecute};
+module.exports = { queryExecute };
