@@ -21,16 +21,6 @@ const pool = new Pool({
    */,
 });
 
-pool.on('error', (err) => {
-  console.log(err);
-  // console.error('Unexpected error on idle client', err);
-  process.exit(-1); // SI une erreur dans la pool -> exit
-});
-
-// creat db if nost exist
-const dbInit = fs.readFileSync(filePath).toString();
-queryExecute(dbInit);
-
 async function queryExecute(query) {
   try {
     const client = await pool.connect();
@@ -46,18 +36,13 @@ async function queryExecute(query) {
       client.release();
     }
   } catch (error) {
-    end();
     console.error('Error client connect:', error);
     throw error;
   }
 }
 
-function end() {
-  pool.end();
-}
+// creat db if nost exist
+const dbInit = fs.readFileSync(filePath).toString();
+queryExecute(dbInit);
 
-process.on('exit', () => {
-  end();
-});
-
-module.exports = { queryExecute, end };
+module.exports = { queryExecute };

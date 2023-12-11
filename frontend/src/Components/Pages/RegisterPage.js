@@ -2,6 +2,12 @@ import anime from 'animejs/lib/anime.es';
 import Navigate from '../Router/Navigate';
 
 const RegisterPage = () => {
+
+  if (localStorage.getItem('token')!=null) {
+    Navigate('/');
+    return;
+  }
+  
   const main = document.querySelector('main');
   main.innerHTML = `
   <div class="div-back">
@@ -106,6 +112,7 @@ async function tryRgister() {
     };
 
     const response = await fetch(`${process.env.API_BASE_URL}/auths/register`, options);
+    const finalResponse = await response.json();
 
 
     if (!response.ok) {
@@ -115,10 +122,10 @@ async function tryRgister() {
       
     }
     else {
-      localStorage.setItem('token', response.token);
-      localStorage.setItem('user',response.username)
+      localStorage.setItem('token', finalResponse.token);
+      localStorage.setItem('user',finalResponse.username)
       animeLogin(true);
-      setTimeout(()=>Navigate('/'),1000)
+      setTimeout(()=>Navigate('/'),2000)
     }
   }
 }
@@ -161,5 +168,6 @@ function animeLogin(isConnected) {
     });
   }
 }
+;
 
 export default RegisterPage;
