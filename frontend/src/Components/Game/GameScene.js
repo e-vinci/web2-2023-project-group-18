@@ -352,7 +352,7 @@ interpolate(vFrom, vTo, delta){
   addCoin(x, slopeStartHeight) {
     const y = slopeStartHeight * gameOptions.amplitude;
     const coin = this.physics.add.image(x, y + 20, COIN_KEY);
-    coin.setBounceY(Phaser.Math.FloatBetween(0.4, 0.8));
+coin.setBounceY(Phaser.Math.FloatBetween(0.4, 0.8));
 
     this.coins.add(coin);
   }
