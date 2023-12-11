@@ -426,7 +426,7 @@ color: #dbdbdb;
 
 .creditPage {
 overflow:auto;
-height: 650px;
+height: 80vh;
 width: 800px;
 background: transparent;
 border: 6px solid rgba(255,255,225,.2);
