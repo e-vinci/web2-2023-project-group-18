@@ -1,24 +1,17 @@
 // eslint-disable-next-line max-classes-per-file
 import Phaser from 'phaser';
-// eslint-disable-next-line import/no-extraneous-dependencies
 import simplify from 'simplify-js';
-// import dudeAsset from '../../assets/penguin.png';
 import dudeAsset from '../../assets/santa.png'
 import CoinLabel from './CoinLabel';
 import coinAsset from '../../assets/coin.png';
 import coinHudAsset from '../../assets/hudcoin.png';
-import bombAsset from '../../assets/bomb.png';
 import pauseButton from '../../assets/pauseButton.png';
 import Settings from '../../utils/settings';
 import MeterLabel from './MeterLabel';
-// import dudeAssetJSON from '../../assets/penguin.json';
 import dudeAssetJSON from '../../assets/santa.json';
-import sheet from '../../assets/sheet.png';
-import mapSheet from '../../assets/map.json';
 
 const COIN_KEY = 'coin';
 const HUD_COIN_KEY = 'hudcoin';
-const BOMB_KEY = 'bomb';
 const PAUSE_BUTTON = 'pause';
 
 
@@ -40,13 +33,9 @@ class GameScene extends Phaser.Scene {
     this.cursors = undefined;
     this.stars = undefined;
     this.meterLabel = undefined;
-
     this.coinLabel = undefined;
     this.coins = undefined;
-
-    this.bombSpawner = undefined;
     this.gameOver = false;
-    this.ground = undefined;
     this.obstacles = undefined;
     this.scorePauseScene = undefined;
   }
@@ -59,14 +48,12 @@ class GameScene extends Phaser.Scene {
 
   preload() {
     this.load.atlas('santa', dudeAsset, dudeAssetJSON);
-    this.load.tilemapTiledJSON('tileMap', mapSheet);
-    this.load.image(BOMB_KEY, bombAsset);
   }
 
   create() {
     this.createDudeAnimations();
 
-     // Generating Ground and Collision it
+     // Generating Ground and its Collision
      this.bodyPool = [];
      this.bodyPoolId = [];
      this.slopeGraphics = [];
@@ -78,7 +65,7 @@ class GameScene extends Phaser.Scene {
 
 
     this.santa = this.matter.add
-            .sprite(0, 400, 'santa')
+            .sprite(0, 450, 'santa')
             .play('player-idle')
             .setFixedRotation();
 
@@ -135,12 +122,12 @@ class GameScene extends Phaser.Scene {
     simpleSlope.forEach(point => {
       graphics.lineTo(point.x, point.y);
   });
-    graphics.lineTo(currentPoint, sliceStart.y *  1200);
-    graphics.lineTo(0, sliceStart.y * 1200);
+    graphics.lineTo(currentPoint, sliceStart.y *  1500);
+    graphics.lineTo(0, sliceStart.y * 1500);
     graphics.closePath();
     graphics.fillPath();
 
-    // draw the top ground
+    // draw the snow
     graphics.lineStyle(16, 0xc9edf0);
     graphics.beginPath();
     simpleSlope.forEach(point => {
@@ -202,9 +189,8 @@ interpolate(vFrom, vTo, delta){
   return vFrom * (1 - interpolation) + vTo * interpolation;
 }
 
-  update(t, dt) {
+  update() {
     const santa1 = this.santa;
-    const groundLayer = this.ground;
 
     santa1.x += 2;
     santa1.play('player-slide', true);
@@ -232,40 +218,24 @@ interpolate(vFrom, vTo, delta){
       this.key = this.input.keyboard.addKey(key);
     }
 
-    // Check if the penguin and groundLayer are defined
-    if (santa1 && groundLayer) {
-      // Filter tiles with the 'obstacles' property
-      const obstacleTiles = groundLayer.filterTiles(
-        (tile) => tile.properties && tile.properties.obstacles,
-      );
+    // loop through all mountains
+    this.slopeGraphics.forEach((item) =>{
+ 
+      // if the mountain leaves the screen to the left...
+      if(this.cameras.main.scrollX > item.x + item.width + 4000){
 
-      // Check if the penguin and its body are defined
-      if (santa1.body) {
-        // Check if the penguin overlaps with any obstacle tiles
-        const overlappingTiles = obstacleTiles.filter((tile) => {
-          const tileBounds = tile.getBounds();
-          return (
-            tileBounds &&
-            Phaser.Geom.Intersects.RectangleToRectangle(santa1.getBounds(), tileBounds)
-          );
-        });
-
-        // If there are overlapping tiles, set gameOver to true
-        if (overlappingTiles.length > 0) {
-          this.hitObstacle(this.santa);
-        }
+          // reuse the mountain
+          this.sliceStart = this.createSlope(item, this.sliceStart)
       }
-    }
+  });
 
      // get all bodies
      const {bodies} = this.matter.world.localWorld;
 
      // loop through all bodies
      bodies.forEach((body) =>{
- 
          // if the body is out of camera view to the left side and is not yet in the pool..
          if(this.cameras.main.scrollX > body.position.x + 200 && this.bodyPoolId.indexOf(body.id) === -1){
- 
              // ...add the body to the pool
              this.bodyPool.push(body);
              this.bodyPoolId.push(body.id);
@@ -293,7 +263,6 @@ interpolate(vFrom, vTo, delta){
     });
 
     // slide animaion
-
     this.anims.create({
       key: 'player-slide',
       frameRate: 5,
@@ -307,7 +276,6 @@ interpolate(vFrom, vTo, delta){
     });
 
     // jump animation
-
     this.anims.create({
       key: 'player-jump',
       frameRate: 5,
@@ -369,6 +337,7 @@ interpolate(vFrom, vTo, delta){
     const response = await fetch(`${process.env.API_BASE_URL}/scores/`, options);
 
     if (!response.ok) {
+      // eslint-disable-next-line no-console
       console.log(response.status);
       throw new Error();
     }
@@ -421,6 +390,7 @@ interpolate(vFrom, vTo, delta){
 
   async updateDBCoins() {
     const coin = this.coinLabel.getCoin();
+    // eslint-disable-next-line no-console
     console.log(`you have ${coin}`);
     // const token = localStorage.getItem('token');
     // const options = {
