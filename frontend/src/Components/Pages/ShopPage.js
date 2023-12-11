@@ -22,16 +22,23 @@ let currentSkinPage = 1;
 let currentThemePage = 1;
 
 const ShopPage = async () => {
-    coins = 458;
+
+    // if not connected
+    const token = localStorage.getItem('token');
+    if (!token) {
+        Navigate('/');
+        return;
+    }
 
     try {
-        // To avoid redoing queries each time the page loads
-        if(!skinsList || !themesPerPage || !currentSkinPage || !currentThemePage) {
-            skinsList = await fetchData(`/skins/`);
-            themesList = await fetchData(`/themes/`);
-            ownedSkins = await fetchData(`/skins/1`);
-            ownedThemes = await fetchData(`/themes/1`);
-        }
+        // const coinsResult = await fetchData(`/collectibles/1`);
+        // coins = coinsResult.nbre_collectible;
+        coins = 400;
+
+        skinsList = await fetchData(`/skins/`);
+        themesList = await fetchData(`/themes/`);
+        ownedSkins = await fetchData(`/skins/getuserskins`);
+        ownedThemes = await fetchData(`/themes/getuserthemes`);
 
         renderShopPage();
 
@@ -41,10 +48,10 @@ const ShopPage = async () => {
         changePageListenner();
         backButtonListenner();
 
-    } catch {
+    } catch(e) {
         document.querySelector('main').innerHTML = `
         <div class="container text-center text-white mt-5">
-            <p class="display-5">Error: API is not online</p>
+            <p class="display-5">Error: API ERROR</p>
         </div>`;
     }
 }
@@ -117,6 +124,8 @@ function renderShopPage() {
 
 // Display skins page
 function displayCurrentSkinPage() {
+    const currentSkin = localStorage.getItem("skin") || skinsList[0]?.name_skin || null;
+
     const startIndex = (currentSkinPage - 1) * skinsPerPage;
     const endIndex = startIndex + skinsPerPage;
     const currentSkins = skinsList.slice(startIndex, endIndex);
@@ -134,8 +143,12 @@ function displayCurrentSkinPage() {
 
             let typeButton = `<button type="button" class="btn shop-buy-button shop-buy-skin" data-id="${skin.id_skin}">${skin.price} coins</button>`;
             
-            if (ownedSkins.some(s => s.name_skin === skin.name_skin))
-                typeButton = `<button type="button" class="btn shop-own-button shop-own-skin" data-id="${skin.id_skin}">Choose</button>`;
+            if (ownedSkins.some(s => s.name_skin === skin.name_skin)) {
+                if(skin.name_skin === currentSkin)
+                    typeButton = `<button type="button" class="btn shop-current-button" data-id="${skin.id_skin}">Current</button>`;
+                else
+                    typeButton = `<button type="button" class="btn shop-own-button shop-own-skin" data-id="${skin.id_skin}">Choose</button>`;
+            }
 
             skinHTML += `
                 <div class="col-md-4 text-center">
@@ -156,6 +169,8 @@ function displayCurrentSkinPage() {
 
 // Display themes page
 function displayCurrentThemePage() {
+    const currentTheme = localStorage.getItem("theme") || themesList[0]?.name_theme || null;
+
     const startIndex = (currentThemePage - 1) * themesPerPage;
     const endIndex = startIndex + themesPerPage;
     const currentThemes = themesList.slice(startIndex, endIndex);
@@ -172,8 +187,13 @@ function displayCurrentThemePage() {
             const theme = currentThemes[j];
 
             let typeButton = `<button type="button" class="btn shop-buy-button shop-buy-theme" data-id="${theme.id_theme}">${theme.price} coins</button>`;
-            if (ownedThemes.some(t => t.name_theme === theme.name_theme))
+
+            if (ownedThemes.some(t => t.name_theme === theme.name_theme)) {
+                if(theme.name_theme === currentTheme)
+                    typeButton = `<button type="button" class="btn shop-current-button" data-id="${theme.id_theme}">Current</button>`;
+                else
                 typeButton = `<button type="button" class="btn shop-own-button shop-own-theme" data-id="${theme.id_theme}">Choose</button>`;
+            }
 
             themeHTML += `
                 <div class="col-md-4 text-center">
@@ -249,11 +269,11 @@ async function skinsListenner() {
 
                 if (!ownThisSkin) {
                     try {
-                        await fetchBuy(`/skins/${idSkin}`);
-                        ownedSkins = await fetchData(`/skins/1`);
+                        await fetchBuy(`/skins`, idSkin);
+                        ownedSkins = await fetchData(`/skins/getuserskins`);
                         displayCurrentSkinPage();
-                    } catch {
-                        alert("Une erreur est survenue lors de l'achat de ce skin...");
+                    } catch(e) {
+                        alert("An error occurred while purchasing this skin...");
                     }
                 }
             })
@@ -266,8 +286,10 @@ async function skinsListenner() {
                 // check if html is not modified in devtools (the data-id)
                 const idSkin = parseInt(btn.getAttribute('data-id'), 10);
                 ownedSkins.forEach((skin) => {
-                    if(skin.id_skin === idSkin)
-                        console.log(`a le skin ${  skin.name_skin}`)
+                    if(skin.id_skin === idSkin) {
+                        localStorage.setItem("skin", skin.name_skin);
+                        displayCurrentSkinPage();
+                    }
                 });
             })
         });
@@ -294,11 +316,11 @@ function themesListenner() {
 
                 if (!ownThisTheme) {
                     try {
-                        await fetchBuy(`/themes/${idTheme}`);
-                        ownedThemes = await fetchData(`/themes/1`);
+                        await fetchBuy(`/themes`, idTheme);
+                        ownedThemes = await fetchData(`/themes/getuserthemes`);
                         displayCurrentThemePage();
                     } catch {
-                        alert("Une erreur est survenue lors de l'achat de ce thème...");
+                        alert("An error occurred while purchasing this theme...");
                     }
                 }
             })
@@ -312,7 +334,8 @@ function themesListenner() {
                 const idTheme = parseInt(btn.getAttribute('data-id'), 10);
                 ownedThemes.forEach((theme) => {
                     if(theme.id_theme === idTheme)
-                        console.log(`a le skin ${  theme.name_theme}`)
+                        localStorage.setItem("theme", theme.name_theme);
+                        displayCurrentThemePage();
                 });
             })
         });
@@ -329,31 +352,39 @@ function backButtonListenner() {
 
 // Fetch data from API
 async function fetchData(url) {
-    const response = await fetch(process.env.API_BASE_URL + url)
+    const token = localStorage.getItem('token');
+
+    const options = {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: token,
+      },
+    };
+
+    const response = await fetch(`${process.env.API_BASE_URL}${url}`, options);
     if (!response.ok) throw new Error(`fetch error : ${response.status} : ${response.statusText}`);
     const finalResponse = await response.json();
     return finalResponse;
 }
 
 // Fetch data from API
-async function fetchBuy(url) {
-    // const token = localStorage.getItem('token');
+async function fetchBuy(url, item) {
+    const token = localStorage.getItem('token');
 
     const options = {
       method: 'PUT',
       body: JSON.stringify({
+        item,
       }),
       headers: {
         'Content-Type': 'application/json',
-        // Authorization: token,
+        Authorization: token,
       },
     };
-    const response = await fetch(process.env.API_BASE_URL + url, options);
 
+    const response = await fetch(`${process.env.API_BASE_URL}${url}`, options);
     if (!response.ok) throw new Error(`fetch error : ${response.status} : ${response.statusText}`);
-
-    const finalResponse = await response.json();
-    return finalResponse;
 }
 
 

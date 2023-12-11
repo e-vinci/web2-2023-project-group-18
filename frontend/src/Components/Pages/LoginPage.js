@@ -85,6 +85,7 @@ const LoginPage = () => {
     else {
       localStorage.setItem('token', finalResponse.token);
       localStorage.setItem('user', finalResponse.username);
+
       animeLogin(true);
       setTimeout(() => Navigate('/'), 2000);
   }

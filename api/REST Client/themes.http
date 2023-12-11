@@ -1,16 +1,30 @@
 ### Basic url
-@baseUrl = http://localhost:3000/themes
+@baseUrl = http://localhost:3000
 
-### Get all themes in order by price
-GET {{baseUrl}}/
-
-### Get all themes of a player
-GET {{baseUrl}}/1
-
-### Give a theme to a player
-PUT {{baseUrl}}/1
+### Login as test user
+# @name test
+POST {{baseUrl}}/auths/login
 Content-Type: application/json
 
 {
-    "theme": 5
+    "username":"test",
+    "password":"test"
+}
+
+### Get all skins in order by price
+GET {{baseUrl}}/themes
+
+### Get all skins of a player
+GET {{baseUrl}}/themes/getuserthemes
+Content-Type: application/jsnpm on
+Authorization: {{test.response.body.token}}
+
+
+### Give a skin to a player
+PUT {{baseUrl}}/themes/
+Content-Type: application/json
+Authorization: {{test.response.body.token}}
+
+{
+    "item": 5
 }

@@ -75,10 +75,10 @@ SELECT projet.user_change_score(4, 150);*/
 
 
 
-DROP TABLE IF EXISTS projet.users_skins;
-DROP TABLE IF EXISTS projet.users_themes;
-DROP TABLE IF EXISTS projet.skins CASCADE;
-DROP TABLE IF EXISTS projet.themes CASCADE;
+-- DROP TABLE IF EXISTS projet.users_skins;
+-- DROP TABLE IF EXISTS projet.users_themes;
+-- DROP TABLE IF EXISTS projet.skins CASCADE;
+-- DROP TABLE IF EXISTS projet.themes CASCADE;
 
 CREATE TABLE IF NOT EXISTS projet.skins(
     id_skin SERIAL PRIMARY KEY,
@@ -136,6 +136,7 @@ RETURN;
 END;
 $$ LANGUAGE plpgsql;
 
+/*
 INSERT INTO projet.skins (name_skin, price) VALUES ('dragon', 100);
 INSERT INTO projet.skins (name_skin, price) VALUES ('phoenix', 200);
 INSERT INTO projet.skins (name_skin, price) VALUES ('spectre', 300);
@@ -161,10 +162,7 @@ INSERT INTO projet.themes (name_theme, price) VALUES ('mountain', 900);
 INSERT INTO projet.themes (name_theme, price) VALUES ('plain', 1000);
 INSERT INTO projet.themes (name_theme, price) VALUES ('rock', 1250);
 INSERT INTO projet.themes (name_theme, price) VALUES ('jungle', 1500);
-
-INSERT INTO projet.users_skins (id_user, id_skin) VALUES (1, 1);
-INSERT INTO projet.users_skins (id_user, id_skin) VALUES (1, 5);
-
+*/
 
 --DROP TABLE projet.collectible;
 CREATE TABLE IF NOT EXISTS projet.collectibles(

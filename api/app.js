@@ -28,5 +28,4 @@ app.use('/scores', scoresRouter);
 app.use('/skins', skinsRouter);
 app.use('/themes', themesRouter);
 
-
 module.exports = app;

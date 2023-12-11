@@ -20,7 +20,7 @@
 
 .shop-buy-button {
     width: 100%;
-    background-color: rgb(43, 75, 141);
+    background-color: rgb(56, 100, 141);
     color: white;
     border: 0px;
  
@@ -28,15 +28,15 @@
     border-top-left-radius: 0px;
 }
 .shop-buy-button:hover {
-    background-color: rgb(29, 51, 95);
+    background-color: rgb(45, 81, 114);
 }
 .shop-buy-button:not(:disabled):not(.disabled):active {
-    background-color: rgb(24, 42, 78);
+    background-color: rgb(30, 53, 74);
 }
 
 .shop-own-button {
     width: 100%;
-    background-color: rgb(135, 135, 135);
+    background-color: rgb(97,116,131);
     color: white;
     border: 0px;
  
@@ -44,10 +44,26 @@
     border-top-left-radius: 0px;
 }
 .shop-own-button:hover {
-    background-color: rgb(97, 97, 97);
+    background-color: rgb(74, 87, 98);
 }
 .shop-own-button:not(:disabled):not(.disabled):active {
-    background-color: rgb(64, 64, 64);
+    background-color: rgb(74, 87, 98);
+}
+
+.shop-current-button {
+  width: 100%;
+  background-color: rgb(158, 171, 175);
+  color: white;
+  border: 0px;
+
+  border-top-right-radius: 0px;
+  border-top-left-radius: 0px;
+}
+.shop-current-button:hover {
+  background-color: rgb(158, 171, 175);
+}
+.shop-current-button:not(:disabled):not(.disabled):active {
+  background-color: rgb(158, 171, 175);
 }
 
 .shop-back-button {
