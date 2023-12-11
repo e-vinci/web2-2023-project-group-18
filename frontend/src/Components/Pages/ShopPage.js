@@ -124,7 +124,7 @@ function renderShopPage() {
 
 // Display skins page
 function displayCurrentSkinPage() {
-    const currentSkin = localStorage.getItem("skin") || skinsList[0].name_skin;
+    const currentSkin = localStorage.getItem("skin") || skinsList[0]?.name_skin || null;
 
     const startIndex = (currentSkinPage - 1) * skinsPerPage;
     const endIndex = startIndex + skinsPerPage;
@@ -169,7 +169,7 @@ function displayCurrentSkinPage() {
 
 // Display themes page
 function displayCurrentThemePage() {
-    const currentTheme = localStorage.getItem("theme") || themesList[0].name_theme;
+    const currentTheme = localStorage.getItem("theme") || themesList[0]?.name_theme || null;
 
     const startIndex = (currentThemePage - 1) * themesPerPage;
     const endIndex = startIndex + themesPerPage;
