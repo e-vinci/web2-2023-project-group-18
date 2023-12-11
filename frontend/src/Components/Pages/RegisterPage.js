@@ -161,5 +161,6 @@ function animeLogin(isConnected) {
     });
   }
 }
+;
 
 export default RegisterPage;

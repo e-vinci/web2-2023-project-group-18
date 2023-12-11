@@ -24,20 +24,24 @@ CREATE OR REPLACE FUNCTION projet.user_change_score(
     _score INT
 ) RETURNS VOID AS $$
 DECLARE
-    id_current_user INTEGER;
+    id_current_user INTEGER := NULL;
 BEGIN
     id_current_user := (SELECT s.id_user FROM projet.scores s, projet.users u WHERE s.id_user = u.id_user AND u.username = _user);
 
-    IF (FOUND) THEN
+    IF (id_current_user IS NOT NULL) THEN
         UPDATE projet.scores SET score =_score, score_date = CURRENT_DATE WHERE id_user = id_current_user;
-    ELSE
-        INSERT INTO projet.scores (id_user, score) VALUES (id_current_user, _score);
-    end if;
+        RETURN;
+
+    END IF;
+
+     id_current_user := (SELECT u.id_user FROM projet.users u WHERE  u.username = _user);
+
+    INSERT INTO projet.scores (id_user, score) VALUES (id_current_user, _score);
+
 RETURN;
 END;
 
 $$ LANGUAGE plpgsql;
-
 
 CREATE OR REPLACE FUNCTION projet.insert_user(
     _username VARCHAR(255),
@@ -46,10 +50,10 @@ CREATE OR REPLACE FUNCTION projet.insert_user(
 DECLARE
     id INTEGER;
 BEGIN
-    INSERT INTO projet.users (username, password) 
+    INSERT INTO projet.users (username, password)
     VALUES (_username, _password)
     RETURNING id_user INTO  id;
-    
+
 RETURN id;
 END;
 
@@ -64,6 +68,102 @@ SELECT projet.user_change_score(1, 120);
 SELECT projet.user_change_score(2, 300);
 SELECT projet.user_change_score(3, 120);
 SELECT projet.user_change_score(4, 150);*/
+
+
+
+
+
+
+
+DROP TABLE IF EXISTS projet.users_skins;
+DROP TABLE IF EXISTS projet.users_themes;
+DROP TABLE IF EXISTS projet.skins CASCADE;
+DROP TABLE IF EXISTS projet.themes CASCADE;
+
+CREATE TABLE IF NOT EXISTS projet.skins(
+    id_skin SERIAL PRIMARY KEY,
+    name_skin VARCHAR(255) UNIQUE NOT NULL,
+    price INTEGER NOT NULL,
+    CHECK(price >= 0)
+);
+CREATE TABLE IF NOT EXISTS projet.themes(
+    id_theme SERIAL PRIMARY KEY,
+    name_theme VARCHAR(255) UNIQUE NOT NULL,
+    price INTEGER NOT NULL,
+    CHECK(price >= 0)
+);
+
+CREATE TABLE IF NOT EXISTS projet.users_skins(
+    id_user INTEGER REFERENCES projet.users(id_user),
+    id_skin INTEGER REFERENCES projet.skins(id_skin),
+    PRIMARY KEY (id_user, id_skin)
+);
+CREATE TABLE IF NOT EXISTS projet.users_themes(
+    id_user INTEGER REFERENCES projet.users(id_user),
+    id_theme INTEGER REFERENCES projet.themes(id_theme),
+    PRIMARY KEY (id_user, id_theme)
+);
+
+CREATE OR REPLACE VIEW  projet.get_all_skins AS
+    SELECT s.id_skin, s.name_skin, s.price
+    FROM projet.skins s
+    ORDER BY s.price;
+
+CREATE OR REPLACE VIEW  projet.get_all_themes AS
+    SELECT t.id_theme, t.name_theme, t.price
+    FROM projet.themes t
+    ORDER BY t.price;
+
+CREATE OR REPLACE FUNCTION projet.add_user_skin(
+    _user INT,
+    _skin INT
+) RETURNS VOID AS $$
+DECLARE
+BEGIN
+    INSERT INTO projet.users_skins(id_user, id_skin) VALUES (_user, _skin);
+RETURN;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION projet.add_user_theme(
+    _user INT,
+    _theme INT
+) RETURNS VOID AS $$
+DECLARE
+BEGIN
+    INSERT INTO projet.users_themes(id_user, id_theme) VALUES (_user, _theme);
+RETURN;
+END;
+$$ LANGUAGE plpgsql;
+
+INSERT INTO projet.skins (name_skin, price) VALUES ('dragon', 100);
+INSERT INTO projet.skins (name_skin, price) VALUES ('phoenix', 200);
+INSERT INTO projet.skins (name_skin, price) VALUES ('spectre', 300);
+INSERT INTO projet.skins (name_skin, price) VALUES ('viper', 400);
+INSERT INTO projet.skins (name_skin, price) VALUES ('raven', 500);
+INSERT INTO projet.skins (name_skin, price) VALUES ('hydra', 600);
+INSERT INTO projet.skins (name_skin, price) VALUES ('banshee', 700);
+INSERT INTO projet.skins (name_skin, price) VALUES ('serpent', 800);
+INSERT INTO projet.skins (name_skin, price) VALUES ('gorgon', 900);
+INSERT INTO projet.skins (name_skin, price) VALUES ('chimera', 1000);
+INSERT INTO projet.skins (name_skin, price) VALUES ('wyvern', 1250);
+INSERT INTO projet.skins (name_skin, price) VALUES ('harpy', 1500);
+
+INSERT INTO projet.themes (name_theme, price) VALUES ('snow', 100);
+INSERT INTO projet.themes (name_theme, price) VALUES ('meadow', 200);
+INSERT INTO projet.themes (name_theme, price) VALUES ('desert', 300);
+INSERT INTO projet.themes (name_theme, price) VALUES ('taiga', 400);
+INSERT INTO projet.themes (name_theme, price) VALUES ('forest', 500);
+INSERT INTO projet.themes (name_theme, price) VALUES ('tundra', 600);
+INSERT INTO projet.themes (name_theme, price) VALUES ('ocean', 700);
+INSERT INTO projet.themes (name_theme, price) VALUES ('swamp', 800);
+INSERT INTO projet.themes (name_theme, price) VALUES ('mountain', 900);
+INSERT INTO projet.themes (name_theme, price) VALUES ('plain', 1000);
+INSERT INTO projet.themes (name_theme, price) VALUES ('rock', 1250);
+INSERT INTO projet.themes (name_theme, price) VALUES ('jungle', 1500);
+
+INSERT INTO projet.users_skins (id_user, id_skin) VALUES (1, 1);
+INSERT INTO projet.users_skins (id_user, id_skin) VALUES (1, 5);
 
 
 --DROP TABLE projet.collectible;

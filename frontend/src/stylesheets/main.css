@@ -598,3 +598,9 @@ justify-content: space-evenly;
   min-height: 50vh;
 }
 
+/*Game Page*/
+
+#gameDiv{
+  position: absolute;
+  left: 0;
+}

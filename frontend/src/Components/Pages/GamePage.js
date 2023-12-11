@@ -1,7 +1,9 @@
 import Phaser from 'phaser';
+// eslint-disable-next-line import/no-named-as-default, import/no-named-as-default-member
 import GameScene from '../Game/GameScene';
 import PauseSceneMenu from '../Game/PauseSceneMenu';
 import StartMenuScene from '../Game/StartMenuScene';
+import GameOverScene from '../Game/GameOverScene';
 
 let game;
 
@@ -14,23 +16,23 @@ const GamePage = () => {
 
   const config = {
     type: Phaser.AUTO,
-    width: '100%',
     height: '100%',
+    width: '100%',
     transparent: true,
     scale: {
       mode: Phaser.Scale.FIT,
       autoCenter: Phaser.Scale.CENTER_BOTH,
       parent: 'GamePage',
-  },
+    },
     physics: {
-      default: 'arcade',
+      default: 'matter',
       arcade: {
         gravity: { y: 500 },
         debug: false,
       },
     },
 
-    scene: [StartMenuScene, GameScene,PauseSceneMenu],
+    scene: [StartMenuScene,GameScene, PauseSceneMenu, GameOverScene],
 
     //  parent DOM element into which the canvas created by the renderer will be injected.
     parent: 'gameDiv',
