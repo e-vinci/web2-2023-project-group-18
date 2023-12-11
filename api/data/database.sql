@@ -7,7 +7,7 @@ CREATE TABLE IF NOT EXISTS projet.users(
 );
 
 CREATE TABLE IF NOT EXISTS projet.scores(
-    id_user INTEGER REFERENCES projet.users(id_user) PRIMARY KEY ,
+    id_user INTEGER REFERENCES projet.users(id_user) PRIMARY KEY,
     score INTEGER NOT NULL,
     score_date DATE NOT NULL DEFAULT CURRENT_DATE
     CHECK ( score >= 0 )
@@ -39,8 +39,7 @@ BEGIN
     INSERT INTO projet.scores (id_user, score) VALUES (id_current_user, _score);
 
 RETURN;
-END;
-
+END
 $$ LANGUAGE plpgsql;
 
 CREATE OR REPLACE FUNCTION projet.insert_user(
@@ -55,8 +54,7 @@ BEGIN
     RETURNING id_user INTO  id;
 
 RETURN id;
-END;
-
+END
 $$ LANGUAGE plpgsql;
 
 /*INSERT INTO projet.users (username, password) VALUES ('GoldKing', 'mdp1');
@@ -168,8 +166,7 @@ INSERT INTO projet.users_skins (id_user, id_skin) VALUES (1, 5);
 
 --DROP TABLE projet.collectible;
 CREATE TABLE IF NOT EXISTS projet.collectibles(
-    id_collectible SERIAL PRIMARY KEY NOT NULL,
-    user_id INTEGER NOT NULL REFERENCES projet.users,
+    user_id INTEGER PRIMARY KEY NOT NULL REFERENCES projet.users(id_user),
     nbre_collectible INTEGER NOT NULL
     CHECK ( nbre_collectible >= 0 )
 );
@@ -202,15 +199,15 @@ RETURNS VOID AS $$
     IF (id_current_user IS NOT NULL) THEN
         UPDATE projet.collectibles SET nbre_collectible = (nbre_collectible + _collectible) WHERE user_id = id_current_user;
         RETURN;
-    end if;
-        id_current_user := (SELECT u.id_user FROM projet.users u WHERE  u.username = _user);
-    
-        INSERT INTO projet.collectibles (user_id, nbre_collectible) VALUES (id_current_user, _collectible);
+    END IF;
 
+    id_current_user := (SELECT u.id_user FROM projet.users u WHERE  u.username = _user);
+    INSERT INTO projet.collectibles (user_id, nbre_collectible) VALUES (id_current_user, _collectible);
     RETURN;
-    END;
+END;
 
 $$ LANGUAGE plpgsql;
+
 
 CREATE OR REPLACE FUNCTION projet.supp_collectible(_user VARCHAR(255), _collectible INTEGER)
 RETURNS VOID AS $$

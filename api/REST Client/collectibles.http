@@ -3,8 +3,9 @@
 
 
 
+
 ### Login as test user
-# @name test
+# @name test2
 POST {{baseUrl}}/auths/login
 Content-Type: application/json
 
@@ -16,13 +17,13 @@ Content-Type: application/json
 ### Get the amount of collectibles
 GET {{baseUrl}}/collectibles
 Content-Type: application/json
-Authorization: {{test.response.body.token}}
+Authorization: {{test2.response.body.token}}
 
 
 ### Add collectibles
 PUT {{baseUrl}}/collectibles/add
 Content-Type: application/json
-Authorization: {{test.response.body.token}}
+Authorization: {{test2.response.body.token}}
 
 
 
@@ -33,7 +34,7 @@ Authorization: {{test.response.body.token}}
 ### Supp collectibles
 PUT {{baseUrl}}/collectibles/supp
 Content-Type: application/json
-Authorization: {{test.response.body.token}}
+Authorization: {{test2.response.body.token}}
 
 
 

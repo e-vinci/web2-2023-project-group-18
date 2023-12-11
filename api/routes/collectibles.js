@@ -37,8 +37,9 @@ router.put('/add', authorize, async (req, res) => {
   const collectible = req?.body?.collectible ? req.body.collectible : undefined;
   if (collectible) {
     try {
+      console.log(username);
       await addCollectible(username, collectible);
-      res.sendStatus(200);
+      return res.sendStatus(200);
     } catch (error) {
       console.error(`Erreur lors de l'ajout de la collectible : ${error}`);
       if (error.code === '23505') {
@@ -48,7 +49,7 @@ router.put('/add', authorize, async (req, res) => {
       }
     }
   } else {
-    res.sendStatus(400);
+    return res.sendStatus(400);
   }
 });
 
@@ -63,12 +64,10 @@ router.put('/supp', authorize, async (req, res) => {
     } catch (error) {
       // console.error('Error in request');
       // user doesn't exist or bad user index
-      res.sendStatus(404);
+      return res.sendStatus(404);
     }
-  } else {
-    // bad parmeter
-    res.sendStatus(400);
   }
+  return res.sendStatus(400);
 });
 
 module.exports = router;

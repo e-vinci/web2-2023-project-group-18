@@ -5,8 +5,6 @@
 ### Get all scores in correct order
 GET {{baseUrl}}/scores
 
-
-
 ### Login as test user
 # @name test
 POST {{baseUrl}}/auths/login
