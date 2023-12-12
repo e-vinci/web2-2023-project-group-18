@@ -1,5 +1,6 @@
 // eslint-disable-next-line max-classes-per-file
 import Phaser from 'phaser';
+// eslint-disable-next-line import/no-unresolved
 import simplify from 'simplify-js';
 import dudeAsset from '../../assets/santa.png'
 import CoinLabel from './CoinLabel';
@@ -17,10 +18,9 @@ const PAUSE_BUTTON = 'pause';
 
 const gameOptions = {
   amplitude: 300,
-  slopeLength: [200, 500],
+  slopeLength: [300, 600],
   slicesAmount: 3,
-  slopesPerSlice: 5,
-  terrainSpeed: 200,
+  slopesPerSlice: 5
 };
 
 
@@ -65,7 +65,7 @@ class GameScene extends Phaser.Scene {
 
 
     this.santa = this.matter.add
-            .sprite(0, 450, 'santa')
+            .sprite(800, 600, 'santa')
             .play('player-idle')
             .setFixedRotation();
 
@@ -74,7 +74,6 @@ class GameScene extends Phaser.Scene {
     });
 
     this.cameras.main.startFollow(this.santa);
-
 
     this.key = this.input.keyboard.addKey(localStorage.getItem('selectedKey'));
 
@@ -122,8 +121,8 @@ class GameScene extends Phaser.Scene {
     simpleSlope.forEach(point => {
       graphics.lineTo(point.x, point.y);
   });
-    graphics.lineTo(currentPoint, sliceStart.y *  1500);
-    graphics.lineTo(0, sliceStart.y * 1500);
+    graphics.lineTo(currentPoint, sliceStart.y *  1300);
+    graphics.lineTo(0, sliceStart.y * 1300);
     graphics.closePath();
     graphics.fillPath();
 
@@ -192,7 +191,7 @@ interpolate(vFrom, vTo, delta){
   update() {
     const santa1 = this.santa;
 
-    santa1.x += 2;
+    santa1.x += 3;
     santa1.play('player-slide', true);
     const spaceJustPressed = Phaser.Input.Keyboard.JustDown(this.cursors.space);
 
@@ -222,7 +221,7 @@ interpolate(vFrom, vTo, delta){
     this.slopeGraphics.forEach((item) =>{
  
       // if the mountain leaves the screen to the left...
-      if(this.cameras.main.scrollX > item.x + item.width + 4000){
+      if(this.cameras.main.scrollX > item.x + item.width + 6000){
 
           // reuse the mountain
           this.sliceStart = this.createSlope(item, this.sliceStart)
@@ -317,6 +316,7 @@ interpolate(vFrom, vTo, delta){
     this.scene.pause('game-scene');
     this.scene.run('game-over');
   }
+
 
   // eslint-disable-next-line class-methods-use-this
   async updateScore(newScore) {
