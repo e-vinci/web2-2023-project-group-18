@@ -2,9 +2,16 @@
 import Phaser from 'phaser';
 
 import santaAsset from '../../assets/santa.png';
-import redhatboyAsset from '../../assets/redhatboy.png';
+import redhatAsset from '../../assets/redhat.png';
+import jackAsset from '../../assets/jack.png';
+import catAsset from '../../assets/cat.png';
+import dogAsset from '../../assets/dog.png';
+
 import santaAssetJSON from '../../assets/santa.json';
-import redhatboyAssetJSON from '../../assets/redhatboy.json';
+import redhatAssetJSON from '../../assets/redhat.json';
+import jackAssetJSON from '../../assets/jack.json';
+import catAssetJSON from '../../assets/cat.json';
+import dogAssetJSON from '../../assets/dog.json';
 
 import CoinLabel from './CoinLabel';
 import coinAsset from '../../assets/coin.png';
@@ -392,8 +399,23 @@ function changeSkin() {
     switch (skinName) {
 
       case "redhat":
-        dudeAsset = redhatboyAsset;
-        dudeAssetJSON = redhatboyAssetJSON;
+        dudeAsset = redhatAsset;
+        dudeAssetJSON = redhatAssetJSON;
+        return;
+    
+      case "jack":
+        dudeAsset = jackAsset;
+        dudeAssetJSON = jackAssetJSON;
+        return;
+
+      case "cat":
+        dudeAsset = catAsset;
+        dudeAssetJSON = catAssetJSON;
+        return;
+
+      case "dog":
+        dudeAsset = dogAsset;
+        dudeAssetJSON = dogAssetJSON;
         return;
 
       default:

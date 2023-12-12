@@ -2,7 +2,10 @@ import anime from 'animejs/lib/anime.es';
 import Navigate from '../Router/Navigate';
 
 import santaImage from '../../assets/santaSkin.png';
-import redhatImage from '../../assets/redhat.png';
+import redhatImage from '../../assets/redhatSkin.png';
+import jackImage from '../../assets/jackSkin.png';
+import catImage from '../../assets/catSkin.png';
+import dogImage from '../../assets/dogSkin.png';
 
 import templateMapImage from '../../assets/templateMapShopPage.png';
 
@@ -356,6 +359,15 @@ function getSkinImage(name) {
 
         case "redhat":
             return redhatImage;
+
+        case "jack":
+            return jackImage;
+
+        case "cat":
+            return catImage;
+            
+        case "dog":
+            return dogImage;
 
         default:
             return santaImage;
