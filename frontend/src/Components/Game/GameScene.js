@@ -30,6 +30,9 @@ const HUD_COIN_KEY = 'hudcoin';
 const BOMB_KEY = 'bomb';
 const PAUSE_BUTTON = 'pause';
 
+const DUDE_ASSET_WIDTH = 30;
+const DUDE_ASSET_HEIGHT = 50;
+
 let dudeAsset = santaAsset;
 let dudeAssetJSON = santaAssetJSON;
 
@@ -91,8 +94,14 @@ class GameScene extends Phaser.Scene {
       // eslint-disable-next-line default-case
       switch (name) {
         case 'player-spawn': {
+
           this.santa = this.matter.add
             .sprite(x, y, 'santa')
+            .setBody({
+              type: 'rectangle',
+              width: DUDE_ASSET_WIDTH,
+              height: DUDE_ASSET_HEIGHT,
+            })
             .play('player-idle')
             .setFixedRotation();
 
@@ -101,6 +110,7 @@ class GameScene extends Phaser.Scene {
           });
 
           this.cameras.main.startFollow(this.santa);
+
           break;
         }
       }
@@ -403,31 +413,37 @@ function changeSkin() {
       case "redhat":
         dudeAsset = redhatAsset;
         dudeAssetJSON = redhatAssetJSON;
-        return;
+
+        break;
     
       case "jack":
         dudeAsset = jackAsset;
         dudeAssetJSON = jackAssetJSON;
-        return;
+
+        break;
 
       case "cat":
         dudeAsset = catAsset;
         dudeAssetJSON = catAssetJSON;
-        return;
+
+        break;
 
       case "dog":
         dudeAsset = dogAsset;
         dudeAssetJSON = dogAssetJSON;
-        return;
+
+        break;
 
       case "explorer":
         dudeAsset = explorerAsset;
         dudeAssetJSON = explorerAssetJSON;
-        return;
+
+        break;
 
       default:
         dudeAsset = santaAsset;
         dudeAssetJSON = santaAssetJSON;
+
         break;
     }
   }
