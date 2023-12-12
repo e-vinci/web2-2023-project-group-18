@@ -242,50 +242,7 @@ interpolate(vFrom, vTo, delta) {
           // reuse the mountain
           this.sliceStart = this.createSlope(item, this.sliceStart)
       }
-
-
-
-      // Collect coin
-      this.matter.world.on("collisionstart", (event, bodyA, bodyB) => {
-
-        if (bodyA.label === COIN_KEY && bodyA.gameObject) {
-            bodyA.gameObject.destroy();
-            this.scorePauseScene.coinLabel.add(gameOptions.amountCoin);
-        }
-        else if (bodyB.label === COIN_KEY && bodyB.gameObject) {
-            bodyB.gameObject.destroy();
-            this.scorePauseScene.coinLabel.add(gameOptions.amountCoin);
-        }
-
-
-    }, this);
-
-    // Collect coin
-    this.matter.world.on('collisionactive', (event, bodyA, bodyB) => {
-      
-        if (bodyA.label === COIN_KEY && bodyA.gameObject) {
-          bodyA.gameObject.destroy();
-          this.scorePauseScene.coinLabel.add(gameOptions.amountCoin);
-      }
-      else if (bodyB.label === COIN_KEY && bodyB.gameObject) {
-          bodyB.gameObject.destroy();
-          this.scorePauseScene.coinLabel.add(gameOptions.amountCoin);
-      }
     });
-    this.matter.world.on('collisionend', (event, bodyA, bodyB) => {
-      if (bodyA.label === COIN_KEY && bodyA.gameObject) {
-        bodyA.gameObject.destroy();
-        this.scorePauseScene.coinLabel.add(gameOptions.amountCoin);
-    }
-    else if (bodyB.label === COIN_KEY && bodyB.gameObject) {
-        bodyB.gameObject.destroy();
-        this.scorePauseScene.coinLabel.add(gameOptions.amountCoin);
-    }
-    });
-    
-    
-
-  });
 
      // get all bodies
      const {bodies} = this.matter.world.localWorld;
@@ -298,7 +255,12 @@ interpolate(vFrom, vTo, delta) {
              this.bodyPool.push(body);
              this.bodyPoolId.push(body.id);
          }
-     })
+     });
+
+    // Collect coin
+    this.matter.world.on("collisionstart", (event, bodyA, bodyB) => this.collectCoin(bodyA, bodyB) , this);
+    this.matter.world.on("collisionactive", (event, bodyA, bodyB) => this.collectCoin(bodyA, bodyB) , this);
+    this.matter.world.on("collisionend", (event, bodyA, bodyB) => this.collectCoin(bodyA, bodyB) , this);
   }
 
   createDudeAnimations() {
@@ -405,6 +367,7 @@ interpolate(vFrom, vTo, delta) {
 
   addCoin(x, y) {
     const coin = this.matter.add.image(x, y, COIN_KEY, null);
+    // Set hit box bigger
     // const coinRadius = 30;
     // coin.setCircle(coinRadius, {
     //   isSensor: true,
@@ -417,6 +380,19 @@ interpolate(vFrom, vTo, delta) {
 
 
     this.coins.push(coin);
+  }
+
+  collectCoin(a, b) {
+
+    if (a.label === COIN_KEY && a.gameObject !== null && a.gameObject !== undefined) {
+      a.gameObject.destroy();
+      this.scorePauseScene.coinLabel.add(gameOptions.amountCoin);
+    }
+
+    if (b.label === COIN_KEY && b.gameObject !== null && b.gameObject !== undefined) {
+        b.gameObject.destroy();
+        this.scorePauseScene.coinLabel.add(gameOptions.amountCoin);
+    }
   }
 
 
