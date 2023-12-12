@@ -8,7 +8,9 @@ import GameOverScene from '../Game/GameOverScene';
 let game;
 
 const GamePage = () => {
-  const phaserGame = `
+
+
+const phaserGame = `
 <div id="gameDiv" class="d-flex justify-content-center"> </div>`;
 
   const main = document.querySelector('main');
@@ -31,7 +33,7 @@ const GamePage = () => {
       },
     },
 
-    scene: [StartMenuScene,GameScene, PauseSceneMenu, GameOverScene],
+    scene: [StartMenuScene,GameScene,GameOverScene,PauseSceneMenu],
 
     //  parent DOM element into which the canvas created by the renderer will be injected.
     parent: 'gameDiv',
