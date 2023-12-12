@@ -1,6 +1,9 @@
 import anime from 'animejs/lib/anime.es';
 import Navigate from '../Router/Navigate';
-import templateSkinImage from '../../assets/templateSkinShopPage.png';
+
+import santaImage from '../../assets/santaSkin.png';
+import redhatImage from '../../assets/redhat.png';
+
 import templateMapImage from '../../assets/templateMapShopPage.png';
 
 let coins = 0;
@@ -151,7 +154,7 @@ function displayCurrentSkinPage() {
             skinHTML += `
                 <div class="col-md-4 text-center">
                     <h3>${skin.name_skin.charAt(0).toUpperCase() + skin.name_skin.slice(1)}</h3>
-                    <img class="w-100 shop-picture" src="${templateSkinImage}" alt="skin picture ${skin.name_skin}" draggable="false">
+                    <img class="w-100 shop-picture" src="${getSkinImage(skin.name_skin)}" alt="skin picture ${skin.name_skin}" draggable="false">
                     ${typeButton}
                 </div>`;
         }
@@ -346,6 +349,17 @@ function backButtonListenner() {
     backElement.addEventListener('click', () =>{
         Navigate('/');
     })
+}
+
+function getSkinImage(name) {
+    switch (name) {
+
+        case "red hat":
+            return redhatImage;
+
+        default:
+            return santaImage;
+    }
 }
 
 // Fetch data from API
