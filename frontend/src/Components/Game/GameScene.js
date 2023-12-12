@@ -25,6 +25,7 @@ const gameOptions = {
   terrainSpeed: 200,
   // rocks ratio, in %
   pineRatio: 5,
+  coinRatio: 4,
   amountCoin: 10
 };
 
@@ -186,7 +187,7 @@ class GameScene extends Phaser.Scene {
             }
 
         // random coin
-        if(Phaser.Math.Between(0, 100) < 80 && (sliceStart.x > 0 || i !== 1)){
+        if(Phaser.Math.Between(0, 100) < (gameOptions.coinRatio *10) && i > 20){
           const x = center.x + sliceStart.x + Phaser.Math.Between(20, 50);
           const y = center.y + sliceStart.y + (-50);
           this.addCoin(x, y);
@@ -455,9 +456,8 @@ interpolate(vFrom, vTo, delta) {
     }
 
     createCoinLabel(x, y) {
-      const coin = 100; // await this.getDBCoinValue();
       const style = { fontSize: '32px', fill: '#ffffff', fontFamily: 'Arial, sans-serif' };
-      const label = new CoinLabel(this, x, y, coin, style);
+      const label = new CoinLabel(this, x, y, 0, style);
       return label;
     }
 
