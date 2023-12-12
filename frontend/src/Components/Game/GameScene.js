@@ -83,7 +83,6 @@ class GameScene extends Phaser.Scene {
 
     this.cameras.main.startFollow(this.santa);
 
-
     this.key = this.input.keyboard.addKey(localStorage.getItem('selectedKey'));
 }
 
@@ -154,11 +153,11 @@ class GameScene extends Phaser.Scene {
             if(this.bodyPool.length === 0){
 
                 // create a new rectangle body
-                this.matter.add.rectangle(center.x + sliceStart.x, center.y, distance, 10, {
+                this.matter.add.rectangle(center.x + sliceStart.x, center.y, distance,10, {
                     isStatic: true,
                     angle: angle1,
                     friction: 1,
-                    restitution: 0
+                    restitution: 0,
                 });
             }
 
@@ -179,23 +178,24 @@ class GameScene extends Phaser.Scene {
                 this.matter.body.scale(body, 1 / length, 1);
                 this.matter.body.scale(body, distance, 1);
                 this.matter.body.setAngle(body, angle1);
+
             }
 
             if(Phaser.Math.Between(0, 100) < gameOptions.pineRatio && (sliceStart.x > 0 || i !== 1)){
 
               // random rock position
-              const size = 10;
-              const pineSaplingX = center.x + sliceStart.x + Phaser.Math.Between(20, 50);
-              const pineSaplingY = center.y + sliceStart.y;
+              const size = 5;
+              const pineSaplingX = center.x + sliceStart.x + Phaser.Math.Between(10,20);
+              const pineSaplingY = center.y + sliceStart.y - 32;
 
             // draw the pineSapling
-            graphics.fillRect(pineSaplingX - sliceStart.x, pineSaplingY, size, size);
+            graphics.fillRect(center.x,center.y,size,size);
 
             // if the pool is empty...
             if(this.pinesPool.length === 0){
 
                 // create a new pineSapling body
-                const pineSaplingBody = this.matter.add.image(pineSaplingX, pineSaplingY, 'pineSapling', null, {
+                const pineSaplingBody = this.matter.add.image(pineSaplingX, pineSaplingY, 'pineSapling',null, {
                     isStatic: true,
                     friction: 1,
                     restitution: 0,
@@ -206,6 +206,7 @@ class GameScene extends Phaser.Scene {
 
                 // assign inPool property to check if the body is in the pool
                 pineSaplingBody.inPool = false;
+
             }
             else{
 
@@ -213,17 +214,16 @@ class GameScene extends Phaser.Scene {
                 const pineSaplingBody = this.pinesPool.shift();
 
                 // move the pineSapling body to its new position
-                pineSaplingBody.setOnCollide({
+                pineSaplingBody.setPosition({
                   x: pineSaplingX,
                   y: pineSaplingY
                 });
+
                 pineSaplingBody.inPool = false;
             }
 
         }
     }
-
-
     // eslint-disable-next-line no-param-reassign
     graphics.width = (currentPoint - 1) * -1;
     return new Phaser.Math.Vector2(graphics.x + currentPoint - 1, slopeStartHeight);
