@@ -3,17 +3,35 @@
 
 Jeu 2D dans le quelle un père  Noël descente une montagne et doit éviter des obstacles sur son chemin.Le jeu sera simple à jouer, une action possible sauter. Tout le long de la descente le père Noël pourra collectera des pièces et ensuite pourra acheter des "skins".Le but principal sera d'être le joueur à aller le plus loin (tableau de score) dans le jeux (compteur de mètres).
 
-# Installation && Démarage
+
+# Host
+
+Frontend: https://e-vinci.github.io/web2-2023-project-group-18/   
+
+API: https://santafall.azurewebsites.net/
+
+# Installation
 
 ### Installer NodeJs
 - [NodeJS](https://nodejs.org/en)
-### Installer les node moduels 
-#### API
+
+
+### API
+| Installation des node modules
 ```bash
 cd api
 npm i
 ```
-##### Secret et information de donnection base de donnée
+
+| Base de donnée
+Il vous faudra un  base de donnée PostgreSQL
+
+[Elephantsql](https://www.elephantsql.com/) prorposer un hébergement gratuit nommé "Tiny Turtle"
+
+OU 
+Crée votre base de donnée localement [Télécharger](https://www.postgresql.org/download/)
+
+| Secret et information de connection base de donnée
 ```bash
 touch .env
 nano .env
@@ -32,7 +50,7 @@ JWT_SECRET="VOTRE_SECRET"
 ```bash
 npm run start
 ```
-#### Frontend
+### Frontend
 ```bash
 cd frontend
 npm i
@@ -43,22 +61,15 @@ npm run start
 
 
 ## API 
-
-#### Route Scores
-
-| URI       | Méthode HTTP  | Opération                                         |
-| :-------- | :------------ | :------------------------------------------------ |
-| `scores/` | `GET`         |  Récupérer tous les scores de tous les utilisateurs |
-| `scores/:id` | `PUT`         |  Mettre à jour ou créé un score pour le joueur (**token obligatoire**) |
-
-#### Route Auths
+La table des route de notre api ce trouve dans le rapport 
 
 
-| URI       | Méthode HTTP  | Opération                                         |
-| :-------- | :------------ | :------------------------------------------------ |
-| `auths/register/` | `POST` | Cree un compte utilisateur doit fournir username, mdp renovie un token  |
-| `auths/login/` | `POST` | Se connecter en utilisateur revoie un token de connexion |
+## Credits
 
+[front-end/boilerplate](https://github.com/e-vinci/js-phaser-boilerplate)
+[API/boilerplate](https://github.com/e-vinci/jwt-api-boilerplate)
+
+// TODO ADD asset link
 
 
 ## Authors
