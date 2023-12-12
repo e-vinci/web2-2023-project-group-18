@@ -5,9 +5,9 @@ import Navigate from '../Router/Navigate';
 const LoginPage = () => {
 
   if (localStorage.getItem('token') != null) {  
-  Navigate('/');
-  return;
-}
+    Navigate('/');
+    return;
+  }
   
   const main = document.querySelector('main');
   main.innerHTML = `

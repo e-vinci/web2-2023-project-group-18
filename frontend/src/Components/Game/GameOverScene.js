@@ -16,10 +16,14 @@ class GameOverScene extends Phaser.Scene {
     this.cartShopButton = undefined;
     this.settingsButton = undefined;
     this.scoreTxt = undefined;
-    this.score = 0;
+    this.score = undefined;
   }
 
-  
+  // eslint-disable-next-line class-methods-use-this
+  init(data) {
+    this.score = data.score
+    console.log(data.score);
+  }
 
   preload() {
     this.load.image(REPLAY_BUTTON, replayButton);

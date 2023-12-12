@@ -307,7 +307,6 @@ interpolate(vFrom, vTo, delta){
         this.scorePauseScene.meterLabel.timeElapsed,
       )}`,
     );
-    localStorage.setItem('score', this.formatDistance(this.meterLabel));
 
     if (localStorage.getItem('token')) {
       this.updateScore(this.scorePauseScene.meterLabel.timeElapsed);
@@ -318,7 +317,7 @@ interpolate(vFrom, vTo, delta){
 
     this.scene.stop('pause-score');
     this.scene.stop('game-scene');
-    this.scene.run('game-over');
+    this.scene.run('game-over', { score: this.scorePauseScene.meterLabel.timeElapsed });
   }
 
   // eslint-disable-next-line class-methods-use-this
