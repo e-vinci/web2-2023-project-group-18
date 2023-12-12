@@ -64,6 +64,13 @@ npm run start
 La table des route de notre api ce trouve dans le rapport 
 
 
+## Credits
+
+[front-end/boilerplate](https://github.com/e-vinci/js-phaser-boilerplate)
+[API/boilerplate](https://github.com/e-vinci/jwt-api-boilerplate)
+
+// TODO ADD asset link
+
 
 ## Authors
 
