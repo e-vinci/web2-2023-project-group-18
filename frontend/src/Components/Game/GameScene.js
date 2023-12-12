@@ -47,6 +47,7 @@ class GameScene extends Phaser.Scene {
   }
 
   init() {
+
     this.cursors = this.input.keyboard.createCursorKeys();
     // eslint-disable-next-line no-use-before-define
     this.scorePauseScene = this.scene.add('pause-score', ScorePauseScene, true);
@@ -184,44 +185,12 @@ class GameScene extends Phaser.Scene {
                 this.matter.body.setAngle(body, angle1);
             }
 
-        if(Phaser.Math.Between(0, 100) < 10 && (sliceStart.x > 0 || i !== 1)){
-
-
+        // random coin
+        if(Phaser.Math.Between(0, 100) < 80 && (sliceStart.x > 0 || i !== 1)){
           const x = center.x + sliceStart.x + Phaser.Math.Between(20, 50);
-          const y = center.y + sliceStart.y + (-40);
+          const y = center.y + sliceStart.y + (-50);
           this.addCoin(x, y);
-
-        // // if the pool is empty...
-        // if(this.pinesPool.length === 0){
-
-        //     // create a new pineSapling body
-        //     const pineSaplingBody = this.matter.add.image(pineSaplingX, pineSaplingY, 'pineSapling', null, {
-        //         isStatic: true,
-        //         friction: 1,
-        //         restitution: 0,
-        //         collisionFilter: {
-        //             category: 2
-        //         },
-        //     });
-
-        //     // assign inPool property to check if the body is in the pool
-        //     pineSaplingBody.inPool = false;
-        // }
-        // else{
-
-        //     // get the rock from the pool
-        //     const pineSaplingBody = this.pinesPool.shift();
-
-        //     // move the pineSapling body to its new position
-        //     pineSaplingBody.setOnCollide({
-        //       x,
-        //       y
-        //     });
-        //     pineSaplingBody.inPool = false;
-        // }
-
-    
-    }
+        }
   }
 
     // eslint-disable-next-line no-param-reassign
@@ -276,15 +245,14 @@ interpolate(vFrom, vTo, delta) {
 
 
 
-
+      // Collect coin
       this.matter.world.on("collisionstart", (event, bodyA, bodyB) => {
+
         if (bodyA.label === COIN_KEY && bodyA.gameObject) {
-          console.log('test');
             bodyA.gameObject.destroy();
             this.scorePauseScene.coinLabel.add(gameOptions.amountCoin);
         }
         else if (bodyB.label === COIN_KEY && bodyB.gameObject) {
-          console.log('test2');
             bodyB.gameObject.destroy();
             this.scorePauseScene.coinLabel.add(gameOptions.amountCoin);
         }
@@ -292,17 +260,30 @@ interpolate(vFrom, vTo, delta) {
 
     }, this);
 
-    this.matter.world.on("overlap", (event, bodyA, bodyB) => {
-      if (bodyA.label === COIN_KEY && bodyA.gameObject) {
+    // Collect coin
+    this.matter.world.on('collisionactive', (event, bodyA, bodyB) => {
+      
+        if (bodyA.label === COIN_KEY && bodyA.gameObject) {
           bodyA.gameObject.destroy();
-          this.scorePauseScene.coinLabel.add(1);
+          this.scorePauseScene.coinLabel.add(gameOptions.amountCoin);
       }
-  
-      if (bodyB.label === COIN_KEY && bodyB.gameObject) {
+      else if (bodyB.label === COIN_KEY && bodyB.gameObject) {
           bodyB.gameObject.destroy();
-          this.scorePauseScene.coinLabel.add(1);
+          this.scorePauseScene.coinLabel.add(gameOptions.amountCoin);
       }
-  }, this);
+    });
+    this.matter.world.on('collisionend', (event, bodyA, bodyB) => {
+      if (bodyA.label === COIN_KEY && bodyA.gameObject) {
+        bodyA.gameObject.destroy();
+        this.scorePauseScene.coinLabel.add(gameOptions.amountCoin);
+    }
+    else if (bodyB.label === COIN_KEY && bodyB.gameObject) {
+        bodyB.gameObject.destroy();
+        this.scorePauseScene.coinLabel.add(gameOptions.amountCoin);
+    }
+    });
+    
+    
 
   });
 
@@ -420,15 +401,20 @@ interpolate(vFrom, vTo, delta) {
     }
   }
 
+
+
   addCoin(x, y) {
-    const coin = this.matter.add.image(x, y, COIN_KEY, null, {
-      isStatic: true,
-      
-    });
+    const coin = this.matter.add.image(x, y, COIN_KEY, null);
+    // const coinRadius = 30;
+    // coin.setCircle(coinRadius, {
+    //   isSensor: true,
+    //   label: COIN_KEY,
+    // });
     coin.setCircle();
     coin.setStatic(true);
     coin.body.isSensor = true;
     coin.body.label = COIN_KEY;
+
 
     this.coins.push(coin);
   }
@@ -499,23 +485,6 @@ interpolate(vFrom, vTo, delta) {
       return label;
     }
 
-
-
-  // eslint-disable-next-line class-methods-use-this
-  async getDBCoinValue() {
-    const token = localStorage.getItem('token');
-    const options = {
-      method: 'GET',
-      headers: {
-        Authorization: token,
-        'Content-Type': 'application/json',
-      },
-    };
-
-    const response = await fetch(`${process.env.API_BASE_URL}/collectibles/`, options);
-    const data = await response;
-    return data.coin;
-  }
 
   async updateDBCoins() {
     const coin = this.coinLabel.getCoin();
