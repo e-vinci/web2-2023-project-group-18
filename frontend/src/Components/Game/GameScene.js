@@ -23,8 +23,8 @@ const gameOptions = {
   slicesAmount: 3,
   slopesPerSlice: 5,
   terrainSpeed: 200,
-  // rocks ratio, in %
-  pineRatio: 5
+  // pine ratio, in %
+  pineRatio: 3
 };
 
 
@@ -181,11 +181,11 @@ class GameScene extends Phaser.Scene {
 
             }
 
-            if(Phaser.Math.Between(0, 100) < gameOptions.pineRatio && (sliceStart.x > 0 || i !== 1)){
+            if(Phaser.Math.Between(0,100) < gameOptions.pineRatio && (sliceStart.x > 0 || i !== 1)){
 
               // random rock position
               const size = 5;
-              const pineSaplingX = center.x + sliceStart.x + Phaser.Math.Between(10,20);
+              const pineSaplingX = center.x +  sliceStart.x + Phaser.Math.Between(0, 30);
               const pineSaplingY = center.y + sliceStart.y - 32;
 
             // draw the pineSapling
@@ -203,7 +203,6 @@ class GameScene extends Phaser.Scene {
                         category: 2
                     },
                 });
-
                 // assign inPool property to check if the body is in the pool
                 pineSaplingBody.inPool = false;
 
@@ -253,7 +252,7 @@ interpolate(vFrom, vTo, delta){
 
     if (this.isTouchingGround && spaceJustPressed) {
       this.santa.play('player-jump', true);
-      this.santa.setVelocityY(-10);
+      this.santa.setVelocityY(-15);
       this.santa.setVelocityX(2);
       this.isTouchingGround = false;
     }
