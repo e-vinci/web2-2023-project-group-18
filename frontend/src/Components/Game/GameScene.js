@@ -1,5 +1,6 @@
 // eslint-disable-next-line max-classes-per-file
 import Phaser from 'phaser';
+// eslint-disable-next-line import/no-extraneous-dependencies
 import simplify from 'simplify-js';
 import dudeAsset from '../../assets/santa.png'
 import CoinLabel from './CoinLabel';
