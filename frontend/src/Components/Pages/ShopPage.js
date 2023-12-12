@@ -153,7 +153,7 @@ function displayCurrentSkinPage() {
 
             skinHTML += `
                 <div class="col-md-4 text-center">
-                    <h3>${skin.name_skin.charAt(0).toUpperCase() + skin.name_skin.slice(1)}</h3>
+                    <h3>${skin.label_skin}</h3>
                     <img class="w-100 shop-picture" src="${getSkinImage(skin.name_skin)}" alt="skin picture ${skin.name_skin}" draggable="false">
                     ${typeButton}
                 </div>`;
@@ -198,7 +198,7 @@ function displayCurrentThemePage() {
 
             themeHTML += `
                 <div class="col-md-4 text-center">
-                    <h3>${theme.name_theme.charAt(0).toUpperCase() + theme.name_theme.slice(1)}</h3>
+                    <h3>${theme.label_theme}</h3>
                     <img class="w-100 shop-picture" src="${templateMapImage}" alt="theme picture ${theme.name_theme}">
                     ${typeButton}
                 </div>`;
@@ -354,7 +354,7 @@ function backButtonListenner() {
 function getSkinImage(name) {
     switch (name) {
 
-        case "red hat":
+        case "redhat":
             return redhatImage;
 
         default:

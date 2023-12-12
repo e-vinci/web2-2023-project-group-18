@@ -391,7 +391,7 @@ function changeSkin() {
   if (skinName) {
     switch (skinName) {
 
-      case "red hat":
+      case "redhat":
         dudeAsset = redhatboyAsset;
         dudeAssetJSON = redhatboyAssetJSON;
         return;
