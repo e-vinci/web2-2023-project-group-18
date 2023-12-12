@@ -26,13 +26,12 @@ const GamePage = () => {
     },
     physics: {
       default: 'matter',
-      arcade: {
-        gravity: { y: 500 },
-        debug: false,
+      matter: {
+        debug: true,
       },
     },
 
-    scene: [StartMenuScene,GameScene, PauseSceneMenu, GameOverScene],
+    scene: [StartMenuScene,GameScene,GameOverScene,PauseSceneMenu],
 
     //  parent DOM element into which the canvas created by the renderer will be injected.
     parent: 'gameDiv',

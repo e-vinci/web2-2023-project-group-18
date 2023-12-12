@@ -25,13 +25,14 @@
     "express": "^4.18.2",
     "jsonwebtoken": "^9.0.2",
     "morgan": "~1.9.1",
-    "pg": "^8.11.3"
+    "pg": "^8.11.3",
+    "simplify-js": "^1.2.4"
   },
   "devDependencies": {
     "eslint": "^8.19.0",
     "eslint-config-airbnb-base": "^15.0.0",
     "nodemon": "^3.0.1",
-    "prettier-airbnb-config": "^1.0.0"  
+    "prettier-airbnb-config": "^1.0.0"
   },
   "author": "e-Baron"
 }

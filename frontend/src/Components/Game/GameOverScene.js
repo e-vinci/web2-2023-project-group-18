@@ -75,7 +75,7 @@ class GameOverScene extends Phaser.Scene {
     });
 
     this.settingsButton = this.add.image(
-      this.scale.width / 2 + 700,
+      this.scale.width -75,
       this.scale.height - 40,
       SETTINGS_ASSET,
     );
@@ -121,7 +121,7 @@ class GameOverScene extends Phaser.Scene {
   }
 
   replayGame() {
-       this.scene.remove('pause-menu');
+       this.scene.resume('pause-menu');
        this.scene.remove('pause-score');
        this.scene.start('game-scene');
   }
