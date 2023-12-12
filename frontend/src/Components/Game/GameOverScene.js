@@ -19,6 +19,8 @@ class GameOverScene extends Phaser.Scene {
     this.score = 0;
   }
 
+  
+
   preload() {
     this.load.image(REPLAY_BUTTON, replayButton);
     this.load.image(SHOP_BUTTON, cartShopButton);

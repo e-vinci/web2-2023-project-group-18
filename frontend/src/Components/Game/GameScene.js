@@ -39,6 +39,7 @@ class GameScene extends Phaser.Scene {
     this.gameOver = false;
     this.obstacles = undefined;
     this.scorePauseScene = undefined;
+    this.a = undefined;
   }
 
   init() {
@@ -75,10 +76,14 @@ class GameScene extends Phaser.Scene {
     });
 
     this.cameras.main.startFollow(this.santa);
-
+    this.matter.world.setGravity(0, 1); // Apply gravity to the world
 
     this.key = this.input.keyboard.addKey(localStorage.getItem('selectedKey'));
 
+        this.a = 1;
+        setInterval(() => {
+          this.a += Math.log(2) /1000;
+        }, 2000);
   }
 
   createSlope(graphics, sliceStart){
@@ -190,7 +195,7 @@ interpolate(vFrom, vTo, delta){
   update() {
     const santa1 = this.santa;
 
-    santa1.x += 2;
+    santa1.x += this.a;
     santa1.play('player-slide', true);
     const spaceJustPressed = Phaser.Input.Keyboard.JustDown(this.cursors.space);
 
