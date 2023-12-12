@@ -462,24 +462,6 @@ interpolate(vFrom, vTo, delta) {
     }
 
 
-  async updateDBCoins() {
-    const coin = this.coinLabel.getCoin();
-    // eslint-disable-next-line no-console
-    console.log(`you have ${coin}`);
-    // const token = localStorage.getItem('token');
-    // const options = {
-    //   method: 'PUT',
-    //   body: JSON.stringify({
-    //     coin,
-    //   }),
-    //   headers: {
-    //     Authorization: token,
-    //     'Content-Type': 'application/json',
-    //   },
-    // };
-    // await fetch(`${process.env.API_BASE_URL}/collectibles/`, options);
-  }
-
   }
 export default GameScene;
 
