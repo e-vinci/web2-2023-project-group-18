@@ -1,5 +1,6 @@
 // eslint-disable-next-line max-classes-per-file
 import Phaser from 'phaser';
+// eslint-disable-next-line import/no-extraneous-dependencies
 import simplify from 'simplify-js';
 import dudeAsset from '../../assets/santa.png'
 import CoinLabel from './CoinLabel';
@@ -9,6 +10,7 @@ import pauseButton from '../../assets/pauseButton.png';
 import Settings from '../../utils/settings';
 import MeterLabel from './MeterLabel';
 import dudeAssetJSON from '../../assets/santa.json';
+import pineSapling from '../../assets/winterTiles/pineSapling.png'
 
 const COIN_KEY = 'coin';
 const HUD_COIN_KEY = 'hudcoin';
@@ -21,11 +23,15 @@ const gameOptions = {
   slicesAmount: 3,
   slopesPerSlice: 5,
   terrainSpeed: 200,
+  // rocks ratio, in %
+  pineRatio: 5
 };
 
 
 class GameScene extends Phaser.Scene {
   santa = Phaser.Physics.Matter.Sprite;
+
+  pineSapling = Phaser.Physics.Matter.Sprite;
 
   constructor() {
     super('game-scene');
@@ -36,7 +42,6 @@ class GameScene extends Phaser.Scene {
     this.coinLabel = undefined;
     this.coins = undefined;
     this.gameOver = false;
-    this.obstacles = undefined;
     this.scorePauseScene = undefined;
   }
 
@@ -48,10 +53,13 @@ class GameScene extends Phaser.Scene {
 
   preload() {
     this.load.atlas('santa', dudeAsset, dudeAssetJSON);
+    this.load.image('pineSapling', pineSapling);
   }
 
   create() {
     this.createDudeAnimations();
+
+    this.pinesPool = [];
 
      // Generating Ground and its Collision
      this.bodyPool = [];
@@ -77,8 +85,7 @@ class GameScene extends Phaser.Scene {
 
 
     this.key = this.input.keyboard.addKey(localStorage.getItem('selectedKey'));
-
-  }
+}
 
   createSlope(graphics, sliceStart){
     const slopePoints = [];
@@ -132,6 +139,8 @@ class GameScene extends Phaser.Scene {
   });
     graphics.strokePath();
 
+    let prevPineSaplingX = 0;
+
 // loop through all simpleSlope points starting from the second
         for(let i = 1; i < simpleSlope.length; i+=1){
             // define a line between previous and current simpleSlope points
@@ -173,6 +182,53 @@ class GameScene extends Phaser.Scene {
                 this.matter.body.scale(body, distance, 1);
                 this.matter.body.setAngle(body, angle1);
             }
+
+            if(Phaser.Math.Between(0, 100) < gameOptions.pineRatio && (sliceStart.x > 0 || i !== 1)){
+
+              // random rock position
+              const size = 10;
+              const pineSaplingX = center.x + sliceStart.x + Phaser.Math.Between(20, 50);
+              const minDistance = 10;
+        if (Math.abs(pineSaplingX - prevPineSaplingX) >= minDistance) {
+
+            const pineSaplingY = center.y + sliceStart.y;
+
+            // draw the pineSapling
+            graphics.fillRect(pineSaplingX - sliceStart.x, pineSaplingY, size, size);
+
+            // if the pool is empty...
+            if(this.pinesPool.length === 0){
+
+                // create a new pineSapling body
+                const pineSaplingBody = this.matter.add.image(pineSaplingX, pineSaplingY, 'pineSapling', null, {
+                    isStatic: true,
+                    friction: 1,
+                    restitution: 0,
+                    collisionFilter: {
+                        category: 2
+                    },
+                });
+
+                // assign inPool property to check if the body is in the pool
+                pineSaplingBody.inPool = false;
+            }
+            else{
+
+                // get the rock from the pool
+                const pineSaplingBody = this.pinesPool.shift();
+
+                // move the pineSapling body to its new position
+                pineSaplingBody.setOnCollide({
+                  x: pineSaplingX,
+                  y: pineSaplingY
+                });
+                pineSaplingBody.inPool = false;
+            }
+
+            // Update the x-coordinate of the previous pineSapling
+            prevPineSaplingX = pineSaplingX;
+        }
+          }
         }
 
     // eslint-disable-next-line no-param-reassign
@@ -204,7 +260,7 @@ interpolate(vFrom, vTo, delta){
 
     if (this.isTouchingGround && spaceJustPressed) {
       this.santa.play('player-jump', true);
-      this.santa.setVelocityY(-15);
+      this.santa.setVelocityY(-10);
       this.santa.setVelocityX(2);
       this.isTouchingGround = false;
     }
