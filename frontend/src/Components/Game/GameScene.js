@@ -139,8 +139,6 @@ class GameScene extends Phaser.Scene {
   });
     graphics.strokePath();
 
-    let prevPineSaplingX = 0;
-
 // loop through all simpleSlope points starting from the second
         for(let i = 1; i < simpleSlope.length; i+=1){
             // define a line between previous and current simpleSlope points
@@ -188,10 +186,7 @@ class GameScene extends Phaser.Scene {
               // random rock position
               const size = 10;
               const pineSaplingX = center.x + sliceStart.x + Phaser.Math.Between(20, 50);
-              const minDistance = 10;
-        if (Math.abs(pineSaplingX - prevPineSaplingX) >= minDistance) {
-
-            const pineSaplingY = center.y + sliceStart.y;
+              const pineSaplingY = center.y + sliceStart.y;
 
             // draw the pineSapling
             graphics.fillRect(pineSaplingX - sliceStart.x, pineSaplingY, size, size);
@@ -225,11 +220,9 @@ class GameScene extends Phaser.Scene {
                 pineSaplingBody.inPool = false;
             }
 
-            // Update the x-coordinate of the previous pineSapling
-            prevPineSaplingX = pineSaplingX;
         }
-          }
-        }
+    }
+
 
     // eslint-disable-next-line no-param-reassign
     graphics.width = (currentPoint - 1) * -1;
