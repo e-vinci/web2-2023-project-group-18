@@ -1,17 +1,19 @@
 // eslint-disable-next-line max-classes-per-file
 import Phaser from 'phaser';
 
-import santaAsset from '../../assets/santa.png';
-import redhatAsset from '../../assets/redhat.png';
-import jackAsset from '../../assets/jack.png';
-import catAsset from '../../assets/cat.png';
-import dogAsset from '../../assets/dog.png';
+import santaAsset from '../../assets/skins/santa.png';
+import redhatAsset from '../../assets/skins/redhat.png';
+import jackAsset from '../../assets/skins/jack.png';
+import catAsset from '../../assets/skins/cat.png';
+import dogAsset from '../../assets/skins/dog.png';
+import explorerAsset from '../../assets/skins/explorer.png';
 
-import santaAssetJSON from '../../assets/santa.json';
-import redhatAssetJSON from '../../assets/redhat.json';
-import jackAssetJSON from '../../assets/jack.json';
-import catAssetJSON from '../../assets/cat.json';
-import dogAssetJSON from '../../assets/dog.json';
+import santaAssetJSON from '../../assets/skins/santa.json';
+import redhatAssetJSON from '../../assets/skins/redhat.json';
+import jackAssetJSON from '../../assets/skins/jack.json';
+import catAssetJSON from '../../assets/skins/cat.json';
+import dogAssetJSON from '../../assets/skins/dog.json';
+import explorerAssetJSON from '../../assets/skins/explorer.json';
 
 import CoinLabel from './CoinLabel';
 import coinAsset from '../../assets/coin.png';
@@ -152,9 +154,9 @@ class GameScene extends Phaser.Scene {
         (tile) => tile.properties && tile.properties.obstacles,
       );
 
-      // Check if the penguin and its body are defined
+      // Check if santa and its body are defined
       if (santa1.body) {
-        // Check if the penguin overlaps with any obstacle tiles
+        // Check if santa overlaps with any obstacle tiles
         const overlappingTiles = obstacleTiles.filter((tile) => {
           const tileBounds = tile.getBounds();
           return (
@@ -174,7 +176,7 @@ class GameScene extends Phaser.Scene {
   createDudeAnimations() {
     this.anims.create({
       key: 'player-idle',
-      frames: [{ key: 'santa', frame: 'Idle (1).png' }],
+      frames: [{ key: 'santa', frame: 'idle_1.png' }],
     });
 
     // run animation
@@ -184,8 +186,8 @@ class GameScene extends Phaser.Scene {
       frames: this.anims.generateFrameNames('santa', {
         start: 1,
         end: 4,
-        prefix: 'Run (',
-        suffix: ').png',
+        prefix: 'run_',
+        suffix: '.png',
       }),
       repeat: -1,
     });
@@ -198,8 +200,8 @@ class GameScene extends Phaser.Scene {
       frames: this.anims.generateFrameNames('santa', {
         start: 1,
         end: 5,
-        prefix: 'Slide (',
-        suffix: ').png',
+        prefix: 'slide_',
+        suffix: '.png',
       }),
       repeat: -1,
     });
@@ -212,8 +214,8 @@ class GameScene extends Phaser.Scene {
       frames: this.anims.generateFrameNames('santa', {
         start: 1,
         end: 8,
-        prefix: 'Jump (',
-        suffix: ').png',
+        prefix: 'jump_',
+        suffix: '.png',
       }),
       repeat: -1,
     });
@@ -416,6 +418,11 @@ function changeSkin() {
       case "dog":
         dudeAsset = dogAsset;
         dudeAssetJSON = dogAssetJSON;
+        return;
+
+      case "explorer":
+        dudeAsset = explorerAsset;
+        dudeAssetJSON = explorerAssetJSON;
         return;
 
       default:

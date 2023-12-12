@@ -1,7 +1,7 @@
 {"frames": [
 
 {
-	"filename": "Idle (1).png",
+	"filename": "idle_1.png",
 	"frame": {"x":172,"y":1,"w":30,"h":46},
 	"rotated": false,
 	"trimmed": true,
@@ -9,7 +9,7 @@
 	"sourceSize": {"w":72,"h":50}
 },
 {
-	"filename": "Jump (1).png",
+	"filename": "jump_1.png",
 	"frame": {"x":112,"y":109,"w":37,"h":55},
 	"rotated": false,
 	"trimmed": true,
@@ -17,7 +17,7 @@
 	"sourceSize": {"w":93,"h":64}
 },
 {
-	"filename": "Jump (2).png",
+	"filename": "jump_2.png",
 	"frame": {"x":190,"y":108,"w":36,"h":54},
 	"rotated": false,
 	"trimmed": true,
@@ -25,7 +25,7 @@
 	"sourceSize": {"w":93,"h":64}
 },
 {
-	"filename": "Jump (3).png",
+	"filename": "jump_3.png",
 	"frame": {"x":151,"y":109,"w":37,"h":54},
 	"rotated": false,
 	"trimmed": true,
@@ -33,7 +33,7 @@
 	"sourceSize": {"w":93,"h":64}
 },
 {
-	"filename": "Jump (4).png",
+	"filename": "jump_4.png",
 	"frame": {"x":142,"y":49,"w":37,"h":58},
 	"rotated": false,
 	"trimmed": true,
@@ -41,7 +41,7 @@
 	"sourceSize": {"w":93,"h":64}
 },
 {
-	"filename": "Jump (5).png",
+	"filename": "jump_5.png",
 	"frame": {"x":53,"y":49,"w":45,"h":58},
 	"rotated": false,
 	"trimmed": true,
@@ -49,7 +49,7 @@
 	"sourceSize": {"w":93,"h":64}
 },
 {
-	"filename": "Jump (6).png",
+	"filename": "jump_6.png",
 	"frame": {"x":1,"y":119,"w":49,"h":57},
 	"rotated": false,
 	"trimmed": true,
@@ -57,7 +57,7 @@
 	"sourceSize": {"w":93,"h":64}
 },
 {
-	"filename": "Jump (7).png",
+	"filename": "jump_7.png",
 	"frame": {"x":1,"y":1,"w":50,"h":57},
 	"rotated": false,
 	"trimmed": true,
@@ -65,7 +65,7 @@
 	"sourceSize": {"w":93,"h":64}
 },
 {
-	"filename": "Jump (8).png",
+	"filename": "jump_8.png",
 	"frame": {"x":1,"y":60,"w":50,"h":57},
 	"rotated": false,
 	"trimmed": true,
@@ -73,7 +73,7 @@
 	"sourceSize": {"w":93,"h":64}
 },
 {
-	"filename": "Run (1).png",
+	"filename": "run_1.png",
 	"frame": {"x":181,"y":49,"w":36,"h":57},
 	"rotated": false,
 	"trimmed": true,
@@ -81,7 +81,7 @@
 	"sourceSize": {"w":93,"h":64}
 },
 {
-	"filename": "Run (2).png",
+	"filename": "run_2.png",
 	"frame": {"x":122,"y":166,"w":36,"h":58},
 	"rotated": false,
 	"trimmed": true,
@@ -89,7 +89,7 @@
 	"sourceSize": {"w":93,"h":64}
 },
 {
-	"filename": "Run (3).png",
+	"filename": "run_3.png",
 	"frame": {"x":100,"y":49,"w":40,"h":58},
 	"rotated": false,
 	"trimmed": true,
@@ -97,7 +97,7 @@
 	"sourceSize": {"w":93,"h":64}
 },
 {
-	"filename": "Run (4).png",
+	"filename": "run_4.png",
 	"frame": {"x":160,"y":165,"w":36,"h":59},
 	"rotated": false,
 	"trimmed": true,
@@ -105,7 +105,7 @@
 	"sourceSize": {"w":93,"h":64}
 },
 {
-	"filename": "Slide (1).png",
+	"filename": "slide_1.png",
 	"frame": {"x":53,"y":1,"w":57,"h":46},
 	"rotated": false,
 	"trimmed": true,
@@ -113,7 +113,7 @@
 	"sourceSize": {"w":93,"h":64}
 },
 {
-	"filename": "Slide (2).png",
+	"filename": "slide_2.png",
 	"frame": {"x":52,"y":119,"w":58,"h":46},
 	"rotated": false,
 	"trimmed": true,
@@ -121,7 +121,7 @@
 	"sourceSize": {"w":93,"h":64}
 },
 {
-	"filename": "Slide (3).png",
+	"filename": "slide_3.png",
 	"frame": {"x":62,"y":167,"w":58,"h":46},
 	"rotated": false,
 	"trimmed": true,
@@ -129,7 +129,7 @@
 	"sourceSize": {"w":93,"h":64}
 },
 {
-	"filename": "Slide (4).png",
+	"filename": "slide_4.png",
 	"frame": {"x":112,"y":1,"w":58,"h":46},
 	"rotated": false,
 	"trimmed": true,
@@ -137,7 +137,7 @@
 	"sourceSize": {"w":93,"h":64}
 },
 {
-	"filename": "Slide (5).png",
+	"filename": "slide_5.png",
 	"frame": {"x":1,"y":178,"w":59,"h":46},
 	"rotated": false,
 	"trimmed": true,
