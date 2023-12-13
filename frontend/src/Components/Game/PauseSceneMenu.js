@@ -65,19 +65,17 @@ class PauseMenuScene extends Phaser.Scene {
 
                this.replayButton = this.add.image(this.scale.width / 2 + 100, 350, REPLAY_BUTTON);
                this.replayButton.setInteractive({ useHandCursor: true });
-      this.replayButton.on('pointerdown', () => {
+               this.replayButton.on('pointerdown', () => {
                  
                  this.replayGame();
                });
 
-               this.settingsButton = this.add.image(this.scale.width/2 + 700, this.scale.height - 40, SETTINGS_ASSET);
+               this.settingsButton = this.add.image(this.scale.width - 75, this.scale.height - 40, SETTINGS_ASSET);
                this.settingsButton.setInteractive({ useHandCursor: true});
                this.settingsButton.on('pointerdown', () => {
                 settings.openSettings();
                })
         
-               // Emit a custom event when creation is complete
-               this.events.emit('create-complete');
              }
 
     restartGame() {
@@ -94,7 +92,7 @@ class PauseMenuScene extends Phaser.Scene {
     }
 
     replayGame() {
-       this.scene.remove('game-over');
+       this.scene.resume('game-over');
        this.scene.remove('pause-score');
        this.scene.start('game-scene');
   }
