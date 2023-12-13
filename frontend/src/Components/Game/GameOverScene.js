@@ -21,8 +21,8 @@ class GameOverScene extends Phaser.Scene {
 
   // eslint-disable-next-line class-methods-use-this
   init(data) {
-    console.log(data.someData);
-    this.score = data.someData
+    this.score = data.score
+    console.log(data.score);
   }
 
   preload() {

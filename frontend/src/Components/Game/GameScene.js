@@ -47,6 +47,7 @@ class GameScene extends Phaser.Scene {
     this.ground = undefined;
     this.obstacles = undefined;
     this.scorePauseScene = undefined;
+    this.a = undefined;
   }
 
   init() {
@@ -95,21 +96,26 @@ class GameScene extends Phaser.Scene {
 
     // this.physics.add.overlap(this.santa, this.coins, this.collectCoin, null, this);
 
-    this.matter.world.convertTilemapLayer(this.ground);
+    this.matter.world.convertTilemapLayer(this.ground); this.matter.world.setGravity(0, 1); // Apply gravity to the world
 
     this.key = this.input.keyboard.addKey(localStorage.getItem('selectedKey'));
 
+    this.a = 1;
+    setInterval(() => {
+      this.a += Math.log(2) / 1000;
+    }, 2000);
     this.scorePauseScene.pauseButton.on('pointerdown', () => {
       this.scene.run('pause-menu');
     });
 
   }
 
+
   update() {
     const santa1 = this.santa;
     const groundLayer = this.ground;
 
-    santa1.x += 2.5;
+    santa1.x += 2;
     santa1.play('player-slide', true);
     const spaceJustPressed = Phaser.Input.Keyboard.JustDown(this.cursors.space);
 
@@ -246,7 +252,7 @@ class GameScene extends Phaser.Scene {
         this.scorePauseScene.meterLabel.timeElapsed,
       )}`,
     );
-    localStorage.setItem('score', this.formatDistance(this.scorePauseScene.meterLabel.timeElapsed));
+    localStorage.setItem('score', this.formatDistance(this.meterLabel));
 
     // if (localStorage.getItem('token')) {
     //   this.updateScore(this.formatDistance(this.meterLabel.timeElapsed));
@@ -255,17 +261,34 @@ class GameScene extends Phaser.Scene {
     this.matter.pause();
     player.setTint(0xff0000);
 
-    this.scene.pause('pause-score');
-    this.scene.pause('game-scene');
-    this.scene.run('game-over', {
-      someData: this.formatDistance(this.scorePauseScene.meterLabel.timeElapsed),
-    });
+    this.scene.stop('pause-score');
+    this.scene.stop('game-scene');
+    this.scene.run('game-over', { score : this.formatDistance(this.meterLabel) });
   }
 
-  pauseGame() {
-    this.scorePauseScene.meterLabel.pauseMeter();
-    this.scene.pause();
-    this.scene.run('pause-menu');
+  // eslint-disable-next-line class-methods-use-this
+  async updateScore(newScore) {
+    const token = localStorage.getItem('token');
+    const user = localStorage.getItem('user')
+
+    const options = {
+      method: 'PUT',
+      body: JSON.stringify({
+        user,
+        score: newScore
+      }),
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: token,
+      },
+    };
+    const response = await fetch(`${process.env.API_BASE_URL}/scores/`, options);
+
+    if (!response.ok) {
+      // eslint-disable-next-line no-console
+      console.log(response.status);
+      throw new Error();
+    }
   }
 
   addCoin(x, slopeStartHeight) {
