@@ -18,8 +18,8 @@ const PAUSE_BUTTON = 'pause';
 
 const gameOptions = {
   amplitude: 300,
-  slopeLength: [300, 600],
-  slicesAmount: 3,
+  slopeLength: [400, 800],
+  slicesAmount: 4,
   slopesPerSlice: 5
 };
 
@@ -65,7 +65,7 @@ class GameScene extends Phaser.Scene {
 
 
     this.santa = this.matter.add
-            .sprite(800, 600, 'santa')
+            .sprite(1500, 800, 'santa')
             .play('player-idle')
             .setFixedRotation();
 
@@ -121,8 +121,8 @@ class GameScene extends Phaser.Scene {
     simpleSlope.forEach(point => {
       graphics.lineTo(point.x, point.y);
   });
-    graphics.lineTo(currentPoint, sliceStart.y *  1300);
-    graphics.lineTo(0, sliceStart.y * 1300);
+    graphics.lineTo(currentPoint, sliceStart.y *  1500);
+    graphics.lineTo(0, sliceStart.y * 1500);
     graphics.closePath();
     graphics.fillPath();
 
@@ -221,7 +221,7 @@ interpolate(vFrom, vTo, delta){
     this.slopeGraphics.forEach((item) =>{
  
       // if the mountain leaves the screen to the left...
-      if(this.cameras.main.scrollX > item.x + item.width + 6000){
+      if(this.cameras.main.scrollX > item.x + item.width + 10000){
 
           // reuse the mountain
           this.sliceStart = this.createSlope(item, this.sliceStart)
