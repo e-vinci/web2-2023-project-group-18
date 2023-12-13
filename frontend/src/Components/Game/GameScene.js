@@ -18,12 +18,13 @@ const PAUSE_BUTTON = 'pause';
 
 const gameOptions = {
   amplitude: 300,
-  slopeLength: [300, 600],
+  slopeLength: [200, 800], 
   slicesAmount: 3,
   slopesPerSlice: 5,
+  // ratio in %
   pineRatio: 5,
-  coinRatio: 10,
-  amountCoin: 5
+  coinRatio: 30,
+  amountCoin: 10
 };
 
 class GameScene extends Phaser.Scene {
@@ -197,10 +198,10 @@ class GameScene extends Phaser.Scene {
       }
 
       // random coin
-      if (Phaser.Math.Between(0, 100) < gameOptions.coinRatio && i%3 === 0) {
-        const x = center.x + sliceStart.x + 20;
-        const y = center.y + sliceStart.y - 70;
-        this.addCoin(x, y);
+        if (Phaser.Math.Between(0, 100) < gameOptions.coinRatio && i%3 === 0) {
+          const x = center.x + sliceStart.x + 20;
+          const y = center.y + sliceStart.y - 70;
+          this.addCoin(x, y);
       }
     }
 
@@ -233,8 +234,8 @@ class GameScene extends Phaser.Scene {
 
     if (this.isTouchingGround && spaceJustPressed) {
       this.santa.play('player-jump', true);
-      this.santa.setVelocityY(-10);
-      this.santa.setVelocityX(2);
+      this.santa.setVelocityY(-17);
+      this.santa.setVelocityX(this.caracterSpeed);
       this.isTouchingGround = false;
     }
 
@@ -260,13 +261,22 @@ class GameScene extends Phaser.Scene {
     bodies.forEach((body) => {
       // if the body is out of camera view to the left side and is not yet in the pool
       if (
-        this.cameras.main.scrollX > body.position.x &&
-        this.bodyPoolId.indexOf(body.id) === -1
-        && body.label !== COIN_KEY
+        this.cameras.main.scrollX > body.position.x + 100 &&
+        this.bodyPoolId.indexOf(body.id) === -1 &&
+        body.label !== COIN_KEY
+        // TODO body.label !== obstacles
       ) {
         // add the body to the pool
         this.bodyPool.push(body);
         this.bodyPoolId.push(body.id);
+      } else 
+      if( 
+        this.cameras.main.scrollX > body.position.x + 100 &&
+        body.label === COIN_KEY
+        // TODO add obstacles
+      ) {
+        // TODO delete body image
+        this.matter.world.remove(body);
       }
     });
 
