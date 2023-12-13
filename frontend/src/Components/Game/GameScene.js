@@ -70,14 +70,14 @@ class GameScene extends Phaser.Scene {
       this.sliceStart = this.createSlope(this.slopeGraphics[i], this.sliceStart);
     }
 
-this.santa = this.matter.add
+    this.santa = this.matter.add
        .sprite(1500, 800, 'santa')
        .play('player-idle')
        .setFixedRotation();
 
-this.santa.setOnCollide(() => {
- this.isTouchingGround = true;
-});
+    this.santa.setOnCollide(() => {
+      this.isTouchingGround = true;
+    });
 
 
 
@@ -92,6 +92,7 @@ this.santa.setOnCollide(() => {
     this.scorePauseScene.pauseButton.on('pointerdown', () => {
       this.scene.run('pause-menu');
     });
+}
 
   createSlope(graphics, sliceStart) {
     const slopePoints = [];
@@ -299,22 +300,7 @@ this.santa.setOnCollide(() => {
       (event, bodyA, bodyB) => this.checkCollision(bodyA, bodyB),
       this,
     );
-  }
-});
-
- // get all bodies
- const {bodies} = this.matter.world.localWorld;
-
- // loop through all bodies
- bodies.forEach((body) =>{
-     // if the body is out of camera view to the left side and is not yet in the pool..
-     if(this.cameras.main.scrollX > body.position.x + 200 && this.bodyPoolId.indexOf(body.id) === -1){
-         // ...add the body to the pool
-         this.bodyPool.push(body);
-         this.bodyPoolId.push(body.id);
-     }
- })
-}
+ }
 
   createDudeAnimations() {
     this.anims.create({
