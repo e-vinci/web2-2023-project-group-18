@@ -19,7 +19,7 @@ const PAUSE_BUTTON = 'pause';
 const gameOptions = {
   amplitude: 300,
   slopeLength: [200, 800], 
-  slicesAmount: 3,
+  slicesAmount: 4,
   slopesPerSlice: 5,
   // ratio in %
   pineRatio: 5,
@@ -71,7 +71,7 @@ class GameScene extends Phaser.Scene {
     }
 
     this.santa = this.matter.add
-       .sprite(1500, 800, 'santa')
+       .sprite(1500, 400, 'santa')
        .play('player-idle')
        .setFixedRotation();
 
@@ -252,7 +252,7 @@ class GameScene extends Phaser.Scene {
     // loop through all mountains
     this.slopeGraphics.forEach((item) => {
       // if the mountain leaves the screen to the left...
-      if(this.cameras.main.scrollX > item.x + item.width + 5000){
+      if(this.cameras.main.scrollX > item.x + item.width + 7000){
           // reuse the mountain
           this.sliceStart = this.createSlope(item, this.sliceStart)
       }
