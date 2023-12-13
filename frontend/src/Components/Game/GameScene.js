@@ -58,7 +58,6 @@ class GameScene extends Phaser.Scene {
 
   create() {
     this.createDudeAnimations();
-
     this.pinesPool = [];
 
     // Generating Ground and its Collision
@@ -71,14 +70,16 @@ class GameScene extends Phaser.Scene {
       this.sliceStart = this.createSlope(this.slopeGraphics[i], this.sliceStart);
     }
 
-    this.santa = this.matter.add
-            .sprite(1500, 500, 'santa')
-            .play('player-idle')
-            .setFixedRotation();
+this.santa = this.matter.add
+       .sprite(1500, 800, 'santa')
+       .play('player-idle')
+       .setFixedRotation();
 
-    this.santa.setOnCollide(() => {
-      this.isTouchingGround = true;
-    });
+this.santa.setOnCollide(() => {
+ this.isTouchingGround = true;
+});
+
+
 
     this.cameras.main.startFollow(this.santa);
     this.matter.world.setGravity(0, 1); // Apply gravity to the world
@@ -88,7 +89,9 @@ class GameScene extends Phaser.Scene {
         setInterval(() => {
           this.caracterSpeed+= Math.log(2) /1000;
         }, 2000);
-  }
+    this.scorePauseScene.pauseButton.on('pointerdown', () => {
+      this.scene.run('pause-menu');
+    });
 
   createSlope(graphics, sliceStart) {
     const slopePoints = [];
@@ -297,6 +300,21 @@ class GameScene extends Phaser.Scene {
       this,
     );
   }
+});
+
+ // get all bodies
+ const {bodies} = this.matter.world.localWorld;
+
+ // loop through all bodies
+ bodies.forEach((body) =>{
+     // if the body is out of camera view to the left side and is not yet in the pool..
+     if(this.cameras.main.scrollX > body.position.x + 200 && this.bodyPoolId.indexOf(body.id) === -1){
+         // ...add the body to the pool
+         this.bodyPool.push(body);
+         this.bodyPoolId.push(body.id);
+     }
+ })
+}
 
   createDudeAnimations() {
     this.anims.create({
@@ -318,6 +336,7 @@ class GameScene extends Phaser.Scene {
     });
 
     // slide animaion
+
     this.anims.create({
       key: 'player-slide',
       frameRate: 5,
@@ -331,6 +350,7 @@ class GameScene extends Phaser.Scene {
     });
 
     // jump animation
+
     this.anims.create({
       key: 'player-jump',
       frameRate: 5,
@@ -359,17 +379,18 @@ class GameScene extends Phaser.Scene {
         this.scorePauseScene.meterLabel.timeElapsed,
       )}`,
     );
+    localStorage.setItem('score', this.formatDistance(this.meterLabel));
 
-    if (localStorage.getItem('token')) {
-      this.updateScore(this.scorePauseScene.meterLabel.timeElapsed);
-    }
+    // if (localStorage.getItem('token')) {
+    //   this.updateScore(this.formatDistance(this.meterLabel.timeElapsed));
+    // }
 
     this.matter.pause();
     player.setTint(0xff0000);
 
     this.scene.stop('pause-score');
     this.scene.stop('game-scene');
-    this.scene.run('game-over', { score: this.scorePauseScene.meterLabel.timeElapsed });
+    this.scene.run('game-over', { score : this.formatDistance(this.meterLabel) });
   }
 
 
@@ -404,7 +425,6 @@ class GameScene extends Phaser.Scene {
     coin.setStatic(true);
     coin.body.isSensor = true;
     coin.body.label = COIN_KEY;
-
     this.coins.push(coin);
   }
 
