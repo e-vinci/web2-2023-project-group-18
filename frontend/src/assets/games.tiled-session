@@ -1,0 +1,57 @@
+{
+    "activeFile": "map.json",
+    "expandedProjectPaths": [
+        "."
+    ],
+    "file.lastUsedOpenFilter": "Tous les Fichiers (*)",
+    "fileStates": {
+        "game.tmx": {
+            "scale": 0.2540571428571428,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 1753.5425101214576,
+                "y": 525.472334682861
+            }
+        },
+        "game.tmx#iceworld": {
+            "scaleInDock": 1
+        },
+        "map.json": {
+            "scale": 0.5,
+            "selectedLayer": 1,
+            "viewCenter": {
+                "x": -348,
+                "y": 437
+            }
+        },
+        "map.json#iceworld": {
+            "scaleInDock": 2,
+            "scaleInEditor": 1
+        },
+        "map.tmx": {
+            "scale": 0.5,
+            "selectedLayer": 1,
+            "viewCenter": {
+                "x": 935,
+                "y": 451
+            }
+        },
+        "map.tmx#iceworld": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        }
+    },
+    "last.exportedFilePath": "B:/MoodleVinci.Q1/Javascript_2/web2-project/frontend/src/assets",
+    "map.lastUsedExportFilter": "Fichiers de carte JSON (*.tmj *.json)",
+    "mapScene.enableWorlds": true,
+    "openFiles": [
+        "map.json"
+    ],
+    "project": "games.tiled-project",
+    "property.type": "bool",
+    "recentFiles": [
+        "map.json",
+        "map.tmx",
+        "game.tmx"
+    ]
+}
