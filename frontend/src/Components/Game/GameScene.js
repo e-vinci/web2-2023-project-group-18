@@ -18,14 +18,12 @@ const PAUSE_BUTTON = 'pause';
 
 const gameOptions = {
   amplitude: 300,
-  slopeLength: [300, 600],
-  slicesAmount: 3,
+  slopeLength: [400, 800],
+  slicesAmount: 4,
   slopesPerSlice: 5,
-  terrainSpeed: 200,
-  // rocks ratio, in %
   pineRatio: 5,
   coinRatio: 4,
-  amountCoin: 10,
+  amountCoin: 10
 };
 
 class GameScene extends Phaser.Scene {
@@ -43,6 +41,7 @@ class GameScene extends Phaser.Scene {
     this.coins = [];
     this.gameOver = false;
     this.scorePauseScene = undefined;
+    this.caracterSpeed= undefined;
   }
 
   init() {
@@ -72,17 +71,22 @@ class GameScene extends Phaser.Scene {
     }
 
     this.santa = this.matter.add
-      .sprite(700, 450, 'santa')
-      .play('player-idle')
-      .setFixedRotation();
+            .sprite(1500, 800, 'santa')
+            .play('player-idle')
+            .setFixedRotation();
 
     this.santa.setOnCollide(() => {
       this.isTouchingGround = true;
     });
 
     this.cameras.main.startFollow(this.santa);
-
+    this.matter.world.setGravity(0, 1); // Apply gravity to the world
     this.key = this.input.keyboard.addKey(localStorage.getItem('selectedKey'));
+
+        this.caracterSpeed= 1;
+        setInterval(() => {
+          this.caracterSpeed+= Math.log(2) /1000;
+        }, 2000);
   }
 
   createSlope(graphics, sliceStart) {
@@ -214,7 +218,7 @@ class GameScene extends Phaser.Scene {
   update() {
     const santa1 = this.santa;
 
-    santa1.x += 2;
+    santa1.x += this.caracterSpeed;
     santa1.play('player-slide', true);
     const spaceJustPressed = Phaser.Input.Keyboard.JustDown(this.cursors.space);
 
@@ -243,9 +247,9 @@ class GameScene extends Phaser.Scene {
     // loop through all mountains
     this.slopeGraphics.forEach((item) => {
       // if the mountain leaves the screen to the left...
-      if (this.cameras.main.scrollX > item.x + item.width + 5000) {
-        // reuse the mountain
-        this.sliceStart = this.createSlope(item, this.sliceStart);
+      if(this.cameras.main.scrollX > item.x + item.width + 10000){
+          // reuse the mountain
+          this.sliceStart = this.createSlope(item, this.sliceStart)
       }
     });
 
@@ -344,7 +348,6 @@ class GameScene extends Phaser.Scene {
         this.scorePauseScene.meterLabel.timeElapsed,
       )}`,
     );
-    localStorage.setItem('score', this.formatDistance(this.meterLabel));
 
     if (localStorage.getItem('token')) {
       this.updateScore(this.scorePauseScene.meterLabel.timeElapsed);
@@ -355,8 +358,9 @@ class GameScene extends Phaser.Scene {
 
     this.scene.stop('pause-score');
     this.scene.stop('game-scene');
-    this.scene.run('game-over');
+    this.scene.run('game-over', { score: this.scorePauseScene.meterLabel.timeElapsed });
   }
+
 
   // eslint-disable-next-line class-methods-use-this
   async updateScore(newScore) {
