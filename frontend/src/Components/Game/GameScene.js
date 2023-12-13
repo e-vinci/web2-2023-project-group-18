@@ -15,6 +15,7 @@ import pineSapling from '../../assets/winterTiles/pineSapling.png'
 const COIN_KEY = 'coin';
 const HUD_COIN_KEY = 'hudcoin';
 const PAUSE_BUTTON = 'pause';
+const PINE_SAPLING = 'pine';
 
 
 const gameOptions = {
@@ -53,7 +54,7 @@ class GameScene extends Phaser.Scene {
 
   preload() {
     this.load.atlas('santa', dudeAsset, dudeAssetJSON);
-    this.load.image('pineSapling', pineSapling);
+    this.load.image(PINE_SAPLING, pineSapling);
   }
 
   create() {
@@ -195,7 +196,7 @@ class GameScene extends Phaser.Scene {
             if(this.pinesPool.length === 0){
 
                 // create a new pineSapling body
-                const pineSaplingBody = this.matter.add.image(pineSaplingX, pineSaplingY, 'pineSapling',null, {
+                const pineSaplingBody = this.matter.add.image(pineSaplingX, pineSaplingY, PINE_SAPLING,null, {
                     isStatic: true,
                     friction: 1,
                     restitution: 0,
