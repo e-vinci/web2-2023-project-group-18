@@ -1,5 +1,6 @@
 // eslint-disable-next-line max-classes-per-file
 import Phaser from 'phaser';
+// eslint-disable-next-line import/no-extraneous-dependencies
 import simplify from 'simplify-js';
 
 import santaAsset from '../../assets/skins/santa.png';
@@ -22,16 +23,16 @@ import coinHudAsset from '../../assets/hudcoin.png';
 import pauseButton from '../../assets/pauseButton.png';
 import Settings from '../../utils/settings';
 import MeterLabel from './MeterLabel';
-// import dudeAssetJSON from '../../assets/penguin.json';
-import dudeAssetJSON from '../../assets/santa.json';
+// eslint-disable-next-line no-unused-vars
 import sheet from '../../assets/sheet.png';
+// eslint-disable-next-line no-unused-vars
 import mapSheet from '../../assets/map.json';
 
 const COIN_KEY = 'coin';
 const HUD_COIN_KEY = 'hudcoin';
 const PAUSE_BUTTON = 'pause';
 
-const DUDE_ASSET_WIDTH = 30;
+const DUDE_ASSET_WIDTH = 25;
 const DUDE_ASSET_HEIGHT = 50;
 
 let dudeAsset = santaAsset;
