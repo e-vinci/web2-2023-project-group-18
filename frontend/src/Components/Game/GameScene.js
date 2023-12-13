@@ -39,7 +39,7 @@ class GameScene extends Phaser.Scene {
     this.gameOver = false;
     this.obstacles = undefined;
     this.scorePauseScene = undefined;
-    this.a = undefined;
+    this.caracterSpeed = undefined;
   }
 
   init() {
@@ -80,9 +80,9 @@ class GameScene extends Phaser.Scene {
 
     this.key = this.input.keyboard.addKey(localStorage.getItem('selectedKey'));
 
-        this.a = 1;
+        this.caracterSpeed = 3;
         setInterval(() => {
-          this.a += Math.log(2) /1000;
+          this.caracterSpeed += Math.log(2) /1000;
         }, 2000);
   }
 
@@ -195,7 +195,7 @@ interpolate(vFrom, vTo, delta){
   update() {
     const santa1 = this.santa;
 
-    santa1.x += this.a;
+    santa1.x += this.caracterSpeed;
     santa1.play('player-slide', true);
     const spaceJustPressed = Phaser.Input.Keyboard.JustDown(this.cursors.space);
 
