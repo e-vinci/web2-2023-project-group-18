@@ -8,7 +8,9 @@ import GameOverScene from '../Game/GameOverScene';
 let game;
 
 const GamePage = () => {
-  const phaserGame = `
+
+
+const phaserGame = `
 <div id="gameDiv" class="d-flex justify-content-center"> </div>`;
 
   const main = document.querySelector('main');

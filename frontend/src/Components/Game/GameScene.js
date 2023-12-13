@@ -2,7 +2,7 @@
 import Phaser from 'phaser';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import simplify from 'simplify-js';
-import dudeAsset from '../../assets/santa.png'
+import dudeAsset from '../../assets/santa.png';
 import CoinLabel from './CoinLabel';
 import coinAsset from '../../assets/coin.png';
 import coinHudAsset from '../../assets/hudcoin.png';
@@ -10,7 +10,7 @@ import pauseButton from '../../assets/pauseButton.png';
 import Settings from '../../utils/settings';
 import MeterLabel from './MeterLabel';
 import dudeAssetJSON from '../../assets/santa.json';
-import pineSapling from '../../assets/winterTiles/pineSapling.png'
+import pineSapling from '../../assets/winterTiles/pineSapling.png';
 
 const COIN_KEY = 'coin';
 const HUD_COIN_KEY = 'hudcoin';
@@ -20,14 +20,14 @@ const PINE_SAPLING = 'pine';
 
 const gameOptions = {
   amplitude: 300,
-  slopeLength: [200, 500],
-  slicesAmount: 3,
+  slopeLength: [200, 800], 
+  slicesAmount: 4,
   slopesPerSlice: 5,
-  terrainSpeed: 200,
-  // pine ratio, in %
-  pineRatio: 3
+  // ratio in %
+  pineRatio: 5,
+  coinRatio: 30,
+  amountCoin: 10
 };
-
 
 class GameScene extends Phaser.Scene {
   santa = Phaser.Physics.Matter.Sprite;
@@ -41,9 +41,10 @@ class GameScene extends Phaser.Scene {
     this.stars = undefined;
     this.meterLabel = undefined;
     this.coinLabel = undefined;
-    this.coins = undefined;
+    this.coins = [];
     this.gameOver = false;
     this.scorePauseScene = undefined;
+    this.caracterSpeed= undefined;
   }
 
   init() {
@@ -59,59 +60,77 @@ class GameScene extends Phaser.Scene {
 
   create() {
     this.createDudeAnimations();
-
     this.pinesPool = [];
 
-     // Generating Ground and its Collision
-     this.bodyPool = [];
-     this.bodyPoolId = [];
-     this.slopeGraphics = [];
-     this.sliceStart = new Phaser.Math.Vector2(0, 2);
-     for(let i = 0; i < gameOptions.slicesAmount; i+=1){
-       this.slopeGraphics[i] = this.add.graphics();
-       this.sliceStart = this.createSlope(this.slopeGraphics[i], this.sliceStart);
-     }
-
+    // Generating Ground and its Collision
+    this.bodyPool = [];
+    this.bodyPoolId = [];
+    this.slopeGraphics = [];
+    this.sliceStart = new Phaser.Math.Vector2(0, 2);
+    for (let i = 0; i < gameOptions.slicesAmount; i += 1) {
+      this.slopeGraphics[i] = this.add.graphics();
+      this.sliceStart = this.createSlope(this.slopeGraphics[i], this.sliceStart);
+    }
 
     this.santa = this.matter.add
-            .sprite(0, 450, 'santa')
-            .play('player-idle')
-            .setFixedRotation();
+       .sprite(1500, 400, 'santa')
+       .play('player-idle')
+       .setFixedRotation();
 
     this.santa.setOnCollide(() => {
       this.isTouchingGround = true;
     });
 
-    this.cameras.main.startFollow(this.santa);
 
+
+    this.cameras.main.startFollow(this.santa);
+    this.matter.world.setGravity(0, 1); // Apply gravity to the world
     this.key = this.input.keyboard.addKey(localStorage.getItem('selectedKey'));
+
+        this.caracterSpeed= 3;
+        setInterval(() => {
+          this.caracterSpeed+= Math.log(2) /1000;
+        }, 2000);
+    this.scorePauseScene.pauseButton.on('pointerdown', () => {
+      this.scene.run('pause-menu');
+    });
 }
 
-  createSlope(graphics, sliceStart){
+  createSlope(graphics, sliceStart) {
     const slopePoints = [];
     let slopes = 0;
     let slopeStart = 0;
     let slopeStartHeight = sliceStart.y;
-    let currentSlopeLength = Phaser.Math.Between(gameOptions.slopeLength[0], gameOptions.slopeLength[1]);
+    let currentSlopeLength = Phaser.Math.Between(
+      gameOptions.slopeLength[0],
+      gameOptions.slopeLength[1],
+    );
     let slopeEnd = slopeStart + currentSlopeLength;
     let slopeEndHeight = slopeStartHeight + Math.random();
     let currentPoint = 0;
-    while(slopes < gameOptions.slopesPerSlice){
+    while (slopes < gameOptions.slopesPerSlice) {
       let y;
-        if(currentPoint === slopeEnd){
-            slopes +=1;
-            slopeStartHeight = slopeEndHeight;
-            slopeEndHeight = slopeStartHeight + Math.random();
-            y = slopeStartHeight * gameOptions.amplitude;
-            slopeStart = currentPoint;
-            currentSlopeLength = Phaser.Math.Between(gameOptions.slopeLength[0], gameOptions.slopeLength[1]);
-            slopeEnd += currentSlopeLength;
-        }
-        else{
-            y = this.interpolate(slopeStartHeight, slopeEndHeight, (currentPoint - slopeStart) / (slopeEnd - slopeStart)) * gameOptions.amplitude;
-        }
-        slopePoints.push(new Phaser.Math.Vector2(currentPoint, y))
-        currentPoint +=1;
+      if (currentPoint === slopeEnd) {
+        slopes += 1;
+        slopeStartHeight = slopeEndHeight;
+        slopeEndHeight = slopeStartHeight + Math.random();
+        y = slopeStartHeight * gameOptions.amplitude;
+        slopeStart = currentPoint;
+        currentSlopeLength = Phaser.Math.Between(
+          gameOptions.slopeLength[0],
+          gameOptions.slopeLength[1],
+        );
+        slopeEnd += currentSlopeLength;
+      } else {
+        y =
+          this.interpolate(
+            slopeStartHeight,
+            slopeEndHeight,
+            (currentPoint - slopeStart) / (slopeEnd - slopeStart),
+          ) * gameOptions.amplitude;
+      }
+      slopePoints.push(new Phaser.Math.Vector2(currentPoint, y));
+      currentPoint += 1;
     }
     // simplify the slope
     const simpleSlope = simplify(slopePoints, 1, true);
@@ -123,10 +142,10 @@ class GameScene extends Phaser.Scene {
     graphics.moveTo(0, 1000);
     graphics.fillStyle(0xdefbff);
     graphics.beginPath();
-    simpleSlope.forEach(point => {
+    simpleSlope.forEach((point) => {
       graphics.lineTo(point.x, point.y);
-  });
-    graphics.lineTo(currentPoint, sliceStart.y *  1500);
+    });
+    graphics.lineTo(currentPoint, sliceStart.y * 1500);
     graphics.lineTo(0, sliceStart.y * 1500);
     graphics.closePath();
     graphics.fillPath();
@@ -134,55 +153,65 @@ class GameScene extends Phaser.Scene {
     // draw the snow
     graphics.lineStyle(16, 0xc9edf0);
     graphics.beginPath();
-    simpleSlope.forEach(point => {
+    simpleSlope.forEach((point) => {
       graphics.lineTo(point.x, point.y);
-  });
+    });
     graphics.strokePath();
 
-// loop through all simpleSlope points starting from the second
-        for(let i = 1; i < simpleSlope.length; i+=1){
-            // define a line between previous and current simpleSlope points
-            const line = new Phaser.Geom.Line(simpleSlope[i - 1].x, simpleSlope[i - 1].y, simpleSlope[i].x, simpleSlope[i].y);
-            // calculate line length, which is the distance between the two points
-            const distance = Phaser.Geom.Line.Length(line);
-            // calculate the center of the line
-            const center = Phaser.Geom.Line.GetPoint(line, 0.5);
-            // calculate line angle
-            const angle1 = Phaser.Geom.Line.Angle(line);
+    // loop through all simpleSlope points starting from the second
+    for (let i = 1; i < simpleSlope.length; i += 1) {
+      // define a line between previous and current simpleSlope points
+      const line = new Phaser.Geom.Line(
+        simpleSlope[i - 1].x,
+        simpleSlope[i - 1].y,
+        simpleSlope[i].x,
+        simpleSlope[i].y,
+      );
+      // calculate line length, which is the distance between the two points
+      const distance = Phaser.Geom.Line.Length(line);
+      // calculate the center of the line
+      const center = Phaser.Geom.Line.GetPoint(line, 0.5);
+      // calculate line angle
+      const angle1 = Phaser.Geom.Line.Angle(line);
 
-            // if the pool is empty...
-            if(this.bodyPool.length === 0){
+      // if the pool is empty...
+      if (this.bodyPool.length === 0) {
+        // create a new rectangle body
+        this.matter.add.rectangle(center.x + sliceStart.x, center.y, distance, 10, {
+          isStatic: true,
+          angle: angle1,
+          friction: 1,
+          restitution: 0,
+        });
+      }
 
-                // create a new rectangle body
-                this.matter.add.rectangle(center.x + sliceStart.x, center.y, distance,10, {
-                    isStatic: true,
-                    angle: angle1,
-                    friction: 1,
-                    restitution: 0,
-                });
-            }
+      // if the pool is not empty...
+      else {
+        // get the body from the pool
+        const body = this.bodyPool.shift();
+        this.bodyPoolId.shift();
 
-            // if the pool is not empty...
-            else{
+        // reset, reshape and move the body to its new position
+        this.matter.body.setPosition(body, {
+          x: center.x + sliceStart.x,
+          y: center.y,
+        });
+        const length = body.area / 10;
+        this.matter.body.setAngle(body, 0);
+        this.matter.body.scale(body, 1 / length, 1);
+        this.matter.body.scale(body, distance, 1);
+        this.matter.body.setAngle(body, angle1);
+      }
 
-                // get the body from the pool
-                const body = this.bodyPool.shift();
-                this.bodyPoolId.shift();
+      // random coin
+        if (Phaser.Math.Between(0, 100) < gameOptions.coinRatio && i%3 === 0) {
+          const x = center.x + sliceStart.x + 20;
+          const y = center.y + sliceStart.y - 70;
+          this.addCoin(x, y);
+      }
 
-                // reset, reshape and move the body to its new position
-                this.matter.body.setPosition(body, {
-                    x: center.x + sliceStart.x,
-                    y: center.y
-                });
-                const length = body.area / 10;
-                this.matter.body.setAngle(body, 0)
-                this.matter.body.scale(body, 1 / length, 1);
-                this.matter.body.scale(body, distance, 1);
-                this.matter.body.setAngle(body, angle1);
 
-            }
-
-            if(Phaser.Math.Between(0,100) < gameOptions.pineRatio && (sliceStart.x > 0 || i !== 1)){
+          if(Phaser.Math.Between(0,100) < gameOptions.pineRatio && (sliceStart.x > 0 || i !== 1)){
 
               // random rock position
               const size = 5;
@@ -227,18 +256,18 @@ class GameScene extends Phaser.Scene {
     // eslint-disable-next-line no-param-reassign
     graphics.width = (currentPoint - 1) * -1;
     return new Phaser.Math.Vector2(graphics.x + currentPoint - 1, slopeStartHeight);
-}
+  }
 
-// eslint-disable-next-line class-methods-use-this
-interpolate(vFrom, vTo, delta){
-  const interpolation = (1 - Math.cos(delta * Math.PI)) * 0.5;
-  return vFrom * (1 - interpolation) + vTo * interpolation;
-}
+  // eslint-disable-next-line class-methods-use-this
+  interpolate(vFrom, vTo, delta) {
+    const interpolation = (1 - Math.cos(delta * Math.PI)) * 0.5;
+    return vFrom * (1 - interpolation) + vTo * interpolation;
+  }
 
   update() {
     const santa1 = this.santa;
 
-    santa1.x += 2;
+    santa1.x += this.caracterSpeed;
     santa1.play('player-slide', true);
     const spaceJustPressed = Phaser.Input.Keyboard.JustDown(this.cursors.space);
 
@@ -254,7 +283,7 @@ interpolate(vFrom, vTo, delta){
     if (this.isTouchingGround && spaceJustPressed) {
       this.santa.play('player-jump', true);
       this.santa.setVelocityY(-15);
-      this.santa.setVelocityX(2);
+      this.santa.setVelocityX(2*this.caracterSpeed);
       this.isTouchingGround = false;
     }
 
@@ -265,29 +294,57 @@ interpolate(vFrom, vTo, delta){
     }
 
     // loop through all mountains
-    this.slopeGraphics.forEach((item) =>{
- 
+    this.slopeGraphics.forEach((item) => {
       // if the mountain leaves the screen to the left...
-      if(this.cameras.main.scrollX > item.x + item.width + 4000){
-
+      if(this.cameras.main.scrollX > item.x + item.width + 7000){
           // reuse the mountain
           this.sliceStart = this.createSlope(item, this.sliceStart)
       }
-  });
+    });
 
-     // get all bodies
-     const {bodies} = this.matter.world.localWorld;
+    // get all bodies
+    const { bodies } = this.matter.world.localWorld;
 
-     // loop through all bodies
-     bodies.forEach((body) =>{
-         // if the body is out of camera view to the left side and is not yet in the pool..
-         if(this.cameras.main.scrollX > body.position.x + 200 && this.bodyPoolId.indexOf(body.id) === -1){
-             // ...add the body to the pool
-             this.bodyPool.push(body);
-             this.bodyPoolId.push(body.id);
-         }
-     })
-  }
+    // loop through all bodies
+    bodies.forEach((body) => {
+      // if the body is out of camera view to the left side and is not yet in the pool
+      if (
+        this.cameras.main.scrollX > body.position.x &&
+        this.bodyPoolId.indexOf(body.id) === -1 &&
+        body.label !== COIN_KEY
+        // TODO body.label !== obstacles
+      ) {
+        // add the body to the pool
+        this.bodyPool.push(body);
+        this.bodyPoolId.push(body.id);
+      } else 
+      if( 
+        this.cameras.main.scrollX > body.position.x + 100 &&
+        body.label === COIN_KEY
+        // TODO add obstacles
+      ) {
+        // TODO delete body image
+        this.matter.world.remove(body);
+      }
+    });
+
+    // CheckCollision
+    this.matter.world.on(
+      'collisionstart',
+      (event, bodyA, bodyB) => this.checkCollision(bodyA, bodyB),
+      this,
+    );
+    this.matter.world.on(
+      'collisionactive',
+      (event, bodyA, bodyB) => this.checkCollision(bodyA, bodyB),
+      this,
+    );
+    this.matter.world.on(
+      'collisionend',
+      (event, bodyA, bodyB) => this.checkCollision(bodyA, bodyB),
+      this,
+    );
+ }
 
   createDudeAnimations() {
     this.anims.create({
@@ -309,6 +366,7 @@ interpolate(vFrom, vTo, delta){
     });
 
     // slide animaion
+
     this.anims.create({
       key: 'player-slide',
       frameRate: 5,
@@ -322,6 +380,7 @@ interpolate(vFrom, vTo, delta){
     });
 
     // jump animation
+
     this.anims.create({
       key: 'player-jump',
       frameRate: 5,
@@ -352,28 +411,29 @@ interpolate(vFrom, vTo, delta){
     );
     localStorage.setItem('score', this.formatDistance(this.meterLabel));
 
-    if (localStorage.getItem('token')) {
-      this.updateScore(this.scorePauseScene.meterLabel.timeElapsed);
-    }
+    // if (localStorage.getItem('token')) {
+    //   this.updateScore(this.formatDistance(this.meterLabel.timeElapsed));
+    // }
 
     this.matter.pause();
     player.setTint(0xff0000);
 
     this.scene.stop('pause-score');
     this.scene.stop('game-scene');
-    this.scene.run('game-over');
+    this.scene.run('game-over', { score : this.formatDistance(this.meterLabel) });
   }
+
 
   // eslint-disable-next-line class-methods-use-this
   async updateScore(newScore) {
     const token = localStorage.getItem('token');
-    const user = localStorage.getItem('user')
+    const user = localStorage.getItem('user');
 
     const options = {
       method: 'PUT',
       body: JSON.stringify({
         user,
-        score: newScore
+        score: newScore,
       }),
       headers: {
         'Content-Type': 'application/json',
@@ -389,118 +449,81 @@ interpolate(vFrom, vTo, delta){
     }
   }
 
-  addCoin(x, slopeStartHeight) {
-    const y = slopeStartHeight * gameOptions.amplitude;
-    const coin = this.physics.add.image(x, y + 20, COIN_KEY);
-coin.setBounceY(Phaser.Math.FloatBetween(0.4, 0.8));
-
-    this.coins.add(coin);
+  addCoin(x, y) {
+    const coin = this.matter.add.image(x, y, COIN_KEY, null);
+    coin.setCircle();
+    coin.setStatic(true);
+    coin.body.isSensor = true;
+    coin.body.label = COIN_KEY;
+    this.coins.push(coin);
   }
 
-  collectCoin(player, coin) {
-    coin.disableBody(true, true);
-    this.coinLabel.add(10);
-
-    if (this.coins.countActive(true) === 0) {
-      this.coins.children.iterate((child) => {
-        child.enableBody(true, child.x, 0, true, true);
-      });
+  checkCollision(a, b) {
+    if (a.label === COIN_KEY && a.gameObject !== null && a.gameObject !== undefined) {
+      a.gameObject.destroy();
+      this.scorePauseScene.coinLabel.add(gameOptions.amountCoin);
     }
 
-    if (this.pointCounter % 300 === 0) {
-      this.addCoin(this.sliceStart.x, this.sliceStart.y * gameOptions.amplitude);
+    if (b.label === COIN_KEY && b.gameObject !== null && b.gameObject !== undefined) {
+      b.gameObject.destroy();
+      this.scorePauseScene.coinLabel.add(gameOptions.amountCoin);
     }
-  }
-
-  // eslint-disable-next-line class-methods-use-this
-  async getDBCoinValue() {
-    const token = localStorage.getItem('token');
-    const options = {
-      method: 'GET',
-      headers: {
-        Authorization: token,
-        'Content-Type': 'application/json',
-      },
-    };
-
-    const response = await fetch(`${process.env.API_BASE_URL}/collectibles/`, options);
-    const data = await response;
-    return data.coin;
-  }
-
-  async updateDBCoins() {
-    const coin = this.coinLabel.getCoin();
-    // eslint-disable-next-line no-console
-    console.log(`you have ${coin}`);
-    // const token = localStorage.getItem('token');
-    // const options = {
-    //   method: 'PUT',
-    //   body: JSON.stringify({
-    //     coin,
-    //   }),
-    //   headers: {
-    //     Authorization: token,
-    //     'Content-Type': 'application/json',
-    //   },
-    // };
-    // await fetch(`${process.env.API_BASE_URL}/collectibles/`, options);
   }
 }
-  class ScorePauseScene extends Phaser.Scene {
-    constructor() {
-      super('pause-score');
-      this.meterLabel = undefined;
-      this.pauseButton = undefined;
-      this.coinLabel = undefined;
-    }
 
-    preload() {
-      this.load.image(PAUSE_BUTTON, pauseButton);
-
-      // coins
-      this.load.image(HUD_COIN_KEY, coinHudAsset);
-      this.load.image(COIN_KEY, coinAsset);
-    }
-
-    create() {
-      this.meterLabel = this.createMeterLabel(20, 20);
-      this.meterLabel.setColor('#ffffff');
-
-      // pause btn
-      this.pauseButton = this.add.image(this.scale.width - 75, 50, PAUSE_BUTTON);
-      this.pauseButton.setInteractive({ useHandCursor: true });
-      this.pauseButton.setScale(0.8);
-
-      this.pauseButton.on('pointerdown', () => {
-        this.pauseGame();
-      });
-
-      // coins 
-      this.add.image(30, 88, HUD_COIN_KEY);
-      this.coinLabel = this.createCoinLabel(45, 70);
-      this.add.existing(this.coinLabel);
-    }
-
-    createMeterLabel(x, y) {
-      const label = new MeterLabel(this, x, y);
-      this.add.existing(label);
-
-      return label;
-    }
-
-    pauseGame() {
-      this.meterLabel.pauseMeter();
-      this.scene.pause('pause-score');
-      this.scene.pause('game-scene');
-      this.scene.run('pause-menu');
-    }
-
-    createCoinLabel(x, y) {
-      const coin = 100; // await this.getDBCoinValue();
-      const style = { fontSize: '32px', fill: '#ffffff', fontFamily: 'Arial, sans-serif' };
-      const label = new CoinLabel(this, x, y, coin, style);
-      return label;
-    }
+class ScorePauseScene extends Phaser.Scene {
+  constructor() {
+    super('pause-score');
+    this.meterLabel = undefined;
+    this.pauseButton = undefined;
+    this.coinLabel = undefined;
   }
-export default GameScene;
 
+  preload() {
+    this.load.image(PAUSE_BUTTON, pauseButton);
+
+    // coins
+    this.load.image(HUD_COIN_KEY, coinHudAsset);
+    this.load.image(COIN_KEY, coinAsset);
+  }
+
+  create() {
+    this.meterLabel = this.createMeterLabel(20, 20);
+    this.meterLabel.setColor('#ffffff');
+
+    // pause btn
+    this.pauseButton = this.add.image(this.scale.width - 75, 50, PAUSE_BUTTON);
+    this.pauseButton.setInteractive({ useHandCursor: true });
+    this.pauseButton.setScale(0.8);
+
+    this.pauseButton.on('pointerdown', () => {
+      this.pauseGame();
+    });
+
+    // coins
+    this.add.image(30, 88, HUD_COIN_KEY);
+    this.coinLabel = this.createCoinLabel(45, 70);
+    this.add.existing(this.coinLabel);
+  }
+
+  createMeterLabel(x, y) {
+    const label = new MeterLabel(this, x, y);
+    this.add.existing(label);
+
+    return label;
+  }
+
+  pauseGame() {
+    this.meterLabel.pauseMeter();
+    this.scene.pause('pause-score');
+    this.scene.pause('game-scene');
+    this.scene.run('pause-menu');
+  }
+
+  createCoinLabel(x, y) {
+    const style = { fontSize: '32px', fill: '#ffffff', fontFamily: 'Arial, sans-serif' };
+    const label = new CoinLabel(this, x, y, 0, style);
+    return label;
+  }
+}
+export default GameScene;
