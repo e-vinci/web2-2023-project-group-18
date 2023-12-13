@@ -76,7 +76,6 @@ class GameScene extends Phaser.Scene {
 
     this.cameras.main.startFollow(this.santa);
     this.matter.world.setGravity(0, 1); // Apply gravity to the world
-
     this.key = this.input.keyboard.addKey(localStorage.getItem('selectedKey'));
 
         this.caracterSpeed = 3;
