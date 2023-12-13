@@ -1,31 +1,26 @@
 // eslint-disable-next-line max-classes-per-file
 import Phaser from 'phaser';
-// import dudeAsset from '../../assets/penguin.png';
+// eslint-disable-next-line import/no-extraneous-dependencies
+import simplify from 'simplify-js';
 import dudeAsset from '../../assets/santa.png'
 import CoinLabel from './CoinLabel';
 import coinAsset from '../../assets/coin.png';
 import coinHudAsset from '../../assets/hudcoin.png';
-import bombAsset from '../../assets/bomb.png';
 import pauseButton from '../../assets/pauseButton.png';
 import Settings from '../../utils/settings';
 import MeterLabel from './MeterLabel';
-// import dudeAssetJSON from '../../assets/penguin.json';
 import dudeAssetJSON from '../../assets/santa.json';
-import sheet from '../../assets/sheet.png';
-import mapSheet from '../../assets/map.json';
 
 const COIN_KEY = 'coin';
 const HUD_COIN_KEY = 'hudcoin';
-const BOMB_KEY = 'bomb';
 const PAUSE_BUTTON = 'pause';
 
 
 const gameOptions = {
   amplitude: 300,
-  slopeLength: [200, 500],
-  slicesAmount: 3,
-  slopesPerSlice: 5,
-  terrainSpeed: 200,
+  slopeLength: [400, 800],
+  slicesAmount: 4,
+  slopesPerSlice: 5
 };
 
 
@@ -38,16 +33,12 @@ class GameScene extends Phaser.Scene {
     this.cursors = undefined;
     this.stars = undefined;
     this.meterLabel = undefined;
-
     this.coinLabel = undefined;
     this.coins = undefined;
-
-    this.bombSpawner = undefined;
     this.gameOver = false;
-    this.ground = undefined;
     this.obstacles = undefined;
     this.scorePauseScene = undefined;
-    this.a = undefined;
+    this.caracterSpeed = undefined;
   }
 
   init() {
@@ -58,49 +49,35 @@ class GameScene extends Phaser.Scene {
 
   preload() {
     this.load.atlas('santa', dudeAsset, dudeAssetJSON);
-    this.load.image('tiles', sheet);
-    this.load.tilemapTiledJSON('tileMap', mapSheet);
-    this.load.image(BOMB_KEY, bombAsset);
   }
 
   create() {
-    this.createDudeAnimations();
+// Generating Ground and its Collision
+this.bodyPool = [];
+this.bodyPoolId = [];
+this.slopeGraphics = [];
+this.sliceStart = new Phaser.Math.Vector2(0, 2);
+for(let i = 0; i < gameOptions.slicesAmount; i+=1){
+  this.slopeGraphics[i] = this.add.graphics();
+  this.sliceStart = this.createSlope(this.slopeGraphics[i], this.sliceStart);
+}
 
-    const map = this.make.tilemap({ key: 'tileMap' });
-    const tileset = map.addTilesetImage('iceworld', 'tiles');
-    this.ground = map.createLayer('ground', tileset);
-    this.ground.setCollisionByProperty({ collides: true });
 
-    const objectLayer = map.getObjectLayer('objects');
+this.santa = this.matter.add
+       .sprite(1500, 800, 'santa')
+       .play('player-idle')
+       .setFixedRotation();
 
-    objectLayer.objects.forEach((objData) => {
-      const { x, y, name } = objData;
+this.santa.setOnCollide(() => {
+ this.isTouchingGround = true;
+});
 
-      // eslint-disable-next-line default-case
-      switch (name) {
-        case 'player-spawn': {
-          this.santa = this.matter.add
-            .sprite(x, y, 'santa')
-            .play('player-idle')
-            .setFixedRotation();
 
-          this.santa.setOnCollide(() => {
-            this.isTouchingGround = true;
-          });
-
-          this.cameras.main.startFollow(this.santa);
-          break;
-        }
-      }
-    });
-
-    // this.physics.add.overlap(this.santa, this.coins, this.collectCoin, null, this);
-
-    this.matter.world.convertTilemapLayer(this.ground); this.matter.world.setGravity(0, 1); // Apply gravity to the world
-
+    this.cameras.main.startFollow(this.santa);
+    this.matter.world.setGravity(0, 1); // Apply gravity to the world
     this.key = this.input.keyboard.addKey(localStorage.getItem('selectedKey'));
 
-    this.a = 1;
+    this.caracterSpeed = 3;
     setInterval(() => {
       this.a += Math.log(2) / 1000;
     }, 2000);
@@ -110,12 +87,116 @@ class GameScene extends Phaser.Scene {
 
   }
 
+  createSlope(graphics, sliceStart){
+    const slopePoints = [];
+    let slopes = 0;
+    let slopeStart = 0;
+    let slopeStartHeight = sliceStart.y;
+    let currentSlopeLength = Phaser.Math.Between(gameOptions.slopeLength[0], gameOptions.slopeLength[1]);
+    let slopeEnd = slopeStart + currentSlopeLength;
+    let slopeEndHeight = slopeStartHeight + Math.random();
+    let currentPoint = 0;
+    while(slopes < gameOptions.slopesPerSlice){
+      let y;
+        if(currentPoint === slopeEnd){
+            slopes +=1;
+            slopeStartHeight = slopeEndHeight;
+            slopeEndHeight = slopeStartHeight + Math.random();
+            y = slopeStartHeight * gameOptions.amplitude;
+            slopeStart = currentPoint;
+            currentSlopeLength = Phaser.Math.Between(gameOptions.slopeLength[0], gameOptions.slopeLength[1]);
+            slopeEnd += currentSlopeLength;
+        }
+        else{
+            y = this.interpolate(slopeStartHeight, slopeEndHeight, (currentPoint - slopeStart) / (slopeEnd - slopeStart)) * gameOptions.amplitude;
+        }
+        slopePoints.push(new Phaser.Math.Vector2(currentPoint, y))
+        currentPoint +=1;
+    }
+    // simplify the slope
+    const simpleSlope = simplify(slopePoints, 1, true);
+
+    // eslint-disable-next-line no-param-reassign
+    graphics.x = sliceStart.x;
+    // draw the ground
+    graphics.clear();
+    graphics.moveTo(0, 1000);
+    graphics.fillStyle(0xdefbff);
+    graphics.beginPath();
+    simpleSlope.forEach(point => {
+      graphics.lineTo(point.x, point.y);
+  });
+    graphics.lineTo(currentPoint, sliceStart.y *  1500);
+    graphics.lineTo(0, sliceStart.y * 1500);
+    graphics.closePath();
+    graphics.fillPath();
+
+    // draw the snow
+    graphics.lineStyle(16, 0xc9edf0);
+    graphics.beginPath();
+    simpleSlope.forEach(point => {
+      graphics.lineTo(point.x, point.y);
+  });
+    graphics.strokePath();
+
+// loop through all simpleSlope points starting from the second
+        for(let i = 1; i < simpleSlope.length; i+=1){
+            // define a line between previous and current simpleSlope points
+            const line = new Phaser.Geom.Line(simpleSlope[i - 1].x, simpleSlope[i - 1].y, simpleSlope[i].x, simpleSlope[i].y);
+            // calculate line length, which is the distance between the two points
+            const distance = Phaser.Geom.Line.Length(line);
+            // calculate the center of the line
+            const center = Phaser.Geom.Line.GetPoint(line, 0.5);
+            // calculate line angle
+            const angle1 = Phaser.Geom.Line.Angle(line);
+
+            // if the pool is empty...
+            if(this.bodyPool.length === 0){
+
+                // create a new rectangle body
+                this.matter.add.rectangle(center.x + sliceStart.x, center.y, distance, 10, {
+                    isStatic: true,
+                    angle: angle1,
+                    friction: 1,
+                    restitution: 0
+                });
+            }
+
+            // if the pool is not empty...
+            else{
+
+                // get the body from the pool
+                const body = this.bodyPool.shift();
+                this.bodyPoolId.shift();
+
+                // reset, reshape and move the body to its new position
+                this.matter.body.setPosition(body, {
+                    x: center.x + sliceStart.x,
+                    y: center.y
+                });
+                const length = body.area / 10;
+                this.matter.body.setAngle(body, 0)
+                this.matter.body.scale(body, 1 / length, 1);
+                this.matter.body.scale(body, distance, 1);
+                this.matter.body.setAngle(body, angle1);
+            }
+        }
+
+    // eslint-disable-next-line no-param-reassign
+    graphics.width = (currentPoint - 1) * -1;
+    return new Phaser.Math.Vector2(graphics.x + currentPoint - 1, slopeStartHeight);
+}
+
+// eslint-disable-next-line class-methods-use-this
+interpolate(vFrom, vTo, delta){
+  const interpolation = (1 - Math.cos(delta * Math.PI)) * 0.5;
+  return vFrom * (1 - interpolation) + vTo * interpolation;
+}
 
   update() {
     const santa1 = this.santa;
-    const groundLayer = this.ground;
 
-    santa1.x += 2;
+    santa1.x += this.caracterSpeed;
     santa1.play('player-slide', true);
     const spaceJustPressed = Phaser.Input.Keyboard.JustDown(this.cursors.space);
 
@@ -125,11 +206,6 @@ class GameScene extends Phaser.Scene {
       scorePauseScene.meterLabel.resumeMeter();
       localStorage.removeItem('resume');
     }
-
-    // if (localStorage.getItem('replay')) {
-    //   this.scorePauseScene.meterLabel.destroyMeter();
-    //   localStorage.removeItem('replay');
-    // }
 
     if (this.cursors.space.isDown) this.santa.play('player-jump', true);
 
@@ -146,48 +222,30 @@ class GameScene extends Phaser.Scene {
       this.key = this.input.keyboard.addKey(key);
     }
 
-    // Check if the penguin and groundLayer are defined
-    if (santa1 && groundLayer) {
-      // Filter tiles with the 'obstacles' property
-      const obstacleTiles = groundLayer.filterTiles(
-        (tile) => tile.properties && tile.properties.obstacles,
-      );
+ // loop through all mountains
+ this.slopeGraphics.forEach((item) =>{
+ 
+  // if the mountain leaves the screen to the left...
+  if(this.cameras.main.scrollX > item.x + item.width + 10000){
 
-      // Check if the penguin and its body are defined
-      if (santa1.body) {
-        // Check if the penguin overlaps with any obstacle tiles
-        const overlappingTiles = obstacleTiles.filter((tile) => {
-          const tileBounds = tile.getBounds();
-          return (
-            tileBounds &&
-            Phaser.Geom.Intersects.RectangleToRectangle(santa1.getBounds(), tileBounds)
-          );
-        });
-
-        // If there are overlapping tiles, set gameOver to true
-        if (overlappingTiles.length > 0) {
-          this.hitObstacle(this.santa);
-        }
-      }
-    }
+      // reuse the mountain
+      this.sliceStart = this.createSlope(item, this.sliceStart)
   }
+});
 
-  // eslint-disable-next-line class-methods-use-this
-  //   async updateScore(score) {
-  //     const token = localStorage.getItem('token');
+ // get all bodies
+ const {bodies} = this.matter.world.localWorld;
 
-  //     const options = {
-  //       method: 'PUT',
-  //       body: JSON.stringify({
-  //         score,
-  //       }),
-  //       headers: {
-  //         'Content-Type': 'application/json',
-  //         Authorization: token,
-  //       },
-  //     };
-  //     await fetch(`${process.env.API_BASE_URL}/scores/`, options);
-  //   }
+ // loop through all bodies
+ bodies.forEach((body) =>{
+     // if the body is out of camera view to the left side and is not yet in the pool..
+     if(this.cameras.main.scrollX > body.position.x + 200 && this.bodyPoolId.indexOf(body.id) === -1){
+         // ...add the body to the pool
+         this.bodyPool.push(body);
+         this.bodyPoolId.push(body.id);
+     }
+ })
+}
 
   createDudeAnimations() {
     this.anims.create({
@@ -266,6 +324,7 @@ class GameScene extends Phaser.Scene {
     this.scene.run('game-over', { score : this.formatDistance(this.meterLabel) });
   }
 
+
   // eslint-disable-next-line class-methods-use-this
   async updateScore(newScore) {
     const token = localStorage.getItem('token');
@@ -332,6 +391,7 @@ class GameScene extends Phaser.Scene {
 
   async updateDBCoins() {
     const coin = this.coinLabel.getCoin();
+    // eslint-disable-next-line no-console
     console.log(`you have ${coin}`);
     // const token = localStorage.getItem('token');
     // const options = {

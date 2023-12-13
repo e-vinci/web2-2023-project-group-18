@@ -22,6 +22,7 @@ class GameOverScene extends Phaser.Scene {
   // eslint-disable-next-line class-methods-use-this
   init(data) {
     this.score = data.score
+    // eslint-disable-next-line no-console
     console.log(data.score);
   }
 
@@ -115,6 +116,7 @@ class GameOverScene extends Phaser.Scene {
   }
 
   handleGameOverEvent() {
+    // eslint-disable-next-line no-console
     console.log(`score : ${this.score}`);
     this.scoreText.setText(`Score: ${this.score}`);
   }
