@@ -52,36 +52,39 @@ class GameScene extends Phaser.Scene {
   }
 
   create() {
-    this.createDudeAnimations();
-
-     // Generating Ground and its Collision
-     this.bodyPool = [];
-     this.bodyPoolId = [];
-     this.slopeGraphics = [];
-     this.sliceStart = new Phaser.Math.Vector2(0, 2);
-     for(let i = 0; i < gameOptions.slicesAmount; i+=1){
-       this.slopeGraphics[i] = this.add.graphics();
-       this.sliceStart = this.createSlope(this.slopeGraphics[i], this.sliceStart);
-     }
+// Generating Ground and its Collision
+this.bodyPool = [];
+this.bodyPoolId = [];
+this.slopeGraphics = [];
+this.sliceStart = new Phaser.Math.Vector2(0, 2);
+for(let i = 0; i < gameOptions.slicesAmount; i+=1){
+  this.slopeGraphics[i] = this.add.graphics();
+  this.sliceStart = this.createSlope(this.slopeGraphics[i], this.sliceStart);
+}
 
 
-    this.santa = this.matter.add
-            .sprite(1500, 800, 'santa')
-            .play('player-idle')
-            .setFixedRotation();
+this.santa = this.matter.add
+       .sprite(1500, 800, 'santa')
+       .play('player-idle')
+       .setFixedRotation();
 
-    this.santa.setOnCollide(() => {
-      this.isTouchingGround = true;
-    });
+this.santa.setOnCollide(() => {
+ this.isTouchingGround = true;
+});
+
 
     this.cameras.main.startFollow(this.santa);
     this.matter.world.setGravity(0, 1); // Apply gravity to the world
     this.key = this.input.keyboard.addKey(localStorage.getItem('selectedKey'));
 
-        this.caracterSpeed = 3;
-        setInterval(() => {
-          this.caracterSpeed += Math.log(2) /1000;
-        }, 2000);
+    this.caracterSpeed = 3;
+    setInterval(() => {
+      this.a += Math.log(2) / 1000;
+    }, 2000);
+    this.scorePauseScene.pauseButton.on('pointerdown', () => {
+      this.scene.run('pause-menu');
+    });
+
   }
 
   createSlope(graphics, sliceStart){
@@ -208,7 +211,7 @@ interpolate(vFrom, vTo, delta){
 
     if (this.isTouchingGround && spaceJustPressed) {
       this.santa.play('player-jump', true);
-      this.santa.setVelocityY(-15);
+      this.santa.setVelocityY(-17);
       this.santa.setVelocityX(2);
       this.isTouchingGround = false;
     }
@@ -219,30 +222,30 @@ interpolate(vFrom, vTo, delta){
       this.key = this.input.keyboard.addKey(key);
     }
 
-    // loop through all mountains
-    this.slopeGraphics.forEach((item) =>{
+ // loop through all mountains
+ this.slopeGraphics.forEach((item) =>{
  
-      // if the mountain leaves the screen to the left...
-      if(this.cameras.main.scrollX > item.x + item.width + 10000){
+  // if the mountain leaves the screen to the left...
+  if(this.cameras.main.scrollX > item.x + item.width + 10000){
 
-          // reuse the mountain
-          this.sliceStart = this.createSlope(item, this.sliceStart)
-      }
-  });
-
-     // get all bodies
-     const {bodies} = this.matter.world.localWorld;
-
-     // loop through all bodies
-     bodies.forEach((body) =>{
-         // if the body is out of camera view to the left side and is not yet in the pool..
-         if(this.cameras.main.scrollX > body.position.x + 200 && this.bodyPoolId.indexOf(body.id) === -1){
-             // ...add the body to the pool
-             this.bodyPool.push(body);
-             this.bodyPoolId.push(body.id);
-         }
-     })
+      // reuse the mountain
+      this.sliceStart = this.createSlope(item, this.sliceStart)
   }
+});
+
+ // get all bodies
+ const {bodies} = this.matter.world.localWorld;
+
+ // loop through all bodies
+ bodies.forEach((body) =>{
+     // if the body is out of camera view to the left side and is not yet in the pool..
+     if(this.cameras.main.scrollX > body.position.x + 200 && this.bodyPoolId.indexOf(body.id) === -1){
+         // ...add the body to the pool
+         this.bodyPool.push(body);
+         this.bodyPoolId.push(body.id);
+     }
+ })
+}
 
   createDudeAnimations() {
     this.anims.create({
@@ -264,6 +267,7 @@ interpolate(vFrom, vTo, delta){
     });
 
     // slide animaion
+
     this.anims.create({
       key: 'player-slide',
       frameRate: 5,
@@ -277,6 +281,7 @@ interpolate(vFrom, vTo, delta){
     });
 
     // jump animation
+
     this.anims.create({
       key: 'player-jump',
       frameRate: 5,
@@ -305,17 +310,18 @@ interpolate(vFrom, vTo, delta){
         this.scorePauseScene.meterLabel.timeElapsed,
       )}`,
     );
+    localStorage.setItem('score', this.formatDistance(this.meterLabel));
 
-    if (localStorage.getItem('token')) {
-      this.updateScore(this.scorePauseScene.meterLabel.timeElapsed);
-    }
+    // if (localStorage.getItem('token')) {
+    //   this.updateScore(this.formatDistance(this.meterLabel.timeElapsed));
+    // }
 
     this.matter.pause();
     player.setTint(0xff0000);
 
     this.scene.stop('pause-score');
     this.scene.stop('game-scene');
-    this.scene.run('game-over', { score: this.scorePauseScene.meterLabel.timeElapsed });
+    this.scene.run('game-over', { score : this.formatDistance(this.meterLabel) });
   }
 
 
@@ -347,7 +353,7 @@ interpolate(vFrom, vTo, delta){
   addCoin(x, slopeStartHeight) {
     const y = slopeStartHeight * gameOptions.amplitude;
     const coin = this.physics.add.image(x, y + 20, COIN_KEY);
-coin.setBounceY(Phaser.Math.FloatBetween(0.4, 0.8));
+    coin.setBounceY(Phaser.Math.FloatBetween(0.4, 0.8));
 
     this.coins.add(coin);
   }
