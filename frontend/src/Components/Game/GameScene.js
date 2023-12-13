@@ -1,6 +1,6 @@
 // eslint-disable-next-line max-classes-per-file
 import Phaser from 'phaser';
-// eslint-disable-next-line import/no-unresolved
+// eslint-disable-next-line import/no-extraneous-dependencies
 import simplify from 'simplify-js';
 import dudeAsset from '../../assets/santa.png'
 import CoinLabel from './CoinLabel';
@@ -38,6 +38,7 @@ class GameScene extends Phaser.Scene {
     this.gameOver = false;
     this.obstacles = undefined;
     this.scorePauseScene = undefined;
+    this.a = undefined;
   }
 
   init() {
@@ -74,12 +75,13 @@ class GameScene extends Phaser.Scene {
     });
 
     this.cameras.main.startFollow(this.santa);
-
+    this.matter.world.setGravity(0, 1); // Apply gravity to the world
     this.key = this.input.keyboard.addKey(localStorage.getItem('selectedKey'));
 
-    this.scorePauseScene.pauseButton.on('pointerdown', () => {
-      this.scene.run('pause-menu');
-    });
+        this.a = 1;
+        setInterval(() => {
+          this.a += Math.log(2) /1000;
+        }, 2000);
   }
 
   createSlope(graphics, sliceStart){
@@ -191,7 +193,7 @@ interpolate(vFrom, vTo, delta){
   update() {
     const santa1 = this.santa;
 
-    santa1.x += 3;
+    santa1.x += this.a;
     santa1.play('player-slide', true);
     const spaceJustPressed = Phaser.Input.Keyboard.JustDown(this.cursors.space);
 
@@ -303,7 +305,6 @@ interpolate(vFrom, vTo, delta){
         this.scorePauseScene.meterLabel.timeElapsed,
       )}`,
     );
-    localStorage.setItem('score', this.formatDistance(this.meterLabel));
 
     if (localStorage.getItem('token')) {
       this.updateScore(this.scorePauseScene.meterLabel.timeElapsed);
@@ -312,9 +313,9 @@ interpolate(vFrom, vTo, delta){
     this.matter.pause();
     player.setTint(0xff0000);
 
-    this.scene.remove('pause-score');
-    this.scene.pause('game-scene');
-    this.scene.run('game-over');
+    this.scene.stop('pause-score');
+    this.scene.stop('game-scene');
+    this.scene.run('game-over', { score: this.scorePauseScene.meterLabel.timeElapsed });
   }
 
 
@@ -341,12 +342,6 @@ interpolate(vFrom, vTo, delta){
       console.log(response.status);
       throw new Error();
     }
-  }
-
-  pauseGame() {
-    this.meterLabel.pauseMeter();
-    this.scene.pause();
-    this.scene.run('pause-menu');
   }
 
   addCoin(x, slopeStartHeight) {
