@@ -81,7 +81,7 @@ class GameOverScene extends Phaser.Scene {
     });
 
     this.settingsButton = this.add.image(
-      this.scale.width -75,
+      this.scale.width - 75,
       this.scale.height - 40,
       SETTINGS_ASSET,
     );
@@ -114,22 +114,23 @@ class GameOverScene extends Phaser.Scene {
     this.events.emit('create-complete');
   }
 
-  handleGameOverEvent(score) {
-    this.score = score;
-    console.log(`score : ${score}`);
+  handleGameOverEvent() {
+    console.log(`score : ${this.score}`);
     this.scoreText.setText(`Score: ${this.score}`);
   }
 
   goShop() {
+    localStorage.getItem('score');
     this.scene.stop('game-over');
     this.game.destroy(true);
     Navigate('/shop');
   }
 
   replayGame() {
-       this.scene.resume('pause-menu');
-       this.scene.remove('pause-score');
-       this.scene.start('game-scene');
+    localStorage.getItem('score');
+    this.scene.resume('pause-menu');
+    this.scene.remove('pause-score');
+    this.scene.start('game-scene');
   }
 }
 

@@ -17,15 +17,15 @@
             "scaleInDock": 1
         },
         "map.json": {
-            "scale": 1,
-            "selectedLayer": 0,
+            "scale": 0.5,
+            "selectedLayer": 1,
             "viewCenter": {
-                "x": -157,
-                "y": 441.5
+                "x": -348,
+                "y": 437
             }
         },
         "map.json#iceworld": {
-            "scaleInDock": 1,
+            "scaleInDock": 2,
             "scaleInEditor": 1
         },
         "map.tmx": {
