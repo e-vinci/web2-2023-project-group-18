@@ -72,7 +72,7 @@ class GameScene extends Phaser.Scene {
     }
 
     this.santa = this.matter.add
-            .sprite(1500, 800, 'santa')
+            .sprite(1500, 500, 'santa')
             .play('player-idle')
             .setFixedRotation();
 
@@ -234,8 +234,8 @@ class GameScene extends Phaser.Scene {
 
     if (this.isTouchingGround && spaceJustPressed) {
       this.santa.play('player-jump', true);
-      this.santa.setVelocityY(-17);
-      this.santa.setVelocityX(this.caracterSpeed);
+      this.santa.setVelocityY(-15);
+      this.santa.setVelocityX(2*this.caracterSpeed);
       this.isTouchingGround = false;
     }
 
@@ -248,7 +248,7 @@ class GameScene extends Phaser.Scene {
     // loop through all mountains
     this.slopeGraphics.forEach((item) => {
       // if the mountain leaves the screen to the left...
-      if(this.cameras.main.scrollX > item.x + item.width + 6000){
+      if(this.cameras.main.scrollX > item.x + item.width + 5000){
           // reuse the mountain
           this.sliceStart = this.createSlope(item, this.sliceStart)
       }
@@ -261,7 +261,7 @@ class GameScene extends Phaser.Scene {
     bodies.forEach((body) => {
       // if the body is out of camera view to the left side and is not yet in the pool
       if (
-        this.cameras.main.scrollX > body.position.x + 100 &&
+        this.cameras.main.scrollX > body.position.x &&
         this.bodyPoolId.indexOf(body.id) === -1 &&
         body.label !== COIN_KEY
         // TODO body.label !== obstacles
