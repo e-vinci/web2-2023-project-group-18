@@ -18,12 +18,12 @@ const PAUSE_BUTTON = 'pause';
 
 const gameOptions = {
   amplitude: 300,
-  slopeLength: [400, 800],
-  slicesAmount: 4,
+  slopeLength: [300, 600],
+  slicesAmount: 3,
   slopesPerSlice: 5,
   pineRatio: 5,
-  coinRatio: 4,
-  amountCoin: 10
+  coinRatio: 10,
+  amountCoin: 5
 };
 
 class GameScene extends Phaser.Scene {
@@ -83,7 +83,7 @@ class GameScene extends Phaser.Scene {
     this.matter.world.setGravity(0, 1); // Apply gravity to the world
     this.key = this.input.keyboard.addKey(localStorage.getItem('selectedKey'));
 
-        this.caracterSpeed= 1;
+        this.caracterSpeed= 3;
         setInterval(() => {
           this.caracterSpeed+= Math.log(2) /1000;
         }, 2000);
@@ -197,9 +197,9 @@ class GameScene extends Phaser.Scene {
       }
 
       // random coin
-      if (Phaser.Math.Between(0, 100) < gameOptions.coinRatio * 10 && i > 20) {
-        const x = center.x + sliceStart.x + Phaser.Math.Between(20, 50);
-        const y = center.y + sliceStart.y + -50;
+      if (Phaser.Math.Between(0, 100) < gameOptions.coinRatio && i%3 === 0) {
+        const x = center.x + sliceStart.x + 20;
+        const y = center.y + sliceStart.y - 70;
         this.addCoin(x, y);
       }
     }
@@ -247,7 +247,7 @@ class GameScene extends Phaser.Scene {
     // loop through all mountains
     this.slopeGraphics.forEach((item) => {
       // if the mountain leaves the screen to the left...
-      if(this.cameras.main.scrollX > item.x + item.width + 10000){
+      if(this.cameras.main.scrollX > item.x + item.width + 6000){
           // reuse the mountain
           this.sliceStart = this.createSlope(item, this.sliceStart)
       }
@@ -258,31 +258,32 @@ class GameScene extends Phaser.Scene {
 
     // loop through all bodies
     bodies.forEach((body) => {
-      // if the body is out of camera view to the left side and is not yet in the pool..
+      // if the body is out of camera view to the left side and is not yet in the pool
       if (
-        this.cameras.main.scrollX > body.position.x + 200 &&
+        this.cameras.main.scrollX > body.position.x &&
         this.bodyPoolId.indexOf(body.id) === -1
+        && body.label !== COIN_KEY
       ) {
-        // ...add the body to the pool
+        // add the body to the pool
         this.bodyPool.push(body);
         this.bodyPoolId.push(body.id);
       }
     });
 
-    // Collect coin
+    // CheckCollision
     this.matter.world.on(
       'collisionstart',
-      (event, bodyA, bodyB) => this.collectCoin(bodyA, bodyB),
+      (event, bodyA, bodyB) => this.checkCollision(bodyA, bodyB),
       this,
     );
     this.matter.world.on(
       'collisionactive',
-      (event, bodyA, bodyB) => this.collectCoin(bodyA, bodyB),
+      (event, bodyA, bodyB) => this.checkCollision(bodyA, bodyB),
       this,
     );
     this.matter.world.on(
       'collisionend',
-      (event, bodyA, bodyB) => this.collectCoin(bodyA, bodyB),
+      (event, bodyA, bodyB) => this.checkCollision(bodyA, bodyB),
       this,
     );
   }
@@ -389,12 +390,6 @@ class GameScene extends Phaser.Scene {
 
   addCoin(x, y) {
     const coin = this.matter.add.image(x, y, COIN_KEY, null);
-    // Set hit box bigger
-    // const coinRadius = 30;
-    // coin.setCircle(coinRadius, {
-    //   isSensor: true,
-    //   label: COIN_KEY,
-    // });
     coin.setCircle();
     coin.setStatic(true);
     coin.body.isSensor = true;
@@ -403,7 +398,7 @@ class GameScene extends Phaser.Scene {
     this.coins.push(coin);
   }
 
-  collectCoin(a, b) {
+  checkCollision(a, b) {
     if (a.label === COIN_KEY && a.gameObject !== null && a.gameObject !== undefined) {
       a.gameObject.destroy();
       this.scorePauseScene.coinLabel.add(gameOptions.amountCoin);
