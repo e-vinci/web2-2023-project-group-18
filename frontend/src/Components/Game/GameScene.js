@@ -347,6 +347,7 @@ class GameScene extends Phaser.Scene {
         body.gameObject.destroy();
       }
     });
+
  }
 
   createDudeAnimations() {
