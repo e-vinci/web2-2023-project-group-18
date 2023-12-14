@@ -37,7 +37,7 @@ class ScorePauseScene extends Phaser.Scene {
          this.pauseButton.on('pointerdown', () => {
            this.pauseGame();
          });
-     
+
          // coins
          this.add.image(30, 88, HUD_COIN_KEY);
          this.coinLabel = this.createCoinLabel(45, 70);
