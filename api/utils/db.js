@@ -24,7 +24,7 @@ if (process.env.DB_USER
     connectionTimeoutMillis: 2000,
   });
 } else {
-  console.log('Your database credentials are not correct!');
+  console.error('Your database credentials are not correct!');
   process.exit(1);
 }
 
