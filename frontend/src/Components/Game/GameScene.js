@@ -10,13 +10,15 @@ import pauseButton from '../../assets/pauseButton.png';
 import Settings from '../../utils/settings';
 import MeterLabel from './MeterLabel';
 import dudeAssetJSON from '../../assets/santa.json';
-import pineSapling from '../../assets/winterTiles/pineSapling.png';
+import pineSaplingAsset from '../../assets/winterTiles/pineSapling.png';
 
 const GROUND_KEY = 'groundLabel';
 const COIN_KEY = 'coin';
 const OBSTACLE_KEY = 'obstacleLabel';
 const HUD_COIN_KEY = 'hudcoin';
 const PAUSE_BUTTON = 'pause';
+const PINE_SAPLING = 'pine';
+
 
 const gameOptions = {
   amplitude: 300,
@@ -45,6 +47,7 @@ class GameScene extends Phaser.Scene {
     this.gameOver = false;
     this.scorePauseScene = undefined;
     this.caracterSpeed= undefined;
+    this.pinesPool = [];
   }
 
   init() {
@@ -55,7 +58,7 @@ class GameScene extends Phaser.Scene {
 
   preload() {
     this.load.atlas('santa', dudeAsset, dudeAssetJSON);
-    this.load.image('pineSapling', pineSapling);
+    this.load.image(PINE_SAPLING, pineSaplingAsset);
   }
 
   create() {
@@ -253,6 +256,15 @@ class GameScene extends Phaser.Scene {
     return new Phaser.Math.Vector2(graphics.x + currentPoint - 1, slopeStartHeight);
   }
 
+  addPine(x, y) {
+    const pineSapling = this.matter.add.image(x, y, PINE_SAPLING, null);
+    pineSapling.setRectangle();
+    pineSapling.setStatic(true);
+    pineSapling.body.isSensor = true;
+    pineSapling.body.label = PINE_SAPLING;
+    this.pinesPool.push(pineSapling);
+  }
+
   // eslint-disable-next-line class-methods-use-this
   interpolate(vFrom, vTo, delta) {
     const interpolation = (1 - Math.cos(delta * Math.PI)) * 0.5;
@@ -348,6 +360,22 @@ class GameScene extends Phaser.Scene {
       (event, bodyA, bodyB) => this.checkCollision(bodyA, bodyB),
       this,
     );
+
+    this.matter.world.on(
+      'collisionstart',
+      (event, bodyA, bodyB) => this.pineCollision(bodyA, bodyB),
+      this,
+    );
+    this.matter.world.on(
+      'collisionactive',
+      (event, bodyA, bodyB) => this.pineCollision(bodyA, bodyB),
+      this,
+    );
+    this.matter.world.on(
+      'collisionend',
+      (event, bodyA, bodyB) => this.pineCollision(bodyA, bodyB),
+      this,
+    );
  }
 
   createDudeAnimations() {
@@ -405,15 +433,11 @@ class GameScene extends Phaser.Scene {
     return `${formattedMeters} m`;
   }
 
-  hitObstacle(player) {
-    this.scorePauseScene.meterLabel.pauseMeter();
-    this.scene.pause();
-    this.scorePauseScene.meterLabel.setText(
-      `GAME OVER :  \nYour Score is ${this.formatDistance(
-        this.scorePauseScene.meterLabel.timeElapsed,
-      )}`,
-    );
+  hitObstacle(player) {    
     localStorage.setItem('score', this.formatDistance(this.meterLabel));
+    this.scorePauseScene.meterLabel.pauseMeter();    
+    this.scene.run('game-over', { score : this.formatDistance(this.meterLabel) });
+    this.scene.pause();
 
     // if (localStorage.getItem('token')) {
     //   this.updateScore(this.formatDistance(this.meterLabel.timeElapsed));
@@ -424,7 +448,17 @@ class GameScene extends Phaser.Scene {
 
     this.scene.stop('pause-score');
     this.scene.stop('game-scene');
-    this.scene.run('game-over', { score : this.formatDistance(this.meterLabel) });
+
+  }
+
+  pineCollision(a, b) {
+    if (a.label === PINE_SAPLING && a.gameObject !== null && a.gameObject !== undefined) {
+      this.hitObstacle(this.santa);
+    }
+
+    if (b.label === PINE_SAPLING && b.gameObject !== null && b.gameObject !== undefined) {
+      this.hitObstacle(this.santa);
+    }
   }
 
 
