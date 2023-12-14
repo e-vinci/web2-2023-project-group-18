@@ -5,6 +5,7 @@ import dudeAsset from '../../assets/santa.png';
 import Settings from '../../utils/settings';
 import dudeAssetJSON from '../../assets/santa.json';
 import pineSaplingAsset from '../../assets/winterTheme/pineSapling.png';
+import ScorePauseScene from './ScorePauseScene';
 
 const GROUND_KEY = 'groundLabel';
 const COIN_KEY = 'coin';
@@ -41,6 +42,7 @@ class GameScene extends Phaser.Scene {
 
   init() {
     this.cursors = this.input.keyboard.createCursorKeys();
+    this.scorePauseScene = this.scene.add('pause-score', ScorePauseScene, true);
   }
 
   preload() {
@@ -98,7 +100,7 @@ class GameScene extends Phaser.Scene {
              setInterval(() => {
                this.caracterSpeed += Math.log(2) / 1000;
              }, 2000);
-             ScorePauseScene.pauseButton.on('pointerdown', () => {
+             this.scorePauseScene.pauseButton.on('pointerdown', () => {
                this.scene.run('pause-menu');
              });
            }
@@ -278,7 +280,7 @@ class GameScene extends Phaser.Scene {
     const spaceJustPressed = Phaser.Input.Keyboard.JustDown(this.cursors.space);
 
     if (localStorage.getItem('resume')) {
-      ScorePauseScene.meterLabel.resumeMeter();
+      this.scorePauseScene.meterLabel.resumeMeter();
       localStorage.removeItem('resume');
     }
 
@@ -396,16 +398,16 @@ class GameScene extends Phaser.Scene {
   }
 
    hitObstacle(player) {
-    ScorePauseScene.meterLabel.pauseMeter();
+    this.scorePauseScene.meterLabel.pauseMeter();
     this.scene.stop();
-    ScorePauseScene.meterLabel.setText(
+    this.scorePauseScene.meterLabel.setText(
       `GAME OVER :  \nYour Score is ${this.formatDistance(
-        ScorePauseScene.meterLabel.timeElapsed,
+        this.scorePauseScene.meterLabel.timeElapsed,
       )}`,
     );
 
     if (localStorage.getItem('token')) {
-      this.updateScore(ScorePauseScene.meterLabel.timeElapsed);
+      this.updateScore(this.scorePauseScene.meterLabel.timeElapsed);
     }
 
     this.matter.pause();
@@ -414,7 +416,7 @@ class GameScene extends Phaser.Scene {
     this.scene.stop('game-scene');
     this.scene.stop('pause-score');
     this.scene.run('game-over', {
-      score: this.formatDistance(ScorePauseScene.meterLabel.timeElapsed),
+      score: this.formatDistance(this.scorePauseScene.meterLabel.timeElapsed),
     });
   }
 
@@ -456,12 +458,12 @@ class GameScene extends Phaser.Scene {
   checkCollision(a, b) {
     if (a.label === COIN_KEY && a.gameObject !== null && a.gameObject !== undefined) {
       a.gameObject.destroy();
-      ScorePauseScene.coinLabel.add(gameOptions.amountCoin);
+      this.scorePauseScene.coinLabel.add(gameOptions.amountCoin);
     }
 
     if (b.label === COIN_KEY && b.gameObject !== null && b.gameObject !== undefined) {
       b.gameObject.destroy();
-      ScorePauseScene.coinLabel.add(gameOptions.amountCoin);
+      this.scorePauseScene.coinLabel.add(gameOptions.amountCoin);
     }
     if (a.label === OBSTACLE_KEY && a.gameObject !== null && a.gameObject !== undefined) {
       this.hitObstacle(this.santa);
