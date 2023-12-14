@@ -14,6 +14,19 @@ import robotImage from '../../assets/skins/robotSkin.png';
 
 import templateMapImage from '../../assets/templateMapShopPage.png';
 
+const SKINS_IMAGE = {
+    redhat: redhatImage,
+    jack: jackImage,
+    cat: catImage,
+    dog: dogImage,
+    explorer: explorerImage,
+    adventurer: adventurerImage,
+    ninja: ninjaImage,
+    ninjagirl: ninjagirlImage,
+    robot: robotImage,
+    default: santaImage
+};
+
 let coins = 0;
 
 // List from database
@@ -162,7 +175,7 @@ function displayCurrentSkinPage() {
             skinHTML += `
                 <div class="col-md-4 text-center">
                     <h3>${skin.label_skin}</h3>
-                    <img class="w-100 shop-picture" src="${getSkinImage(skin.name_skin)}" alt="skin picture ${skin.name_skin}" draggable="false">
+                    <img class="w-100 shop-picture" src="${SKINS_IMAGE[skin.name_skin] || SKINS_IMAGE.default}" alt="skin picture ${skin.name_skin}" draggable="false">
                     ${typeButton}
                 </div>`;
         }
@@ -357,41 +370,6 @@ function backButtonListenner() {
     backElement.addEventListener('click', () =>{
         Navigate('/');
     })
-}
-
-function getSkinImage(name) {
-    switch (name) {
-
-        case "redhat":
-            return redhatImage;
-
-        case "jack":
-            return jackImage;
-
-        case "cat":
-            return catImage;
-            
-        case "dog":
-            return dogImage;
-
-        case "explorer":
-            return explorerImage;
-
-        case "adventurer":
-            return adventurerImage;
-
-        case "ninja":
-            return ninjaImage;
-
-        case "ninjagirl":
-            return ninjagirlImage;
-
-        case "robot":
-            return robotImage;
-
-        default:
-            return santaImage;
-    }
 }
 
 // Fetch data from API
