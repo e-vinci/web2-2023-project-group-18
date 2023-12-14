@@ -21,12 +21,12 @@ const PINE_SAPLING = 'pine';
 
 const gameOptions = {
   amplitude: 300,
-  slopeLength: [200, 800], 
+  slopeLength: [300, 800], 
   slicesAmount: 3,
   slopesPerSlice: 5,
   // ratio in %
-  pineRatio: 10,
-  coinRatio: 30,
+  pineRatio: 15,
+  coinRatio: 33,
   amountCoin: 10 
 };
 
@@ -60,7 +60,7 @@ class GameScene extends Phaser.Scene {
   }
 
   create() {
-    this.createDudeAnimations();
+    this.matter.world.setGravity(0, 1); // Apply gravity to the world
     
     // Generating Ground and its Collision
     this.bodyPool = [];
@@ -83,8 +83,9 @@ class GameScene extends Phaser.Scene {
       this.isTouchingGround = true;
     });
 
+    this.createDudeAnimations();
+
     this.cameras.main.startFollow(this.santa);
-    this.matter.world.setGravity(0, 1); // Apply gravity to the world
     this.key = this.input.keyboard.addKey(localStorage.getItem('selectedKey'));
 
         this.caracterSpeed= 3;
@@ -185,7 +186,6 @@ class GameScene extends Phaser.Scene {
           label: GROUND_KEY,
         });
       }
-
       // if the pool is not empty...
       else {
         // get the body from the pool
@@ -204,51 +204,52 @@ class GameScene extends Phaser.Scene {
         this.matter.body.setAngle(body, angle1);
       }
 
-
-      if(Phaser.Math.Between(0,1) === 0){
+      if(i%3 === 0 && sliceStart.x > 2000){
+        // add an coin
+        if(Phaser.Math.Between(0,100) < gameOptions.coinRatio){
+          const coinX = center.x + sliceStart.x + 20;
+          const coinY = center.y + sliceStart.y - 70;
+          this.addCoin(coinX, coinY);
+        }
+      }
+      else if(sliceStart.x > 4000){
         // add an obstacle
-        if(Phaser.Math.Between(0,100) < gameOptions.pineRatio && sliceStart.x > 4000){
+        if(Phaser.Math.Between(0,100) < gameOptions.pineRatio){
       
           // random obstacle position
-            const size = 5;
-            const pineSaplingX = center.x +  sliceStart.x;
-            const pineSaplingY = center.y + sliceStart.y - 30;
+          const size = 5;
+          const pineSaplingX = center.x +  sliceStart.x;
+          const pineSaplingY = center.y + sliceStart.y - 30;
   
           // draw the obstacle
           graphics.fillRect(center.x,center.y,size,size);
   
           // if the pool is empty...
           if(this.pinesPool.length === 0){
-                  // create a new obstacle body
-                   this.matter.add.image(pineSaplingX, pineSaplingY, PINE_SAPLING, null, {
-                      isStatic: true,
-                      friction: 1,
-                      restitution: 0,
-                      collisionFilter: {
-                          category: 2
-                      },
-                      label: OBSTACLE_KEY,
-                  });
+            // create a new obstacle body
+            this.matter.add.image(pineSaplingX, pineSaplingY, PINE_SAPLING, null, {
+              isStatic: true,
+              friction: 1,
+              restitution: 0,
+              collisionFilter: {
+                category: 2 
+              },
+              label: OBSTACLE_KEY,
+            });
           }
-           else{
-                  // get the obstacle from the pool
-                  const pineSaplingBody = this.pinesPool.shift();
-                  this.pinesPoolId.shift();
+          else{
+            // get the obstacle from the pool
+            const pineSaplingBody = this.pinesPool.shift();
+            this.pinesPoolId.shift();
   
-                  // move the obstacle body to its new position
-                  this.matter.body.setPosition(pineSaplingBody, {
-                    x: pineSaplingX,
-                    y: pineSaplingY,
-                  });
+            // move the obstacle body to its new position
+            this.matter.body.setPosition(pineSaplingBody, {
+              x: pineSaplingX,
+              y: pineSaplingY,
+            });
           }
         }
-      }else
-      // add an coin
-        if(Phaser.Math.Between(0,100) < gameOptions.coinRatio && i%3 === 0 && sliceStart.x > 2000){
-          const coinX = center.x + sliceStart.x + 20;
-          const coinY = center.y + sliceStart.y - 70;
-          this.addCoin(coinX, coinY);
-        }
+      }
     }
 
     // eslint-disable-next-line no-param-reassign
