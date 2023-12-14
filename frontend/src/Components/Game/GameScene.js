@@ -18,7 +18,7 @@ const gameOptions = {
   slopesPerSlice: 5,
   // ratio in %
   pineRatio: 10,
-  coinRatio: 30,
+  coinRatio: 20,
   amountCoin: 10 
 };
 
@@ -100,10 +100,6 @@ class GameScene extends Phaser.Scene {
              setInterval(() => {
                this.caracterSpeed += Math.log(2) / 1000;
              }, 2000);
-             
-             this.scorePauseScene.pauseButton.on('pointerdown', () => {
-               this.scene.run('pause-menu');
-             });
            }
 
 
@@ -215,29 +211,19 @@ class GameScene extends Phaser.Scene {
       }
       
       // Generate objects
-      if(i%3 === 0 && sliceStart.x > 2000){
-        // add an coin
-        if(Phaser.Math.Between(0,100) < gameOptions.coinRatio){
-          const coinX = center.x + sliceStart.x + 20;
-          const coinY = center.y + sliceStart.y - 70;
-          this.addCoin(coinX, coinY);
-        }
-      }else 
-      if(i%2 === 0 && sliceStart.x > 3000){
+      if(i%3 === 0 && Phaser.Math.Between(0,100) < gameOptions.pineRatio && sliceStart.x > 2000){
         // add an obstacle
-        if(Phaser.Math.Between(0,100) < gameOptions.pineRatio){
-
           const size = 5;
-          const pineSaplingX = center.x +  sliceStart.x;
-          const pineSaplingY = center.y + sliceStart.y - 30;
+          const obstacleX = center.x +  sliceStart.x;
+          const obstacleY = center.y - 30;
   
           // draw the obstacle
           graphics.fillRect(center.x,center.y,size,size);
-  
+
           // if the pool is empty...
           if(this.pinesPool.length === 0){
             // create a new obstacle body
-            this.matter.add.image(pineSaplingX, pineSaplingY, PINE_SAPLING, null, {
+            this.matter.add.image(obstacleX, obstacleY, PINE_SAPLING, null, {
               isStatic: true,
               friction: 1,
               restitution: 0,
@@ -249,16 +235,24 @@ class GameScene extends Phaser.Scene {
           }
           else{
             // get the obstacle from the pool
-            const pineSaplingBody = this.pinesPool.shift();
+            const obstacleBody  = this.pinesPool.shift();
             this.pinesPoolId.shift();
   
             // move the obstacle body to its new position
-            this.matter.body.setPosition(pineSaplingBody, {
-              x: pineSaplingX,
-              y: pineSaplingY,
+            this.matter.body.setPosition(obstacleBody, {
+              x: obstacleX,
+              y: obstacleY,
+              isStatic: true,
+              friction: 1,
+              restitution: 0
             });
           }
-        }
+      }else 
+      if(i%3 === 0 && Phaser.Math.Between(0,100) < gameOptions.coinRatio && sliceStart.x > 1700){
+        // add an coin
+        const coinX = center.x + sliceStart.x + 20;
+        const coinY = center.y - 70;
+        this.addCoin(coinX, coinY);
       }
     }
 
@@ -326,8 +320,8 @@ class GameScene extends Phaser.Scene {
       } else 
       // if the body is out of camera view to the left side && it's not in the current obstacle pool && it's an obstacle body
       if(
-        this.cameras.main.scrollX > body.position.x +1000 &&
-        this.bodyPoolId.indexOf(body.id) === -1 &&
+        this.cameras.main.scrollX > body.position.x &&
+        this.pinesPoolId.indexOf(body.id) === -1 &&
         body.label === OBSTACLE_KEY
       ) {
         // add the body to the pines pool
@@ -421,6 +415,7 @@ class GameScene extends Phaser.Scene {
     });
   }
 
+  
   // eslint-disable-next-line class-methods-use-this
   async updateScore(newScore) {
     const token = localStorage.getItem('token');
@@ -451,7 +446,6 @@ class GameScene extends Phaser.Scene {
     const coin = this.matter.add.image(x, y, COIN_KEY, null);
     coin.setCircle();
     coin.setStatic(true);
-    coin.body.isSensor = true;
     coin.body.label = COIN_KEY;
     this.coins.push(coin);
   }
