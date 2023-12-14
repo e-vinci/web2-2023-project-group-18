@@ -16,8 +16,7 @@ const gameOptions = {
   slopeLength: [300, 800], 
   slicesAmount: 3,
   slopesPerSlice: 5,
-  // ratio in %
-  pineRatio: 10,
+  obstacleRatio: 10,
   coinRatio: 20,
   amountCoin: 10 
 };
@@ -30,14 +29,13 @@ class GameScene extends Phaser.Scene {
   constructor() {
     super('game-scene');
     this.player = undefined;
+    this.caracterSpeed= undefined;
     this.cursors = undefined;
-    this.stars = undefined;
     this.meterLabel = undefined;
     this.coinLabel = undefined;
     this.coins = [];
-    this.gameOver = false;
-    this.caracterSpeed= undefined;
     this.scorePauseScene = undefined;
+    this.gameOver = false;
   }
 
   init() {
@@ -215,7 +213,7 @@ class GameScene extends Phaser.Scene {
       }
       
       // Generate objects
-      if(i%3 === 0 && Phaser.Math.Between(0,100) < gameOptions.pineRatio && sliceStart.x > 2000){
+      if(i%3 === 0 && Phaser.Math.Between(0,100) < gameOptions.obstacleRatio && sliceStart.x > 2000){
         // add an obstacle
           const size = 5;
           const obstacleX = center.x +  sliceStart.x;
@@ -286,7 +284,6 @@ class GameScene extends Phaser.Scene {
     if (this.cursors.space.isDown) this.santa.play('player-jump', true);
 
     if (this.isTouchingGround && spaceJustPressed) {
-      this.santa.play('player-jump', true);
       this.santa.setVelocityY(-13);
       this.santa.setVelocityX(2*this.caracterSpeed);
       this.isTouchingGround = false;
