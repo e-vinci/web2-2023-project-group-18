@@ -9,6 +9,7 @@ import dogImage from '../../assets/skins/dogSkin.png';
 import explorerImage from '../../assets/skins/explorerSkin.png';
 import adventurerImage from '../../assets/skins/adventurerSkin.png';
 import ninjaImage from '../../assets/skins/ninjaSkin.png';
+import ninjagirlImage from '../../assets/skins/ninjagirlSkin.png';
 
 import templateMapImage from '../../assets/templateMapShopPage.png';
 
@@ -380,6 +381,9 @@ function getSkinImage(name) {
 
         case "ninja":
             return ninjaImage;
+
+        case "ninjagirl":
+            return ninjagirlImage;
 
         default:
             return santaImage;

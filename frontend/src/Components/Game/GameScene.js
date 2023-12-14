@@ -11,6 +11,7 @@ import dogAsset from '../../assets/skins/dog.png';
 import explorerAsset from '../../assets/skins/explorer.png';
 import adventurerAsset from '../../assets/skins/adventurer.png';
 import ninjaAsset from '../../assets/skins/ninja.png';
+import ninjagirlAsset from '../../assets/skins/ninjagirl.png';
 
 import santaAssetJSON from '../../assets/skins/santa.json';
 import redhatAssetJSON from '../../assets/skins/redhat.json';
@@ -20,6 +21,7 @@ import dogAssetJSON from '../../assets/skins/dog.json';
 import explorerAssetJSON from '../../assets/skins/explorer.json';
 import adventurerAssetJSON from '../../assets/skins/adventurer.json';
 import ninjaAssetJSON from '../../assets/skins/ninja.json';
+import ninjagirlAssetJSON from '../../assets/skins/ninjagirl.json';
 
 import CoinLabel from './CoinLabel';
 import coinAsset from '../../assets/coin.png';
@@ -47,6 +49,7 @@ const SKINS = {
   explorer: { asset: explorerAsset, assetJSON: explorerAssetJSON },
   adventurer: { asset: adventurerAsset, assetJSON: adventurerAssetJSON },
   ninja: { asset: ninjaAsset, assetJSON: ninjaAssetJSON },
+  ninjagirl: { asset: ninjagirlAsset, assetJSON: ninjagirlAssetJSON },
   default: { asset: santaAsset, assetJSON: santaAssetJSON }
 };
 

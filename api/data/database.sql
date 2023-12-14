@@ -146,7 +146,7 @@ INSERT INTO projet.skins (name_skin, label_skin, price) VALUES ('dog', 'Dog', 40
 INSERT INTO projet.skins (name_skin, label_skin, price) VALUES ('explorer', 'Explorer', 500);
 INSERT INTO projet.skins (name_skin, label_skin, price) VALUES ('adventurer', 'Adventurer', 600);
 INSERT INTO projet.skins (name_skin, label_skin, price) VALUES ('ninja', 'Ninja', 700);
-INSERT INTO projet.skins (name_skin, label_skin, price) VALUES ('gorgon', 'Gorgon', 800);
+INSERT INTO projet.skins (name_skin, label_skin, price) VALUES ('ninjagirl', 'Ninja Girl', 800);
 INSERT INTO projet.skins (name_skin, label_skin, price) VALUES ('chimera', 'Chimera', 900);
 INSERT INTO projet.skins (name_skin, label_skin, price) VALUES ('wyvern', 'Wyvern', 1000);
 INSERT INTO projet.skins (name_skin, label_skin, price) VALUES ('harpy', 'Harpy', 1500);
