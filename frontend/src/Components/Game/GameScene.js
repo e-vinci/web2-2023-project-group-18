@@ -10,7 +10,7 @@ import pauseButton from '../../assets/pauseButton.png';
 import Settings from '../../utils/settings';
 import MeterLabel from './MeterLabel';
 import dudeAssetJSON from '../../assets/santa.json';
-import pineSapling from '../../assets/winterTiles/pineSapling.png';
+import pineSaplingAsset from '../../assets/winterTiles/pineSapling.png';
 
 const COIN_KEY = 'coin';
 const HUD_COIN_KEY = 'hudcoin';
@@ -24,7 +24,7 @@ const gameOptions = {
   slicesAmount: 4,
   slopesPerSlice: 5,
   // ratio in %
-  pineRatio: 5,
+  pineRatio: 10,
   coinRatio: 30,
   amountCoin: 10
 };
@@ -45,6 +45,7 @@ class GameScene extends Phaser.Scene {
     this.gameOver = false;
     this.scorePauseScene = undefined;
     this.caracterSpeed= undefined;
+    this.pinesPool = [];
   }
 
   init() {
@@ -55,12 +56,12 @@ class GameScene extends Phaser.Scene {
 
   preload() {
     this.load.atlas('santa', dudeAsset, dudeAssetJSON);
-    this.load.image(PINE_SAPLING, pineSapling);
+    this.load.image(PINE_SAPLING, pineSaplingAsset);
   }
 
   create() {
     this.createDudeAnimations();
-    this.pinesPool = [];
+
 
     // Generating Ground and its Collision
     this.bodyPool = [];
@@ -211,51 +212,28 @@ class GameScene extends Phaser.Scene {
       }
 
 
-          if(Phaser.Math.Between(0,100) < gameOptions.pineRatio && (sliceStart.x > 0 || i !== 1)){
+      if (Phaser.Math.Between(0, 100) < gameOptions.pineRatio && i !== 3) {
+        // random rock position
+        const pineSaplingX = center.x + sliceStart.x + 30;
+        const pineSaplingY = center.y + sliceStart.y - 35;
 
-              // random rock position
-              const size = 5;
-              const pineSaplingX = center.x +  sliceStart.x + Phaser.Math.Between(0, 30);
-              const pineSaplingY = center.y + sliceStart.y - 32;
+        // Add pine sapling using the addPine method
+        this.addPine(pineSaplingX, pineSaplingY);
 
-            // draw the pineSapling
-            graphics.fillRect(center.x,center.y,size,size);
-
-            // if the pool is empty...
-            if(this.pinesPool.length === 0){
-
-                // create a new pineSapling body
-                const pineSaplingBody = this.matter.add.image(pineSaplingX, pineSaplingY, PINE_SAPLING,null, {
-                    isStatic: true,
-                    friction: 1,
-                    restitution: 0,
-                    collisionFilter: {
-                        category: 2
-                    },
-                });
-                // assign inPool property to check if the body is in the pool
-                pineSaplingBody.inPool = false;
-
-            }
-            else{
-
-                // get the rock from the pool
-                const pineSaplingBody = this.pinesPool.shift();
-
-                // move the pineSapling body to its new position
-                pineSaplingBody.setPosition({
-                  x: pineSaplingX,
-                  y: pineSaplingY
-                });
-
-                pineSaplingBody.inPool = false;
-            }
-
-        }
+      }
     }
     // eslint-disable-next-line no-param-reassign
     graphics.width = (currentPoint - 1) * -1;
     return new Phaser.Math.Vector2(graphics.x + currentPoint - 1, slopeStartHeight);
+  }
+
+  addPine(x, y) {
+    const pineSapling = this.matter.add.image(x, y, PINE_SAPLING, null);
+    pineSapling.setRectangle();
+    pineSapling.setStatic(true);
+    pineSapling.body.isSensor = true;
+    pineSapling.body.label = PINE_SAPLING;
+    this.pinesPool.push(pineSapling);
   }
 
   // eslint-disable-next-line class-methods-use-this
@@ -310,9 +288,9 @@ class GameScene extends Phaser.Scene {
       // if the body is out of camera view to the left side and is not yet in the pool
       if (
         this.cameras.main.scrollX > body.position.x &&
-        this.bodyPoolId.indexOf(body.id) === -1 &&
-        body.label !== COIN_KEY
-        // TODO body.label !== obstacles
+        this.bodyPoolId.indexOf(body.id) === -1 && (
+        body.label !== COIN_KEY ||
+        body.label !== PINE_SAPLING)
       ) {
         // add the body to the pool
         this.bodyPool.push(body);
@@ -320,7 +298,7 @@ class GameScene extends Phaser.Scene {
       } else 
       if( 
         this.cameras.main.scrollX > body.position.x + 100 &&
-        body.label === COIN_KEY
+        (body.label === COIN_KEY || body.label === PINE_SAPLING)
         // TODO add obstacles
       ) {
         // TODO delete body image
@@ -342,6 +320,22 @@ class GameScene extends Phaser.Scene {
     this.matter.world.on(
       'collisionend',
       (event, bodyA, bodyB) => this.checkCollision(bodyA, bodyB),
+      this,
+    );
+
+    this.matter.world.on(
+      'collisionstart',
+      (event, bodyA, bodyB) => this.pineCollision(bodyA, bodyB),
+      this,
+    );
+    this.matter.world.on(
+      'collisionactive',
+      (event, bodyA, bodyB) => this.pineCollision(bodyA, bodyB),
+      this,
+    );
+    this.matter.world.on(
+      'collisionend',
+      (event, bodyA, bodyB) => this.pineCollision(bodyA, bodyB),
       this,
     );
  }
@@ -401,15 +395,11 @@ class GameScene extends Phaser.Scene {
     return `${formattedMeters} m`;
   }
 
-  hitObstacle(player) {
-    this.scorePauseScene.meterLabel.pauseMeter();
-    this.scene.pause();
-    this.scorePauseScene.meterLabel.setText(
-      `GAME OVER :  \nYour Score is ${this.formatDistance(
-        this.scorePauseScene.meterLabel.timeElapsed,
-      )}`,
-    );
+  hitObstacle(player) {    
     localStorage.setItem('score', this.formatDistance(this.meterLabel));
+    this.scorePauseScene.meterLabel.pauseMeter();    
+    this.scene.run('game-over', { score : this.formatDistance(this.meterLabel) });
+    this.scene.pause();
 
     // if (localStorage.getItem('token')) {
     //   this.updateScore(this.formatDistance(this.meterLabel.timeElapsed));
@@ -420,7 +410,17 @@ class GameScene extends Phaser.Scene {
 
     this.scene.stop('pause-score');
     this.scene.stop('game-scene');
-    this.scene.run('game-over', { score : this.formatDistance(this.meterLabel) });
+
+  }
+
+  pineCollision(a, b) {
+    if (a.label === PINE_SAPLING && a.gameObject !== null && a.gameObject !== undefined) {
+      this.hitObstacle(this.santa);
+    }
+
+    if (b.label === PINE_SAPLING && b.gameObject !== null && b.gameObject !== undefined) {
+      this.hitObstacle(this.santa);
+    }
   }
 
 
