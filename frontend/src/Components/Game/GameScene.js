@@ -75,9 +75,13 @@ class GameScene extends Phaser.Scene {
              }
 
              this.santa = this.matter.add
-               .sprite(1500, 400, 'santa')
+               .sprite(1500, 400, 'santa', null, {
+                 shape: { type: 'rectangle', width: 10, height: 40 },
+               })
                .play('player-idle')
                .setFixedRotation();
+
+             // Pour une hitbox rectangulaire
 
              this.santa.setOnCollide(() => {
                this.isTouchingGround = true;
