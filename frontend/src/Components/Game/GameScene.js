@@ -19,7 +19,6 @@ const HUD_COIN_KEY = 'hudcoin';
 const PAUSE_BUTTON = 'pause';
 const PINE_SAPLING = 'pine';
 
-
 const gameOptions = {
   amplitude: 300,
   slopeLength: [200, 800], 
@@ -34,7 +33,7 @@ const gameOptions = {
 class GameScene extends Phaser.Scene {
   santa = Phaser.Physics.Matter.Sprite;
 
-  pineSapling = Phaser.Physics.Matter.Sprite;
+  pineSaplingAsset = Phaser.Physics.Matter.Sprite;
 
   constructor() {
     super('game-scene');
@@ -47,7 +46,6 @@ class GameScene extends Phaser.Scene {
     this.gameOver = false;
     this.scorePauseScene = undefined;
     this.caracterSpeed= undefined;
-    this.pinesPool = [];
   }
 
   init() {
@@ -221,7 +219,7 @@ class GameScene extends Phaser.Scene {
           // if the pool is empty...
           if(this.pinesPool.length === 0){
                   // create a new obstacle body
-                   this.matter.add.image(pineSaplingX, pineSaplingY, 'pineSapling',null, {
+                   this.matter.add.image(pineSaplingX, pineSaplingY, PINE_SAPLING, null, {
                       isStatic: true,
                       friction: 1,
                       restitution: 0,
@@ -254,15 +252,6 @@ class GameScene extends Phaser.Scene {
     // eslint-disable-next-line no-param-reassign
     graphics.width = (currentPoint - 1) * -1;
     return new Phaser.Math.Vector2(graphics.x + currentPoint - 1, slopeStartHeight);
-  }
-
-  addPine(x, y) {
-    const pineSapling = this.matter.add.image(x, y, PINE_SAPLING, null);
-    pineSapling.setRectangle();
-    pineSapling.setStatic(true);
-    pineSapling.body.isSensor = true;
-    pineSapling.body.label = PINE_SAPLING;
-    this.pinesPool.push(pineSapling);
   }
 
   // eslint-disable-next-line class-methods-use-this
@@ -360,22 +349,6 @@ class GameScene extends Phaser.Scene {
       (event, bodyA, bodyB) => this.checkCollision(bodyA, bodyB),
       this,
     );
-
-    this.matter.world.on(
-      'collisionstart',
-      (event, bodyA, bodyB) => this.pineCollision(bodyA, bodyB),
-      this,
-    );
-    this.matter.world.on(
-      'collisionactive',
-      (event, bodyA, bodyB) => this.pineCollision(bodyA, bodyB),
-      this,
-    );
-    this.matter.world.on(
-      'collisionend',
-      (event, bodyA, bodyB) => this.pineCollision(bodyA, bodyB),
-      this,
-    );
  }
 
   createDudeAnimations() {
@@ -448,19 +421,7 @@ class GameScene extends Phaser.Scene {
 
     this.scene.stop('pause-score');
     this.scene.stop('game-scene');
-
   }
-
-  pineCollision(a, b) {
-    if (a.label === PINE_SAPLING && a.gameObject !== null && a.gameObject !== undefined) {
-      this.hitObstacle(this.santa);
-    }
-
-    if (b.label === PINE_SAPLING && b.gameObject !== null && b.gameObject !== undefined) {
-      this.hitObstacle(this.santa);
-    }
-  }
-
 
   // eslint-disable-next-line class-methods-use-this
   async updateScore(newScore) {
