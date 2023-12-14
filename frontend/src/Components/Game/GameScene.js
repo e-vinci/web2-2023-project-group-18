@@ -98,9 +98,9 @@ class GameScene extends Phaser.Scene {
              this.cameras.main.startFollow(this.santa);
              this.key = this.input.keyboard.addKey(localStorage.getItem('selectedKey'));
 
-             this.caracterSpeed = 3;
+             this.caracterSpeed = 5;
              setInterval(() => {
-               this.caracterSpeed += Math.log(2) / 1000;
+               this.caracterSpeed += Math.log(2) / 100;
              }, 2000);
            }
 
@@ -281,12 +281,16 @@ class GameScene extends Phaser.Scene {
       localStorage.removeItem('resume');
     }
 
-    if (this.cursors.space.isDown) this.santa.play('player-jump', true);
+    if (this.cursors.space.isDown)  this.santa.play('player-jump', true) ;
 
     if (this.isTouchingGround && spaceJustPressed) {
       this.santa.setVelocityY(-13);
       this.santa.setVelocityX(2*this.caracterSpeed);
       this.isTouchingGround = false;
+    }
+
+    if (this.cursors.right.isDown) {
+      this.santa.play('player-run',true);
     }
 
     const key = Settings.getKey();
@@ -339,6 +343,9 @@ class GameScene extends Phaser.Scene {
       }
     });
 
+    if (!this.scene.isActive('pause-menu')) {
+      this.scene.setActive(true,'pause-menu');
+    }
  }
 
   createDudeAnimations() {
@@ -348,6 +355,7 @@ class GameScene extends Phaser.Scene {
     });
 
     // run animation
+    
     this.anims.create({
       key: 'player-run',
       frameRate: 5,
@@ -372,6 +380,8 @@ class GameScene extends Phaser.Scene {
       }),
       repeat: -1,
     });
+
+    
 
     // jump animation
     this.anims.create({
