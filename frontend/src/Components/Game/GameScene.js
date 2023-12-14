@@ -10,7 +10,7 @@ import pauseButton from '../../assets/pauseButton.png';
 import Settings from '../../utils/settings';
 import MeterLabel from './MeterLabel';
 import dudeAssetJSON from '../../assets/santa.json';
-import pineSaplingAsset from '../../assets/winterTiles/pineSapling.png';
+import pineSaplingAsset from '../../assets/winterTheme/pineSapling.png';
 
 const GROUND_KEY = 'groundLabel';
 const COIN_KEY = 'coin';
@@ -95,6 +95,23 @@ class GameScene extends Phaser.Scene {
     this.scorePauseScene.pauseButton.on('pointerdown', () => {
       this.scene.run('pause-menu');
     });
+
+        // CheckCollision
+        this.matter.world.on(
+          'collisionstart',
+          (event, bodyA, bodyB) => this.checkCollision(bodyA, bodyB),
+          this,
+        );
+        this.matter.world.on(
+          'collisionactive',
+          (event, bodyA, bodyB) => this.checkCollision(bodyA, bodyB),
+          this,
+        );
+        this.matter.world.on(
+          'collisionend',
+          (event, bodyA, bodyB) => this.checkCollision(bodyA, bodyB),
+          this,
+        );
 }
 
   createSlope(graphics, sliceStart) {
@@ -212,7 +229,7 @@ class GameScene extends Phaser.Scene {
           this.addCoin(coinX, coinY);
         }
       }
-      else if(sliceStart.x > 4000){
+      else if(sliceStart.x > 3000){
         // add an obstacle
         if(Phaser.Math.Between(0,100) < gameOptions.pineRatio){
       
@@ -335,23 +352,6 @@ class GameScene extends Phaser.Scene {
         body.gameObject.destroy();
       }
     });
-
-    // CheckCollision
-    this.matter.world.on(
-      'collisionstart',
-      (event, bodyA, bodyB) => this.checkCollision(bodyA, bodyB),
-      this,
-    );
-    this.matter.world.on(
-      'collisionactive',
-      (event, bodyA, bodyB) => this.checkCollision(bodyA, bodyB),
-      this,
-    );
-    this.matter.world.on(
-      'collisionend',
-      (event, bodyA, bodyB) => this.checkCollision(bodyA, bodyB),
-      this,
-    );
  }
 
   createDudeAnimations() {
@@ -374,7 +374,6 @@ class GameScene extends Phaser.Scene {
     });
 
     // slide animaion
-
     this.anims.create({
       key: 'player-slide',
       frameRate: 5,
@@ -388,7 +387,6 @@ class GameScene extends Phaser.Scene {
     });
 
     // jump animation
-
     this.anims.create({
       key: 'player-jump',
       frameRate: 5,
