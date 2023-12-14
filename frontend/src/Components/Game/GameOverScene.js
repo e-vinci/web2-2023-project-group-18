@@ -122,15 +122,13 @@ class GameOverScene extends Phaser.Scene {
   }
 
   goShop() {
-    localStorage.getItem('score');
     this.scene.stop('game-over');
     this.game.destroy(true);
     Navigate('/shop');
   }
 
   replayGame() {
-    localStorage.getItem('score');
-    this.scene.resume('pause-menu');
+    this.scene.remove('pause-menu');
     this.scene.remove('pause-score');
     this.scene.start('game-scene');
   }
