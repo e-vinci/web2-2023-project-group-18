@@ -62,9 +62,6 @@ const CreditPage = () => {
       </div>
       </div>
       </div>
-      <div class="text-center">
-        <a href="mailto:support@santafall.com" class="text-white">support@santafall.be</a>
-      </div>
   `;
 
   linkClick();
