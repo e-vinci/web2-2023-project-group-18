@@ -3,27 +3,7 @@ import Phaser from 'phaser';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import simplify from 'simplify-js';
 
-import santaAsset from '../../assets/skins/santa.png';
-import redhatAsset from '../../assets/skins/redhat.png';
-import jackAsset from '../../assets/skins/jack.png';
-import catAsset from '../../assets/skins/cat.png';
-import dogAsset from '../../assets/skins/dog.png';
-import explorerAsset from '../../assets/skins/explorer.png';
-import adventurerAsset from '../../assets/skins/adventurer.png';
-import ninjaAsset from '../../assets/skins/ninja.png';
-import ninjagirlAsset from '../../assets/skins/ninjagirl.png';
-import robotAsset from '../../assets/skins/robot.png';
-
-import santaAssetJSON from '../../assets/skins/santa.json';
-import redhatAssetJSON from '../../assets/skins/redhat.json';
-import jackAssetJSON from '../../assets/skins/jack.json';
-import catAssetJSON from '../../assets/skins/cat.json';
-import dogAssetJSON from '../../assets/skins/dog.json';
-import explorerAssetJSON from '../../assets/skins/explorer.json';
-import adventurerAssetJSON from '../../assets/skins/adventurer.json';
-import ninjaAssetJSON from '../../assets/skins/ninja.json';
-import ninjagirlAssetJSON from '../../assets/skins/ninjagirl.json';
-import robotAssetJSON from '../../assets/skins/robot.json';
+import Skin from '../../utils/skins';
 
 import CoinLabel from './CoinLabel';
 import coinAsset from '../../assets/coin.png';
@@ -42,22 +22,6 @@ const PAUSE_BUTTON = 'pause';
 
 const DUDE_ASSET_WIDTH = 25;
 const DUDE_ASSET_HEIGHT = 40;
-
-const SKINS = {
-  redhat: { asset: redhatAsset, assetJSON: redhatAssetJSON },
-  jack: { asset: jackAsset, assetJSON: jackAssetJSON },
-  cat: { asset: catAsset, assetJSON: catAssetJSON },
-  dog: { asset: dogAsset, assetJSON: dogAssetJSON },
-  explorer: { asset: explorerAsset, assetJSON: explorerAssetJSON },
-  adventurer: { asset: adventurerAsset, assetJSON: adventurerAssetJSON },
-  ninja: { asset: ninjaAsset, assetJSON: ninjaAssetJSON },
-  ninjagirl: { asset: ninjagirlAsset, assetJSON: ninjagirlAssetJSON },
-  robot: { asset: robotAsset, assetJSON: robotAssetJSON },
-  default: { asset: santaAsset, assetJSON: santaAssetJSON }
-};
-
-let dudeAsset = santaAsset;
-let dudeAssetJSON = santaAssetJSON;
 
 const gameOptions = {
   amplitude: 300,
@@ -91,8 +55,7 @@ class GameScene extends Phaser.Scene {
   }
 
   preload() {
-    changeSkin();
-    this.load.atlas('santa', dudeAsset, dudeAssetJSON);
+    this.load.atlas('santa', Skin.getSkinPicture(), Skin.getSkinJSON());
   }
 
   create() {
@@ -506,14 +469,6 @@ class ScorePauseScene extends Phaser.Scene {
     const label = new CoinLabel(this, x, y, coin, style);
     return label;
   }
-}
-
-function changeSkin() {
-  const skinName = localStorage.getItem("skin");
-  const selectedSkin = SKINS[skinName] || SKINS.default;
-
-  dudeAsset = selectedSkin.asset;
-  dudeAssetJSON = selectedSkin.assetJSON;
 }
 
 export default GameScene;
