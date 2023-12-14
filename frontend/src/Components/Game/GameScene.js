@@ -38,6 +38,7 @@ class GameScene extends Phaser.Scene {
     this.coins = [];
     this.gameOver = false;
     this.caracterSpeed= undefined;
+    this.scorePauseScene = undefined;
   }
 
   init() {
@@ -279,8 +280,10 @@ class GameScene extends Phaser.Scene {
     santa1.play('player-slide', true);
     const spaceJustPressed = Phaser.Input.Keyboard.JustDown(this.cursors.space);
 
+    const scorePauseScene = this.scene.get('pause-score');
+
     if (localStorage.getItem('resume')) {
-      this.scorePauseScene.meterLabel.resumeMeter();
+      scorePauseScene.meterLabel.resumeMeter();
       localStorage.removeItem('resume');
     }
 
