@@ -26,7 +26,7 @@ const gameOptions = {
   slopesPerSlice: 5,
   // ratio in %
   pineRatio: 10,
-  coinRatio: 60,
+  coinRatio: 30,
   amountCoin: 10 
 };
 
@@ -205,7 +205,7 @@ class GameScene extends Phaser.Scene {
       }
 
 
-      if(Phaser.Math.Between(0,1) === 0 && this.cameras.main.scrollX){
+      if(Phaser.Math.Between(0,1) === 0){
         if(Phaser.Math.Between(0,100) < gameOptions.pineRatio && i%2 === 0){
       
           // random obstacle position
@@ -242,7 +242,7 @@ class GameScene extends Phaser.Scene {
           }
         }
       }else
-        if(Phaser.Math.Between(0,100) < gameOptions.pineRatio && i%3 === 0){
+        if(Phaser.Math.Between(0,100) < gameOptions.coinRatio && i%3 === 0){
           const coinX = center.x + sliceStart.x + 20;
           const coinY = center.y + sliceStart.y - 70;
           this.addCoin(coinX, coinY);
@@ -406,11 +406,15 @@ class GameScene extends Phaser.Scene {
     return `${formattedMeters} m`;
   }
 
-  hitObstacle(player) {    
-    localStorage.setItem('score', this.formatDistance(this.meterLabel));
-    this.scorePauseScene.meterLabel.pauseMeter();    
-    this.scene.run('game-over', { score : this.formatDistance(this.meterLabel) });
+  hitObstacle(player) {
+    this.scorePauseScene.meterLabel.pauseMeter();
     this.scene.pause();
+    this.scorePauseScene.meterLabel.setText(
+      `GAME OVER :  \nYour Score is ${this.formatDistance(
+        this.scorePauseScene.meterLabel.timeElapsed,
+      )}`,
+    );
+    localStorage.setItem('score', this.formatDistance(this.meterLabel));
 
     // if (localStorage.getItem('token')) {
     //   this.updateScore(this.formatDistance(this.meterLabel.timeElapsed));
@@ -421,6 +425,7 @@ class GameScene extends Phaser.Scene {
 
     this.scene.stop('pause-score');
     this.scene.stop('game-scene');
+    this.scene.run('game-over', { score : this.formatDistance(this.meterLabel) });
   }
 
   // eslint-disable-next-line class-methods-use-this
