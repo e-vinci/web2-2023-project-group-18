@@ -1,8 +1,9 @@
-
+body{
+  font-family: "Roboto", sans-serif;
+}
 #shop-page {
     background-size: cover;
     color: white;
-    font-family: "Roboto", sans-serif;
     height: 100vh;
     overflow: auto;
 }
