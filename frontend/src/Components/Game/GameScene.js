@@ -22,7 +22,7 @@ const PINE_SAPLING = 'pine';
 const gameOptions = {
   amplitude: 300,
   slopeLength: [200, 800], 
-  slicesAmount: 4,
+  slicesAmount: 3,
   slopesPerSlice: 5,
   // ratio in %
   pineRatio: 10,
@@ -89,7 +89,7 @@ class GameScene extends Phaser.Scene {
 
         this.caracterSpeed= 3;
         setInterval(() => {
-          this.caracterSpeed+= Math.log(2) /1000;
+          this.caracterSpeed += Math.log(2) /1000;
         }, 2000);
     this.scorePauseScene.pauseButton.on('pointerdown', () => {
       this.scene.run('pause-menu');
@@ -206,7 +206,8 @@ class GameScene extends Phaser.Scene {
 
 
       if(Phaser.Math.Between(0,1) === 0){
-        if(Phaser.Math.Between(0,100) < gameOptions.pineRatio && i%2 === 0){
+        // add an obstacle
+        if(Phaser.Math.Between(0,100) < gameOptions.pineRatio && sliceStart.x > 4000){
       
           // random obstacle position
             const size = 5;
@@ -242,7 +243,8 @@ class GameScene extends Phaser.Scene {
           }
         }
       }else
-        if(Phaser.Math.Between(0,100) < gameOptions.coinRatio && i%3 === 0){
+      // add an coin
+        if(Phaser.Math.Between(0,100) < gameOptions.coinRatio && i%3 === 0 && sliceStart.x > 2000){
           const coinX = center.x + sliceStart.x + 20;
           const coinY = center.y + sliceStart.y - 70;
           this.addCoin(coinX, coinY);
@@ -305,7 +307,7 @@ class GameScene extends Phaser.Scene {
     bodies.forEach((body) => {
       // if the body is out of camera view to the left side && it's not in the current ground pool && it's a ground body
       if (
-        this.cameras.main.scrollX > body.position.x &&
+        this.cameras.main.scrollX > body.position.x +200 &&
         this.bodyPoolId.indexOf(body.id) === -1 &&
         body.label === GROUND_KEY
       ) {
@@ -315,7 +317,7 @@ class GameScene extends Phaser.Scene {
       } else 
       // if the body is out of camera view to the left side && it's not in the current obstacle pool && it's an obstacle body
       if(
-        this.cameras.main.scrollX > body.position.x &&
+        this.cameras.main.scrollX > body.position.x +1000 &&
         this.bodyPoolId.indexOf(body.id) === -1 &&
         body.label === OBSTACLE_KEY
       ) {
