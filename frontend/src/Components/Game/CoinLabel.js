@@ -26,7 +26,6 @@ export default class CoinLabel extends Phaser.GameObjects.Text {
   }
 
   async updateCoinDb() {
-
     const token = localStorage.getItem('token');
     const options = {
       method: 'PUT',
@@ -38,7 +37,11 @@ export default class CoinLabel extends Phaser.GameObjects.Text {
         'Content-Type': 'application/json',
       },
     };
-    await fetch(`${process.env.API_BASE_URL}/collectibles/add`, options);
+    const response = await fetch(`${process.env.API_BASE_URL}/collectibles/add`, options);
+
+    if (!response.ok) {
+      console.error(response.status);
+    }
   }
 
 }
