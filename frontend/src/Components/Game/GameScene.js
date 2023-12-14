@@ -60,59 +60,60 @@ class GameScene extends Phaser.Scene {
   }
 
   create() {
-    this.matter.world.setGravity(0, 1); // Apply gravity to the world
-    
-    // Generating Ground and its Collision
-    this.bodyPool = [];
-    this.bodyPoolId = [];
-    this.pinesPool = [];
-    this.pinesPoolId = [];
-    this.slopeGraphics = [];
-    this.sliceStart = new Phaser.Math.Vector2(0, 2);
-    for (let i = 0; i < gameOptions.slicesAmount; i += 1) {
-      this.slopeGraphics[i] = this.add.graphics();
-      this.sliceStart = this.createSlope(this.slopeGraphics[i], this.sliceStart);
-    }
+             this.matter.world.setGravity(0, 1); // Apply gravity to the world
 
-    this.santa = this.matter.add
-       .sprite(1500, 400, 'santa')
-       .play('player-idle')
-       .setFixedRotation();
+             // Generating Ground and its Collision
+             this.bodyPool = [];
+             this.bodyPoolId = [];
+             this.pinesPool = [];
+             this.pinesPoolId = [];
+             this.slopeGraphics = [];
+             this.sliceStart = new Phaser.Math.Vector2(0, 2);
+             for (let i = 0; i < gameOptions.slicesAmount; i += 1) {
+               this.slopeGraphics[i] = this.add.graphics();
+               this.sliceStart = this.createSlope(this.slopeGraphics[i], this.sliceStart);
+             }
 
-    this.santa.setOnCollide(() => {
-      this.isTouchingGround = true;
-    });
+             this.santa = this.matter.add
+               .sprite(1500, 400, 'santa')
+               .play('player-idle')
+               .setFixedRotation();
 
-    this.createDudeAnimations();
+             this.santa.setOnCollide(() => {
+               this.isTouchingGround = true;
+             });
 
-    this.cameras.main.startFollow(this.santa);
-    this.key = this.input.keyboard.addKey(localStorage.getItem('selectedKey'));
+             // CheckCollision
+             this.matter.world.on(
+               'collisionstart',
+               (event, bodyA, bodyB) => this.checkCollision(bodyA, bodyB),
+               this,
+             );
+             this.matter.world.on(
+               'collisionactive',
+               (event, bodyA, bodyB) => this.checkCollision(bodyA, bodyB),
+               this,
+             );
+             this.matter.world.on(
+               'collisionend',
+               (event, bodyA, bodyB) => this.checkCollision(bodyA, bodyB),
+               this,
+             );
 
-        this.caracterSpeed= 3;
-        setInterval(() => {
-          this.caracterSpeed += Math.log(2) /1000;
-        }, 2000);
-    this.scorePauseScene.pauseButton.on('pointerdown', () => {
-      this.scene.run('pause-menu');
-    });
+             this.createDudeAnimations();
 
-        // CheckCollision
-        this.matter.world.on(
-          'collisionstart',
-          (event, bodyA, bodyB) => this.checkCollision(bodyA, bodyB),
-          this,
-        );
-        this.matter.world.on(
-          'collisionactive',
-          (event, bodyA, bodyB) => this.checkCollision(bodyA, bodyB),
-          this,
-        );
-        this.matter.world.on(
-          'collisionend',
-          (event, bodyA, bodyB) => this.checkCollision(bodyA, bodyB),
-          this,
-        );
-}
+             this.cameras.main.startFollow(this.santa);
+             this.key = this.input.keyboard.addKey(localStorage.getItem('selectedKey'));
+
+             this.caracterSpeed = 3;
+             setInterval(() => {
+               this.caracterSpeed += Math.log(2) / 1000;
+             }, 2000);
+             this.scorePauseScene.pauseButton.on('pointerdown', () => {
+               this.scene.run('pause-menu');
+             });
+           }
+
 
   createSlope(graphics, sliceStart) {
     const slopePoints = [];
@@ -407,26 +408,27 @@ class GameScene extends Phaser.Scene {
     return `${formattedMeters} m`;
   }
 
-  hitObstacle(player) {
+   hitObstacle(player) {
     this.scorePauseScene.meterLabel.pauseMeter();
-    this.scene.pause();
+    this.scene.stop();
     this.scorePauseScene.meterLabel.setText(
       `GAME OVER :  \nYour Score is ${this.formatDistance(
         this.scorePauseScene.meterLabel.timeElapsed,
       )}`,
     );
-    localStorage.setItem('score', this.formatDistance(this.meterLabel));
 
-    // if (localStorage.getItem('token')) {
-    //   this.updateScore(this.formatDistance(this.meterLabel.timeElapsed));
-    // }
+    if (localStorage.getItem('token')) {
+      this.updateScore(this.scorePauseScene.meterLabel.timeElapsed);
+    }
 
     this.matter.pause();
     player.setTint(0xff0000);
 
-    this.scene.stop('pause-score');
     this.scene.stop('game-scene');
-    this.scene.run('game-over', { score : this.formatDistance(this.meterLabel) });
+    this.scene.stop('pause-score');
+    this.scene.run('game-over', {
+      score: this.formatDistance(this.scorePauseScene.meterLabel.timeElapsed),
+    });
   }
 
   // eslint-disable-next-line class-methods-use-this
@@ -445,7 +447,8 @@ class GameScene extends Phaser.Scene {
         Authorization: token,
       },
     };
-    const response = await fetch(`${process.env.API_BASE_URL}/scores/`, options);
+
+    const response = await fetch(`${process.env.API_BASE_URL}/scores`, options);
 
     if (!response.ok) {
       // eslint-disable-next-line no-console
