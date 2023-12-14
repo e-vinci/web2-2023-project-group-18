@@ -1,4 +1,3 @@
-// eslint-disable-next-line max-classes-per-file
 import Phaser from 'phaser';
 import simplify from 'simplify-js';
 import dudeAsset from '../../assets/santa.png';
@@ -18,8 +17,8 @@ const gameOptions = {
   slicesAmount: 3,
   slopesPerSlice: 5,
   // ratio in %
-  pineRatio: 15,
-  coinRatio: 33,
+  pineRatio: 10,
+  coinRatio: 30,
   amountCoin: 10 
 };
 
@@ -101,6 +100,7 @@ class GameScene extends Phaser.Scene {
              setInterval(() => {
                this.caracterSpeed += Math.log(2) / 1000;
              }, 2000);
+             
              this.scorePauseScene.pauseButton.on('pointerdown', () => {
                this.scene.run('pause-menu');
              });
@@ -213,7 +213,8 @@ class GameScene extends Phaser.Scene {
         this.matter.body.scale(body, distance, 1);
         this.matter.body.setAngle(body, angle1);
       }
-
+      
+      // Generate objects
       if(i%3 === 0 && sliceStart.x > 2000){
         // add an coin
         if(Phaser.Math.Between(0,100) < gameOptions.coinRatio){
@@ -221,12 +222,11 @@ class GameScene extends Phaser.Scene {
           const coinY = center.y + sliceStart.y - 70;
           this.addCoin(coinX, coinY);
         }
-      }
-      else if(sliceStart.x > 3000){
+      }else 
+      if(i%2 === 0 && sliceStart.x > 3000){
         // add an obstacle
         if(Phaser.Math.Between(0,100) < gameOptions.pineRatio){
-      
-          // random obstacle position
+
           const size = 5;
           const pineSaplingX = center.x +  sliceStart.x;
           const pineSaplingY = center.y + sliceStart.y - 30;
@@ -280,10 +280,8 @@ class GameScene extends Phaser.Scene {
     santa1.play('player-slide', true);
     const spaceJustPressed = Phaser.Input.Keyboard.JustDown(this.cursors.space);
 
-    const scorePauseScene = this.scene.get('pause-score');
-
     if (localStorage.getItem('resume')) {
-      scorePauseScene.meterLabel.resumeMeter();
+      this.scorePauseScene.meterLabel.resumeMeter();
       localStorage.removeItem('resume');
     }
 
