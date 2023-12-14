@@ -210,7 +210,7 @@ class GameScene extends Phaser.Scene {
       
           // random obstacle position
             const size = 5;
-            const pineSaplingX = center.x +  sliceStart.x + Phaser.Math.Between(20,50);
+            const pineSaplingX = center.x +  sliceStart.x;
             const pineSaplingY = center.y + sliceStart.y - 30;
   
           // draw the obstacle
@@ -278,7 +278,7 @@ class GameScene extends Phaser.Scene {
 
     if (this.isTouchingGround && spaceJustPressed) {
       this.santa.play('player-jump', true);
-      this.santa.setVelocityY(-15);
+      this.santa.setVelocityY(-13);
       this.santa.setVelocityX(2*this.caracterSpeed);
       this.isTouchingGround = false;
     }
