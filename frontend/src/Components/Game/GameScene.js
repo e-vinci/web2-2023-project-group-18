@@ -9,6 +9,8 @@ import jackAsset from '../../assets/skins/jack.png';
 import catAsset from '../../assets/skins/cat.png';
 import dogAsset from '../../assets/skins/dog.png';
 import explorerAsset from '../../assets/skins/explorer.png';
+import adventurerAsset from '../../assets/skins/adventurer.png';
+import ninjaAsset from '../../assets/skins/ninja.png';
 
 import santaAssetJSON from '../../assets/skins/santa.json';
 import redhatAssetJSON from '../../assets/skins/redhat.json';
@@ -16,6 +18,8 @@ import jackAssetJSON from '../../assets/skins/jack.json';
 import catAssetJSON from '../../assets/skins/cat.json';
 import dogAssetJSON from '../../assets/skins/dog.json';
 import explorerAssetJSON from '../../assets/skins/explorer.json';
+import adventurerAssetJSON from '../../assets/skins/adventurer.json';
+import ninjaAssetJSON from '../../assets/skins/ninja.json';
 
 import CoinLabel from './CoinLabel';
 import coinAsset from '../../assets/coin.png';
@@ -33,7 +37,18 @@ const HUD_COIN_KEY = 'hudcoin';
 const PAUSE_BUTTON = 'pause';
 
 const DUDE_ASSET_WIDTH = 25;
-const DUDE_ASSET_HEIGHT = 50;
+const DUDE_ASSET_HEIGHT = 40;
+
+const SKINS = {
+  redhat: { asset: redhatAsset, assetJSON: redhatAssetJSON },
+  jack: { asset: jackAsset, assetJSON: jackAssetJSON },
+  cat: { asset: catAsset, assetJSON: catAssetJSON },
+  dog: { asset: dogAsset, assetJSON: dogAssetJSON },
+  explorer: { asset: explorerAsset, assetJSON: explorerAssetJSON },
+  adventurer: { asset: adventurerAsset, assetJSON: adventurerAssetJSON },
+  ninja: { asset: ninjaAsset, assetJSON: ninjaAssetJSON },
+  default: { asset: santaAsset, assetJSON: santaAssetJSON }
+};
 
 let dudeAsset = santaAsset;
 let dudeAssetJSON = santaAssetJSON;
@@ -489,47 +504,10 @@ class ScorePauseScene extends Phaser.Scene {
 
 function changeSkin() {
   const skinName = localStorage.getItem("skin");
+  const selectedSkin = SKINS[skinName] || SKINS.default;
 
-  if (skinName) {
-    switch (skinName) {
-
-      case "redhat":
-        dudeAsset = redhatAsset;
-        dudeAssetJSON = redhatAssetJSON;
-
-        break;
-    
-      case "jack":
-        dudeAsset = jackAsset;
-        dudeAssetJSON = jackAssetJSON;
-
-        break;
-
-      case "cat":
-        dudeAsset = catAsset;
-        dudeAssetJSON = catAssetJSON;
-
-        break;
-
-      case "dog":
-        dudeAsset = dogAsset;
-        dudeAssetJSON = dogAssetJSON;
-
-        break;
-
-      case "explorer":
-        dudeAsset = explorerAsset;
-        dudeAssetJSON = explorerAssetJSON;
-
-        break;
-
-      default:
-        dudeAsset = santaAsset;
-        dudeAssetJSON = santaAssetJSON;
-
-        break;
-    }
-  }
+  dudeAsset = selectedSkin.asset;
+  dudeAssetJSON = selectedSkin.assetJSON;
 }
 
 export default GameScene;

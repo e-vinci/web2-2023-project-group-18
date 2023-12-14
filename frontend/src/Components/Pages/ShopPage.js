@@ -7,6 +7,8 @@ import jackImage from '../../assets/skins/jackSkin.png';
 import catImage from '../../assets/skins/catSkin.png';
 import dogImage from '../../assets/skins/dogSkin.png';
 import explorerImage from '../../assets/skins/explorerSkin.png';
+import adventurerImage from '../../assets/skins/adventurerSkin.png';
+import ninjaImage from '../../assets/skins/ninjaSkin.png';
 
 import templateMapImage from '../../assets/templateMapShopPage.png';
 
@@ -372,6 +374,12 @@ function getSkinImage(name) {
 
         case "explorer":
             return explorerImage;
+
+        case "adventurer":
+            return adventurerImage;
+
+        case "ninja":
+            return ninjaImage;
 
         default:
             return santaImage;
