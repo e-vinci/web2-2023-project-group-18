@@ -205,7 +205,7 @@ class GameScene extends Phaser.Scene {
 
 
       if(Phaser.Math.Between(0,1) === 0 && this.cameras.main.scrollX){
-        if(Phaser.Math.Between(0,100) < gameOptions.pineRatio){
+        if(Phaser.Math.Between(0,100) < gameOptions.pineRatio && i%2 === 0){
       
           // random obstacle position
             const size = 5;
@@ -328,8 +328,7 @@ class GameScene extends Phaser.Scene {
         body.label === COIN_KEY
       ) {
         // Delete the coin body
-        // TODO delete body image
-        this.matter.world.remove(body);
+        body.gameObject.destroy();
       }
     });
 
