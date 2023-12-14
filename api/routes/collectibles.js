@@ -16,7 +16,7 @@ router.get('/', authorize, async (req, res) => {
     console.log(nbreCollectible);
 
     // Check if nbreCollectible is defined before sending the response
-    res.json({ nbre_collectible: nbreCollectible });
+    res.json(nbreCollectible);
   } catch (error) {
     // Handle errors
     console.error('Error in request handling:', error);
