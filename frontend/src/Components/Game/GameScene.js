@@ -417,7 +417,6 @@ class GameScene extends Phaser.Scene {
         this.scorePauseScene.meterLabel.timeElapsed,
       )}`,
     );
-    localStorage.setItem('score', this.formatDistance(this.meterLabel));
 
     // if (localStorage.getItem('token')) {
     //   this.updateScore(this.formatDistance(this.meterLabel.timeElapsed));
@@ -428,7 +427,9 @@ class GameScene extends Phaser.Scene {
 
     this.scene.stop('pause-score');
     this.scene.stop('game-scene');
-    this.scene.run('game-over', { score : this.formatDistance(this.meterLabel) });
+    this.scene.run('game-over', {
+      score: this.formatDistance(this.scorePauseScene.meterLabel.timeElapsed),
+    });
   }
 
   // eslint-disable-next-line class-methods-use-this
