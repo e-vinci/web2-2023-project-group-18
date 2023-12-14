@@ -25,5 +25,23 @@ export default class CoinLabel extends Phaser.GameObjects.Text {
     return this.coin;
   }
 
+  async updateCoinDb() {
+    const token = localStorage.getItem('token');
+    const options = {
+      method: 'PUT',
+      body: JSON.stringify({
+        collectible: this.coin,
+      }),
+      headers: {
+        Authorization: token,
+        'Content-Type': 'application/json',
+      },
+    };
+    const response = await fetch(`${process.env.API_BASE_URL}/collectibles/add`, options);
+
+    if (!response.ok) {
+      console.error(response.status);
+    }
+  }
 
 }

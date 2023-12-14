@@ -151,9 +151,6 @@ const PrivatePolicyPage = () => {
 <li>
 <p>By email: office@santafall.com</p>
 </li>
-<li>
-<p>By visiting this page on our website: <a href="https://localhost/8080" rel="external nofollow noopener" target="_blank">https://localhost/8080</a></p>
-</li>
 </ul>
 </div>
 </div>

@@ -13,7 +13,12 @@ function formatDistance(distance) {
 
 export default class MeterLabel extends Phaser.GameObjects.Text {
   constructor(scene, x, y) {
-    super(scene, x, y, '00 m', { fontSize: '32px', fill: '#000' });
+    super(scene, x, y, '00 m', {
+      fontSize: '32px',
+      fill: '#000',
+      color: '#ffffff',
+      fontFamily: 'Arial, sans-serif',
+    });
     this.timeElapsed = 0;
     console.log('inside class', this.timeElapsed);
     this.startMeter();
