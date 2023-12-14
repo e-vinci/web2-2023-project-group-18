@@ -421,6 +421,8 @@ class GameScene extends Phaser.Scene {
 
     if (localStorage.getItem('token')) {
       this.updateScore(this.scorePauseScene.meterLabel.timeElapsed);
+      this.scorePauseScene.coinLabel.updateCoinDb();
+
     }
 
     this.matter.pause();
