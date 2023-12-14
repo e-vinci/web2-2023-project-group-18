@@ -1,22 +1,14 @@
-// eslint-disable-next-line max-classes-per-file
 import Phaser from 'phaser';
-// eslint-disable-next-line import/no-extraneous-dependencies
 import simplify from 'simplify-js';
 import dudeAsset from '../../assets/santa.png';
-import CoinLabel from './CoinLabel';
-import coinAsset from '../../assets/coin.png';
-import coinHudAsset from '../../assets/hudcoin.png';
-import pauseButton from '../../assets/pauseButton.png';
 import Settings from '../../utils/settings';
-import MeterLabel from './MeterLabel';
 import dudeAssetJSON from '../../assets/santa.json';
-import pineSaplingAsset from '../../assets/winterTiles/pineSapling.png';
+import pineSaplingAsset from '../../assets/winterTheme/pineSapling.png';
+import ScorePauseScene from './ScorePauseScene';
 
 const GROUND_KEY = 'groundLabel';
 const COIN_KEY = 'coin';
 const OBSTACLE_KEY = 'obstacleLabel';
-const HUD_COIN_KEY = 'hudcoin';
-const PAUSE_BUTTON = 'pause';
 const PINE_SAPLING = 'pine';
 
 const gameOptions = {
@@ -25,8 +17,8 @@ const gameOptions = {
   slicesAmount: 3,
   slopesPerSlice: 5,
   // ratio in %
-  pineRatio: 15,
-  coinRatio: 33,
+  pineRatio: 10,
+  coinRatio: 30,
   amountCoin: 10 
 };
 
@@ -44,13 +36,12 @@ class GameScene extends Phaser.Scene {
     this.coinLabel = undefined;
     this.coins = [];
     this.gameOver = false;
-    this.scorePauseScene = undefined;
     this.caracterSpeed= undefined;
+    this.scorePauseScene = undefined;
   }
 
   init() {
     this.cursors = this.input.keyboard.createCursorKeys();
-    // eslint-disable-next-line no-use-before-define
     this.scorePauseScene = this.scene.add('pause-score', ScorePauseScene, true);
   }
 
@@ -109,10 +100,12 @@ class GameScene extends Phaser.Scene {
              setInterval(() => {
                this.caracterSpeed += Math.log(2) / 1000;
              }, 2000);
+             
              this.scorePauseScene.pauseButton.on('pointerdown', () => {
                this.scene.run('pause-menu');
              });
            }
+
 
   createSlope(graphics, sliceStart) {
     const slopePoints = [];
@@ -220,7 +213,8 @@ class GameScene extends Phaser.Scene {
         this.matter.body.scale(body, distance, 1);
         this.matter.body.setAngle(body, angle1);
       }
-
+      
+      // Generate objects
       if(i%3 === 0 && sliceStart.x > 2000){
         // add an coin
         if(Phaser.Math.Between(0,100) < gameOptions.coinRatio){
@@ -228,12 +222,11 @@ class GameScene extends Phaser.Scene {
           const coinY = center.y + sliceStart.y - 70;
           this.addCoin(coinX, coinY);
         }
-      }
-      else if(sliceStart.x > 4000){
+      }else 
+      if(i%2 === 0 && sliceStart.x > 3000){
         // add an obstacle
         if(Phaser.Math.Between(0,100) < gameOptions.pineRatio){
-      
-          // random obstacle position
+
           const size = 5;
           const pineSaplingX = center.x +  sliceStart.x;
           const pineSaplingY = center.y + sliceStart.y - 30;
@@ -287,10 +280,8 @@ class GameScene extends Phaser.Scene {
     santa1.play('player-slide', true);
     const spaceJustPressed = Phaser.Input.Keyboard.JustDown(this.cursors.space);
 
-    const scorePauseScene = this.scene.get('pause-score');
-
     if (localStorage.getItem('resume')) {
-      scorePauseScene.meterLabel.resumeMeter();
+      this.scorePauseScene.meterLabel.resumeMeter();
       localStorage.removeItem('resume');
     }
 
@@ -352,7 +343,6 @@ class GameScene extends Phaser.Scene {
         body.gameObject.destroy();
       }
     });
-
  }
 
   createDudeAnimations() {
@@ -375,7 +365,6 @@ class GameScene extends Phaser.Scene {
     });
 
     // slide animaion
-
     this.anims.create({
       key: 'player-slide',
       frameRate: 5,
@@ -389,7 +378,6 @@ class GameScene extends Phaser.Scene {
     });
 
     // jump animation
-
     this.anims.create({
       key: 'player-jump',
       frameRate: 5,
@@ -490,59 +478,4 @@ class GameScene extends Phaser.Scene {
   }
 }
 
-class ScorePauseScene extends Phaser.Scene {
-  constructor() {
-    super('pause-score');
-    this.meterLabel = undefined;
-    this.pauseButton = undefined;
-    this.coinLabel = undefined;
-  }
-
-  preload() {
-    this.load.image(PAUSE_BUTTON, pauseButton);
-
-    // coins
-    this.load.image(HUD_COIN_KEY, coinHudAsset);
-    this.load.image(COIN_KEY, coinAsset);
-  }
-
-  create() {
-    this.meterLabel = this.createMeterLabel(20, 20);
-    this.meterLabel.setColor('#ffffff');
-
-    // pause btn
-    this.pauseButton = this.add.image(this.scale.width - 75, 50, PAUSE_BUTTON);
-    this.pauseButton.setInteractive({ useHandCursor: true });
-    this.pauseButton.setScale(0.8);
-
-    this.pauseButton.on('pointerdown', () => {
-      this.pauseGame();
-    });
-
-    // coins
-    this.add.image(30, 88, HUD_COIN_KEY);
-    this.coinLabel = this.createCoinLabel(45, 70);
-    this.add.existing(this.coinLabel);
-  }
-
-  createMeterLabel(x, y) {
-    const label = new MeterLabel(this, x, y);
-    this.add.existing(label);
-
-    return label;
-  }
-
-  pauseGame() {
-    this.meterLabel.pauseMeter();
-    this.scene.pause('pause-score');
-    this.scene.pause('game-scene');
-    this.scene.run('pause-menu');
-  }
-
-  createCoinLabel(x, y) {
-    const style = { fontSize: '32px', fill: '#ffffff', fontFamily: 'Arial, sans-serif' };
-    const label = new CoinLabel(this, x, y, 0, style);
-    return label;
-  }
-}
 export default GameScene;

@@ -1,5 +1,4 @@
 import Phaser from 'phaser';
-// eslint-disable-next-line import/no-named-as-default, import/no-named-as-default-member
 import GameScene from '../Game/GameScene';
 import PauseSceneMenu from '../Game/PauseSceneMenu';
 import StartMenuScene from '../Game/StartMenuScene';
@@ -33,7 +32,7 @@ const phaserGame = `
       },
     },
 
-    scene: [StartMenuScene,GameScene,GameOverScene,PauseSceneMenu],
+    scene: [StartMenuScene, GameScene, PauseSceneMenu, GameOverScene],
 
     //  parent DOM element into which the canvas created by the renderer will be injected.
     parent: 'gameDiv',
