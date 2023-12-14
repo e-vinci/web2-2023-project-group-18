@@ -1,6 +1,7 @@
 import anime from 'animejs/lib/anime.es';
 import Navigate from '../Router/Navigate';
 
+import noImageAvailable from '../../assets/noimageavailable.png';
 import santaImage from '../../assets/skins/santaSkin.png';
 import redhatImage from '../../assets/skins/redhatSkin.png';
 import jackImage from '../../assets/skins/jackSkin.png';
@@ -8,23 +9,24 @@ import catImage from '../../assets/skins/catSkin.png';
 import dogImage from '../../assets/skins/dogSkin.png';
 import explorerImage from '../../assets/skins/explorerSkin.png';
 import adventurerImage from '../../assets/skins/adventurerSkin.png';
-import ninjaImage from '../../assets/skins/ninjaSkin.png';
+import ninjaboyImage from '../../assets/skins/ninjaboySkin.png';
 import ninjagirlImage from '../../assets/skins/ninjagirlSkin.png';
 import robotImage from '../../assets/skins/robotSkin.png';
 
 import templateMapImage from '../../assets/templateMapShopPage.png';
 
 const SKINS_IMAGE = {
+    santa: santaImage,
     redhat: redhatImage,
     jack: jackImage,
     cat: catImage,
     dog: dogImage,
     explorer: explorerImage,
     adventurer: adventurerImage,
-    ninja: ninjaImage,
+    ninjaboy: ninjaboyImage,
     ninjagirl: ninjagirlImage,
     robot: robotImage,
-    default: santaImage
+    default: noImageAvailable
 };
 
 let coins = 0;
@@ -81,7 +83,7 @@ const ShopPage = async () => {
 function renderShopPage() {
     const main = document.querySelector('main');
 
-    // For phone the number of skins or themes is 1 per page
+    // For phone the number of skins or themes is 1 per page (reload is needed)
     if (window.innerWidth <= 480) {
         skinsPerPage = 1;
         themesPerPage = 1;
@@ -408,7 +410,6 @@ async function fetchBuy(url, item) {
     const response = await fetch(`${process.env.API_BASE_URL}${url}`, options);
     if (!response.ok) throw new Error(`fetch error : ${response.status} : ${response.statusText}`);
 }
-
 
 // No right click on picture
 document.addEventListener('contextmenu', (e) => {
