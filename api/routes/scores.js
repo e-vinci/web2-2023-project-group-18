@@ -9,8 +9,6 @@ router.get('/', async (req, res) => {
     const scores = await getAllScores();
     return res.json(scores.rows);
   } catch (error) {
-    // server error
-    console.error('Error in request handling:', error);
     return res.status(500).send('Internal Server Error');
   }
 });
@@ -23,13 +21,13 @@ router.put('/', authorize, async (req, res) => {
       await updateScore(username, score);
       return res.sendStatus(200);
     } catch (error) {
-      console.log(error);
+      if (error.message.includes('The score cannot be lower than the current score')) {
+        return res.sendStatus(422);
+      }
       return res.sendStatus(404);
     }
-  } else {
-    // bad parmeter
-    return res.sendStatus(400);
   }
+  return res.sendStatus(400);
 });
 
 module.exports = router;

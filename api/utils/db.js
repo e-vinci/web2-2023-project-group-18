@@ -1,6 +1,4 @@
-// eslint-disable-next-line import/no-extraneous-dependencies
 const { Pool } = require('pg');
-// eslint-disable-next-line import/no-extraneous-dependencies
 require('dotenv').config();
 const fs = require('fs');
 const path = require('path');

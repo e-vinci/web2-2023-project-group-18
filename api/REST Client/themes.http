@@ -11,20 +11,30 @@ Content-Type: application/json
     "password":"test"
 }
 
-### Get all skins in order by price
+### Get all theme in order by price
 GET {{baseUrl}}/themes
 
 ### Get all skins of a player
 GET {{baseUrl}}/themes/getuserthemes
-Content-Type: application/jsnpm on
+Content-Type: application/json
 Authorization: {{test.response.body.token}}
 
 
-### Give a skin to a player
+### Give a theme to a player
 PUT {{baseUrl}}/themes/
 Content-Type: application/json
 Authorization: {{test.response.body.token}}
 
 {
     "item": 5
+}
+
+
+### Try to give a theme that doesn't exist
+PUT {{baseUrl}}/themes/
+Content-Type: application/json
+Authorization: {{test.response.body.token}}
+
+{
+    "item": 10000
 }
