@@ -126,14 +126,17 @@ CREATE OR REPLACE FUNCTION projet.add_user_skin(
     _skin INT
 ) RETURNS VOID AS $$
 DECLARE
+    _user_skin_found INT;
     _skin_found INT;
 BEGIN
-    SELECT us.id_skin FROM projet.users_skins us 
-    WHERE us.id_user = _user AND us.id_skin = _skin 
-    INTO _skin_found;
+    SELECT us.id_skin FROM projet.users_skins us WHERE us.id_user = _user AND us.id_skin = _skin INTO _user_skin_found;
 
     IF NOT FOUND THEN
-        INSERT INTO projet.users_skins(id_user, id_skin) VALUES (_user, _skin);
+        SELECT id_skin FROM projet.skins WHERE id_skin = _skin INTO _skin_found;
+
+        IF FOUND THEN
+            INSERT INTO projet.users_skins(id_user, id_skin) VALUES (_user, _skin);
+        END IF;
     END IF;
 RETURN;
 END;
@@ -144,14 +147,19 @@ CREATE OR REPLACE FUNCTION projet.add_user_theme(
     _theme INT
 ) RETURNS VOID AS $$
 DECLARE
+    _user_theme_found INT;
     _theme_found INT;
 BEGIN
-    SELECT ut.id_skin FROM projet.users_themes ut 
+    SELECT ut.id_theme FROM projet.users_themes ut 
     WHERE ut.id_user = _user AND ut.id_theme = _theme 
-    INTO _theme_found;
+    INTO _user_theme_found;
 
     IF NOT FOUND THEN
-        INSERT INTO projet.users_themes(id_user, id_theme) VALUES (_user, _theme);
+        SELECT id_theme FROM projet.themes WHERE id_theme = _theme INTO _theme_found;
+
+        IF FOUND THEN
+            INSERT INTO projet.users_themes(id_user, id_theme) VALUES (_user, _theme);
+        END IF;
     END IF;
 RETURN;
 END;
