@@ -1,4 +1,5 @@
 import Phaser from 'phaser';
+// eslint-disable-next-line import/no-named-as-default
 import GameScene from '../Game/GameScene';
 import PauseSceneMenu from '../Game/PauseSceneMenu';
 import StartMenuScene from '../Game/StartMenuScene';
@@ -29,6 +30,9 @@ const phaserGame = `
       default: 'matter',
       matter: {
         debug: false,
+        gravity: {
+          y: 1
+      },
       },
     },
 

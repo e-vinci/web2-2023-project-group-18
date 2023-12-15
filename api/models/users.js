@@ -75,7 +75,7 @@ async function register(username, password) {
 }
 
 /** *************************************************************************************
-* Title: regisreadOneUserFromUsernameter
+* Title: regisreadOneUserFromUsernameter (adapted)
 *  Author: JS Teacher
 * Date: 11/12/2023
 *    Code version: 2.0
@@ -89,7 +89,7 @@ async function readOneUserFromUsername(username) {
 }
 
 /** *************************************************************************************
-* Title: createOneUser
+* Title: createOneUser (adapted)
 *  Author: JS Teacher
 * Date: 11/12/2023
 *    Code version: 2.0
@@ -99,7 +99,7 @@ async function readOneUserFromUsername(username) {
 async function createOneUser(username, password) {
   const hashedPassword = await bcrypt.hash(password, saltRounds);
   const cUsername = escape(username);
-  await queryExecute(`INSERT INTO projet.users (username, password) VALUES ('${cUsername}', '${hashedPassword}');`);
+  await queryExecute(`SELECT projet.insert_user('${cUsername}', '${hashedPassword}')`);
 
   const user = await readOneUserFromUsername(cUsername);
 

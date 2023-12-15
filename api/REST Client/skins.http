@@ -28,3 +28,12 @@ Authorization: {{test.response.body.token}}
 {
     "item": 5
 }
+
+### Try to give a skin that doesn't exist
+PUT {{baseUrl}}/skins/
+Content-Type: application/json
+Authorization: {{test.response.body.token}}
+
+{
+    "item": 10000
+}
