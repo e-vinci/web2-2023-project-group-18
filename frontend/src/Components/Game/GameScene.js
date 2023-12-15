@@ -16,7 +16,7 @@ const gameOptions = {
   slopeLength: [300, 800], 
   slicesAmount: 3,
   slopesPerSlice: 5,
-  obstacleRatio: 10,
+  obstacleRatio: 100, // 10
   coinRatio: 20,
   amountCoin: 10 
 };
@@ -209,8 +209,9 @@ class GameScene extends Phaser.Scene {
       }
       
       // Generate objects
+    if(this.scorePauseScene.meterLabel.timeElapsed > 1){ // spawn at 20m
+      // add an obstacle
       if(i%3 === 0 && Phaser.Math.Between(0,100) < gameOptions.obstacleRatio){
-        // add an obstacle
           const size = 5;
           const obstacleX = center.x +  sliceStart.x;
           const obstacleY = center.y - 30;
@@ -246,12 +247,13 @@ class GameScene extends Phaser.Scene {
             });
           }
       }else 
+      // add an coin
       if(i%3 === 0 && Phaser.Math.Between(0,100) < gameOptions.coinRatio){
-        // add an coin
         const coinX = center.x + sliceStart.x + 20;
         const coinY = center.y - 55;
         this.addCoin(coinX, coinY);
       }
+    }
     }
 
     // eslint-disable-next-line no-param-reassign
@@ -311,7 +313,7 @@ class GameScene extends Phaser.Scene {
     bodies.forEach((body) => {
       // if the body is out of camera view to the left side && it's not in the current ground pool && it's a ground body
       if (
-        this.cameras.main.scrollX > body.position.x +200 &&
+        this.cameras.main.scrollX > body.position.x + 200 &&
         this.bodyPoolId.indexOf(body.id) === -1 &&
         body.label === GROUND_KEY
       ) {
@@ -321,7 +323,7 @@ class GameScene extends Phaser.Scene {
       } else 
       // if the body is out of camera view to the left side && it's not in the current obstacle pool && it's an obstacle body
       if(
-        this.cameras.main.scrollX > body.position.x &&
+        this.cameras.main.scrollX > body.position.x + 200 &&
         this.pinesPoolId.indexOf(body.id) === -1 &&
         body.label === OBSTACLE_KEY
       ) {
