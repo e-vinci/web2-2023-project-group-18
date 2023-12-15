@@ -81,12 +81,14 @@ body{
 .shop-picture {
     border-top-right-radius: 5px;
     border-top-left-radius: 5px;
+    border: 2px solid rgb(218,217,214);
+    border-bottom: none;
 }
 
 .shop-part {
   border: 6px solid rgba(255,255,225,.2);
   backdrop-filter: blur(10px);
-  box-shadow: 0 0 5px rgba(0,0,0,.2);
+  box-shadow: 0 0 5px rgba(0,0,0,0.2);
   color:#fff ;
   border-radius: 10px;
 }

@@ -13,7 +13,7 @@ import ninjaboyImage from '../../assets/skins/ninjaboySkin.png';
 import ninjagirlImage from '../../assets/skins/ninjagirlSkin.png';
 import robotImage from '../../assets/skins/robotSkin.png';
 
-import templateMapImage from '../../assets/templateMapShopPage.png';
+import snowImage from '../../assets/themes/snowTheme.png';
 
 const SKINS_IMAGE = {
     santa: santaImage,
@@ -26,6 +26,11 @@ const SKINS_IMAGE = {
     ninjaboy: ninjaboyImage,
     ninjagirl: ninjagirlImage,
     robot: robotImage,
+    default: noImageAvailable
+};
+
+const THEMES_IMAGE = {
+    snow: snowImage,
     default: noImageAvailable
 };
 
@@ -215,7 +220,7 @@ function displayCurrentThemePage() {
             themeHTML += `
                 <div class="col-md-4 text-center">
                     <h3>${theme.label_theme}</h3>
-                    <img class="w-100 shop-picture" src="${templateMapImage}" alt="theme picture ${theme.name_theme}">
+                    <img class="w-100 shop-picture" src="${THEMES_IMAGE[theme.name_theme] || THEMES_IMAGE.default}" alt="theme picture ${theme.name_theme}">
                     ${typeButton}
                 </div>`;
         }
