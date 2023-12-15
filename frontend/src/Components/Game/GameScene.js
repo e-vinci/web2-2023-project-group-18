@@ -284,8 +284,8 @@ class GameScene extends Phaser.Scene {
     if (this.cursors.space.isDown)  this.santa.play('player-jump', true) ;
 
     if (this.isTouchingGround && spaceJustPressed) {
-      this.santa.setVelocityY(-13);
-      this.santa.setVelocityX(2*this.caracterSpeed);
+      this.santa.setVelocityY(-10);
+      this.santa.setVelocityX(this.caracterSpeed);
       this.isTouchingGround = false;
     }
 
