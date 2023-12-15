@@ -67,12 +67,7 @@ class GameScene extends Phaser.Scene {
 
              this.santa = this.matter.add
             .sprite(1500, 500, 'santa', null, {
-              shape: { type: 'rectangle', width: 30, height: 40 },
-            })
-            .setBody({
-              type: 'rectangle',
-              width: DUDE_ASSET_WIDTH,
-              height: DUDE_ASSET_HEIGHT,
+              shape: { type: 'rectangle', width: DUDE_ASSET_WIDTH, height: DUDE_ASSET_HEIGHT },
             })
             .play('player-idle')
             .setFixedRotation();
