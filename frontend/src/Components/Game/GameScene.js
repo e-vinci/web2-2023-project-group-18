@@ -29,7 +29,7 @@ const gameOptions = {
   slopeLength: [300, 800], 
   slicesAmount: 3,
   slopesPerSlice: 5,
-  obstacleRatio: 100,
+  obstacleRatio: 10,
   coinRatio: 20,
   amountCoin: 10 
 };
