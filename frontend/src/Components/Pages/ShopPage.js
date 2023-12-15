@@ -283,13 +283,31 @@ async function skinsListenner() {
         skinsBuyButtons.forEach((btn) => {
             btn.addEventListener('click', async () =>{
                 const idSkin = parseInt(btn.getAttribute('data-id'), 10);
+                
+                if(coins<skinsList[idSkin-1]?.price || true) {
 
-                try {
-                    await fetchBuy(`/skins`, idSkin);
-                    ownedSkins = await fetchData(`/skins/getuserskins`);
-                    displayCurrentSkinPage();
-                } catch(e) {
-                    alert("An error occurred while purchasing this skin...");
+                    anime({
+                        targets: btn,
+                        backgroundColor: '#ff0000',
+                        complete () {
+                            anime({
+                                targets: btn,
+                                backgroundColor: '#38648D',
+                                duration: 2000,
+                            });
+                        }
+                    });
+
+                } else {
+
+                    try {
+                        await fetchBuy(`/skins`, idSkin);
+                        ownedSkins = await fetchData(`/skins/getuserskins`);
+                        displayCurrentSkinPage();
+                    } catch(e) {
+                        alert("An error occurred while purchasing this skin...");
+                    }
+
                 }
             })
         });
@@ -321,13 +339,31 @@ function themesListenner() {
         themesBuyButtons.forEach((btn) => {
             btn.addEventListener('click', async () =>{
                 const idTheme = parseInt(btn.getAttribute('data-id'), 10);
+                
+                if(coins<themesList[idTheme-1]?.price || true) {
 
-                try {
-                    await fetchBuy(`/themes`, idTheme);
-                    ownedThemes = await fetchData(`/themes/getuserthemes`);
-                    displayCurrentThemePage();
-                } catch {
-                    alert("An error occurred while purchasing this theme...");
+                    anime({
+                        targets: btn,
+                        backgroundColor: '#ff0000',
+                        complete () {
+                            anime({
+                                targets: btn,
+                                backgroundColor: '#38648D',
+                                duration: 2000,
+                            });
+                        }
+                    });
+
+                } else {
+
+                    try {
+                        await fetchBuy(`/themes`, idTheme);
+                        ownedThemes = await fetchData(`/themes/getuserthemes`);
+                        displayCurrentThemePage();
+                    } catch {
+                        alert("An error occurred while purchasing this theme...");
+                    }
+
                 }
             })
         });
