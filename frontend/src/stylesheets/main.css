@@ -117,7 +117,7 @@ backdrop-filter: blur(10px);
 box-shadow: 0 0 5px rgba(0,0,0,.2);
 color:#fff ;
 border-radius: 10px;
-padding: 30px 40px;
+padding: 5vmin 6vmin;
 }
 
 .wrapper hl {
@@ -215,7 +215,7 @@ text-decoration :underline;
 }
 
 .back{
-  font-size: 65px;
+  font-size: 12vmin;
   background-color: transparent;
   color: white;
   border-color: transparent;
@@ -277,16 +277,17 @@ body {
 
 
 /*Home page*/
+
 .btn2{
-  font-size: 65px;
   display: none;
 }
 
-.btn1{
-  font-size: 65px;
+.btn4{
+  display: none;
 }
+
 .setting-btn{
-  font-size: 55px;
+  font-size: 7.5vmin;
   border-color: transparent;
   height: 40px;
   color: transparent;
@@ -297,9 +298,6 @@ body {
   color: white;
 }
 
-.btn4{
-  display: none;
-}
 .screen {
   height: 100vh;
   width: 99%;
@@ -314,38 +312,53 @@ body {
   color: #ebebeb;
   margin-left: 4em;
   text-transform: uppercase;
+  display: flex;
+  flex-direction: column;
 }
 
 .menu h1{
-  font-size: 3em;
-  letter-spacing: 30px;
+
+  font-size: 7vmin;
+  letter-spacing: 5vmin;
   display: block;
   margin-bottom: 0.5em;
 }
 
-.menu h3{
+.menu h2{
   font-weight: 250;
-  font-size: 2.5em;
-  text-align: center;
+  font-size: 4vmin;
   letter-spacing: 10px;
   position: relative;
 }
 
-.menu h3 ::before{
+.menu h2 ::before{
   left: 0;
 }
 
-.menu h3::after{
+.menu h2::after{
   right: 0 ;
 }
 
 .menu ul{
   list-style: none;
   padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2em;
+}
+
+.menu ul::after{
+  right :0;
+} 
+
+.menu ul::before{
+  left :0;
 }
 
 .menu li{
-  margin: 1em 0;
+  font-size: 2.5vh;
+  width: 170px;
+
 }
 
 .menu li a {
@@ -459,16 +472,16 @@ justify-content: space-evenly;
 .h1Credit{
   justify-content: center;
   text-align: center;
-  font-size: 60px;
+  font-size: 8vmin;
 }
 
 .creditPage div ul h3{
   text-decoration: underline;
-  font-size: 30px;
+  font-size: 4.5vmin;
 }
 
 .creditPage div li{
-  font-size: 25px;
+  font-size: 3vmin;
 }
 .div-back{
   width: 100px;
@@ -622,3 +635,4 @@ justify-content: space-evenly;
   position: absolute;
   left: 0;
 }
+

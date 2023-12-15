@@ -2,12 +2,10 @@ import Phaser from "phaser";
 import MeterLabel from './MeterLabel';
 import pauseButton from '../../assets/pauseButton.png';
 import CoinLabel from './CoinLabel';
-import coinAsset from '../../assets/coin.png';
 import coinHudAsset from '../../assets/hudcoin.png';
 
 const PAUSE_BUTTON = 'pause';
 const HUD_COIN_KEY = 'hudcoin';
-const COIN_KEY = 'coin';
 
 class ScorePauseScene extends Phaser.Scene {
       constructor() {
@@ -22,7 +20,6 @@ class ScorePauseScene extends Phaser.Scene {
      
          // coins
          this.load.image(HUD_COIN_KEY, coinHudAsset);
-         this.load.image(COIN_KEY, coinAsset);
        }
 
        create() {

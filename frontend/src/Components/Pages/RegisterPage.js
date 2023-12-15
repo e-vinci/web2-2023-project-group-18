@@ -26,11 +26,6 @@ const RegisterPage = () => {
             </div>
 
             <div class="input-box">
-              <input class="email" type="email" placeholder="Email Adresse" required>
-              <i class='bx bx-envelope'></i>
-            </div>
-
-            <div class="input-box">
               <input class= "password1" type="password" placeholder="Password" required>
               <i class='bx bxs-lock-alt'></i>
             </div>
@@ -125,7 +120,7 @@ async function tryRgister() {
       localStorage.setItem('token', finalResponse.token);
       localStorage.setItem('user',finalResponse.username)
       animeLogin(true);
-      setTimeout(()=>Navigate('/'),2000)
+      setTimeout(()=>Navigate('/'),1000)
     }
   }
 }

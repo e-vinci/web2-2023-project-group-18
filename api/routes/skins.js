@@ -10,7 +10,6 @@ router.get('/', async (req, res) => {
     const skins = await getAllSkins();
     return res.json(skins.rows);
   } catch (error) {
-    console.error('Error in request handling:', error);
     return res.status(500).send('Internal Server Error');
   }
 });
@@ -36,9 +35,8 @@ router.put('/', authorize, async (req, res) => {
     } catch (error) {
       return res.sendStatus(404);
     }
-  } else {
-    return res.sendStatus(400);
   }
+  return res.sendStatus(400);
 });
 
 module.exports = router;

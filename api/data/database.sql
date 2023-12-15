@@ -1,46 +1,11 @@
 CREATE SCHEMA IF NOT EXISTS projet;
 
+-- Users
 CREATE TABLE IF NOT EXISTS projet.users(
     id_user SERIAL PRIMARY KEY,
     username VARCHAR(255) UNIQUE NOT NULL,
     password VARCHAR(255) NOT NULL
 );
-
-CREATE TABLE IF NOT EXISTS projet.scores(
-    id_user INTEGER REFERENCES projet.users(id_user) PRIMARY KEY,
-    score INTEGER NOT NULL,
-    score_date DATE NOT NULL DEFAULT CURRENT_DATE
-    CHECK ( score >= 0 )
-);
-
-CREATE OR REPLACE VIEW  projet.display_scores AS
-    SELECT u.username, s.score, s.score_date
-    FROM projet.scores s, projet.users u
-    WHERE u.id_user = s.id_user
-    ORDER BY 2 DESC, 3 DESC;
-
-CREATE OR REPLACE FUNCTION projet.user_change_score(
-    _user VARCHAR(255),
-    _score INT
-) RETURNS VOID AS $$
-DECLARE
-    id_current_user INTEGER := NULL;
-BEGIN
-    id_current_user := (SELECT s.id_user FROM projet.scores s, projet.users u WHERE s.id_user = u.id_user AND u.username = _user);
-
-    IF (id_current_user IS NOT NULL) THEN
-        UPDATE projet.scores SET score =_score, score_date = CURRENT_DATE WHERE id_user = id_current_user;
-        RETURN;
-
-    END IF;
-
-     id_current_user := (SELECT u.id_user FROM projet.users u WHERE  u.username = _user);
-
-    INSERT INTO projet.scores (id_user, score) VALUES (id_current_user, _score);
-
-RETURN;
-END;
-$$ LANGUAGE plpgsql;
 
 CREATE OR REPLACE FUNCTION projet.insert_user(
     _username VARCHAR(255),
@@ -63,27 +28,58 @@ RETURN id;
 END;
 $$ LANGUAGE plpgsql;
 
-/*INSERT INTO projet.users (username, password) VALUES ('GoldKing', 'mdp1');
-INSERT INTO projet.users (username, password) VALUES ('WitcherGood', 'mdp1');
-INSERT INTO projet.users (username, password) VALUES ('WarSteel', 'mdp1');
-INSERT INTO projet.users (username, password) VALUES ('RushRonin', 'mdp1');
-
-SELECT projet.user_change_score(1, 120);
-SELECT projet.user_change_score(2, 300);
-SELECT projet.user_change_score(3, 120);
-SELECT projet.user_change_score(4, 150);*/
 
 
 
+-- Scores
+CREATE TABLE IF NOT EXISTS projet.scores(
+    id_user INTEGER REFERENCES projet.users(id_user) PRIMARY KEY,
+    score INTEGER NOT NULL,
+    score_date DATE NOT NULL DEFAULT CURRENT_DATE
+    CHECK ( score >= 0 )
+);
+
+CREATE OR REPLACE VIEW  projet.display_scores AS
+    SELECT u.username, s.score, s.score_date
+    FROM projet.scores s, projet.users u
+    WHERE u.id_user = s.id_user
+    ORDER BY 2 DESC, 3 DESC;
+
+CREATE OR REPLACE FUNCTION projet.user_change_score(
+    _user VARCHAR(255),
+    _score INT
+) RETURNS VOID AS $$
+DECLARE
+    user_id INT := NULL;
+    current_score int;
+BEGIN
+
+    SELECT u.id_user FROM projet.users u WHERE u.username = _user INTO user_id;
+
+   IF( user_id IS NULL ) THEN
+       RAISE 'User not found';
+   END IF;
 
 
+    SELECT s.score FROM projet.scores s WHERE s.id_user = user_id INTO current_score;
 
-/*
-DROP TABLE IF EXISTS projet.users_skins;
-DROP TABLE IF EXISTS projet.users_themes;
-DROP TABLE IF EXISTS projet.skins CASCADE;
-DROP TABLE IF EXISTS projet.themes CASCADE;
-*/
+    IF FOUND THEN
+        IF(current_score >= _score) THEN
+            RAISE 'The score cannot be lower than the current score';
+        END IF;
+
+        -- have already a score
+        UPDATE projet.scores SET score =_score, score_date = CURRENT_DATE WHERE id_user = user_id;
+        RETURN;
+    END IF;
+
+    -- don't have already a score
+    INSERT INTO projet.scores (id_user, score) VALUES (user_id, _score);
+
+RETURN;
+END;
+$$ LANGUAGE plpgsql;
+
 
 CREATE TABLE IF NOT EXISTS projet.skins(
     id_skin SERIAL PRIMARY KEY,
@@ -179,13 +175,14 @@ INSERT INTO projet.themes (name_theme, label_theme, price) VALUES ('candy', 'Can
 INSERT INTO projet.themes (name_theme, label_theme, price) VALUES ('alien', 'Alien',  5000);
 */
 
---DROP TABLE projet.collectible;
+
+-- Collectibles
 CREATE TABLE IF NOT EXISTS projet.collectibles(
     user_id INTEGER PRIMARY KEY NOT NULL REFERENCES projet.users(id_user),
     nbre_collectible INTEGER NOT NULL
     CHECK ( nbre_collectible >= 0 )
 );
---DROP FUNCTION projet.get_collectible;
+
 
 CREATE OR REPLACE FUNCTION projet.get_collectible(_user VARCHAR(255))
 RETURNS INTEGER AS $$
@@ -224,25 +221,25 @@ END;
 $$ LANGUAGE plpgsql;
 
 
-CREATE OR REPLACE FUNCTION projet.supp_collectible(_user VARCHAR(255), _collectible INTEGER)
-RETURNS VOID AS $$
-    DECLARE
-        id_current_user INTEGER := NULL;
-    BEGIN
+-- CREATE OR REPLACE FUNCTION projet.supp_collectible(_user VARCHAR(255), _collectible INTEGER)
+-- RETURNS VOID AS $$
+--     DECLARE
+--         id_current_user INTEGER := NULL;
+--     BEGIN
 
-        id_current_user := (SELECT c.user_id FROM projet.collectibles c, projet.users u WHERE c.user_id = u.id_user AND u.username = _user);
+--         id_current_user := (SELECT c.user_id FROM projet.collectibles c, projet.users u WHERE c.user_id = u.id_user AND u.username = _user);
     
-        IF (id_current_user IS NOT NULL) THEN
-            UPDATE projet.collectibles SET nbre_collectible = (nbre_collectible - _collectible) WHERE user_id = id_current_user;
-            RETURN;
-        end if;  
+--         IF (id_current_user IS NOT NULL) THEN
+--             UPDATE projet.collectibles SET nbre_collectible = (nbre_collectible - _collectible) WHERE user_id = id_current_user;
+--             RETURN;
+--         end if;  
 
-            RAISE NOTICE 'No user found with this id_user';
+--             RAISE NOTICE 'No user found with this id_user';
         
-    RETURN;
-    END;
+--     RETURN;
+--     END;
 
-$$ LANGUAGE plpgsql;
+-- $$ LANGUAGE plpgsql;
 
 
 

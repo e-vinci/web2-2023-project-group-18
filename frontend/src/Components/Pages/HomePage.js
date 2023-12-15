@@ -1,5 +1,5 @@
 
-// import anime from 'animejs/lib/anime.es';
+import anime from 'animejs/lib/anime.es';
 
 import Navigate from '../Router/Navigate';
 import settings from '../../utils/settings';
@@ -23,21 +23,20 @@ const HomePage = () => {
     </div>
  
     <div class= "menu">
-        <h1>SantaFall</h1>
-        <h2>Let us slide</h2>
-        <ul>
-      <li><a class="nav-link" href="#" data-uri="/game">Play</a></li>
+        <h1 class="title">SantaFall</h1>
+        <br>
+        <h2 style = "text-decoration: underline" >Let us slide</h2>
+        <br>
+        <br>
+      <ul>
+      <li><a id="game-link" class="nav-link" href="#" data-uri="/game">Play</a></li>
       <li><a class="nav-link" href="#" data-uri="/leaderboard">LeaderBoard</a></li>
       
-      <li id="linkConnect1"></li>
-      <li id="linkConnect2"></li>
-
-      <li  id="linkNotConnect1"></li>
-      <li  id="linkNotConnect2"></li>
-
+      <li id="linkConnection1"></li>
+      <li id="linkConnection2"></li>
       
       <li><a class="nav-link" href="#" data-uri="/credits">Credits</a></li>
-        </ul>
+      </ul>
     </div>
   </div>
 
@@ -67,26 +66,27 @@ const HomePage = () => {
   settingClick();
 
 
-  // animeLinks();
+  animeLinks();
+  document.addEventListener('DOMContentLoaded', animeLinks);
   // cookie();
 };
 
 function isConnected(token) {
   if (token === false) {
     document.querySelector(
-      '#linkNotConnect1',
+      '#linkConnection1',
     ).innerHTML = `<a class="nav-link" href="#" data-uri="/login">Login</a>`;
 
     document.querySelector(
-      '#linkNotConnect2',
+      '#linkConnection2',
     ).innerHTML = `<a class="nav-link" href="#" data-uri="/register">Sign-In</a>`;
   } else {
     document.querySelector(
-      '#linkConnect1',
+      '#linkConnection1',
     ).innerHTML = `<a class="nav-link" href="#" data-uri="/shop">Shop</a>`;
 
     document.querySelector(
-      '#linkConnect2',
+      '#linkConnection2',
     ).innerHTML = `<a class="nav-link" href="#" data-uri="/logout">Log-out</a>`;
   }
 }
@@ -156,24 +156,26 @@ function settingClick() {
 
 }
 
-//   function animeLinks() {
-//     const links = document.querySelectorAll('li');
+  function animeLinks() {
+    const links = document.querySelectorAll('li');
+    if (links.length > 0) {
+      anime.set(links, {
+        translateX: '100px',
+        translateY: '100px',
+      });
 
-//      const num = 500;
-//      let cpt = 1;
-//      links.forEach((link) => {
-//      window.addEventListener(
-//         'mouseover',
-//        anime({
-//          targets: link,
-//          translateX: 50,
-//          translateY: 50,
-//          duration: num * cpt,
-//        }),
-//      );
-//     cpt += 1;
-//    });
-//  }
+      anime({
+        targets: links,
+        translateX: 0,
+        translateY: 0,
+        delay: anime.stagger(100),
+      });
+    } else {
+      console.log("Aucun élément 'li' trouvé dans le DOM.");
+    }
+  }
+
+ 
 
 
 
