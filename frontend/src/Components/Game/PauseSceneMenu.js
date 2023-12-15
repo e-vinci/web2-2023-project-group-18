@@ -39,11 +39,11 @@ class PauseMenuScene extends Phaser.Scene {
                );
                backgroundShadow.setOrigin(0);
 
-               const title = this.add.text(this.scale.width / 2, 50, 'SANTA FALL', {
-                 fontFamily: 'roboto',
-                 fontSize: '80px',
-               });
-               title.setOrigin(0.5);
+              //  const title = this.add.text(this.scale.width / 2, 50, 'SANTA FALL', {
+              //    fontFamily: 'roboto',
+              //    fontSize: '80px',
+              //  });
+              //  title.setOrigin(0.5);
 
                const textPause = this.add.text(this.scale.width / 2, 200, 'PAUSE', {
                  fontFamily: 'roboto',
