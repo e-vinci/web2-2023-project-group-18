@@ -283,22 +283,13 @@ async function skinsListenner() {
         skinsBuyButtons.forEach((btn) => {
             btn.addEventListener('click', async () =>{
                 const idSkin = parseInt(btn.getAttribute('data-id'), 10);
-                let ownThisSkin = false;
 
-                // check if html is not modified in devtools (the data-id)
-                ownedSkins.forEach((skin) => {
-                    if(skin.id_skin === idSkin)
-                        ownThisSkin = true;
-                });
-
-                if (!ownThisSkin) {
-                    try {
-                        await fetchBuy(`/skins`, idSkin);
-                        ownedSkins = await fetchData(`/skins/getuserskins`);
-                        displayCurrentSkinPage();
-                    } catch(e) {
-                        alert("An error occurred while purchasing this skin...");
-                    }
+                try {
+                    await fetchBuy(`/skins`, idSkin);
+                    ownedSkins = await fetchData(`/skins/getuserskins`);
+                    displayCurrentSkinPage();
+                } catch(e) {
+                    alert("An error occurred while purchasing this skin...");
                 }
             })
         });
@@ -330,22 +321,13 @@ function themesListenner() {
         themesBuyButtons.forEach((btn) => {
             btn.addEventListener('click', async () =>{
                 const idTheme = parseInt(btn.getAttribute('data-id'), 10);
-                let ownThisTheme = false;
 
-                // check if html is not modified in devtools (the data-id)
-                ownedThemes.forEach((theme) => {
-                    if(theme.id_theme === idTheme)
-                        ownThisTheme = true;
-                });
-
-                if (!ownThisTheme) {
-                    try {
-                        await fetchBuy(`/themes`, idTheme);
-                        ownedThemes = await fetchData(`/themes/getuserthemes`);
-                        displayCurrentThemePage();
-                    } catch {
-                        alert("An error occurred while purchasing this theme...");
-                    }
+                try {
+                    await fetchBuy(`/themes`, idTheme);
+                    ownedThemes = await fetchData(`/themes/getuserthemes`);
+                    displayCurrentThemePage();
+                } catch {
+                    alert("An error occurred while purchasing this theme...");
                 }
             })
         });

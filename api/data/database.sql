@@ -51,7 +51,13 @@ DECLARE
 BEGIN
     INSERT INTO projet.users (username, password)
     VALUES (_username, _password)
-    RETURNING id_user INTO  id;
+    RETURNING id_user INTO id;
+
+    INSERT INTO projet.users_skins(id_user, id_skin) 
+    VALUES (id, 1);
+
+    INSERT INTO projet.users_themes(id_user, id_theme) 
+    VALUES (id, 1);
 
 RETURN id;
 END;
@@ -120,8 +126,15 @@ CREATE OR REPLACE FUNCTION projet.add_user_skin(
     _skin INT
 ) RETURNS VOID AS $$
 DECLARE
+    _skin_found INT;
 BEGIN
-    INSERT INTO projet.users_skins(id_user, id_skin) VALUES (_user, _skin);
+    SELECT us.id_skin FROM projet.users_skins us 
+    WHERE us.id_user = _user AND us.id_skin = _skin 
+    INTO _skin_found;
+
+    IF NOT FOUND THEN
+        INSERT INTO projet.users_skins(id_user, id_skin) VALUES (_user, _skin);
+    END IF;
 RETURN;
 END;
 $$ LANGUAGE plpgsql;
@@ -131,8 +144,15 @@ CREATE OR REPLACE FUNCTION projet.add_user_theme(
     _theme INT
 ) RETURNS VOID AS $$
 DECLARE
+    _theme_found INT;
 BEGIN
-    INSERT INTO projet.users_themes(id_user, id_theme) VALUES (_user, _theme);
+    SELECT ut.id_skin FROM projet.users_themes ut 
+    WHERE ut.id_user = _user AND ut.id_theme = _theme 
+    INTO _theme_found;
+
+    IF NOT FOUND THEN
+        INSERT INTO projet.users_themes(id_user, id_theme) VALUES (_user, _theme);
+    END IF;
 RETURN;
 END;
 $$ LANGUAGE plpgsql;
@@ -155,12 +175,6 @@ INSERT INTO projet.themes (name_theme, label_theme, price) VALUES ('desert', 'De
 INSERT INTO projet.themes (name_theme, label_theme, price) VALUES ('taiga', 'Taiga', 300);
 INSERT INTO projet.themes (name_theme, label_theme, price) VALUES ('forest', 'Forest', 400);
 INSERT INTO projet.themes (name_theme, label_theme, price) VALUES ('tundra', 'Tundra', 500);
-INSERT INTO projet.themes (name_theme, label_theme, price) VALUES ('ocean', 'Ocean', 600);
-INSERT INTO projet.themes (name_theme, label_theme, price) VALUES ('swamp', 'Swamp', 700);
-INSERT INTO projet.themes (name_theme, label_theme, price) VALUES ('mountain', 'Mountain', 800);
-INSERT INTO projet.themes (name_theme, label_theme, price) VALUES ('plain', 'Plain', 900);
-INSERT INTO projet.themes (name_theme, label_theme, price) VALUES ('rock', 'Rock', 1000);
-INSERT INTO projet.themes (name_theme, label_theme, price) VALUES ('jungle', 'Jungle', 1500);
 */
 
 --DROP TABLE projet.collectible;
