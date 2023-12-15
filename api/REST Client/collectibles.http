@@ -1,7 +1,5 @@
-### Basic url
+### Base url
 @baseUrl = http://localhost:3000
-
-
 
 
 ### Login as test user
