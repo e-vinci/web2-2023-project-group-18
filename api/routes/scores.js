@@ -22,10 +22,8 @@ router.put('/', authorize, async (req, res) => {
     try {
       await updateScore(username, score);
       return res.sendStatus(200);
-      // await res.sendStatus(200);
     } catch (error) {
-      // console.error('Error in request');
-      // user doesn't exist or bad user index
+      console.log(error);
       return res.sendStatus(404);
     }
   } else {

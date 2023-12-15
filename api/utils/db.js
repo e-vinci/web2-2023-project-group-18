@@ -29,22 +29,15 @@ if (process.env.DB_USER
 }
 
 async function queryExecute(query) {
+  // eslint-disable-next-line no-useless-catch
+  let client;
   try {
-    const client = await pool.connect();
-    try {
-      const result = await client.query(query);
-      // console.log(`Result: ${result}`);
-      return result;
-    } catch (error) {
-      console.log(error);
-      // console.error('Error executing query:', error);
-      throw error;
-    } finally {
-      client.release();
-    }
-  } catch (error) {
-    console.error('Error client connect:', error);
-    throw error;
+    // connect client to pool
+    client = await pool.connect();
+    // execute query request
+    return await client.query(query);
+  } finally {
+    client.release();
   }
 }
 

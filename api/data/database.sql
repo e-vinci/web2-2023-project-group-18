@@ -24,19 +24,31 @@ CREATE OR REPLACE FUNCTION projet.user_change_score(
     _score INT
 ) RETURNS VOID AS $$
 DECLARE
-    id_current_user INTEGER := NULL;
+    user_id INT := NULL;
+    current_score int;
 BEGIN
-    id_current_user := (SELECT s.id_user FROM projet.scores s, projet.users u WHERE s.id_user = u.id_user AND u.username = _user);
 
-    IF (id_current_user IS NOT NULL) THEN
-        UPDATE projet.scores SET score =_score, score_date = CURRENT_DATE WHERE id_user = id_current_user;
+    SELECT u.id_user FROM projet.users u WHERE u.username = _user INTO user_id;
+
+   IF( user_id IS NULL ) THEN
+       RAISE 'User not found';
+   END IF;
+
+
+    SELECT s.score FROM projet.scores s WHERE s.id_user = user_id INTO current_score;
+
+    IF FOUND THEN
+        IF(current_score >= _score) THEN
+            RAISE 'The score cannot be lower than the current score';
+        END IF;
+
+        -- have already a score
+        UPDATE projet.scores SET score =_score, score_date = CURRENT_DATE WHERE id_user = user_id;
         RETURN;
-
     END IF;
 
-     id_current_user := (SELECT u.id_user FROM projet.users u WHERE  u.username = _user);
-
-    INSERT INTO projet.scores (id_user, score) VALUES (id_current_user, _score);
+    -- don't have already a score
+    INSERT INTO projet.scores (id_user, score) VALUES (user_id, _score);
 
 RETURN;
 END;
