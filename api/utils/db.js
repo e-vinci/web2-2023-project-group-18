@@ -29,7 +29,6 @@ if (process.env.DB_USER
 }
 
 async function queryExecute(query) {
-  // eslint-disable-next-line no-useless-catch
   let client;
   try {
     // connect client to pool
