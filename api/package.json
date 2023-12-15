@@ -7,8 +7,7 @@
     "dev": "nodemon ./bin/www",
     "start": "node ./bin/www",
     "lint": "eslint **/*.js",
-    "lint:fix": "npm run lint -- --fix",
-    "swagger-autogen": "node ./docs/swagger.js"
+    "lint:fix": "npm run lint -- --fix"
   },
   "nodemonConfig": {
     "ignore": [
