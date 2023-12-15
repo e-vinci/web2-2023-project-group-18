@@ -49,8 +49,6 @@ class GameScene extends Phaser.Scene {
   }
 
   create() {
-             this.matter.world.setGravity(0, 1); // Apply gravity to the world
-
              // Generating Ground and its Collision
              this.bodyPool = [];
              this.bodyPoolId = [];
@@ -211,7 +209,7 @@ class GameScene extends Phaser.Scene {
       }
       
       // Generate objects
-      if(i%3 === 0 && Phaser.Math.Between(0,100) < gameOptions.obstacleRatio && sliceStart.x > 2000){
+      if(i%3 === 0 && Phaser.Math.Between(0,100) < gameOptions.obstacleRatio){
         // add an obstacle
           const size = 5;
           const obstacleX = center.x +  sliceStart.x;
@@ -248,7 +246,7 @@ class GameScene extends Phaser.Scene {
             });
           }
       }else 
-      if(i%3 === 0 && Phaser.Math.Between(0,100) < gameOptions.coinRatio && sliceStart.x > 1700){
+      if(i%3 === 0 && Phaser.Math.Between(0,100) < gameOptions.coinRatio){
         // add an coin
         const coinX = center.x + sliceStart.x + 20;
         const coinY = center.y - 55;
