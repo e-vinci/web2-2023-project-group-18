@@ -2,8 +2,10 @@
 ### Basic url
 @baseUrl = http://localhost:3000
 
+
 ### Get all scores in correct order
 GET {{baseUrl}}/scores
+
 
 ### Login as test user
 # @name test
@@ -14,6 +16,7 @@ Content-Type: application/json
     "username":"test",
     "password":"test"
 }
+
 
 ### First score of test user at 20
 PUT {{baseUrl}}/scores
@@ -34,4 +37,14 @@ Authorization: {{test.response.body.token}}
 
 {
     "score": 1000
+}
+
+### Try to update a lower score 
+PUT {{baseUrl}}/scores
+Content-Type: application/json
+Authorization: {{test.response.body.token}}
+
+
+{
+    "score": 1
 }

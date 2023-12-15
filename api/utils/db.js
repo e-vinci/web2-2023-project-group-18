@@ -1,6 +1,4 @@
-// eslint-disable-next-line import/no-extraneous-dependencies
 const { Pool } = require('pg');
-// eslint-disable-next-line import/no-extraneous-dependencies
 require('dotenv').config();
 const fs = require('fs');
 const path = require('path');
@@ -29,22 +27,14 @@ if (process.env.DB_USER
 }
 
 async function queryExecute(query) {
+  let client;
   try {
-    const client = await pool.connect();
-    try {
-      const result = await client.query(query);
-      // console.log(`Result: ${result}`);
-      return result;
-    } catch (error) {
-      console.log(error);
-      // console.error('Error executing query:', error);
-      throw error;
-    } finally {
-      client.release();
-    }
-  } catch (error) {
-    console.error('Error client connect:', error);
-    throw error;
+    // connect client to pool
+    client = await pool.connect();
+    // execute query request
+    return await client.query(query);
+  } finally {
+    client.release();
   }
 }
 

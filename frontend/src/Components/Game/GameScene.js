@@ -2,9 +2,9 @@ import Phaser from 'phaser';
 import simplify from 'simplify-js';
 
 import Skin from '../../utils/skins';
-import obstacleSmall from '../../assets/winterTheme/caneRedSmall.png'; //TODO import la classe de biome et extraire les 3 obstacles
-import obstacleMedium from '../../assets/winterTheme/pineSapling.png'; //TODO import la classe de biome et extraire les 3 obstacles
-import obstacleFlat from '../../assets/winterTheme/spikesBottomAlt.png'; //TODO import la classe de biome et extraire les 3 obstacles
+import obstacleSmall from '../../assets/winterTheme/caneRedSmall.png'; // TODO import la classe de biome et extraire les 3 obstacles
+import obstacleMedium from '../../assets/winterTheme/pineSapling.png'; // TODO import la classe de biome et extraire les 3 obstacles
+import obstacleFlat from '../../assets/winterTheme/spikesBottomAlt.png'; // TODO import la classe de biome et extraire les 3 obstacles
 import coinAsset from '../../assets/coin.png';
 
 import Settings from '../../utils/settings';
@@ -17,8 +17,8 @@ const OBSTACLE_SMALL_KEY = 'obstacleSmall';
 const OBSTACLE_MEDIUM_KEY = 'obstacleMedium';
 const OBSTACLE_FLAT_KEY = 'obstacleFlat';
 
-const GROUND_COLOR = 0xdefbff; //TODO import from la classe de biome
-const GROUND_TOP_LAYER_COLOR = 0xc9edf0; //TODO import from la classe de biome
+const GROUND_COLOR = 0xdefbff; // TODO import from la classe de biome
+const GROUND_TOP_LAYER_COLOR = 0xc9edf0; // TODO import from la classe de biome
 
 const DUDE_KEY = 'dude';
 const DUDE_ASSET_WIDTH = 25;
@@ -433,13 +433,8 @@ class GameScene extends Phaser.Scene {
       },
     };
 
-    const response = await fetch(`${process.env.API_BASE_URL}/scores`, options);
+    await fetch(`${process.env.API_BASE_URL}/scores`, options);
 
-    if (!response.ok) {
-      // eslint-disable-next-line no-console
-      console.log(response.status);
-      throw new Error();
-    }
   }
 
   addCoin(coinX, coinY) {

@@ -75,7 +75,7 @@ async function register(username, password) {
 }
 
 /** *************************************************************************************
-* Title: regisreadOneUserFromUsernameter
+* Title: regisreadOneUserFromUsernameter (adapted)
 *  Author: JS Teacher
 * Date: 11/12/2023
 *    Code version: 2.0
@@ -89,7 +89,7 @@ async function readOneUserFromUsername(username) {
 }
 
 /** *************************************************************************************
-* Title: createOneUser
+* Title: createOneUser (adapted)
 *  Author: JS Teacher
 * Date: 11/12/2023
 *    Code version: 2.0

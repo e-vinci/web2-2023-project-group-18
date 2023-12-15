@@ -1,3 +1,4 @@
+# BaseURL
 @baseUrl = http://localhost:3000
 
 
@@ -36,4 +37,23 @@ Content-Type: application/json
 {
     "username":"test2",
     "password":"test2"
+}
+
+
+### Try to create a empty user
+POST {{baseUrl}}/auths/register
+Content-Type: application/json
+
+{
+    "username":"",
+    "password":""
+}
+
+### Try to create a blank user
+POST {{baseUrl}}/auths/register
+Content-Type: application/json
+
+{
+    "username":" ",
+    "password":" "
 }
