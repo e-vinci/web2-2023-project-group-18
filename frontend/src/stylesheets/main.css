@@ -53,7 +53,7 @@ body{
 
 .shop-current-button {
   width: 100%;
-  background-color: rgb(158, 171, 175);
+  background-color: rgb(107, 135, 158);
   color: white;
   border: 0px;
 
@@ -61,10 +61,10 @@ body{
   border-top-left-radius: 0px;
 }
 .shop-current-button:hover {
-  background-color: rgb(158, 171, 175);
+  background-color: rgb(107, 135, 158);
 }
 .shop-current-button:not(:disabled):not(.disabled):active {
-  background-color: rgb(158, 171, 175);
+  background-color: rgb(107, 135, 158);
 }
 
 .shop-back-button {

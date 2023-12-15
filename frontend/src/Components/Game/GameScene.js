@@ -1,8 +1,9 @@
 import Phaser from 'phaser';
 import simplify from 'simplify-js';
-import dudeAsset from '../../assets/santa.png';
+
+import Skin from '../../utils/skins';
+
 import Settings from '../../utils/settings';
-import dudeAssetJSON from '../../assets/santa.json';
 import pineSaplingAsset from '../../assets/winterTheme/pineSapling.png';
 import ScorePauseScene from './ScorePauseScene';
 
@@ -10,6 +11,9 @@ const GROUND_KEY = 'groundLabel';
 const COIN_KEY = 'coin';
 const OBSTACLE_KEY = 'obstacleLabel';
 const PINE_SAPLING = 'pine';
+
+const DUDE_ASSET_WIDTH = 25;
+const DUDE_ASSET_HEIGHT = 40;
 
 const gameOptions = {
   amplitude: 300,
@@ -44,7 +48,7 @@ class GameScene extends Phaser.Scene {
   }
 
   preload() {
-    this.load.atlas('santa', dudeAsset, dudeAssetJSON);
+    this.load.atlas('santa', Skin.getSkinPicture(), Skin.getSkinJSON());
     this.load.image(PINE_SAPLING, pineSaplingAsset);
   }
 
@@ -62,11 +66,11 @@ class GameScene extends Phaser.Scene {
              }
 
              this.santa = this.matter.add
-               .sprite(1500, 500, 'santa', null, {
-                 shape: { type: 'rectangle', width: 30, height: 40 },
-               })
-               .play('player-idle')
-               .setFixedRotation();
+            .sprite(1500, 500, 'santa', null, {
+              shape: { type: 'rectangle', width: DUDE_ASSET_WIDTH, height: DUDE_ASSET_HEIGHT },
+            })
+            .play('player-idle')
+            .setFixedRotation();
 
              this.santa.setOnCollide(() => {
                this.isTouchingGround = true;
@@ -349,7 +353,7 @@ class GameScene extends Phaser.Scene {
   createDudeAnimations() {
     this.anims.create({
       key: 'player-idle',
-      frames: [{ key: 'santa', frame: 'Idle (1).png' }],
+      frames: [{ key: 'santa', frame: 'idle_1.png' }],
     });
 
     // run animation
@@ -360,8 +364,8 @@ class GameScene extends Phaser.Scene {
       frames: this.anims.generateFrameNames('santa', {
         start: 1,
         end: 4,
-        prefix: 'Run (',
-        suffix: ').png',
+        prefix: 'run_',
+        suffix: '.png',
       }),
       repeat: -1,
     });
@@ -373,8 +377,8 @@ class GameScene extends Phaser.Scene {
       frames: this.anims.generateFrameNames('santa', {
         start: 1,
         end: 5,
-        prefix: 'Slide (',
-        suffix: ').png',
+        prefix: 'slide_',
+        suffix: '.png',
       }),
       repeat: -1,
     });
@@ -386,8 +390,8 @@ class GameScene extends Phaser.Scene {
       frames: this.anims.generateFrameNames('santa', {
         start: 1,
         end: 8,
-        prefix: 'Jump (',
-        suffix: ').png',
+        prefix: 'jump_',
+        suffix: '.png',
       }),
       repeat: -1,
     });

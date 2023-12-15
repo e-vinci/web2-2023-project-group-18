@@ -51,7 +51,13 @@ DECLARE
 BEGIN
     INSERT INTO projet.users (username, password)
     VALUES (_username, _password)
-    RETURNING id_user INTO  id;
+    RETURNING id_user INTO id;
+
+    INSERT INTO projet.users_skins(id_user, id_skin) 
+    VALUES (id, 1);
+
+    INSERT INTO projet.users_themes(id_user, id_theme) 
+    VALUES (id, 1);
 
 RETURN id;
 END;
@@ -72,21 +78,24 @@ SELECT projet.user_change_score(4, 150);*/
 
 
 
-
--- DROP TABLE IF EXISTS projet.users_skins;
--- DROP TABLE IF EXISTS projet.users_themes;
--- DROP TABLE IF EXISTS projet.skins CASCADE;
--- DROP TABLE IF EXISTS projet.themes CASCADE;
+/*
+DROP TABLE IF EXISTS projet.users_skins;
+DROP TABLE IF EXISTS projet.users_themes;
+DROP TABLE IF EXISTS projet.skins CASCADE;
+DROP TABLE IF EXISTS projet.themes CASCADE;
+*/
 
 CREATE TABLE IF NOT EXISTS projet.skins(
     id_skin SERIAL PRIMARY KEY,
     name_skin VARCHAR(255) UNIQUE NOT NULL,
+    label_skin VARCHAR(255) NOT NULL,
     price INTEGER NOT NULL,
     CHECK(price >= 0)
 );
 CREATE TABLE IF NOT EXISTS projet.themes(
     id_theme SERIAL PRIMARY KEY,
     name_theme VARCHAR(255) UNIQUE NOT NULL,
+    label_theme VARCHAR(255) NOT NULL,
     price INTEGER NOT NULL,
     CHECK(price >= 0)
 );
@@ -103,12 +112,12 @@ CREATE TABLE IF NOT EXISTS projet.users_themes(
 );
 
 CREATE OR REPLACE VIEW  projet.get_all_skins AS
-    SELECT s.id_skin, s.name_skin, s.price
+    SELECT s.id_skin, s.name_skin, s.label_skin, s.price
     FROM projet.skins s
     ORDER BY s.price;
 
 CREATE OR REPLACE VIEW  projet.get_all_themes AS
-    SELECT t.id_theme, t.name_theme, t.price
+    SELECT t.id_theme, t.name_theme, t.label_theme, t.price
     FROM projet.themes t
     ORDER BY t.price;
 
@@ -117,8 +126,16 @@ CREATE OR REPLACE FUNCTION projet.add_user_skin(
     _skin INT
 ) RETURNS VOID AS $$
 DECLARE
+    _price INT;
+    _coins INT;
 BEGIN
-    INSERT INTO projet.users_skins(id_user, id_skin) VALUES (_user, _skin);
+    SELECT price FROM projet.skins WHERE id_skin = _skin INTO _price;
+    SELECT nbre_collectible FROM projet.collectibles WHERE user_id = _user INTO _coins;
+
+    IF(_coins >= _price) THEN
+        INSERT INTO projet.users_skins(id_user, id_skin) VALUES (_user, _skin);
+        UPDATE projet.collectibles SET nbre_collectible = (nbre_collectible - _price) WHERE user_id = _user;
+    END IF;
 RETURN;
 END;
 $$ LANGUAGE plpgsql;
@@ -128,38 +145,38 @@ CREATE OR REPLACE FUNCTION projet.add_user_theme(
     _theme INT
 ) RETURNS VOID AS $$
 DECLARE
+    _price INT;
+    _coins INT;
 BEGIN
-    INSERT INTO projet.users_themes(id_user, id_theme) VALUES (_user, _theme);
+    SELECT price FROM projet.theme WHERE id_theme = _theme INTO _price;
+    SELECT nbre_collectible FROM projet.collectibles WHERE user_id = _user INTO _coins;
+
+    IF(_coins >= _price) THEN
+        INSERT INTO projet.users_themes(id_user, id_theme) VALUES (_user, _theme);
+        UPDATE projet.collectibles SET nbre_collectible = (nbre_collectible - _price) WHERE user_id = _user;
+    END IF;
 RETURN;
 END;
 $$ LANGUAGE plpgsql;
 
 /*
-INSERT INTO projet.skins (name_skin, price) VALUES ('dragon', 100);
-INSERT INTO projet.skins (name_skin, price) VALUES ('phoenix', 200);
-INSERT INTO projet.skins (name_skin, price) VALUES ('spectre', 300);
-INSERT INTO projet.skins (name_skin, price) VALUES ('viper', 400);
-INSERT INTO projet.skins (name_skin, price) VALUES ('raven', 500);
-INSERT INTO projet.skins (name_skin, price) VALUES ('hydra', 600);
-INSERT INTO projet.skins (name_skin, price) VALUES ('banshee', 700);
-INSERT INTO projet.skins (name_skin, price) VALUES ('serpent', 800);
-INSERT INTO projet.skins (name_skin, price) VALUES ('gorgon', 900);
-INSERT INTO projet.skins (name_skin, price) VALUES ('chimera', 1000);
-INSERT INTO projet.skins (name_skin, price) VALUES ('wyvern', 1250);
-INSERT INTO projet.skins (name_skin, price) VALUES ('harpy', 1500);
+INSERT INTO projet.skins (name_skin, label_skin, price) VALUES ('santa', 'Santa', 0);
+INSERT INTO projet.skins (name_skin, label_skin, price) VALUES ('redhat', 'Red Hat', 100);
+INSERT INTO projet.skins (name_skin, label_skin, price) VALUES ('jack', 'Jack', 200);
+INSERT INTO projet.skins (name_skin, label_skin, price) VALUES ('cat', 'Cat', 300);
+INSERT INTO projet.skins (name_skin, label_skin, price) VALUES ('dog', 'Dog', 400);
+INSERT INTO projet.skins (name_skin, label_skin, price) VALUES ('explorer', 'Explorer', 500);
+INSERT INTO projet.skins (name_skin, label_skin, price) VALUES ('adventurer', 'Adventurer', 600);
+INSERT INTO projet.skins (name_skin, label_skin, price) VALUES ('ninjaboy', 'Ninja Boy', 700);
+INSERT INTO projet.skins (name_skin, label_skin, price) VALUES ('ninjagirl', 'Ninja Girl', 800);
+INSERT INTO projet.skins (name_skin, label_skin, price) VALUES ('robot', 'Robot', 1000);
 
-INSERT INTO projet.themes (name_theme, price) VALUES ('snow', 100);
-INSERT INTO projet.themes (name_theme, price) VALUES ('meadow', 200);
-INSERT INTO projet.themes (name_theme, price) VALUES ('desert', 300);
-INSERT INTO projet.themes (name_theme, price) VALUES ('taiga', 400);
-INSERT INTO projet.themes (name_theme, price) VALUES ('forest', 500);
-INSERT INTO projet.themes (name_theme, price) VALUES ('tundra', 600);
-INSERT INTO projet.themes (name_theme, price) VALUES ('ocean', 700);
-INSERT INTO projet.themes (name_theme, price) VALUES ('swamp', 800);
-INSERT INTO projet.themes (name_theme, price) VALUES ('mountain', 900);
-INSERT INTO projet.themes (name_theme, price) VALUES ('plain', 1000);
-INSERT INTO projet.themes (name_theme, price) VALUES ('rock', 1250);
-INSERT INTO projet.themes (name_theme, price) VALUES ('jungle', 1500);
+INSERT INTO projet.themes (name_theme, label_theme, price) VALUES ('snow', 'Snow', 0);
+INSERT INTO projet.themes (name_theme, label_theme, price) VALUES ('meadow', 'Meadow', 100);
+INSERT INTO projet.themes (name_theme, label_theme, price) VALUES ('desert', 'Desert', 200);
+INSERT INTO projet.themes (name_theme, label_theme, price) VALUES ('taiga', 'Taiga', 300);
+INSERT INTO projet.themes (name_theme, label_theme, price) VALUES ('forest', 'Forest', 400);
+INSERT INTO projet.themes (name_theme, label_theme, price) VALUES ('tundra', 'Tundra', 500);
 */
 
 --DROP TABLE projet.collectible;
