@@ -2,15 +2,20 @@ import Phaser from 'phaser';
 import simplify from 'simplify-js';
 
 import Skin from '../../utils/skins';
+import obstacleSmall from '../../assets/winterTheme/caneRedSmall.png'; //TODO import la classe de biome et extraire les 3 obstacles
+import obstacleMedium from '../../assets/winterTheme/pineSapling.png'; //TODO import la classe de biome et extraire les 3 obstacles
+import obstacleFlat from '../../assets/winterTheme/spikesBottomAlt.png'; //TODO import la classe de biome et extraire les 3 obstacles
+import coinAsset from '../../assets/coin.png';
 
 import Settings from '../../utils/settings';
-import pineSaplingAsset from '../../assets/winterTheme/pineSapling.png';
 import ScorePauseScene from './ScorePauseScene';
 
 const GROUND_KEY = 'groundLabel';
-const COIN_KEY = 'coin';
+const COIN_KEY = 'coinLabel';
 const OBSTACLE_KEY = 'obstacleLabel';
-const PINE_SAPLING = 'pine';
+
+const GROUND_COLOR = 0xdefbff; //TODO import from la classe de biome
+const GROUND_TOP_LAYER_COLOR = 0xc9edf0; //TODO import from la classe de biome
 
 const DUDE_ASSET_WIDTH = 25;
 const DUDE_ASSET_HEIGHT = 40;
@@ -20,15 +25,19 @@ const gameOptions = {
   slopeLength: [300, 800], 
   slicesAmount: 3,
   slopesPerSlice: 5,
-  obstacleRatio: 100, // 10
+  obstacleRatio: 10,
   coinRatio: 20,
   amountCoin: 10 
 };
 
 class GameScene extends Phaser.Scene {
-  santa = Phaser.Physics.Matter.Sprite;
+  dude = Phaser.Physics.Matter.Sprite;
 
-  pineSaplingAsset = Phaser.Physics.Matter.Sprite;
+  obstacleSmall = Phaser.Physics.Matter.Sprite;
+
+  obstacleMedium = Phaser.Physics.Matter.Sprite; 
+
+  obstacleFlat = Phaser.Physics.Matter.Sprite;
 
   constructor() {
     super('game-scene');
@@ -48,16 +57,19 @@ class GameScene extends Phaser.Scene {
   }
 
   preload() {
-    this.load.atlas('santa', Skin.getSkinPicture(), Skin.getSkinJSON());
-    this.load.image(PINE_SAPLING, pineSaplingAsset);
+    this.load.atlas('dude', Skin.getSkinPicture(), Skin.getSkinJSON());
+    this.load.image('obstacleSmall', obstacleSmall);
+    this.load.image('obstacleMedium', obstacleMedium);
+    this.load.image('obstacleFlat', obstacleFlat);
+    this.load.image(COIN_KEY, coinAsset);
   }
 
   create() {
              // Generating Ground and its Collision
              this.bodyPool = [];
              this.bodyPoolId = [];
-             this.pinesPool = [];
-             this.pinesPoolId = [];
+             this.obstaclePool = [];
+             this.obstaclePoolId = [];
              this.slopeGraphics = [];
              this.sliceStart = new Phaser.Math.Vector2(0, 2);
              for (let i = 0; i < gameOptions.slicesAmount; i += 1) {
@@ -65,14 +77,14 @@ class GameScene extends Phaser.Scene {
                this.sliceStart = this.createSlope(this.slopeGraphics[i], this.sliceStart);
              }
 
-             this.santa = this.matter.add
-            .sprite(1500, 500, 'santa', null, {
+             this.dude = this.matter.add
+            .sprite(1500, 500, 'dude', null, {
               shape: { type: 'rectangle', width: DUDE_ASSET_WIDTH, height: DUDE_ASSET_HEIGHT },
             })
             .play('player-idle')
             .setFixedRotation();
 
-             this.santa.setOnCollide(() => {
+             this.dude.setOnCollide(() => {
                this.isTouchingGround = true;
              });
 
@@ -95,7 +107,7 @@ class GameScene extends Phaser.Scene {
 
              this.createDudeAnimations();
 
-             this.cameras.main.startFollow(this.santa);
+             this.cameras.main.startFollow(this.dude);
              this.key = this.input.keyboard.addKey(localStorage.getItem('selectedKey'));
 
              this.caracterSpeed = 5;
@@ -149,7 +161,7 @@ class GameScene extends Phaser.Scene {
     // draw the ground
     graphics.clear();
     graphics.moveTo(0, 1000);
-    graphics.fillStyle(0xdefbff);
+    graphics.fillStyle(GROUND_COLOR);
     graphics.beginPath();
     simpleSlope.forEach((point) => {
       graphics.lineTo(point.x, point.y);
@@ -159,8 +171,8 @@ class GameScene extends Phaser.Scene {
     graphics.closePath();
     graphics.fillPath();
 
-    // draw the snow
-    graphics.lineStyle(16, 0xc9edf0);
+    // draw the top layer
+    graphics.lineStyle(16, GROUND_TOP_LAYER_COLOR);
     graphics.beginPath();
     simpleSlope.forEach((point) => {
       graphics.lineTo(point.x, point.y);
@@ -216,42 +228,13 @@ class GameScene extends Phaser.Scene {
     if(this.scorePauseScene.meterLabel.timeElapsed > 1){ // spawn at 20m
       // add an obstacle
       if(i%3 === 0 && Phaser.Math.Between(0,100) < gameOptions.obstacleRatio){
-          const size = 5;
           const obstacleX = center.x +  sliceStart.x;
           const obstacleY = center.y - 30;
-  
           // draw the obstacle
-          graphics.fillRect(center.x,center.y,size,size);
-
-          // if the pool is empty...
-          if(this.pinesPool.length === 0){
-            // create a new obstacle body
-            this.matter.add.image(obstacleX, obstacleY, PINE_SAPLING, null, {
-              isStatic: true,
-              friction: 1,
-              restitution: 0,
-              collisionFilter: {
-                category: 2 
-              },
-              label: OBSTACLE_KEY,
-            });
-          }
-          else{
-            // get the obstacle from the pool
-            const obstacleBody  = this.pinesPool.shift();
-            this.pinesPoolId.shift();
-  
-            // move the obstacle body to its new position
-            this.matter.body.setPosition(obstacleBody, {
-              x: obstacleX,
-              y: obstacleY,
-              isStatic: true,
-              friction: 1,
-              restitution: 0
-            });
-          }
+          graphics.fillRect(center.x,center.y,5,5);
+          this.addObstacle(obstacleX, obstacleY);
       }else 
-      // add an coin
+      // add a coin
       if(i%3 === 0 && Phaser.Math.Between(0,100) < gameOptions.coinRatio){
         const coinX = center.x + sliceStart.x + 20;
         const coinY = center.y - 55;
@@ -272,10 +255,10 @@ class GameScene extends Phaser.Scene {
   }
 
   update() {
-    const santa1 = this.santa;
+    const dude1 = this.dude;
 
-    santa1.x += this.caracterSpeed;
-    santa1.play('player-slide', true);
+    dude1.x += this.caracterSpeed;
+    dude1.play('player-slide', true);
     const spaceJustPressed = Phaser.Input.Keyboard.JustDown(this.cursors.space);
 
     if (localStorage.getItem('resume')) {
@@ -283,16 +266,16 @@ class GameScene extends Phaser.Scene {
       localStorage.removeItem('resume');
     }
 
-    if (this.cursors.space.isDown)  this.santa.play('player-jump', true) ;
+    if (this.cursors.space.isDown)  this.dude.play('player-jump', true) ;
 
     if (this.isTouchingGround && spaceJustPressed) {
-      this.santa.setVelocityY(-10);
-      this.santa.setVelocityX(this.caracterSpeed);
+      this.dude.setVelocityY(-10);
+      this.dude.setVelocityX(this.caracterSpeed);
       this.isTouchingGround = false;
     }
 
     if (this.cursors.right.isDown) {
-      this.santa.play('player-run',true);
+      this.dude.play('player-run',true);
     }
 
     const key = Settings.getKey();
@@ -328,12 +311,12 @@ class GameScene extends Phaser.Scene {
       // if the body is out of camera view to the left side && it's not in the current obstacle pool && it's an obstacle body
       if(
         this.cameras.main.scrollX > body.position.x + 200 &&
-        this.pinesPoolId.indexOf(body.id) === -1 &&
+        this.obstaclePoolId.indexOf(body.id) === -1 &&
         body.label === OBSTACLE_KEY
       ) {
         // add the body to the pines pool
-        this.pinesPool.push(body);
-        this.pinesPoolId.push(body.id);
+        this.obstaclePool.push(body);
+        this.obstaclePoolId.push(body.id);
       } else 
       // if the body is out of camera view to the left side && it's a coin body
       if( 
@@ -353,15 +336,14 @@ class GameScene extends Phaser.Scene {
   createDudeAnimations() {
     this.anims.create({
       key: 'player-idle',
-      frames: [{ key: 'santa', frame: 'idle_1.png' }],
+      frames: [{ key: 'dude', frame: 'idle_1.png' }],
     });
 
     // run animation
-    
     this.anims.create({
       key: 'player-run',
       frameRate: 5,
-      frames: this.anims.generateFrameNames('santa', {
+      frames: this.anims.generateFrameNames('dude', {
         start: 1,
         end: 4,
         prefix: 'run_',
@@ -374,7 +356,7 @@ class GameScene extends Phaser.Scene {
     this.anims.create({
       key: 'player-slide',
       frameRate: 5,
-      frames: this.anims.generateFrameNames('santa', {
+      frames: this.anims.generateFrameNames('dude', {
         start: 1,
         end: 5,
         prefix: 'slide_',
@@ -387,7 +369,7 @@ class GameScene extends Phaser.Scene {
     this.anims.create({
       key: 'player-jump',
       frameRate: 5,
-      frames: this.anims.generateFrameNames('santa', {
+      frames: this.anims.generateFrameNames('dude', {
         start: 1,
         end: 8,
         prefix: 'jump_',
@@ -456,12 +438,57 @@ class GameScene extends Phaser.Scene {
     }
   }
 
-  addCoin(x, y) {
-    const coin = this.matter.add.image(x, y, COIN_KEY, null);
+  addCoin(coinX, coinY) {
+    const coin = this.matter.add.image(coinX, coinY, COIN_KEY, null);
     coin.setCircle();
     coin.setStatic(true);
     coin.body.label = COIN_KEY;
     this.coins.push(coin);
+  }
+
+  addObstacle(obstacleX, obstacleY) {
+     // if the pool is empty...
+     if(this.obstaclePool.length === 0){
+      // choose which obstacle to add
+      let obstacle = '';
+      switch (Math.random(3)) {
+        case 0:
+          obstacle = 'obstacleSmall';
+          break;
+        case 1:
+          obstacle = 'obstacleMedium';
+          break;
+        case 2:
+          obstacle = 'obstacleFlat';
+          break;
+        default: obstacle = '';
+      }
+
+      // create a new obstacle body
+      this.matter.add.image(obstacleX, obstacleY, obstacle, null, {
+        isStatic: true,
+        friction: 1,
+        restitution: 0,
+        collisionFilter: {
+          category: 2 
+        },
+        label: OBSTACLE_KEY,
+      });
+    }
+    // ...else get the obstacle from the pool
+    else{ 
+      const obstacleBody  = this.obstaclePool.shift();
+      this.obstaclePoolId.shift();
+
+      // move the obstacle body to its new position
+      this.matter.body.setPosition(obstacleBody, {
+        x: obstacleX,
+        y: obstacleY,
+        isStatic: true,
+        friction: 1,
+        restitution: 0
+      });
+    }
   }
 
   checkCollision(a, b) {
@@ -475,11 +502,11 @@ class GameScene extends Phaser.Scene {
       this.scorePauseScene.coinLabel.add(gameOptions.amountCoin);
     }
     if (a.label === OBSTACLE_KEY && a.gameObject !== null && a.gameObject !== undefined) {
-      this.hitObstacle(this.santa);
+      this.hitObstacle(this.dude);
     }
 
     if (b.label === OBSTACLE_KEY && b.gameObject !== null && b.gameObject !== undefined) {
-      this.hitObstacle(this.santa);
+      this.hitObstacle(this.dude);
     }
   }
 }
