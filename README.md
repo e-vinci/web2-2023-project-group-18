@@ -1,7 +1,7 @@
 
 # SantaFall (web2-2023-project-group-18)
 
-Jeu 2D dans le quelle un père  Noël descente une montagne et doit éviter des obstacles sur son chemin.Le jeu sera simple à jouer, une action possible sauter. Tout le long de la descente le père Noël pourra collectera des pièces et ensuite pourra acheter des "skins".Le but principal sera d'être le joueur à aller le plus loin (tableau de score) dans le jeux (compteur de mètres).
+Jeu 2D dans le quelle un père  Noël descend une montagne et doit éviter des obstacles sur son chemin.Le jeu sera simple à jouer, une action possible : sauter. Tout le long de la descente le père Noël pourra collecter des pièces et ensuite pourra acheter des "skins".Le but principal sera d'être le joueur à aller le plus loin (tableau de score) dans le jeux (compteur de mètres).
 
 
 # Host
