@@ -98,7 +98,7 @@ class GameScene extends Phaser.Scene {
              this.cameras.main.startFollow(this.santa);
              this.key = this.input.keyboard.addKey(localStorage.getItem('selectedKey'));
 
-             this.caracterSpeed = 5;
+             this.caracterSpeed = 4;
              setInterval(() => {
                this.caracterSpeed += Math.log(2) / 100;
              }, 2000);
@@ -285,7 +285,7 @@ class GameScene extends Phaser.Scene {
 
     if (this.isTouchingGround && spaceJustPressed) {
       this.santa.setVelocityY(-13);
-      this.santa.setVelocityX(2*this.caracterSpeed);
+      this.santa.setVelocityX(2);
       this.isTouchingGround = false;
     }
 
