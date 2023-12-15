@@ -470,16 +470,16 @@ justify-content: space-evenly;
 .h1Credit{
   justify-content: center;
   text-align: center;
-  font-size: 60px;
+  font-size: 8vmin;
 }
 
 .creditPage div ul h3{
   text-decoration: underline;
-  font-size: 30px;
+  font-size: 4.5vmin;
 }
 
 .creditPage div li{
-  font-size: 25px;
+  font-size: 3vmin;
 }
 .div-back{
   width: 100px;
