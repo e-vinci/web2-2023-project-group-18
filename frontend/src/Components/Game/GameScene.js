@@ -13,10 +13,14 @@ import ScorePauseScene from './ScorePauseScene';
 const GROUND_KEY = 'groundLabel';
 const COIN_KEY = 'coinLabel';
 const OBSTACLE_KEY = 'obstacleLabel';
+const OBSTACLE_SMALL_KEY = 'obstacleSmall';
+const OBSTACLE_MEDIUM_KEY = 'obstacleMedium';
+const OBSTACLE_FLAT_KEY = 'obstacleFlat';
 
 const GROUND_COLOR = 0xdefbff; //TODO import from la classe de biome
 const GROUND_TOP_LAYER_COLOR = 0xc9edf0; //TODO import from la classe de biome
 
+const DUDE_KEY = 'dude';
 const DUDE_ASSET_WIDTH = 25;
 const DUDE_ASSET_HEIGHT = 40;
 
@@ -25,7 +29,7 @@ const gameOptions = {
   slopeLength: [300, 800], 
   slicesAmount: 3,
   slopesPerSlice: 5,
-  obstacleRatio: 10,
+  obstacleRatio: 100,
   coinRatio: 20,
   amountCoin: 10 
 };
@@ -57,11 +61,12 @@ class GameScene extends Phaser.Scene {
   }
 
   preload() {
-    this.load.atlas('dude', Skin.getSkinPicture(), Skin.getSkinJSON());
-    this.load.image('obstacleSmall', obstacleSmall);
-    this.load.image('obstacleMedium', obstacleMedium);
-    this.load.image('obstacleFlat', obstacleFlat);
+    this.load.atlas(DUDE_KEY, Skin.getSkinPicture(), Skin.getSkinJSON());
+
     this.load.image(COIN_KEY, coinAsset);
+    this.load.image(OBSTACLE_SMALL_KEY, obstacleSmall);
+    this.load.image(OBSTACLE_MEDIUM_KEY, obstacleMedium);
+    this.load.image(OBSTACLE_FLAT_KEY, obstacleFlat);
   }
 
   create() {
@@ -78,7 +83,7 @@ class GameScene extends Phaser.Scene {
              }
 
              this.dude = this.matter.add
-            .sprite(1500, 500, 'dude', null, {
+            .sprite(1500, 500, DUDE_KEY, null, {
               shape: { type: 'rectangle', width: DUDE_ASSET_WIDTH, height: DUDE_ASSET_HEIGHT },
             })
             .play('player-idle')
@@ -226,19 +231,18 @@ class GameScene extends Phaser.Scene {
       
       // Generate objects
     if(this.scorePauseScene.meterLabel.timeElapsed > 1){ // spawn at 20m
+      const centerX = center.x + sliceStart.x;
+      const centerY = center.y;
+
       // add an obstacle
       if(i%3 === 0 && Phaser.Math.Between(0,100) < gameOptions.obstacleRatio){
-          const obstacleX = center.x +  sliceStart.x;
-          const obstacleY = center.y - 30;
           // draw the obstacle
           graphics.fillRect(center.x,center.y,5,5);
-          this.addObstacle(obstacleX, obstacleY);
+          this.addObstacle(centerX, centerY);
       }else 
       // add a coin
       if(i%3 === 0 && Phaser.Math.Between(0,100) < gameOptions.coinRatio){
-        const coinX = center.x + sliceStart.x + 20;
-        const coinY = center.y - 55;
-        this.addCoin(coinX, coinY);
+        this.addCoin(centerX, centerY);
       }
     }
     }
@@ -336,14 +340,14 @@ class GameScene extends Phaser.Scene {
   createDudeAnimations() {
     this.anims.create({
       key: 'player-idle',
-      frames: [{ key: 'dude', frame: 'idle_1.png' }],
+      frames: [{ key: DUDE_KEY, frame: 'idle_1.png' }],
     });
 
     // run animation
     this.anims.create({
       key: 'player-run',
       frameRate: 5,
-      frames: this.anims.generateFrameNames('dude', {
+      frames: this.anims.generateFrameNames(DUDE_KEY, {
         start: 1,
         end: 4,
         prefix: 'run_',
@@ -356,7 +360,7 @@ class GameScene extends Phaser.Scene {
     this.anims.create({
       key: 'player-slide',
       frameRate: 5,
-      frames: this.anims.generateFrameNames('dude', {
+      frames: this.anims.generateFrameNames(DUDE_KEY, {
         start: 1,
         end: 5,
         prefix: 'slide_',
@@ -369,7 +373,7 @@ class GameScene extends Phaser.Scene {
     this.anims.create({
       key: 'player-jump',
       frameRate: 5,
-      frames: this.anims.generateFrameNames('dude', {
+      frames: this.anims.generateFrameNames(DUDE_KEY, {
         start: 1,
         end: 8,
         prefix: 'jump_',
@@ -439,29 +443,30 @@ class GameScene extends Phaser.Scene {
   }
 
   addCoin(coinX, coinY) {
-    const coin = this.matter.add.image(coinX, coinY, COIN_KEY, null);
+    const coin = this.matter.add.image(coinX + 20, coinY - 55, COIN_KEY, null);
     coin.setCircle();
     coin.setStatic(true);
     coin.body.label = COIN_KEY;
     this.coins.push(coin);
   }
 
-  addObstacle(obstacleX, obstacleY) {
+  addObstacle(obstacleX, centerY) {
+    const obstacleY = centerY - 30;
      // if the pool is empty...
      if(this.obstaclePool.length === 0){
       // choose which obstacle to add
-      let obstacle = '';
-      switch (Math.random(3)) {
+      let obstacle;
+      switch (Math.floor(Math.random() * 3)) {
         case 0:
-          obstacle = 'obstacleSmall';
+          obstacle = OBSTACLE_SMALL_KEY;
           break;
         case 1:
-          obstacle = 'obstacleMedium';
+          obstacle = OBSTACLE_MEDIUM_KEY;
           break;
         case 2:
-          obstacle = 'obstacleFlat';
+          obstacle = OBSTACLE_FLAT_KEY;
           break;
-        default: obstacle = '';
+        default: obstacle = OBSTACLE_MEDIUM_KEY;
       }
 
       // create a new obstacle body
