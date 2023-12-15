@@ -125,7 +125,7 @@ async function tryRgister() {
       localStorage.setItem('token', finalResponse.token);
       localStorage.setItem('user',finalResponse.username)
       animeLogin(true);
-      setTimeout(()=>Navigate('/'),2000)
+      setTimeout(()=>Navigate('/'),1000)
     }
   }
 }
