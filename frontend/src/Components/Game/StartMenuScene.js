@@ -61,7 +61,7 @@ class StartMenuScene extends Phaser.Scene {
                textRules.setOrigin(0.5);
                textRules.setAlign('center');
 
-               // Mettez à jour la position du texte et la largeur de l'enveloppe de mots lorsque la taille de la fenêtre change
+               // Mettez à jour la position du texte et la largeur de l'enveloppe de mots lorsque la taille de                la fenêtre change
                this.scale.on('resize', (gameSize) => {
                  const { width } = gameSize;
                  textRules.x = width / 2;
