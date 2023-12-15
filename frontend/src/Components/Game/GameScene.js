@@ -64,13 +64,11 @@ class GameScene extends Phaser.Scene {
              }
 
              this.santa = this.matter.add
-               .sprite(1500, 400, 'santa', null, {
-                 shape: { type: 'rectangle', width: 10, height: 40 },
+               .sprite(1500, 500, 'santa', null, {
+                 shape: { type: 'rectangle', width: 30, height: 40 },
                })
                .play('player-idle')
                .setFixedRotation();
-
-             // Pour une hitbox rectangulaire
 
              this.santa.setOnCollide(() => {
                this.isTouchingGround = true;
@@ -253,7 +251,7 @@ class GameScene extends Phaser.Scene {
       if(i%3 === 0 && Phaser.Math.Between(0,100) < gameOptions.coinRatio && sliceStart.x > 1700){
         // add an coin
         const coinX = center.x + sliceStart.x + 20;
-        const coinY = center.y - 70;
+        const coinY = center.y - 55;
         this.addCoin(coinX, coinY);
       }
     }
@@ -380,8 +378,6 @@ class GameScene extends Phaser.Scene {
       }),
       repeat: -1,
     });
-
-    
 
     // jump animation
     this.anims.create({
