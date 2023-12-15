@@ -29,6 +29,9 @@ const phaserGame = `
       default: 'matter',
       matter: {
         debug: false,
+        gravity: {
+          y: 1
+      },
       },
     },
 

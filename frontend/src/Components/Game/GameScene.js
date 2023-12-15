@@ -53,8 +53,6 @@ class GameScene extends Phaser.Scene {
   }
 
   create() {
-             this.matter.world.setGravity(0, 1); // Apply gravity to the world
-
              // Generating Ground and its Collision
              this.bodyPool = [];
              this.bodyPoolId = [];
@@ -68,8 +66,8 @@ class GameScene extends Phaser.Scene {
              }
 
              this.santa = this.matter.add
-            .sprite(1500, 400, 'santa', null, {
-              shape: { type: 'rectangle', width: 10, height: 40 },
+            .sprite(1500, 500, 'santa', null, {
+              shape: { type: 'rectangle', width: 30, height: 40 },
             })
             .setBody({
               type: 'rectangle',
@@ -78,8 +76,6 @@ class GameScene extends Phaser.Scene {
             })
             .play('player-idle')
             .setFixedRotation();
-
-             // Pour une hitbox rectangulaire
 
              this.santa.setOnCollide(() => {
                this.isTouchingGround = true;
@@ -222,7 +218,7 @@ class GameScene extends Phaser.Scene {
       }
       
       // Generate objects
-      if(i%3 === 0 && Phaser.Math.Between(0,100) < gameOptions.obstacleRatio && sliceStart.x > 2000){
+      if(i%3 === 0 && Phaser.Math.Between(0,100) < gameOptions.obstacleRatio){
         // add an obstacle
           const size = 5;
           const obstacleX = center.x +  sliceStart.x;
@@ -259,10 +255,10 @@ class GameScene extends Phaser.Scene {
             });
           }
       }else 
-      if(i%3 === 0 && Phaser.Math.Between(0,100) < gameOptions.coinRatio && sliceStart.x > 1700){
+      if(i%3 === 0 && Phaser.Math.Between(0,100) < gameOptions.coinRatio){
         // add an coin
         const coinX = center.x + sliceStart.x + 20;
-        const coinY = center.y - 70;
+        const coinY = center.y - 55;
         this.addCoin(coinX, coinY);
       }
     }
@@ -293,8 +289,8 @@ class GameScene extends Phaser.Scene {
     if (this.cursors.space.isDown)  this.santa.play('player-jump', true) ;
 
     if (this.isTouchingGround && spaceJustPressed) {
-      this.santa.setVelocityY(-13);
-      this.santa.setVelocityX(2*this.caracterSpeed);
+      this.santa.setVelocityY(-10);
+      this.santa.setVelocityX(this.caracterSpeed);
       this.isTouchingGround = false;
     }
 
@@ -389,8 +385,6 @@ class GameScene extends Phaser.Scene {
       }),
       repeat: -1,
     });
-
-    
 
     // jump animation
     this.anims.create({
