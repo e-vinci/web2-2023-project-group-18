@@ -83,7 +83,7 @@ const ShopPage = async () => {
 function renderShopPage() {
     const main = document.querySelector('main');
 
-    // For phone the number of skins or themes is 1 per page (reload is needed)
+    // For phone the number of skins or themes is 1 per page (if phone mode on dekstop -> reload is needed)
     if (window.innerWidth <= 480) {
         skinsPerPage = 1;
         themesPerPage = 1;
@@ -108,7 +108,7 @@ function renderShopPage() {
                         <div id="skin-list"></div>
 
                         <div class="d-flex justify-content-center mt-3">
-                            <button type="button" id="previous-change-skin-page" class="shop-change-page-button me-2">PREVIOUS</button>
+                            <button type="button" id="previous-change-skin-page" class="shop-change-page-button me-2">PREV</button>
                             <span id="skin-page-number" class="me-2"></span>
                             <button type="button" id="next-change-skin-page" class="shop-change-page-button">NEXT</button>
                         </div>
@@ -122,7 +122,7 @@ function renderShopPage() {
                         <div id="theme-list"></div>
 
                         <div class="d-flex justify-content-center mt-3">
-                            <button type="button" id="previous-change-theme-page" class="shop-change-page-button me-2">PREVIOUS</button>
+                            <button type="button" id="previous-change-theme-page" class="shop-change-page-button me-2">PREV</button>
                             <span id="theme-page-number" class="me-2"></span>
                             <button type="button" id="next-change-theme-page" class="shop-change-page-button">NEXT</button>
                         </div>
@@ -133,32 +133,34 @@ function renderShopPage() {
         </div>
     </div>
     `
+
     coinsAnimation(0, coins);
 }
 
 // Display skins page
 function displayCurrentSkinPage() {
-    const currentSkin = localStorage.getItem("skin") || skinsList[0]?.name_skin || null;
+    const selectedSkin = localStorage.getItem("skin") || skinsList[0]?.name_skin || null;
 
     const startIndex = (currentSkinPage - 1) * skinsPerPage;
     const endIndex = startIndex + skinsPerPage;
-    const currentSkins = skinsList.slice(startIndex, endIndex);
+    const skinsOnThisPage = skinsList.slice(startIndex, endIndex);
 
     const skinListPage = document.getElementById('skin-list');
     const skinPageNumber = document.getElementById('skin-page-number');
 
     let skinHTML = '';
 
-    for (let i = 0; i < currentSkins.length; i += 3) {
+    for (let i = 0; i < skinsOnThisPage.length; i += 3) {
         skinHTML += '<div class="row">';
 
-        for (let j = i; j < i+3 && j < currentSkins.length; j+= 1) {
-            const skin = currentSkins[j];
+        for (let j = i; j < i+3 && j < skinsOnThisPage.length; j+= 1) {
+            const skin = skinsOnThisPage[j];
 
             let typeButton = `<button type="button" class="btn shop-buy-button shop-buy-skin" data-id="${skin.id_skin}">${skin.price} coins</button>`;
-            
+
+            // check if skin is owned -> if yes check if is selected
             if (ownedSkins.some(s => s.name_skin === skin.name_skin)) {
-                if(skin.name_skin === currentSkin)
+                if(skin.name_skin === selectedSkin)
                     typeButton = `<button type="button" class="btn shop-current-button" data-id="${skin.id_skin}">Current</button>`;
                 else
                     typeButton = `<button type="button" class="btn shop-own-button shop-own-skin" data-id="${skin.id_skin}">Choose</button>`;
@@ -187,21 +189,22 @@ function displayCurrentThemePage() {
 
     const startIndex = (currentThemePage - 1) * themesPerPage;
     const endIndex = startIndex + themesPerPage;
-    const currentThemes = themesList.slice(startIndex, endIndex);
+    const themesOnThisPage = themesList.slice(startIndex, endIndex);
 
     const themeListPage = document.getElementById('theme-list');
     const themePageNumber = document.getElementById('theme-page-number');
 
     let themeHTML = '';
 
-    for (let i = 0; i < currentThemes.length; i += 3) {
+    for (let i = 0; i < themesOnThisPage.length; i += 3) {
         themeHTML += '<div class="row">';
 
-        for (let j = i; j < i+3 && j < currentThemes.length; j+= 1) {
-            const theme = currentThemes[j];
+        for (let j = i; j < i+3 && j < themesOnThisPage.length; j+= 1) {
+            const theme = themesOnThisPage[j];
 
             let typeButton = `<button type="button" class="btn shop-buy-button shop-buy-theme" data-id="${theme.id_theme}">${theme.price} coins</button>`;
 
+            // check if theme is owned -> if yes check if is selected
             if (ownedThemes.some(t => t.name_theme === theme.name_theme)) {
                 if(theme.name_theme === currentTheme)
                     typeButton = `<button type="button" class="btn shop-current-button" data-id="${theme.id_theme}">Current</button>`;
@@ -275,44 +278,25 @@ async function skinsListenner() {
                 const idSkin = parseInt(btn.getAttribute('data-id'), 10);
 
                 // check if enought coins
-                let notEnoughtCoins = false
-                skinsList.forEach(skin => {
-                    if(skin.id_skin === idSkin) {
-                        if(coins<skin.price)
-                            notEnoughtCoins = true; 
-                    }
-                })
-                
-                if(notEnoughtCoins) {
+                const notEnoughCoins = skinsList.some(skin => skin.id_skin === idSkin && coins < skin.price);
+                if(notEnoughCoins) {
+                    notEnoughCoinsAnimation(btn);
+                    return;
+                } 
 
-                    anime({
-                        targets: btn,
-                        backgroundColor: '#ff0000',
-                        complete () {
-                            anime({
-                                targets: btn,
-                                backgroundColor: '#38648D',
-                                duration: 2000,
-                            });
-                        }
-                    });
+                try {
+                    const beforeCoins = coins;
 
-                } else {
+                    await fetchBuy(`/skins`, idSkin);
+                    coins = await fetchData(`/collectibles`);
+                    ownedSkins = await fetchData(`/skins/getuserskins`);
 
-                    try {
-                        const beforeCoins = coins;
-
-                        await fetchBuy(`/skins`, idSkin);
-                        coins = await fetchData(`/collectibles`);
-                        ownedSkins = await fetchData(`/skins/getuserskins`);
-
-                        coinsAnimation(beforeCoins, coins);
-                        displayCurrentSkinPage();
-                    } catch(e) {
-                        alert("An error occurred while purchasing this skin...");
-                    }
-
+                    coinsAnimation(beforeCoins, coins);
+                    displayCurrentSkinPage();
+                } catch(e) {
+                    alert("An error occurred while purchasing this skin...");
                 }
+
             })
         });
     }
@@ -345,44 +329,25 @@ function themesListenner() {
                 const idTheme = parseInt(btn.getAttribute('data-id'), 10);
                 
                 // check if enought coins
-                let notEnoughtCoins = false
-                themesList.forEach(theme => {
-                    if(theme.id_theme === idTheme) {
-                        if(coins<theme.price)
-                            notEnoughtCoins = true; 
-                    }
-                })
-                
-                if(notEnoughtCoins) {
+                const notEnoughCoins = themesList.some(theme => theme.id_theme === idTheme && coins < theme.price);
+                if(notEnoughCoins) {
+                    notEnoughCoinsAnimation(btn);
+                    return;
+                } 
 
-                    anime({
-                        targets: btn,
-                        backgroundColor: '#ff0000',
-                        complete () {
-                            anime({
-                                targets: btn,
-                                backgroundColor: '#38648D',
-                                duration: 2000,
-                            });
-                        }
-                    });
+                try {
+                    const beforeCoins = coins;
+                    
+                    await fetchBuy(`/themes`, idTheme);
+                    coins = await fetchData(`/collectibles`);
+                    ownedThemes = await fetchData(`/themes/getuserthemes`);
 
-                } else {
-
-                    try {
-                        const beforeCoins = coins;
-                        
-                        await fetchBuy(`/themes`, idTheme);
-                        coins = await fetchData(`/collectibles`);
-                        ownedThemes = await fetchData(`/themes/getuserthemes`);
-
-                        coinsAnimation(beforeCoins, coins);
-                        displayCurrentThemePage();
-                    } catch {
-                        alert("An error occurred while purchasing this theme...");
-                    }
-
+                    coinsAnimation(beforeCoins, coins);
+                    displayCurrentThemePage();
+                } catch {
+                    alert("An error occurred while purchasing this theme...");
                 }
+
             })
         });
     }
@@ -410,6 +375,7 @@ function backButtonListenner() {
     })
 }
 
+// Animation for coins changes
 function coinsAnimation(beforeCoins, afterCoins) {
     const coinsDiv = document.querySelector('#shop-coins');
     anime({
@@ -417,6 +383,21 @@ function coinsAnimation(beforeCoins, afterCoins) {
         innerHTML: [beforeCoins, afterCoins],
         easing: 'linear',
         round: 1,
+    });
+}
+
+// Animation buy button not enough coins
+function notEnoughCoinsAnimation(button) {
+    anime({
+        targets: button,
+        backgroundColor: '#ff0000',
+        complete () {
+            anime({
+                targets: button,
+                backgroundColor: '#38648D',
+                duration: 2000,
+            });
+        }
     });
 }
 
