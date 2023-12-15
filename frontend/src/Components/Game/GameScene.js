@@ -1,7 +1,8 @@
 import Phaser from 'phaser';
 import simplify from 'simplify-js';
 
-import Skin from '../../utils/skins';
+import Skin from './Skin';
+import Theme from './Theme';
 
 import Settings from '../../utils/settings';
 import pineSaplingAsset from '../../assets/winterTheme/pineSapling.png';
@@ -149,7 +150,7 @@ class GameScene extends Phaser.Scene {
     // draw the ground
     graphics.clear();
     graphics.moveTo(0, 1000);
-    graphics.fillStyle(0xdefbff);
+    graphics.fillStyle(Theme.getThemeFirstGroundColor());
     graphics.beginPath();
     simpleSlope.forEach((point) => {
       graphics.lineTo(point.x, point.y);
@@ -160,7 +161,7 @@ class GameScene extends Phaser.Scene {
     graphics.fillPath();
 
     // draw the snow
-    graphics.lineStyle(16, 0xc9edf0);
+    graphics.lineStyle(16, Theme.getThemeSecondGroundColor());
     graphics.beginPath();
     simpleSlope.forEach((point) => {
       graphics.lineTo(point.x, point.y);
