@@ -126,8 +126,16 @@ CREATE OR REPLACE FUNCTION projet.add_user_skin(
     _skin INT
 ) RETURNS VOID AS $$
 DECLARE
+    _price INT;
+    _coins INT;
 BEGIN
-    INSERT INTO projet.users_skins(id_user, id_skin) VALUES (_user, _skin);
+    SELECT price FROM projet.skins WHERE id_skin = _skin INTO _price;
+    SELECT nbre_collectible FROM projet.collectibles WHERE user_id = _user INTO _coins;
+
+    IF(_coins >= _price) THEN
+        INSERT INTO projet.users_skins(id_user, id_skin) VALUES (_user, _skin);
+        UPDATE projet.collectibles SET nbre_collectible = (nbre_collectible - _price) WHERE user_id = _user;
+    END IF;
 RETURN;
 END;
 $$ LANGUAGE plpgsql;
@@ -137,8 +145,16 @@ CREATE OR REPLACE FUNCTION projet.add_user_theme(
     _theme INT
 ) RETURNS VOID AS $$
 DECLARE
+    _price INT;
+    _coins INT;
 BEGIN
-    INSERT INTO projet.users_themes(id_user, id_theme) VALUES (_user, _theme);
+    SELECT price FROM projet.theme WHERE id_theme = _theme INTO _price;
+    SELECT nbre_collectible FROM projet.collectibles WHERE user_id = _user INTO _coins;
+
+    IF(_coins >= _price) THEN
+        INSERT INTO projet.users_themes(id_user, id_theme) VALUES (_user, _theme);
+        UPDATE projet.collectibles SET nbre_collectible = (nbre_collectible - _price) WHERE user_id = _user;
+    END IF;
 RETURN;
 END;
 $$ LANGUAGE plpgsql;

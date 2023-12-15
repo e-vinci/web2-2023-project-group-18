@@ -133,17 +133,7 @@ function renderShopPage() {
         </div>
     </div>
     `
-
-    const coinsDiv = document.querySelector('#shop-coins');
-    anime({
-        targets: coinsDiv,
-        innerHTML: [0, coins],
-        easing: 'linear',
-        round: 10,
-        update(anim) {
-            coinsDiv.innerHTML = anim.animations[0].currentValue.toFixed(0); 
-        }
-    });
+    coinsAnimation(0, coins);
 }
 
 // Display skins page
@@ -310,8 +300,13 @@ async function skinsListenner() {
                 } else {
 
                     try {
+                        const beforeCoins = coins;
+
                         await fetchBuy(`/skins`, idSkin);
+                        coins = await fetchData(`/collectibles`);
                         ownedSkins = await fetchData(`/skins/getuserskins`);
+
+                        coinsAnimation(beforeCoins, coins);
                         displayCurrentSkinPage();
                     } catch(e) {
                         alert("An error occurred while purchasing this skin...");
@@ -375,8 +370,13 @@ function themesListenner() {
                 } else {
 
                     try {
+                        const beforeCoins = coins;
+                        
                         await fetchBuy(`/themes`, idTheme);
+                        coins = await fetchData(`/collectibles`);
                         ownedThemes = await fetchData(`/themes/getuserthemes`);
+
+                        coinsAnimation(beforeCoins, coins);
                         displayCurrentThemePage();
                     } catch {
                         alert("An error occurred while purchasing this theme...");
@@ -408,6 +408,16 @@ function backButtonListenner() {
     backElement.addEventListener('click', () =>{
         Navigate('/');
     })
+}
+
+function coinsAnimation(beforeCoins, afterCoins) {
+    const coinsDiv = document.querySelector('#shop-coins');
+    anime({
+        targets: coinsDiv,
+        innerHTML: [beforeCoins, afterCoins],
+        easing: 'linear',
+        round: 1,
+    });
 }
 
 // Fetch data from API
