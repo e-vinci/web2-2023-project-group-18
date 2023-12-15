@@ -10,7 +10,8 @@ router.get('/', authorize, async (req, res) => {
     const countCollectible = await getCollectible(username);
     const nbreCollectible = countCollectible.rows[0]?.get_collectible;
 
-    return res.json({ nbre_collectible: nbreCollectible });
+    // Check if nbreCollectible is defined before sending the response
+    return res.json(nbreCollectible);
   } catch (error) {
     if (error.message.includes('Not Found')) {
       return res.sendStatus(404);

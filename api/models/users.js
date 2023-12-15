@@ -99,7 +99,7 @@ async function readOneUserFromUsername(username) {
 async function createOneUser(username, password) {
   const hashedPassword = await bcrypt.hash(password, saltRounds);
   const cUsername = escape(username);
-  await queryExecute(`INSERT INTO projet.users (username, password) VALUES ('${cUsername}', '${hashedPassword}');`);
+  await queryExecute(`SELECT projet.insert_user('${cUsername}', '${hashedPassword}')`);
 
   const user = await readOneUserFromUsername(cUsername);
 
