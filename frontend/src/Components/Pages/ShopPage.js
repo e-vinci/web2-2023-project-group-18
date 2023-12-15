@@ -283,8 +283,17 @@ async function skinsListenner() {
         skinsBuyButtons.forEach((btn) => {
             btn.addEventListener('click', async () =>{
                 const idSkin = parseInt(btn.getAttribute('data-id'), 10);
+
+                // check if enought coins
+                let notEnoughtCoins = false
+                skinsList.forEach(skin => {
+                    if(skin.id_skin === idSkin) {
+                        if(coins<skin.price)
+                            notEnoughtCoins = true; 
+                    }
+                })
                 
-                if(coins<skinsList[idSkin-1]?.price || true) {
+                if(notEnoughtCoins) {
 
                     anime({
                         targets: btn,
@@ -340,7 +349,16 @@ function themesListenner() {
             btn.addEventListener('click', async () =>{
                 const idTheme = parseInt(btn.getAttribute('data-id'), 10);
                 
-                if(coins<themesList[idTheme-1]?.price || true) {
+                // check if enought coins
+                let notEnoughtCoins = false
+                themesList.forEach(theme => {
+                    if(theme.id_theme === idTheme) {
+                        if(coins<theme.price)
+                            notEnoughtCoins = true; 
+                    }
+                })
+                
+                if(notEnoughtCoins) {
 
                     anime({
                         targets: btn,
