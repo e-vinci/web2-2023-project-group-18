@@ -1,3 +1,4 @@
+# BaseURL
 @baseUrl = http://localhost:3000
 
 
@@ -10,30 +11,49 @@ Content-Type: application/json
     "password":"abc"
 }
 
-### Login the default admin
+### Login as test user
 POST {{baseUrl}}/auths/login
 Content-Type: application/json
 
 {
-    "username":"admin",
-    "password":"admin"
+    "username":"test",
+    "password":"test"
 }
 
-### Create the manager user
+### Create the test2 user
 POST {{baseUrl}}/auths/register
 Content-Type: application/json
 
 {
-    "username":"manager",
-    "password":"manager"
+    "username":"test2",
+    "password":"test2"
 }
 
 
-### Login the manager user
+### Login the test2 user
 POST {{baseUrl}}/auths/login
 Content-Type: application/json
 
 {
-    "username":"manager",
-    "password":"manager"
+    "username":"test2",
+    "password":"test2"
+}
+
+
+### Try to create a empty user
+POST {{baseUrl}}/auths/register
+Content-Type: application/json
+
+{
+    "username":"",
+    "password":""
+}
+
+### Try to create a blank user
+POST {{baseUrl}}/auths/register
+Content-Type: application/json
+
+{
+    "username":" ",
+    "password":" "
 }

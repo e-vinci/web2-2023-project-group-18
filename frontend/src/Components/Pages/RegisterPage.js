@@ -2,6 +2,12 @@ import anime from 'animejs/lib/anime.es';
 import Navigate from '../Router/Navigate';
 
 const RegisterPage = () => {
+
+  if (localStorage.getItem('token')!=null) {
+    Navigate('/');
+    return;
+  }
+  
   const main = document.querySelector('main');
   main.innerHTML = `
   <div class="div-back">
@@ -83,7 +89,7 @@ async function tryRgister() {
   const password1 = document.querySelector('.password1').value;
   const password2 = document.querySelector('.password2').value;
   const username = document.querySelector('.username').value;
-  const email = document.querySelector(".email").value;
+  // const email = document.querySelector(".email").value;
 
 
   if (password1 !== password2) {
@@ -91,14 +97,14 @@ async function tryRgister() {
     document.querySelector(".errorVue").innerHTML='The passwords are not matching';
     document.querySelector('.errorMessage').style.display = 'block';
   }
-  else{
-
+  else {
+    const password = password1;
     const options = {
       method: 'POST',
       body: JSON.stringify({
-        password1,
+        password,
         username,
-        email,
+        // email
       }),
       headers: {
         'Content-Type': 'application/json',
@@ -106,18 +112,20 @@ async function tryRgister() {
     };
 
     const response = await fetch(`${process.env.API_BASE_URL}/auths/register`, options);
+    const finalResponse = await response.json();
 
 
     if (!response.ok) {
       animeLogin(false);
       document.querySelector('.errorVue').innerHTML = 'This account already exist';
       document.querySelector('.errorMessage').style.display = 'block';
-      throw new Error(`fetch error : ${response.status} : ${response.statusText}`);
+      
     }
     else {
-      localStorage.setItem('token', response.token);
+      localStorage.setItem('token', finalResponse.token);
+      localStorage.setItem('user',finalResponse.username)
       animeLogin(true);
-      Navigate('/');
+      setTimeout(()=>Navigate('/'),2000)
     }
   }
 }
@@ -160,5 +168,6 @@ function animeLogin(isConnected) {
     });
   }
 }
+;
 
 export default RegisterPage;

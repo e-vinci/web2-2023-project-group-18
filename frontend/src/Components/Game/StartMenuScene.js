@@ -16,11 +16,11 @@ class StartMenuScene extends Phaser.Scene {
   
     create() {
 
-    const titleGame = this.add.text(this.scale.width / 2,50,'SANTA FALL', {
+    const titleGame = this.add.text(this.scale.width / 2, 50, 'SANTA FALL', {
       fontSize: '80px',
-      fontFamily: 'Roboto',
-      color: '#ffffff'
-    })
+      fontFamily: 'Arial, sans-serif',
+      color: '#ffffff',
+    });
     titleGame.setOrigin(0.5); 
 
     this.playButton = this.add.image(this.scale.width / 2, 300, PLAY_BUTTON);
@@ -47,11 +47,16 @@ class StartMenuScene extends Phaser.Scene {
       this.playButton.clearTint();
     })
 
-    const textRules = this.add.text(this.scale.width / 2,480,'Press space to jump over obstacles and roll down the slope \n at full speed to earn as many coins as possible',{
-      fontSize: '30px',
-      color: '#ffffff',
-      fontFamily: 'Roboto'
-    });
+    const textRules = this.add.text(
+      this.scale.width / 2,
+      480,
+      'Press space to jump over obstacles and roll down the slope \n at full speed to earn as many coins as possible',
+      {
+        fontSize: '30px',
+        color: '#ffffff',
+        fontFamily: 'Arial, sans-serif',
+      },
+    );
     textRules.setOrigin(0.5);
     textRules.setAlign('center');
 

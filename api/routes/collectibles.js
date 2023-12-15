@@ -1,60 +1,54 @@
 const express = require('express');
 const { getCollectible, addCollectible, suppCollectible } = require('../models/collectibles');
+const { authorize } = require('../utils/auths');
 
 const router = express.Router();
 
-router.get('/:id', async (req, res) => {
+router.get('/', authorize, async (req, res) => {
+  const { username } = req.user;
   try {
-    const countCollectible = await getCollectible(req.params.id);
-
-    // Assuming getCollectible directly returns the result you want
-    const nbreCollectible = countCollectible.rows[0]?.nbre_collectible;
+    const countCollectible = await getCollectible(username);
+    const nbreCollectible = countCollectible.rows[0]?.get_collectible;
 
     // Check if nbreCollectible is defined before sending the response
-    if (nbreCollectible !== undefined) {
-      res.json({ nbre_collectible: nbreCollectible });
-    } else {
-      res.status(404).json({ error: 'Not Found' });
-    }
+    return res.json(nbreCollectible);
   } catch (error) {
-    // server error
-    console.error('Error in request handling:', error);
-    res.status(500).send('Internal Server Error');
+    if (error.message.includes('Not Found')) {
+      return res.sendStatus(404);
+    }
+    return res.sendStatus(500);
   }
 });
 
-router.put('/addCollectible/:id', async (req, res) => {
+router.put('/add', authorize, async (req, res) => {
+  const { username } = req.user;
   const collectible = req?.body?.collectible ? req.body.collectible : undefined;
   if (collectible) {
     try {
-      const id = await addCollectible(req.params.id, collectible);
-      console.log(`Id user ${id.rows.id}`);
-      res.sendStatus(200);
+      await addCollectible(username, collectible);
+      return res.sendStatus(200);
     } catch (error) {
-      console.log(`Erreur type: ${error.detail}`);
-      res.sendStatus(404);
+      if (error.code === '23505') {
+        return res.status(400).json({ error: 'This collectible already exist.' });
+      }
+      return res.sendStatus(500);
     }
-  } else {
-    res.sendStatus(400);
   }
+  return res.sendStatus(400);
 });
 
-router.put('/suppCollectible/:id', async (req, res) => {
+router.put('/supp', authorize, async (req, res) => {
+  const { username } = req.user;
   const collectible = req?.body?.collectible ? req.body.collectible : undefined;
   if (collectible) {
     try {
-      await suppCollectible(req.params.id, collectible);
-      res.sendStatus(200);
-      // await res.sendStatus(200);
+      await suppCollectible(username, collectible);
+      return res.sendStatus(200);
     } catch (error) {
-      // console.error('Error in request');
-      // user doesn't exist or bad user index
-      res.sendStatus(404);
+      return res.sendStatus(404);
     }
-  } else {
-    // bad parmeter
-    res.sendStatus(400);
   }
+  return res.sendStatus(400);
 });
 
 module.exports = router;

@@ -1,11 +1,21 @@
+/* eslint-disable no-irregular-whitespace */
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
+const escape = require('escape-html');
 const { queryExecute } = require('../utils/db');
 
 const lifetimeJwt = 24 * 60 * 60 * 1000; // in ms : 24 * 60 * 60 * 1000 = 24h
 
 const saltRounds = 10;
 
+/** *************************************************************************************
+* Title: genToken
+*  Author: JS Teacher
+* Date: 11/12/2023
+*    Code version: 1.0
+*  Availability: https://github.com/e-vinci/jwt-api-boilerplate/blob/main/models/users.js
+*
+************************************************************************************** */
 function genToken(username) {
   return jwt.sign(
     { username }, // payload
@@ -14,6 +24,14 @@ function genToken(username) {
   );
 }
 
+/** *************************************************************************************
+* Title: login
+*  Author: JS Teacher
+* Date: 11/12/2023
+*    Code version: 1.0
+*  Availability: https://github.com/e-vinci/jwt-api-boilerplate/blob/main/models/users.js
+*
+************************************************************************************** */
 async function login(username, password) {
   const userFound = await readOneUserFromUsername(username);
   if (!userFound) return undefined;
@@ -33,6 +51,14 @@ async function login(username, password) {
   return authenticatedUser;
 }
 
+/** *************************************************************************************
+* Title: register
+*  Author: JS Teacher
+* Date: 11/12/2023
+*    Code version: 1.0
+*  Availability: https://github.com/e-vinci/jwt-api-boilerplate/blob/main/models/users.js
+*
+************************************************************************************** */
 async function register(username, password) {
   const userFound = await readOneUserFromUsername(username);
   if (userFound) return undefined;
@@ -48,18 +74,34 @@ async function register(username, password) {
   return authenticatedUser;
 }
 
+/** *************************************************************************************
+* Title: regisreadOneUserFromUsernameter (adapted)
+*  Author: JS Teacher
+* Date: 11/12/2023
+*    Code version: 2.0
+*  Availability: https://github.com/e-vinci/jwt-api-boilerplate/blob/main/models/users.js
+*
+************************************************************************************** */
 async function readOneUserFromUsername(username) {
   const response = await queryExecute(`SELECT * FROM projet.users u WHERE u.username = '${username}';`);
   if (response.rowCount < 0) return undefined;
   return response.rows[0];
 }
 
+/** *************************************************************************************
+* Title: createOneUser (adapted)
+*  Author: JS Teacher
+* Date: 11/12/2023
+*    Code version: 2.0
+*  Availability: https://github.com/e-vinci/jwt-api-boilerplate/blob/main/models/users.js
+*
+************************************************************************************** */
 async function createOneUser(username, password) {
   const hashedPassword = await bcrypt.hash(password, saltRounds);
+  const cUsername = escape(username);
+  await queryExecute(`SELECT projet.insert_user('${cUsername}', '${hashedPassword}')`);
 
-  await queryExecute(`INSERT INTO projet.users (username, password) VALUES ('${username}', '${hashedPassword}');`);
-
-  const user = await readOneUserFromUsername(username);
+  const user = await readOneUserFromUsername(cUsername);
 
   const createdUser = {
     id: user.id_user,

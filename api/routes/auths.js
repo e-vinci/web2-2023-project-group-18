@@ -3,10 +3,20 @@ const { register, login } = require('../models/users');
 
 const router = express.Router();
 
+/* eslint-disable no-irregular-whitespace */
+/** *************************************************************************************
+* Title: Register route
+*  Author: JS Teacher
+* Date: 11/12/2023
+*    Code version: 1.0
+*  Availability: https://github.com/e-vinci/jwt-api-boilerplate/blob/main/routes/auths.js
+*
+************************************************************************************** */
+
 /* Register a user */
 router.post('/register', async (req, res) => {
-  const username = req?.body?.username?.length !== 0 ? req.body.username : undefined;
-  const password = req?.body?.password?.length !== 0 ? req.body.password : undefined;
+  const username = req?.body?.username?.trim().length !== 0 ? req.body.username : undefined;
+  const password = req?.body?.password?.trim().length !== 0 ? req.body.password : undefined;
 
   if (!username || !password) return res.sendStatus(400); // 400 Bad Request
 
@@ -17,6 +27,14 @@ router.post('/register', async (req, res) => {
   return res.json(authenticatedUser);
 });
 
+/** *************************************************************************************
+* Title: Login route
+*  Author: JS Teacher
+* Date: 11/12/2023
+*    Code version: 1.0
+*  Availability: https://github.com/e-vinci/jwt-api-boilerplate/blob/main/routes/auths.js
+*
+************************************************************************************** */
 /* Login a user */
 router.post('/login', async (req, res) => {
   const username = req?.body?.username?.length !== 0 ? req.body.username : undefined;
