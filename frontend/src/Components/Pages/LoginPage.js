@@ -87,7 +87,7 @@ const LoginPage = () => {
       localStorage.setItem('user', finalResponse.username);
 
       animeLogin(true);
-      setTimeout(() => Navigate('/'), 2000);
+      setTimeout(() => Navigate('/'), 1000);
   }
   }
 };
