@@ -253,26 +253,147 @@ body {
   overflow: hidden;
 }
 
-.background {
+/* Alien Background */
+.background_alien {
   position:fixed;
   height: 100%;
   width: 300%;
   background-size: cover;
-  background: url('../assets/BG.png') repeat-x;
-  animation: slideBackground 20s linear infinite;
+  background: url('../assets/backgrounds/snow_BG.png') repeat-x; /* TODO */
+  animation: slideBackgroundAlien 20s linear infinite;
   z-index: -1;
 }
 
-body {
-  background-color: #16274b;
+.body_color_alien{
+  background-color: #333; /* TODO */
 }
 
-@keyframes slideBackground {
+@keyframes slideBackgroundAlien {
   0% {
     transform: translate(0);
   }
   100% {
-    transform: translate(-1798px);
+    transform: translate(-1800px);
+  }
+}
+
+/* Candy Background */
+.background_candy {
+  position:fixed;
+  height: 100%;
+  width: 300%;
+  background-size: cover;
+  background: url('../assets/backgrounds/snow_BG.png') repeat-x; /* TODO */
+  animation: slideBackgroundCandy 20s linear infinite;
+  z-index: -1;
+}
+
+.body_color_candy{
+  background-color: #333; /* TODO */
+}
+
+@keyframes slideBackgroundCandy {
+  0% {
+    transform: translate(0);
+  }
+  100% {
+    transform: translate(-1800px);
+  }
+}
+
+/* Desert Background */
+.background_desert {
+  position:fixed;
+  height: 100%;
+  width: 300%;
+  background-size: cover;
+  background: url('../assets/backgrounds/desert_BG.png') repeat-x;
+  animation: slideBackgroundDesert 20s linear infinite;
+  z-index: -1;
+}
+
+.body_color_desert{
+  background-color: #e5a029;
+}
+
+@keyframes slideBackgroundDesert {
+  0% {
+    transform: translate(0);
+  }
+  100% {
+    transform: translate(-1280px);
+  }
+}
+
+/* Meadow Background */
+.background_meadow {
+  position:fixed;
+  height: 100%;
+  width: 300%;
+  background-size: cover;
+  background: url('../assets/backgrounds/meadow_BG.png') repeat-x;
+  animation: slideBackgroundMeadow 20s linear infinite;
+  z-index: -1;
+}
+
+.body_color_meadow{
+  background-color: #69df89;
+}
+
+@keyframes slideBackgroundMeadow {
+  0% {
+    transform: translate(0);
+  }
+  100% {
+    transform: translate(-1000px);
+  }
+}
+
+/* Mushroom Background */
+.background_mushroom {
+  position:fixed;
+  height: 100%;
+  width: 300%;
+  background-size: cover;
+  background: url('../assets/backgrounds/mushroom_BG.png') repeat-x;
+  animation: slideBackgroundMushroom 20s linear infinite;
+  z-index: -1;
+}
+
+.body_color_mushroom{
+  background-color: #6da41a;
+}
+
+@keyframes slideBackgroundMushroom {
+  0% {
+    transform: translate(0);
+  }
+  100% {
+    transform: translate(-1024px);
+  }
+}
+
+/* Snow Background */
+.background_snow {
+  position:fixed;
+  height: 100%;
+  width: 300%;
+  background-size: cover;
+  background: url('../assets/backgrounds/snow_BG.png') repeat-x;
+  animation: slideBackgroundSnow 20s linear infinite;
+  z-index: -1;
+}
+
+.body_color_snow{
+  background-color: #274687;
+}
+
+@keyframes slideBackgroundSnow {
+  0% {
+    transform: translate(0);
+  }
+  100% {
+    transform: translate(-1800px);
   }
 }
 
