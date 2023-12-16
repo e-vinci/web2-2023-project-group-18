@@ -4,9 +4,6 @@ import simplify from 'simplify-js';
 import Skin from './Skin';
 import Theme from './Theme';
 
-import obstacleSmall from '../../assets/winterTheme/caneRedSmall.png'; // TODO import la classe de biome et extraire les 3 obstacles
-import obstacleMedium from '../../assets/winterTheme/pineSapling.png'; // TODO import la classe de biome et extraire les 3 obstacles
-import obstacleFlat from '../../assets/winterTheme/spikesBottomAlt.png'; // TODO import la classe de biome et extraire les 3 obstacles
 import coinAsset from '../../assets/coin.png';
 
 import Settings from '../../utils/settings';
@@ -63,9 +60,9 @@ class GameScene extends Phaser.Scene {
     this.load.atlas(DUDE_KEY, Skin.getSkinPicture(), Skin.getSkinJSON());
 
     this.load.image(COIN_KEY, coinAsset);
-    this.load.image(OBSTACLE_SMALL_KEY, obstacleSmall);
-    this.load.image(OBSTACLE_MEDIUM_KEY, obstacleMedium);
-    this.load.image(OBSTACLE_FLAT_KEY, obstacleFlat);
+    this.load.image(OBSTACLE_SMALL_KEY, Theme.getObstacleSmall());
+    this.load.image(OBSTACLE_MEDIUM_KEY, Theme.getObstacleMedium());
+    this.load.image(OBSTACLE_FLAT_KEY, Theme.getObstacleFlat());
   }
 
   create() {

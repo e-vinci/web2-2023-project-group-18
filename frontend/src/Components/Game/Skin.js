@@ -36,17 +36,17 @@ const SKINS = {
 };
 
 export default class Skin {
-    static getSkinPicture() {
+
+    static getSkin() {
         const skinName = localStorage.getItem("skin");
-        const selectedSkin = SKINS[skinName] || SKINS.default;
-      
-        return selectedSkin.asset;
+        return SKINS[skinName] || SKINS.default;
+    }
+
+    static getSkinPicture() {
+        return Skin.getSkin().asset;
     }
 
     static getSkinJSON() {
-        const skinName = localStorage.getItem("skin");
-        const selectedSkin = SKINS[skinName] || SKINS.default;
-      
-        return selectedSkin.assetJSON;
+        return Skin.getSkin().assetJSON;
     }
 }
