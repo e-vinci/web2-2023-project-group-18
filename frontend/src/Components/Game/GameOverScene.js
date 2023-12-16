@@ -6,7 +6,7 @@ import settingsButton from '../../assets/settingsAssest.png';
 import Navigate from '../Router/Navigate';
 
 const REPLAY_BUTTON = 'replay';
-const SHOP_BUTTON = 'home';
+const SHOP_BUTTON = 'shop';
 const SETTINGS_ASSET = 'settings';
 
 class GameOverScene extends Phaser.Scene {
