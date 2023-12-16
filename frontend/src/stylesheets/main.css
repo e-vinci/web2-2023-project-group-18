@@ -265,7 +265,7 @@ body {
 }
 
 .body_color_alien{
-  background-color: #23485e;
+  background-color: #153745;
 }
 
 @keyframes slideBackgroundAlien {
@@ -289,7 +289,7 @@ body {
 }
 
 .body_color_candy{
-  background-color: #c4e5f8;
+  background-color: #7e96a4;
 }
 
 @keyframes slideBackgroundCandy {
@@ -337,7 +337,7 @@ body {
 }
 
 .body_color_meadow{
-  background-color: #418493;
+  background-color: #30626d;
 }
 
 @keyframes slideBackgroundMeadow {
@@ -361,7 +361,7 @@ body {
 }
 
 .body_color_mushroom{
-  background-color: #0f1326;
+  background-color: #0f1123;
 }
 
 @keyframes slideBackgroundMushroom {
