@@ -249,7 +249,7 @@ body {
   background-color: #16274b;
 }
 
-/* Background and background animation */
+/* Backgrounds and background animation */
 .scrolling-background {
   overflow: hidden;
 }
@@ -259,17 +259,17 @@ body {
   height: 100%;
   width: 200%;
   background-size: cover;
-  background: url('../assets/BG.png') repeat-x;
-  animation: scrollBackground 20s linear infinite; /* Ajust the velocity of the animation */
+  background: url('../assets/backgrounds/bg_castle2.png'), url('../assets/backgrounds/bg_castle.png') repeat-x;
+  animation: slideBackground 10s linear infinite;
   z-index: -1;
 }
 
-@keyframes scrollBackground {
+@keyframes slideBackground {
   0% {
     transform: translate(0);
   }
   100% {
-    transform: translate(-50%);
+    transform: translate(-1024px);
   }
 }
 
