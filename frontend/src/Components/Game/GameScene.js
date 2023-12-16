@@ -29,7 +29,7 @@ const gameOptions = {
   slopeLength: [300, 800], 
   slicesAmount: 3,
   slopesPerSlice: 5,
-  obstacleRatio: 10,
+  obstacleRatio: 15,
   coinRatio: 20,
   amountCoin: 10 
 };
@@ -230,7 +230,7 @@ class GameScene extends Phaser.Scene {
       }
       
       // Generate objects
-    if(this.scorePauseScene.meterLabel.timeElapsed > 1){ // spawn at 20m
+    if(this.scorePauseScene.meterLabel.timeElapsed){ // spawn at 20m
       const centerX = center.x + sliceStart.x;
       const centerY = center.y;
 
