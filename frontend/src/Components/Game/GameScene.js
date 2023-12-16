@@ -70,75 +70,77 @@ class GameScene extends Phaser.Scene {
   }
 
   create() {
-    // Generating Ground and its Collision
-    this.bodyPool = [];
-    this.bodyPoolId = [];
-    this.obstaclePool = [];
-    this.obstaclePoolId = [];
-    this.slopeGraphics = [];
-    this.sliceStart = new Phaser.Math.Vector2(0, 2);
-    for (let i = 0; i < gameOptions.slicesAmount; i += 1) {
-      this.slopeGraphics[i] = this.add.graphics();
-      this.sliceStart = this.createSlope(this.slopeGraphics[i], this.sliceStart);
-    }
 
-    this.dude = this.matter.add
-      .sprite(1500, 500, DUDE_KEY, null, {
-        shape: { type: 'rectangle', width: DUDE_ASSET_WIDTH, height: DUDE_ASSET_HEIGHT },
-      })
-      .play('player-idle')
-      .setFixedRotation();
+  // Generating Ground and its Collision
+  this.bodyPool = [];
+  this.bodyPoolId = [];
+  this.obstaclePool = [];
+  this.obstaclePoolId = [];
+  this.slopeGraphics = [];
+  this.sliceStart = new Phaser.Math.Vector2(0, 2);
+  for (let i = 0; i < gameOptions.slicesAmount; i += 1) {
+    this.slopeGraphics[i] = this.add.graphics();
+    this.sliceStart = this.createSlope(this.slopeGraphics[i], this.sliceStart);
+  }
 
-    this.dude.setOnCollide(() => {
-      this.isTouchingGround = true;
-    });
+  this.dude = this.matter.add
+    .sprite(1500, 500, DUDE_KEY, null, {
+      shape: { type: 'rectangle', width: DUDE_ASSET_WIDTH, height: DUDE_ASSET_HEIGHT },
+    })
+    .play('player-idle')
+    .setFixedRotation();
 
-    // CheckCollision
-    this.matter.world.on(
-      'collisionstart',
-      (event, bodyA, bodyB) => this.checkCollision(bodyA, bodyB),
-      this,
-    );
-    this.matter.world.on(
-      'collisionactive',
-      (event, bodyA, bodyB) => this.checkCollision(bodyA, bodyB),
-      this,
-    );
-    this.matter.world.on(
-      'collisionend',
-      (event, bodyA, bodyB) => this.checkCollision(bodyA, bodyB),
-      this,
-    );
+  this.dude.setOnCollide(() => {
+    this.isTouchingGround = true;
+  });
 
-    // animation 
-    this.createDudeAnimations();
+  // CheckCollision
+  this.matter.world.on(
+    'collisionstart',
+    (event, bodyA, bodyB) => this.checkCollision(bodyA, bodyB),
+    this,
+  );
+  this.matter.world.on(
+    'collisionactive',
+    (event, bodyA, bodyB) => this.checkCollision(bodyA, bodyB),
+    this,
+  );
+  this.matter.world.on(
+    'collisionend',
+    (event, bodyA, bodyB) => this.checkCollision(bodyA, bodyB),
+    this,
+  );
+
+  // Ajoutez un écouteur d'événements de redimensionnement
+  this.scale.on('resize', this.resize, this);
+
+  // Commencez à suivre le personnage
+  this.cameras.main.startFollow(this.dude);
+
+  this.key = this.input.keyboard.addKey(localStorage.getItem('selectedKey'));
+
+  this.caracterSpeed = 5;
+  setInterval(() => {
+    this.caracterSpeed += Math.log(2) / 100;
+  }, 2000);
+
+  // animation
+  this.createDudeAnimations();
 
     this.input.on('pointerdown', () => {
-      this.dude.play('player-jump', true);
-      if (this.isTouchingGround) {
-        this.dude.setVelocityY(-10);
-        this.isTouchingGround = false;
-      } else if (this.jumpCount < 2) {
-        this.dude.setVelocityY(-10);
-        // eslint-disable-next-line no-plusplus
-        this.jumpCount++;
-      }
-    });
-
-
-
-    // Ajoutez un écouteur d'événements de redimensionnement
-    this.scale.on('resize', this.resize, this);
-
-    // Commencez à suivre le personnage
-    this.cameras.main.startFollow(this.dude);
-
-    this.key = this.input.keyboard.addKey(localStorage.getItem('selectedKey'));
-
-    this.caracterSpeed = 5;
-    setInterval(() => {
-      this.caracterSpeed += Math.log(2) / 100;
-    }, 2000);
+    this.dude.anims.play('player-jump', true);
+    if (this.isTouchingGround) {
+      this.dude.setVelocityY(-10);
+      this.dude.setVelocityX(this.caracterSpeed);
+      this.isTouchingGround = false;
+    } else if (this.jumpCount < 2) {
+      this.dude.setVelocityY(-10);
+      this.dude.setVelocityX(this.caracterSpeed);
+      // eslint-disable-next-line no-plusplus
+      this.jumpCount++;
+    }
+  });
+    
   }
 
   resize(gameSize) {
@@ -293,32 +295,29 @@ class GameScene extends Phaser.Scene {
 
     dude1.x += this.caracterSpeed;
     dude1.play('player-slide', true);
-    const spaceJustPressed = Phaser.Input.Keyboard.JustDown(this.cursors.space);
-
+    // const spaceJustPressed = Phaser.Input.Keyboard.JustDown(this.cursors.space);
 
     if (localStorage.getItem('resume')) {
       this.scorePauseScene.meterLabel.resumeMeter();
       localStorage.removeItem('resume');
     }
 
-    if (this.cursors.space.isDown) this.dude.play('player-jump', true);
+    // animation
 
-    this.input.on(
-    'pointerdown',() => {
-      this.dude.play('player-jump', true);
-      },
-      this,
-    );
-    
+    if (this.cursors.space.isDown) dude1.play('player-jump', true);
 
-    if (this.isTouchingGround && (spaceJustPressed)) {
-      this.dude.setVelocityY(-10);
-      this.dude.setVelocityX(this.caracterSpeed);
-      this.isTouchingGround = false;
+    if (this.isTouchingGround) {
+      if (this.cursors.space.isDown) {
+        dude1.setVelocityY(-10); // Ajustez une valeur pour changer la hauteur du saut
+        dude1.setVelocityX(this.caracterSpeed);
+        this.isTouchingGround = false;
+      }
     }
-
-    if (this.cursors.right.isDown) {
-      this.dude.play('player-run', true);
+    // Si le joueur n'est pas en train de sauter, joue l'animation de course ou d'attente
+    else if (dude1.body.velocity.x !== 0) {
+      dude1.anims.play('player-run', true);
+    } else {
+      dude1.anims.play('player-idle', true);
     }
 
     const key = Settings.getKey();
