@@ -289,7 +289,7 @@ body {
 }
 
 .body_color_candy{
-  background-color: #c6e9fb;
+  background-color: #c4e5f8;
 }
 
 @keyframes slideBackgroundCandy {
@@ -331,7 +331,7 @@ body {
   height: 100%;
   width: 300%;
   background-size: cover;
-  background: url('../assets/backgrounds/meadow_BG2.png') repeat-x;
+  background: url('../assets/backgrounds/meadow_BG.png') repeat-x;
   animation: slideBackgroundMeadow 20s linear infinite;
   z-index: -1;
 }
@@ -355,7 +355,7 @@ body {
   height: 100%;
   width: 300%;
   background-size: cover;
-  background: url('../assets/backgrounds/mushroom_BG3.png') repeat-x;
+  background: url('../assets/backgrounds/mushroom_BG.png') repeat-x;
   animation: slideBackgroundMushroom 20s linear infinite;
   z-index: -1;
 }
