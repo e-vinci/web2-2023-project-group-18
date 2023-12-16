@@ -110,13 +110,28 @@ class GameScene extends Phaser.Scene {
       this,
     );
 
+    // animation 
     this.createDudeAnimations();
 
-    this.cameras.main.startFollow(this.dude);
+    this.input.on('pointerdown', () => {
+      this.dude.play('player-jump', true);
+      if (this.isTouchingGround) {
+        this.dude.setVelocityY(-10);
+        this.isTouchingGround = false;
+      } else if (this.jumpCount < 2) {
+        this.dude.setVelocityY(-10);
+        // eslint-disable-next-line no-plusplus
+        this.jumpCount++;
+      }
+    });
+
+
 
     // Ajoutez un écouteur d'événements de redimensionnement
     this.scale.on('resize', this.resize, this);
-    
+
+    // Commencez à suivre le personnage
+    this.cameras.main.startFollow(this.dude);
 
     this.key = this.input.keyboard.addKey(localStorage.getItem('selectedKey'));
 
@@ -126,15 +141,13 @@ class GameScene extends Phaser.Scene {
     }, 2000);
   }
 
-  resize() {
+  resize(gameSize) {
     // Mettez à jour le zoom de la caméra
-    this.updateCameraZoom();
-
-    // Autres codes de redimensionnement...
+    this.updateCameraZoom(gameSize);
   }
 
-  updateCameraZoom() {
-    const zoom = this.scale.width / 800; // Ajustez le nombre en fonction de nos besoins
+  updateCameraZoom(gameSize) {
+    const zoom = Math.min(gameSize.width / 800, gameSize.height / 600); // Ajustez les nombres en fonction de vos besoins
     this.cameras.main.setZoom(zoom);
   }
 
@@ -282,6 +295,7 @@ class GameScene extends Phaser.Scene {
     dude1.play('player-slide', true);
     const spaceJustPressed = Phaser.Input.Keyboard.JustDown(this.cursors.space);
 
+
     if (localStorage.getItem('resume')) {
       this.scorePauseScene.meterLabel.resumeMeter();
       localStorage.removeItem('resume');
@@ -289,7 +303,15 @@ class GameScene extends Phaser.Scene {
 
     if (this.cursors.space.isDown) this.dude.play('player-jump', true);
 
-    if (this.isTouchingGround && spaceJustPressed) {
+    this.input.on(
+    'pointerdown',() => {
+      this.dude.play('player-jump', true);
+      },
+      this,
+    );
+    
+
+    if (this.isTouchingGround && (spaceJustPressed)) {
       this.dude.setVelocityY(-10);
       this.dude.setVelocityX(this.caracterSpeed);
       this.isTouchingGround = false;
