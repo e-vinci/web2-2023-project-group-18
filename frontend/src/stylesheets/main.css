@@ -313,7 +313,7 @@ body {
 }
 
 .body_color_desert{
-  background-color: #e5a029;
+  background-color: #9d5e10;
 }
 
 @keyframes slideBackgroundDesert {
@@ -337,7 +337,7 @@ body {
 }
 
 .body_color_meadow{
-  background-color: #69df89;
+  background-color: #34984c;
 }
 
 @keyframes slideBackgroundMeadow {
@@ -361,7 +361,7 @@ body {
 }
 
 .body_color_mushroom{
-  background-color: #6da41a;
+  background-color: #215d12;
 }
 
 @keyframes slideBackgroundMushroom {
@@ -385,7 +385,7 @@ body {
 }
 
 .body_color_snow{
-  background-color: #274687;
+  background-color: #0d1b3f;
 }
 
 @keyframes slideBackgroundSnow {
