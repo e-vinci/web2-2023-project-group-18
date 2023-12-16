@@ -121,7 +121,7 @@ class GameScene extends Phaser.Scene {
 
     this.key = this.input.keyboard.addKey(localStorage.getItem('selectedKey'));
 
-    this.caracterSpeed = 10;
+    this.caracterSpeed = 5;
     setInterval(() => {
       this.caracterSpeed += Math.log(2) / 100;
     }, 2000);
