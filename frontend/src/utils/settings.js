@@ -1,7 +1,8 @@
 import anime from 'animejs/lib/anime.es';
 
 // Get key saved in browser or space
-let key = localStorage.getItem('selectedKey') || "SPACE";
+let keyChoosen;
+let key = (keyChoosen === undefined) ? "SPACE" : keyChoosen;
 
 const keyNotSupported = ['!', '"', '#', '$', '%', '&', "'", '(', ')', '*', '+', ',', 
     '-', '.', '/', ':', ';', '<', '=', '>', '?', '@', '[', '\\', ']', '^', '_', '`', '{', 
@@ -58,11 +59,14 @@ const openSettings = () => {
 
             if(!keyNotSupported.includes(event.key)) {
                 key = event.key.toUpperCase();
-                key = key === " " ? "SPACE": key;
+                key = (key === " " || key.length === 0) ? "SPACE": key;
 
                 // Save key in browser
-                localStorage.setItem('selectedKey', key);
-
+                keyChoosen = key;
+                // if (localStorage.getItem('selctedKey')) {
+            
+                //     localStorage.setItem('selectedKey', key);
+                // }
                 errorText.style.display = 'none';
                 borderColor.style.borderColor = '#FFFFFF';
             } else {

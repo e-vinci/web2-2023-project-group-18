@@ -53,6 +53,7 @@ class GameScene extends Phaser.Scene {
     this.coins = [];
     this.scorePauseScene = undefined;
     this.gameOver = false;
+    this.key = undefined;
   }
 
   init() {
@@ -70,77 +71,117 @@ class GameScene extends Phaser.Scene {
   }
 
   create() {
+      // Generating Ground and its Collision
+      this.bodyPool = [];
+      this.bodyPoolId = [];
+      this.obstaclePool = [];
+      this.obstaclePoolId = [];
+      this.slopeGraphics = [];
+      this.sliceStart = new Phaser.Math.Vector2(0, 2);
+      for (let i = 0; i < gameOptions.slicesAmount; i += 1) {
+        this.slopeGraphics[i] = this.add.graphics();
+        this.sliceStart = this.createSlope(this.slopeGraphics[i], this.sliceStart);
+      }
 
-  // Generating Ground and its Collision
-  this.bodyPool = [];
-  this.bodyPoolId = [];
-  this.obstaclePool = [];
-  this.obstaclePoolId = [];
-  this.slopeGraphics = [];
-  this.sliceStart = new Phaser.Math.Vector2(0, 2);
-  for (let i = 0; i < gameOptions.slicesAmount; i += 1) {
-    this.slopeGraphics[i] = this.add.graphics();
-    this.sliceStart = this.createSlope(this.slopeGraphics[i], this.sliceStart);
+      this.dude = this.matter.add
+        .sprite(1500, 500, DUDE_KEY, null, {
+          shape: { type: 'rectangle', width: DUDE_ASSET_WIDTH, height: DUDE_ASSET_HEIGHT },
+        })
+        .play('player-idle')
+        .setFixedRotation();
+
+      this.dude.setOnCollide(() => {
+        this.isTouchingGround = true;
+      });
+
+      // CheckCollision
+      this.matter.world.on(
+        'collisionstart',
+        (event, bodyA, bodyB) => this.checkCollision(bodyA, bodyB),
+        this,
+      );
+      this.matter.world.on(
+        'collisionactive',
+        (event, bodyA, bodyB) => this.checkCollision(bodyA, bodyB),
+        this,
+      );
+      this.matter.world.on(
+        'collisionend',
+        (event, bodyA, bodyB) => this.checkCollision(bodyA, bodyB),
+        this,
+      );
+
+      // Ajoutez un écouteur d'événements de redimensionnement
+      this.scale.on('resize', this.resize, this);
+
+      // Commencez à suivre le personnage
+      this.cameras.main.startFollow(this.dude);
+
+      this.key = this.input.keyboard.addKey(localStorage.getItem('selectedKey'));
+
+      this.caracterSpeed = 5;
+      setInterval(() => {
+        this.caracterSpeed += Math.log(2) / 100;
+      }, 2000);
+
+      // Install key
+      const keyChoosen = Settings.getKey();
+      console.log(`Settings key : ${keyChoosen}`);
+
+      // Create a keyboard event for the chosen key
+      this.keyChose(keyChoosen);
+
+      // Animation
+      this.createDudeAnimations();
+
+      this.input.on('pointerdown', () => {
+        this.dude.anims.play('player-jump', true);
+        if (this.isTouchingGround) {
+          this.dude.setVelocityY(-10);
+          this.dude.setVelocityX(this.caracterSpeed);
+          this.isTouchingGround = false;
+        } else if (this.jumpCount < 2) {
+          this.dude.setVelocityY(-10);
+          this.dude.setVelocityX(this.caracterSpeed);
+          // eslint-disable-next-line no-plusplus
+          this.jumpCount++;
+        }
+      });
   }
+  
+  keyChose(key) {
 
-  this.dude = this.matter.add
-    .sprite(1500, 500, DUDE_KEY, null, {
-      shape: { type: 'rectangle', width: DUDE_ASSET_WIDTH, height: DUDE_ASSET_HEIGHT },
-    })
-    .play('player-idle')
-    .setFixedRotation();
-
-  this.dude.setOnCollide(() => {
-    this.isTouchingGround = true;
-  });
-
-  // CheckCollision
-  this.matter.world.on(
-    'collisionstart',
-    (event, bodyA, bodyB) => this.checkCollision(bodyA, bodyB),
-    this,
-  );
-  this.matter.world.on(
-    'collisionactive',
-    (event, bodyA, bodyB) => this.checkCollision(bodyA, bodyB),
-    this,
-  );
-  this.matter.world.on(
-    'collisionend',
-    (event, bodyA, bodyB) => this.checkCollision(bodyA, bodyB),
-    this,
-  );
-
-  // Ajoutez un écouteur d'événements de redimensionnement
-  this.scale.on('resize', this.resize, this);
-
-  // Commencez à suivre le personnage
-  this.cameras.main.startFollow(this.dude);
-
-  this.key = this.input.keyboard.addKey(localStorage.getItem('selectedKey'));
-
-  this.caracterSpeed = 5;
-  setInterval(() => {
-    this.caracterSpeed += Math.log(2) / 100;
-  }, 2000);
-
-  // animation
-  this.createDudeAnimations();
-
-    this.input.on('pointerdown', () => {
-    this.dude.anims.play('player-jump', true);
-    if (this.isTouchingGround) {
-      this.dude.setVelocityY(-10);
-      this.dude.setVelocityX(this.caracterSpeed);
-      this.isTouchingGround = false;
-    } else if (this.jumpCount < 2) {
-      this.dude.setVelocityY(-10);
-      this.dude.setVelocityX(this.caracterSpeed);
-      // eslint-disable-next-line no-plusplus
-      this.jumpCount++;
-    }
-  });
-    
+    if (key !== 'SPACE') {
+      this.key = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes[key]);
+      this.key.on('down', () => {
+        this.dude.anims.play('player-jump', true);
+        if (this.isTouchingGround) {
+          this.dude.setVelocityY(-10);
+          this.dude.setVelocityX(this.caracterSpeed);
+          this.isTouchingGround = false;
+        } else if (this.jumpCount < 2) {
+          this.dude.setVelocityY(-10);
+          this.dude.setVelocityX(this.caracterSpeed);
+          // eslint-disable-next-line no-plusplus
+          this.jumpCount++;
+        }
+      });
+    } else {
+             // Create a keyboard event for the chosen key
+             this.cursors.space.on('pointerdown', () => {
+               this.dude.anims.play('player-jump', true);
+               if (this.isTouchingGround) {
+                 this.dude.setVelocityY(-10);
+                 this.dude.setVelocityX(this.caracterSpeed);
+                 this.isTouchingGround = false;
+               } else if (this.jumpCount < 2) {
+                 this.dude.setVelocityY(-10);
+                 this.dude.setVelocityX(this.caracterSpeed);
+                 // eslint-disable-next-line no-plusplus
+                 this.jumpCount++;
+               }
+             });
+           }
   }
 
   resize(gameSize) {
@@ -291,82 +332,83 @@ class GameScene extends Phaser.Scene {
   }
 
   update() {
-    const dude1 = this.dude;
+             const dude1 = this.dude;
 
-    dude1.x += this.caracterSpeed;
-    dude1.play('player-slide', true);
-    // const spaceJustPressed = Phaser.Input.Keyboard.JustDown(this.cursors.space);
+             dude1.x += this.caracterSpeed;
+             dude1.play('player-slide', true);
+             //  const spaceJustPressed = Phaser.Input.Keyboard.JustDown(this.cursors.space);
 
-    if (localStorage.getItem('resume')) {
-      this.scorePauseScene.meterLabel.resumeMeter();
-      localStorage.removeItem('resume');
-    }
+             if (localStorage.getItem('resume')) {
+               this.scorePauseScene.meterLabel.resumeMeter();
+               localStorage.removeItem('resume');
+             }
 
-    // animation
+             // animation
 
-    if (this.cursors.space.isDown) dude1.play('player-jump', true);
+             // Install key
+             const keyChoosen = Settings.getKey();
+             console.log(`Settings key : ${keyChoosen}`);
 
-    if (this.isTouchingGround) {
-      if (this.cursors.space.isDown) {
-        dude1.setVelocityY(-10); // Ajustez une valeur pour changer la hauteur du saut
-        dude1.setVelocityX(this.caracterSpeed);
-        this.isTouchingGround = false;
-      }
-    }
-    // Si le joueur n'est pas en train de sauter, joue l'animation de course ou d'attente
-    else if (dude1.body.velocity.x !== 0) {
-      dude1.anims.play('player-run', true);
-    } else {
-      dude1.anims.play('player-idle', true);
-    }
+             // Create a keyboard event for the chosen key
+             this.keyChose(keyChoosen);
 
-    const key = Settings.getKey();
-    if (Phaser.Input.Keyboard.KeyCodes[key] !== this.key.keyCode) {
-      this.key.destroy();
-      this.key = this.input.keyboard.addKey(key);
-    }
+             if (this.cursors.space.isDown) dude1.play('player-jump', true);
 
-    // loop through all mountains
-    this.slopeGraphics.forEach((item) => {
-      // if the mountain leaves the screen to the left...
-      if (this.cameras.main.scrollX > item.x + item.width + 7000) {
-        // reuse the mountain
-        this.sliceStart = this.createSlope(item, this.sliceStart);
-      }
-    });
+             if (this.isTouchingGround) {
+               if (this.cursors.space.isDown) {
+                 dude1.setVelocityY(-10);
+                 dude1.setVelocityX(this.caracterSpeed);
+                 this.isTouchingGround = false;
+               }
+             }
+             // Si le joueur n'est pas en train de sauter, joue l'animation de course ou d'attente
+             else if (dude1.body.velocity.x !== 0) {
+               dude1.anims.play('player-run', true);
+             } else {
+               dude1.anims.play('player-idle', true);
+             }
 
-    // get all bodies
-    const { bodies } = this.matter.world.localWorld;
+             // loop through all mountains
+             this.slopeGraphics.forEach((item) => {
+               // if the mountain leaves the screen to the left...
+               if (this.cameras.main.scrollX > item.x + item.width + 7000) {
+                 // reuse the mountain
+                 this.sliceStart = this.createSlope(item, this.sliceStart);
+               }
+             });
 
-    // loop through all bodies
-    bodies.forEach((body) => {
-      // if the body is out of camera view to the left side && it's not in the current ground pool && it's a ground body
-      if (
-        this.cameras.main.scrollX > body.position.x + 200 &&
-        this.bodyPoolId.indexOf(body.id) === -1 &&
-        body.label === GROUND_KEY
-      ) {
-        // add the body to the ground pool
-        this.bodyPool.push(body);
-        this.bodyPoolId.push(body.id);
-      }
-      // if the body is out of camera view to the left side && it's not in the current obstacle pool && it's an obstacle body
-      else if (
-        this.cameras.main.scrollX > body.position.x + 200 &&
-        this.obstaclePoolId.indexOf(body.id) === -1 &&
-        body.label === OBSTACLE_KEY
-      ) {
-        // add the body to the pines pool
-        this.obstaclePool.push(body);
-        this.obstaclePoolId.push(body.id);
-      }
-      // if the body is out of camera view to the left side && it's a coin body
-      else if (this.cameras.main.scrollX > body.position.x && body.label === COIN_KEY) {
-        // Delete the coin body
-        body.gameObject.destroy();
-      }
-    });
-  }
+             // get all bodies
+             const { bodies } = this.matter.world.localWorld;
+
+             // loop through all bodies
+             bodies.forEach((body) => {
+               // if the body is out of camera view to the left side && it's not in the current ground pool && it's a ground body
+               if (
+                 this.cameras.main.scrollX > body.position.x + 200 &&
+                 this.bodyPoolId.indexOf(body.id) === -1 &&
+                 body.label === GROUND_KEY
+               ) {
+                 // add the body to the ground pool
+                 this.bodyPool.push(body);
+                 this.bodyPoolId.push(body.id);
+               }
+               // if the body is out of camera view to the left side && it's not in the current obstacle pool && it's an obstacle body
+               else if (
+                 this.cameras.main.scrollX > body.position.x + 200 &&
+                 this.obstaclePoolId.indexOf(body.id) === -1 &&
+                 body.label === OBSTACLE_KEY
+               ) {
+                 // add the body to the pines pool
+                 this.obstaclePool.push(body);
+                 this.obstaclePoolId.push(body.id);
+               }
+               // if the body is out of camera view to the left side && it's a coin body
+               else if (this.cameras.main.scrollX > body.position.x && body.label === COIN_KEY) {
+                 // Delete the coin body
+                 body.gameObject.destroy();
+               }
+             });
+           }
 
   createDudeAnimations() {
     this.anims.create({
