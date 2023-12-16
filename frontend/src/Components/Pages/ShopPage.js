@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 import anime from 'animejs/lib/anime.es';
 import Navigate from '../Router/Navigate';
 
@@ -16,6 +17,7 @@ import robotImage from '../../assets/skins/robotSkin.png';
 import snowImage from '../../assets/themes/snow/snowTheme.png';
 import meadowImage from '../../assets/themes/meadow/meadowTheme.png';
 
+// configure skin with his image
 const SKINS_IMAGE = {
     santa: santaImage,
     redhat: redhatImage,
@@ -30,6 +32,7 @@ const SKINS_IMAGE = {
     default: noImageAvailable
 };
 
+// configure theme with his image
 const THEMES_IMAGE = {
     snow: snowImage,
     meadow: meadowImage,
@@ -168,7 +171,7 @@ function displayCurrentSkinPage() {
             // check if skin is owned -> if yes check if is selected
             if (ownedSkins.some(s => s.name_skin === skin.name_skin)) {
                 if(skin.name_skin === selectedSkin)
-                    typeButton = `<button type="button" class="btn shop-current-button" data-id="${skin.id_skin}">Current</button>`;
+                    typeButton = `<button type="button" class="btn shop-current-button disable" data-id="${skin.id_skin}">Current</button>`;
                 else
                     typeButton = `<button type="button" class="btn shop-own-button shop-own-skin" data-id="${skin.id_skin}">Choose</button>`;
             }
@@ -214,7 +217,7 @@ function displayCurrentThemePage() {
             // check if theme is owned -> if yes check if is selected
             if (ownedThemes.some(t => t.name_theme === theme.name_theme)) {
                 if(theme.name_theme === currentTheme)
-                    typeButton = `<button type="button" class="btn shop-current-button" data-id="${theme.id_theme}">Current</button>`;
+                    typeButton = `<button type="button" class="btn shop-current-button disable" data-id="${theme.id_theme}">Current</button>`;
                 else
                 typeButton = `<button type="button" class="btn shop-own-button shop-own-theme" data-id="${theme.id_theme}">Choose</button>`;
             }
@@ -285,14 +288,18 @@ async function skinsListenner() {
                 const idSkin = parseInt(btn.getAttribute('data-id'), 10);
 
                 // check if enought coins
-                const notEnoughCoins = skinsList.some(skin => skin.id_skin === idSkin && coins < skin.price);
-                if(notEnoughCoins) {
+                const enoughCoins = skinsList.some(skin => skin.id_skin === idSkin && coins > skin.price);
+                if(!enoughCoins) {
                     notEnoughCoinsAnimation(btn);
                     return;
                 } 
 
                 try {
                     const beforeCoins = coins;
+                    
+                    btn.disabled = true;
+                    btn.innerHTML = "Loading...";
+                    btn.style.backgroundColor = 'gray';
 
                     await fetchBuy(`/skins`, idSkin);
                     coins = await fetchData(`/collectibles`);
@@ -336,14 +343,18 @@ function themesListenner() {
                 const idTheme = parseInt(btn.getAttribute('data-id'), 10);
                 
                 // check if enought coins
-                const notEnoughCoins = themesList.some(theme => theme.id_theme === idTheme && coins < theme.price);
-                if(notEnoughCoins) {
+                const enoughCoins = themesList.some(theme => theme.id_theme === idTheme && coins > theme.price);
+                if(!enoughCoins) {
                     notEnoughCoinsAnimation(btn);
                     return;
                 } 
 
                 try {
                     const beforeCoins = coins;
+
+                    btn.disabled = true;
+                    btn.innerHTML = "Loading...";
+                    btn.style.backgroundColor = 'gray';
                     
                     await fetchBuy(`/themes`, idTheme);
                     coins = await fetchData(`/collectibles`);
