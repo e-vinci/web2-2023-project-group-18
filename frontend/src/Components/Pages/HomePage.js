@@ -70,12 +70,12 @@ const HomePage = () => {
   document.addEventListener('DOMContentLoaded', animeLinks);
 };
 
-/* eslint-disable no-irregular-whitespace */
+
 /** *************************************************************************************
-* Title: isMobileDevice
-*  Author: ChatGPT 3.5
-* Date: 16/12/2023
-*    Code version: 1.0
+*Title: isMobileDevice
+*Author: ChatGPT 3.5
+*Date: 16/12/2023
+*--Code version: 1.0
 *
 ************************************************************************************** */
 function isMobileDevice() {

@@ -3,13 +3,12 @@ const { register, login } = require('../models/users');
 
 const router = express.Router();
 
-/* eslint-disable no-irregular-whitespace */
 /** *************************************************************************************
-* Title: Register route
-*  Author: JS Teacher
-* Date: 11/12/2023
-*    Code version: 1.0
-*  Availability: https://github.com/e-vinci/jwt-api-boilerplate/blob/main/routes/auths.js
+*Title: Register route
+*Author: JS Teacher
+*Date: 11/12/2023
+*--Code version: 1.0
+*--Availability: https://github.com/e-vinci/jwt-api-boilerplate/blob/main/routes/auths.js
 *
 ************************************************************************************** */
 
@@ -28,11 +27,11 @@ router.post('/register', async (req, res) => {
 });
 
 /** *************************************************************************************
-* Title: Login route
-*  Author: JS Teacher
-* Date: 11/12/2023
-*    Code version: 1.0
-*  Availability: https://github.com/e-vinci/jwt-api-boilerplate/blob/main/routes/auths.js
+*Title: Login route
+*Author: JS Teacher
+*Date: 11/12/2023
+*--Code version: 1.0
+*--Availability: https://github.com/e-vinci/jwt-api-boilerplate/blob/main/routes/auths.js
 *
 ************************************************************************************** */
 /* Login a user */
