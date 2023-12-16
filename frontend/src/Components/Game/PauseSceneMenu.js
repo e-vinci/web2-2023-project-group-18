@@ -91,8 +91,9 @@ class PauseMenuScene extends Phaser.Scene {
       Navigate('/');
     }
 
-    replayGame() {
-       this.scene.resume('game-over');
+  replayGame() {
+       this.scene.stop('pause-menu');
+       this.scene.remove('game-over');
        this.scene.remove('pause-score');
        this.scene.start('game-scene');
   }

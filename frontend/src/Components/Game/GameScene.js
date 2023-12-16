@@ -367,10 +367,6 @@ class GameScene extends Phaser.Scene {
         body.gameObject.destroy();
       }
     });
-
-    if (!this.scene.isActive('pause-menu')) {
-      this.scene.setActive(true, 'pause-menu');
-    }
   }
 
   createDudeAnimations() {
