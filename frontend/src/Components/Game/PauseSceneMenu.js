@@ -70,11 +70,15 @@ class PauseMenuScene extends Phaser.Scene {
                  this.replayGame();
                });
 
-               this.settingsButton = this.add.image(this.scale.width - 75, this.scale.height - 40, SETTINGS_ASSET);
-               this.settingsButton.setInteractive({ useHandCursor: true});
-               this.settingsButton.on('pointerdown', () => {
-                settings.openSettings();
-               })
+               // only setting for computer user
+               this.isMobile = this.sys.game.device.input.touch;
+               if (!this.isMobile) {
+                this.settingsButton = this.add.image(this.scale.width - 75, this.scale.height - 40, SETTINGS_ASSET);
+                this.settingsButton.setInteractive({ useHandCursor: true});
+                this.settingsButton.on('pointerdown', () => {
+                 settings.openSettings();
+                })
+               }
         
              }
 
