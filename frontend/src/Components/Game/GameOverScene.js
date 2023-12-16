@@ -44,8 +44,8 @@ class GameOverScene extends Phaser.Scene {
     backgroundShadow.setOrigin(0);
 
     const title = this.add.text(this.scale.width / 2, this.scale.height / 2 - 200, 'GAME OVER !', {
-      fontFamily: 'Roboto',
-      fontSize: '12vmin',
+      fontFamily: 'Arial, sans-serif',
+      fontSize: '9vmin',
     });
     title.setOrigin(0.5);
 
@@ -106,7 +106,7 @@ class GameOverScene extends Phaser.Scene {
       `Score: ${this.score}`,
       {
         fontFamily: 'Arial, sans-serif',
-        fontSize: '8vmin',
+        fontSize: '3vmin',
         fill: '#fff',
       },
     );
