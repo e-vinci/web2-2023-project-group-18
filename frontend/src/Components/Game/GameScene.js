@@ -332,83 +332,83 @@ class GameScene extends Phaser.Scene {
   }
 
   update() {
-             const dude1 = this.dude;
+    const dude1 = this.dude;
 
-             dude1.x += this.caracterSpeed;
-             dude1.play('player-slide', true);
-             //  const spaceJustPressed = Phaser.Input.Keyboard.JustDown(this.cursors.space);
+    dude1.x += this.caracterSpeed;
+    dude1.play('player-slide', true);
+    //  const spaceJustPressed = Phaser.Input.Keyboard.JustDown(this.cursors.space);
 
-             if (localStorage.getItem('resume')) {
-               this.scorePauseScene.meterLabel.resumeMeter();
-               localStorage.removeItem('resume');
-             }
+    if (localStorage.getItem('resume')) {
+      this.scorePauseScene.meterLabel.resumeMeter();
+      localStorage.removeItem('resume');
+    }
 
-             // animation
+    // animation
 
-             // Install key
-             const keyChoosen = Settings.getKey();
-             console.log(`Settings key : ${keyChoosen}`);
+    // Install key
+    const keyChoosen = Settings.getKey();
+    console.log(`Settings key : ${keyChoosen}`);
 
-             // Create a keyboard event for the chosen key
-             this.keyChose(keyChoosen);
+    // Create a keyboard event for the chosen key
+    this.keyChose(keyChoosen);
 
-             if (this.cursors.space.isDown) dude1.play('player-jump', true);
+    if (this.cursors.space.isDown) dude1.play('player-jump', true);
 
-             if (this.isTouchingGround) {
-               if (this.cursors.space.isDown) {
-                 dude1.setVelocityY(-10);
-                 dude1.setVelocityX(this.caracterSpeed);
-                 this.isTouchingGround = false;
-               }
-             }
-             // Si le joueur n'est pas en train de sauter, joue l'animation de course ou d'attente
-             else if (dude1.body.velocity.x !== 0) {
-               dude1.anims.play('player-run', true);
-             } else {
-               dude1.anims.play('player-idle', true);
-             }
+    if (this.isTouchingGround) {
+      if (this.cursors.space.isDown) {
+        dude1.setVelocityY(-10);
+        dude1.setVelocityX(this.caracterSpeed);
+        this.isTouchingGround = false;
+      }
+    }
+    // Si le joueur n'est pas en train de sauter, joue l'animation de course ou d'attente
+    else if (dude1.body.velocity.x !== 0) {
+      dude1.anims.play('player-run', true);
+    } else {
+      dude1.anims.play('player-idle', true);
+    }
 
-             // loop through all mountains
-             this.slopeGraphics.forEach((item) => {
-               // if the mountain leaves the screen to the left...
-               if (this.cameras.main.scrollX > item.x + item.width + 7000) {
-                 // reuse the mountain
-                 this.sliceStart = this.createSlope(item, this.sliceStart);
-               }
-             });
+    // loop through all mountains
+    this.slopeGraphics.forEach((item) => {
+      // if the mountain leaves the screen to the left...
+      if (this.cameras.main.scrollX > item.x + item.width + 7000) {
+        // reuse the mountain
+        this.sliceStart = this.createSlope(item, this.sliceStart);
+      }
+    });
 
-             // get all bodies
-             const { bodies } = this.matter.world.localWorld;
+    // get all bodies
+    const { bodies } = this.matter.world.localWorld;
 
-             // loop through all bodies
-             bodies.forEach((body) => {
-               // if the body is out of camera view to the left side && it's not in the current ground pool && it's a ground body
-               if (
-                 this.cameras.main.scrollX > body.position.x + 200 &&
-                 this.bodyPoolId.indexOf(body.id) === -1 &&
-                 body.label === GROUND_KEY
-               ) {
-                 // add the body to the ground pool
-                 this.bodyPool.push(body);
-                 this.bodyPoolId.push(body.id);
-               }
-               // if the body is out of camera view to the left side && it's not in the current obstacle pool && it's an obstacle body
-               else if (
-                 this.cameras.main.scrollX > body.position.x + 200 &&
-                 this.obstaclePoolId.indexOf(body.id) === -1 &&
-                 body.label === OBSTACLE_KEY
-               ) {
-                 // add the body to the pines pool
-                 this.obstaclePool.push(body);
-                 this.obstaclePoolId.push(body.id);
-               }
-               // if the body is out of camera view to the left side && it's a coin body
-               else if (this.cameras.main.scrollX > body.position.x && body.label === COIN_KEY) {
-                 // Delete the coin body
-                 body.gameObject.destroy();
-               }
-             });
-           }
+    // loop through all bodies
+    bodies.forEach((body) => {
+      // if the body is out of camera view to the left side && it's not in the current ground pool && it's a ground body
+      if (
+        this.cameras.main.scrollX > body.position.x + 200 &&
+        this.bodyPoolId.indexOf(body.id) === -1 &&
+        body.label === GROUND_KEY
+      ) {
+        // add the body to the ground pool
+        this.bodyPool.push(body);
+        this.bodyPoolId.push(body.id);
+      }
+      // if the body is out of camera view to the left side && it's not in the current obstacle pool && it's an obstacle body
+      else if (
+        this.cameras.main.scrollX > body.position.x + 200 &&
+        this.obstaclePoolId.indexOf(body.id) === -1 &&
+        body.label === OBSTACLE_KEY
+      ) {
+        // add the body to the pines pool
+        this.obstaclePool.push(body);
+        this.obstaclePoolId.push(body.id);
+      }
+      // if the body is out of camera view to the left side && it's a coin body
+      else if (this.cameras.main.scrollX > body.position.x && body.label === COIN_KEY) {
+        // Delete the coin body
+        body.gameObject.destroy();
+      }
+    });
+  }
 
   createDudeAnimations() {
     this.anims.create({
@@ -482,7 +482,7 @@ class GameScene extends Phaser.Scene {
 
     this.scene.stop('game-scene');
     this.scene.stop('pause-score');
-    this.scene.run('game-over', {
+    this.scene.start('game-over', {
       score: this.formatDistance(this.scorePauseScene.meterLabel.timeElapsed),
     });
   }

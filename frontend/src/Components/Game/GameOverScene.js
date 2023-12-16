@@ -133,7 +133,7 @@ class GameOverScene extends Phaser.Scene {
   }
 
   replayGame() {
-    this.scene.pause('pause-menu');
+    this.scene.stop('pause-menu');
     this.scene.remove('pause-score');
     this.scene.start('game-scene');
   }
