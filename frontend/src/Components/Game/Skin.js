@@ -23,16 +23,16 @@ import ninjagirlAssetJSON from '../../assets/skins/ninjagirl.json';
 import robotAssetJSON from '../../assets/skins/robot.json';
 
 const SKINS = {
-    redhat: { asset: redhatAsset, assetJSON: redhatAssetJSON },
-    jack: { asset: jackAsset, assetJSON: jackAssetJSON },
-    cat: { asset: catAsset, assetJSON: catAssetJSON },
-    dog: { asset: dogAsset, assetJSON: dogAssetJSON },
-    explorer: { asset: explorerAsset, assetJSON: explorerAssetJSON },
+    redhat:     { asset: redhatAsset, assetJSON: redhatAssetJSON },
+    jack:       { asset: jackAsset, assetJSON: jackAssetJSON },
+    cat:        { asset: catAsset, assetJSON: catAssetJSON },
+    dog:        { asset: dogAsset, assetJSON: dogAssetJSON },
+    explorer:   { asset: explorerAsset, assetJSON: explorerAssetJSON },
     adventurer: { asset: adventurerAsset, assetJSON: adventurerAssetJSON },
-    ninjaboy: { asset: ninjaboyAsset, assetJSON: ninjaboyAssetJSON },
-    ninjagirl: { asset: ninjagirlAsset, assetJSON: ninjagirlAssetJSON },
-    robot: { asset: robotAsset, assetJSON: robotAssetJSON },
-    default: { asset: santaAsset, assetJSON: santaAssetJSON }
+    ninjaboy:   { asset: ninjaboyAsset, assetJSON: ninjaboyAssetJSON },
+    ninjagirl:  { asset: ninjagirlAsset, assetJSON: ninjagirlAssetJSON },
+    robot:      { asset: robotAsset, assetJSON: robotAssetJSON },
+    default:    { asset: santaAsset, assetJSON: santaAssetJSON }
 };
 
 export default class Skin {

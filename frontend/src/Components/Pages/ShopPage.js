@@ -13,7 +13,8 @@ import ninjaboyImage from '../../assets/skins/ninjaboySkin.png';
 import ninjagirlImage from '../../assets/skins/ninjagirlSkin.png';
 import robotImage from '../../assets/skins/robotSkin.png';
 
-import snowImage from '../../assets/themes/snowTheme.png';
+import snowImage from '../../assets/themes/snow/snowTheme.png';
+import meadowImage from '../../assets/themes/meadow/meadowTheme.png';
 
 const SKINS_IMAGE = {
     santa: santaImage,
@@ -31,6 +32,7 @@ const SKINS_IMAGE = {
 
 const THEMES_IMAGE = {
     snow: snowImage,
+    meadow: meadowImage,
     default: noImageAvailable
 };
 

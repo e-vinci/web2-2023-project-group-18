@@ -1,15 +1,20 @@
-import obstacleSmallSnow from '../../assets/winterTheme/caneRedSmall.png'; // TODO import la classe de biome et extraire les 3 obstacles
-import obstacleMediumSnow from '../../assets/winterTheme/pineSapling.png'; // TODO import la classe de biome et extraire les 3 obstacles
-import obstacleFlatSnow from '../../assets/winterTheme/spikesBottomAlt.png'; // TODO import la classe de biome et extraire les 3 obstacles
+// snow theme obstacle
+import obstacleSmallSnow from '../../assets/themes/snow/caneRedSmall.png'; 
+import obstacleMediumSnow from '../../assets/themes/snow/pineSapling.png'; 
+import obstacleFlatSnow from '../../assets/themes/snow/spikesBottomAlt.png'; 
+// meadow theme obstacle
+import obstacleSmallMeadow from '../../assets/themes/meadow/rockMoss.png'; 
+import obstacleMediumMeadow from '../../assets/themes/meadow/fence.png'; 
+import obstacleFlatMeadow from '../../assets/themes/meadow/signRight.png'; 
 
 const THEMES = {
-    snow: { firstGroundColor: "#DEFBFF", secondGroundColor:"#C9EDF0", obstacleSmall: obstacleSmallSnow, obstacleMedium: obstacleMediumSnow, obstacleFlat: obstacleFlatSnow},
-    meadow: { firstGroundColor: "#689F50", secondGroundColor:"#4D8032" },
-    desert: { firstGroundColor: "#E0CFAF", secondGroundColor:"#C0B68D" },
-    mushroom: { firstGroundColor: "#7C7282", secondGroundColor:"#696170" },
-    candy: { firstGroundColor: "#FFD1DC", secondGroundColor:"#ADD8E6" },
-    alien: { firstGroundColor: "#7FFF7F", secondGroundColor:"#A020F0" },
-    default: { firstGroundColor: "#DEFBFF", secondGroundColor:"#C9EDF0", obstacleSmall: obstacleSmallSnow, obstacleMedium: obstacleMediumSnow, obstacleFlat: obstacleFlatSnow}
+    snow:     { groundColor: "#DEFBFF", groundTopLayerColor: "#C9EDF0", obstacleSmall: obstacleSmallSnow, obstacleMedium: obstacleMediumSnow, obstacleFlat: obstacleFlatSnow },
+    meadow:   { groundColor: "#689F50", groundTopLayerColor: "#4D8032", obstacleSmall: obstacleSmallMeadow, obstacleMedium: obstacleMediumMeadow, obstacleFlat: obstacleFlatMeadow },
+    desert:   { groundColor: "#E0CFAF", groundTopLayerColor: "#C0B68D" },
+    mushroom: { groundColor: "#7C7282", groundTopLayerColor: "#696170" },
+    candy:    { groundColor: "#FFD1DC", groundTopLayerColor: "#ADD8E6" },
+    alien:    { groundColor: "#7FFF7F", groundTopLayerColor: "#A020F0" },
+    default:  { groundColor: "#DEFBFF", groundTopLayerColor: "#C9EDF0", obstacleSmall: obstacleSmallSnow, obstacleMedium: obstacleMediumSnow, obstacleFlat: obstacleFlatSnow }
 };
 
 export default class Theme {
@@ -19,11 +24,11 @@ export default class Theme {
     }
 
     static getGroundColor() {
-        return Theme.getTheme().firstGroundColor.replace("#", "0x");
+        return Theme.getTheme().groundColor.replace("#", "0x");
     }
 
     static getGroundTopLayerColor() {
-        return Theme.getTheme().secondGroundColor.replace("#", "0x");
+        return Theme.getTheme().groundTopLayerColor.replace("#", "0x");
     }
 
     static getObstacleSmall() {
