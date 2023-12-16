@@ -442,7 +442,7 @@ class GameScene extends Phaser.Scene {
   }
 
   addObstacle(obstacleX, centerY) {
-    const obstacleY = centerY - 30;
+    let obstacleY = centerY;
      // if the pool is empty...
      if(this.obstaclePool.length === 0){
       // choose which obstacle to add
@@ -450,14 +450,19 @@ class GameScene extends Phaser.Scene {
       switch (Math.floor(Math.random() * 3)) {
         case 0:
           obstacle = OBSTACLE_SMALL_KEY;
+          obstacleY += Theme.getHeightObstacleSmall();
           break;
         case 1:
           obstacle = OBSTACLE_MEDIUM_KEY;
+          obstacleY += Theme.getHeightObstacleMedium();
           break;
         case 2:
           obstacle = OBSTACLE_FLAT_KEY;
+          obstacleY += Theme.getHeightObstacleFlat();
           break;
-        default: obstacle = OBSTACLE_MEDIUM_KEY;
+        default: 
+          obstacle = OBSTACLE_MEDIUM_KEY;
+          obstacleY += Theme.getHeightObstacleMedium();
       }
 
       // create a new obstacle body
@@ -469,12 +474,27 @@ class GameScene extends Phaser.Scene {
           category: 2 
         },
         label: OBSTACLE_KEY,
+        key: obstacle,
       });
     }
     // ...else get the obstacle from the pool
     else{ 
       const obstacleBody  = this.obstaclePool.shift();
       this.obstaclePoolId.shift();
+
+      switch (obstacleBody.key) {
+        case "obstacleSmall":
+          obstacleY += Theme.getHeightObstacleSmall();
+          break;
+        case "obstacleMedium":
+          obstacleY += Theme.getHeightObstacleMedium();
+          break;
+        case "obstacleFlat":
+          obstacleY += Theme.getHeightObstacleFlat();
+          break;
+        default:
+          obstacleY += Theme.getHeightObstacleMedium();
+      }
 
       // move the obstacle body to its new position
       this.matter.body.setPosition(obstacleBody, {

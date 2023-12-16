@@ -1,6 +1,7 @@
 /* eslint-disable no-param-reassign */
 import anime from 'animejs/lib/anime.es';
 import Navigate from '../Router/Navigate';
+import BackGround from '../../utils/background';
 
 import noImageAvailable from '../../assets/noimageavailable.png';
 import santaImage from '../../assets/skins/santaSkin.png';
@@ -379,6 +380,7 @@ function themesListenner() {
                 ownedThemes.forEach((theme) => {
                     if(theme.id_theme === idTheme)
                         localStorage.setItem("theme", theme.name_theme);
+                        BackGround();
                         displayCurrentThemePage();
                 });
             })

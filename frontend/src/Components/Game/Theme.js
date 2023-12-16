@@ -19,18 +19,18 @@ import smallCandy from '../../assets/themes/candy/canePink.png';
 import mediumCandy from '../../assets/themes/candy/candyTree.png'; 
 import flatCandy from '../../assets/themes/candy/candyBlue.png'; 
 // alien theme obstacle
-import smallAlien from '../../assets/themes/alien/alienGreen.png'; 
+import smallAlien from '../../assets/themes/alien/alienGreen.png';
 import mediumAlien from '../../assets/themes/alien/alienPink.png'; 
 import flatAlien from '../../assets/themes/alien/alienBlue.png'; 
 
 const OBSTACLES = {
-    snow:     { small: smallSnow,       medium: mediumSnow,     flat: flatSnow,     heightSmall: 0,   heightMedium: 0,   heightFlat: 0 },
-    meadow:   { small: smallMeadow,     medium: mediumMeadow,   flat: flatMeadow,   heightSmall: 0,   heightMedium: 0,   heightFlat: 0  },
-    desert:   { small: smallDesert,     medium: mediumDesert,   flat: flatDesert,   heightSmall: 0,   heightMedium: 0,   heightFlat: 0  },
-    mushroom: { small: smallMushroom,   medium: mediumMushroom, flat: flatMushroom, heightSmall: 0,   heightMedium: 0,   heightFlat: 0  },
-    candy:    { small: smallCandy,      medium: mediumCandy,    flat: flatCandy,    heightSmall: 0,   heightMedium: 0,   heightFlat: 0  },
-    alien:    { small: smallAlien,      medium: mediumAlien,    flat: flatAlien,    heightSmall: 0,   heightMedium: 0,   heightFlat: 0  },
-    default:  { small: smallSnow,       medium: mediumSnow,     flat: flatSnow,     heightSmall: 0,   heightMedium: 0,   heightFlat: 0  }
+    snow:     { small: smallSnow,       medium: mediumSnow,     flat: flatSnow,     heightSmall: -30,   heightMedium: -30,   heightFlat: -30 },
+    meadow:   { small: smallMeadow,     medium: mediumMeadow,   flat: flatMeadow,   heightSmall: -10,   heightMedium: -25,   heightFlat: -30  },
+    desert:   { small: smallDesert,     medium: mediumDesert,   flat: flatDesert,   heightSmall: -30,   heightMedium: -30,   heightFlat: -25  },
+    mushroom: { small: smallMushroom,   medium: mediumMushroom, flat: flatMushroom, heightSmall: -20,   heightMedium: -20,   heightFlat: -15  },
+    candy:    { small: smallCandy,      medium: mediumCandy,    flat: flatCandy,    heightSmall: -30,   heightMedium: -60,   heightFlat: -10  },
+    alien:    { small: smallAlien,      medium: mediumAlien,    flat: flatAlien,    heightSmall: -40,   heightMedium: -40,   heightFlat: -30  },
+    default:  { small: smallSnow,       medium: mediumSnow,     flat: flatSnow,     heightSmall: -30,   heightMedium: -30,   heightFlat: -30  }
 };
 
 const THEMES = {
@@ -67,6 +67,18 @@ export default class Theme {
 
     static getObstacleFlat() {
         return Theme.getTheme().obstacles.flat;
+    }
+
+    static getHeightObstacleSmall() {
+        return Theme.getTheme().obstacles.heightSmall;
+    }
+
+    static getHeightObstacleMedium() {
+        return Theme.getTheme().obstacles.heightMedium;
+    }
+
+    static getHeightObstacleFlat() {
+        return Theme.getTheme().obstacles.heightFlat;
     }
     
 }
