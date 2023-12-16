@@ -259,13 +259,13 @@ body {
   height: 100%;
   width: 300%;
   background-size: cover;
-  background: url('../assets/backgrounds/snow_BG.png') repeat-x; /* TODO */
+  background: url('../assets/backgrounds/alien_BG.png') repeat-x;
   animation: slideBackgroundAlien 20s linear infinite;
   z-index: -1;
 }
 
 .body_color_alien{
-  background-color: #333; /* TODO */
+  background-color: #23485e;
 }
 
 @keyframes slideBackgroundAlien {
@@ -273,7 +273,7 @@ body {
     transform: translate(0);
   }
   100% {
-    transform: translate(-1800px);
+    transform: translate(-1920px);
   }
 }
 
@@ -283,13 +283,13 @@ body {
   height: 100%;
   width: 300%;
   background-size: cover;
-  background: url('../assets/backgrounds/snow_BG.png') repeat-x; /* TODO */
+  background: url('../assets/backgrounds/candy_BG.png') repeat-x;
   animation: slideBackgroundCandy 20s linear infinite;
   z-index: -1;
 }
 
 .body_color_candy{
-  background-color: #333; /* TODO */
+  background-color: #c6e9fb;
 }
 
 @keyframes slideBackgroundCandy {
@@ -297,7 +297,7 @@ body {
     transform: translate(0);
   }
   100% {
-    transform: translate(-1800px);
+    transform: translate(-1920px);
   }
 }
 
@@ -331,13 +331,13 @@ body {
   height: 100%;
   width: 300%;
   background-size: cover;
-  background: url('../assets/backgrounds/meadow_BG.png') repeat-x;
+  background: url('../assets/backgrounds/meadow_BG2.png') repeat-x;
   animation: slideBackgroundMeadow 20s linear infinite;
   z-index: -1;
 }
 
 .body_color_meadow{
-  background-color: #34984c;
+  background-color: #418493;
 }
 
 @keyframes slideBackgroundMeadow {
@@ -345,7 +345,7 @@ body {
     transform: translate(0);
   }
   100% {
-    transform: translate(-1000px);
+    transform: translate(-1920px);
   }
 }
 
@@ -355,13 +355,13 @@ body {
   height: 100%;
   width: 300%;
   background-size: cover;
-  background: url('../assets/backgrounds/mushroom_BG.png') repeat-x;
+  background: url('../assets/backgrounds/mushroom_BG3.png') repeat-x;
   animation: slideBackgroundMushroom 20s linear infinite;
   z-index: -1;
 }
 
 .body_color_mushroom{
-  background-color: #215d12;
+  background-color: #0f1326;
 }
 
 @keyframes slideBackgroundMushroom {
@@ -369,7 +369,7 @@ body {
     transform: translate(0);
   }
   100% {
-    transform: translate(-1024px);
+    transform: translate(-1920px);
   }
 }
 
@@ -393,7 +393,7 @@ body {
     transform: translate(0);
   }
   100% {
-    transform: translate(-1800px);
+    transform: translate(-1799px);
   }
 }
 
