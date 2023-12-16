@@ -15,8 +15,8 @@ const HomePage = () => {
   const mainHTML = `
   <div class="screen">
     <div id = "sound" class = "setting-btn">
-      <button class = "btn0"><i class='bx bxs-cog'></i></button>
-      <button class = "btn1"><i class='bx bx-play'></i></button>
+    ${!isMobileDevice() ? '<button class = "btn0"><i class="bx bxs-cog"></i></button>': ''} 
+     <button class = "btn1"><i class='bx bx-play'></i></button>
       <button class = "btn2"><i class='bx bx-pause' ></i></button>
       <button id = "volume" class = "btn3"><i class='bx bxs-volume-full'></i></button>
       <button id = "volume" class = "btn4"><i class='bx bxs-volume-mute'></i></button>
@@ -68,8 +68,22 @@ const HomePage = () => {
 
   animeLinks();
   document.addEventListener('DOMContentLoaded', animeLinks);
-  // cookie();
 };
+
+
+/** *************************************************************************************
+*Title: isMobileDevice
+*Author: ChatGPT 3.5
+*Date: 16/12/2023
+*--Code version: 1.0
+*
+************************************************************************************** */
+function isMobileDevice() {
+  const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0 || navigator.msMaxTouchPoints > 0;
+  const isMobileUserAgent = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+
+  return isTouchDevice || isMobileUserAgent;
+}
 
 function isConnected(token) {
   if (token === false) {
@@ -174,50 +188,5 @@ function settingClick() {
       console.log("Aucun élément 'li' trouvé dans le DOM.");
     }
   }
-
- 
-
-
-
-// const setCookie = (cName, cValue, expdays) => {
-//   const date = new Date();
-//   date.setTime(date.getTime() + expdays * 24 * 60 * 60 * 1000);
-//   const expires = `expires=${date.toUTCString()}`;
-//   document.cookie = `${cName} = ${cValue}; ${expires}; path=/`;
-// };
-
-
-// const getCookie = (cName) => {
-  
-//   const name = `${cName}=`;
-//   const cDecoded = decodeURIComponent(document.cookie)
-//   const cArr = cDecoded.split(";");
-//   let value;
-
-//   cArr.forEach(val => {
-//     if (val.indexOf(name) === 0)
-//       value = val.substring(name.length);
-//   })
-//   return value
-// };
-
-// function cookie() {
-
-//   const divCookie = document.querySelector('#cookies');
-//   const cookieRGPD = document.querySelector('#cookies-btn');
-
-//   cookieRGPD.addEventListener('click', () => {
-//     divCookie.style.display = 'none';
-//     setCookie('cookie', true, 30);
-//   });
-// }
-
-// const cookieMessage = () => { 
-//   if (!getCookie("cookie"))
-//     document.querySelector("#cookies").style.display = "block";
-
-// };
-
-// window.addEventListener("load", cookieMessage);
 
 export default HomePage;
