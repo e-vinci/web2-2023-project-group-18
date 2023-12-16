@@ -213,7 +213,7 @@ text-decoration :underline;
 }
 
 .back{
-  font-size: 12vmin;
+  font-size: 8vmin;
   background-color: transparent;
   color: white;
   border-color: transparent;
@@ -456,7 +456,7 @@ color: #dbdbdb;
 .creditPage {
 overflow:auto;
 height: 80vh;
-width: 800px;
+width: 100vmin;
 background: transparent;
 border: 6px solid rgba(255,255,225,.2);
 backdrop-filter: blur(10px);

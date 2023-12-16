@@ -113,11 +113,10 @@ class GameScene extends Phaser.Scene {
     this.createDudeAnimations();
 
     this.cameras.main.startFollow(this.dude);
-    this.updateCameraZoom();
 
-    window.addEventListener('resize', () => {
-      this.updateCameraZoom();
-    });
+    // Ajoutez un écouteur d'événements de redimensionnement
+    this.scale.on('resize', this.resize, this);
+    
 
     this.key = this.input.keyboard.addKey(localStorage.getItem('selectedKey'));
 
@@ -125,6 +124,13 @@ class GameScene extends Phaser.Scene {
     setInterval(() => {
       this.caracterSpeed += Math.log(2) / 100;
     }, 2000);
+  }
+
+  resize() {
+    // Mettez à jour le zoom de la caméra
+    this.updateCameraZoom();
+
+    // Autres codes de redimensionnement...
   }
 
   updateCameraZoom() {
