@@ -107,8 +107,6 @@ async function tryRgister() {
     };
 
     const response = await fetch(`${process.env.API_BASE_URL}/auths/register`, options);
-    const finalResponse = await response.json();
-
 
     if (!response.ok) {
       animeLogin(false);
@@ -117,6 +115,7 @@ async function tryRgister() {
       
     }
     else {
+      const finalResponse = await response.json();
       localStorage.setItem('token', finalResponse.token);
       localStorage.setItem('user',finalResponse.username)
       animeLogin(true);
