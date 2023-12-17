@@ -36,7 +36,7 @@ async function queryExecute(query, values) {
     if (values === undefined) return await client.query(query);
     return await client.query(query, values);
   } finally {
-    client.release();
+    if (client !== undefined) client.release();
   }
 }
 

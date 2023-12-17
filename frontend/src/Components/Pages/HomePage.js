@@ -184,8 +184,6 @@ function settingClick() {
         translateY: 0,
         delay: anime.stagger(100),
       });
-    } else {
-      console.log("Aucun élément 'li' trouvé dans le DOM.");
     }
   }
 
