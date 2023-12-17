@@ -222,11 +222,6 @@ text-decoration :underline;
   color: rgb(181, 178, 178);
 }
 
-.div-back{
-  margin-left: 2%;
-  margin-top: 2%;
-}
-
 .errorMessage{
   background-color: #FF9494;
   border-radius: 15px;
@@ -605,9 +600,6 @@ justify-content: space-evenly;
 .creditPage div li{
   font-size: 3vmin;
 }
-.div-back{
-  width: 100px;
-}
 
 /* Settings page */
 .settings-frame {
@@ -749,6 +741,20 @@ justify-content: space-evenly;
   justify-content: center;
   align-items: center;
   min-height: 50vh;
+}
+
+/*leaderboard*/
+
+.leaderboard-background {
+  border: 6px solid rgba(255,255,225,.2);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 0 5px rgba(0,0,0,0.2);
+  color:#fff ;
+  border-radius: 10px;
+}
+
+.table {
+  margin: 0px;
 }
 
 /*Game Page*/

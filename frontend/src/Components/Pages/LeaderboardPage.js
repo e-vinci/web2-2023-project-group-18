@@ -51,23 +51,24 @@ async function fetchAllScores() {
 
 async function renderLeaderboardPage(lignes) {
   main.innerHTML = ` 
-  <div class="div-back">
-  <button id="back-leaderboard" class="back" type="button" ><i class='bx bx-arrow-back'></i></button>
+  <div class="d-flex justify-content-between align-items-center position-relative m-3 mt-3 mb-3">
+    <button id="back-leaderboard" class="back btn-lg position-absolute type="button"><i class='bx bx-arrow-back'></i></button>
+    <h1 class="mx-auto text-white">LeaderBoard</h1>
   </div>
+
   <div class="d-flex justify-content-center">
-    <div class="container p-2 border rounded">
-        <h2 class="text-center my-2 text-white">LeaderBoard</h2>
-        <div class="table-responsive mx-4">
-          <table class="table table-striped mx-auto">
+    <div class="container p-2 leaderboard-background">
+      <div class="table-responsive mx-4 mt-3 mb-3 rounded">
+        <table class="table table-striped mx-auto">
           <tr>
-            <th class="text-center">n°</th>
-            <th class="text-center">username</th>
-            <th class="text-center">score</th>
-            <th class="text-center">date</th>
+            <th class="text-center">N°</th>
+            <th class="text-center">Username</th>
+            <th class="text-center">Score</th>
+            <th class="text-center">Date</th>
           </tr>
-           ${lignes}
-          </table>
-        </div>
+          ${lignes}
+        </table>
+      </div>
     </div>
   </div>
   `;
