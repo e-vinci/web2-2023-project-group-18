@@ -2,8 +2,7 @@
 
 # SantaFall (web2-2023-project-group-18)
 
-Jeu 2D dans le quelle un père  Noël descend une montagne et doit éviter des obstacles sur son chemin.Le jeu sera simple à jouer, une action possible : sauter. Tout le long de la descente le père Noël pourra collecter des pièces et ensuite pourra acheter des "skins".Le but principal sera d'être le joueur à aller le plus loin (tableau de score) dans le jeux (compteur de mètres).
-
+Jeu 2D dans lequelle le Père Noël descend une montagne tout en évitant des obstacles sur son chemin.Tout le long de la descente le Père Noël pourra collecter des pièces ce qui lui permettra de personnaliser son apparence et/ou le thème du jeu via la boutique. La prise en main du jeu est simple, une seule action possible : sauter. Le jeu est jouable sur ordinateur, comme sur téléphone pour pouvoir jouer au travail comme aux toilettes. Le but principal est d'aller le plus loin possible dans le jeu afin d'être le joueur avec le meilleur score sur le tableau des scores.
 
 # Host
 
@@ -27,10 +26,9 @@ npm i
 | Base de donnée
 Il vous faudra un  base de donnée PostgreSQL
 
-[Elephantsql](https://www.elephantsql.com/) prorposer un hébergement gratuit nommé "Tiny Turtle"
-
+[Elephantsql](https://www.elephantsql.com/) prorpose un hébergement gratuit nommé "Tiny Turtle"
 OU 
-Crée votre base de donnée localement [Télécharger](https://www.postgresql.org/download/)
+Créez votre base de donnée localement [Télécharger](https://www.postgresql.org/download/)
 
 | Secret et information de connection base de donnée
 ```bash
@@ -89,8 +87,6 @@ npm run start
 ```
 
 
-
-
 ## API 
 La table des routes de notre api ce trouve dans le rapport 
 
@@ -99,8 +95,11 @@ La table des routes de notre api ce trouve dans le rapport
 
 [front-end/boilerplate](https://github.com/e-vinci/js-phaser-boilerplate)
 [API/boilerplate](https://github.com/e-vinci/jwt-api-boilerplate)
-
-// TODO ADD asset link
+[front-end/game](https://www.emanueleferonato.com/)
+[front-end/game](https://mourner.github.io/simplify-js/)
+[front-end/assets](https://craftpix.net/)
+[front-end/assets](https://pzuh.itch.io/)
+[front-end/assets](https://kenney.nl/assets/platformer-art-deluxe)
 
 
 ## Authors
