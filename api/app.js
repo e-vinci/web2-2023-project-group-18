@@ -9,9 +9,8 @@ const corsOptions = {
 
 const collectiblesRouter = require('./routes/collectibles');
 const scoresRouter = require('./routes/scores');
+const shopRouter = require('./routes/shops');
 const authsRouter = require('./routes/auths');
-const skinsRouter = require('./routes/skins');
-const themesRouter = require('./routes/themes');
 
 const app = express();
 
@@ -25,7 +24,6 @@ app.use(cors(corsOptions));
 app.use('/collectibles', collectiblesRouter);
 app.use('/auths', authsRouter);
 app.use('/scores', scoresRouter);
-app.use('/skins', skinsRouter);
-app.use('/themes', themesRouter);
+app.use('/shop', shopRouter);
 
 module.exports = app;

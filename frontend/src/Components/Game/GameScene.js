@@ -1,10 +1,9 @@
 import Phaser from 'phaser';
 import simplify from 'simplify-js';
 
-import Skin from '../../utils/skins';
-import obstacleSmall from '../../assets/winterTheme/caneRedSmall.png'; // TODO import la classe de biome et extraire les 3 obstacles
-import obstacleMedium from '../../assets/winterTheme/pineSapling.png'; // TODO import la classe de biome et extraire les 3 obstacles
-import obstacleFlat from '../../assets/winterTheme/spikesBottomAlt.png'; // TODO import la classe de biome et extraire les 3 obstacles
+import Skin from './Skin';
+import Theme from './Theme';
+
 import coinAsset from '../../assets/coin.png';
 
 import Settings from '../../utils/settings';
@@ -17,9 +16,6 @@ const OBSTACLE_SMALL_KEY = 'obstacleSmall';
 const OBSTACLE_MEDIUM_KEY = 'obstacleMedium';
 const OBSTACLE_FLAT_KEY = 'obstacleFlat';
 
-const GROUND_COLOR = 0xdefbff; // TODO import from la classe de biome
-const GROUND_TOP_LAYER_COLOR = 0xc9edf0; // TODO import from la classe de biome
-
 const DUDE_KEY = 'dude';
 const DUDE_ASSET_WIDTH = 25;
 const DUDE_ASSET_HEIGHT = 40;
@@ -29,7 +25,7 @@ const gameOptions = {
   slopeLength: [300, 800], 
   slicesAmount: 3,
   slopesPerSlice: 5,
-  obstacleRatio: 15,
+  obstacleRatio: 12,
   coinRatio: 20,
   amountCoin: 10 
 };
@@ -57,6 +53,7 @@ class GameScene extends Phaser.Scene {
   }
 
   init() {
+    Theme.setTheme();
     this.cursors = this.input.keyboard.createCursorKeys();
     this.scorePauseScene = this.scene.add('pause-score', ScorePauseScene, true);
   }
@@ -65,9 +62,9 @@ class GameScene extends Phaser.Scene {
     this.load.atlas(DUDE_KEY, Skin.getSkinPicture(), Skin.getSkinJSON());
 
     this.load.image(COIN_KEY, coinAsset);
-    this.load.image(OBSTACLE_SMALL_KEY, obstacleSmall);
-    this.load.image(OBSTACLE_MEDIUM_KEY, obstacleMedium);
-    this.load.image(OBSTACLE_FLAT_KEY, obstacleFlat);
+    this.load.image(OBSTACLE_SMALL_KEY, Theme.getObstacleSmall());
+    this.load.image(OBSTACLE_MEDIUM_KEY, Theme.getObstacleMedium());
+    this.load.image(OBSTACLE_FLAT_KEY, Theme.getObstacleFlat());
   }
 
   create() {
@@ -239,7 +236,7 @@ class GameScene extends Phaser.Scene {
     // draw the ground
     graphics.clear();
     graphics.moveTo(0, 1000);
-    graphics.fillStyle(GROUND_COLOR);
+    graphics.fillStyle(Theme.getGroundColor());
     graphics.beginPath();
     simpleSlope.forEach((point) => {
       graphics.lineTo(point.x, point.y);
@@ -249,8 +246,8 @@ class GameScene extends Phaser.Scene {
     graphics.closePath();
     graphics.fillPath();
 
-    // draw the top layer
-    graphics.lineStyle(16, GROUND_TOP_LAYER_COLOR);
+    // draw the snow
+    graphics.lineStyle(16, Theme.getGroundTopLayerColor());
     graphics.beginPath();
     simpleSlope.forEach((point) => {
       graphics.lineTo(point.x, point.y);
@@ -513,28 +510,33 @@ class GameScene extends Phaser.Scene {
     const coin = this.matter.add.image(coinX + 20, coinY - 55, COIN_KEY, null);
     coin.setCircle();
     coin.setStatic(true);
+    coin.body.isSensor = true;
     coin.body.label = COIN_KEY;
     this.coins.push(coin);
   }
 
   addObstacle(obstacleX, centerY) {
-    const obstacleY = centerY - 30;
-    // if the pool is empty...
-    if (this.obstaclePool.length === 0) {
+    let obstacleY = centerY;
+     // if the pool is empty...
+     if(this.obstaclePool.length === 0){
       // choose which obstacle to add
       let obstacle;
       switch (Math.floor(Math.random() * 3)) {
         case 0:
           obstacle = OBSTACLE_SMALL_KEY;
+          obstacleY += Theme.getHeightObstacleSmall();
           break;
         case 1:
           obstacle = OBSTACLE_MEDIUM_KEY;
+          obstacleY += Theme.getHeightObstacleMedium();
           break;
         case 2:
           obstacle = OBSTACLE_FLAT_KEY;
+          obstacleY += Theme.getHeightObstacleFlat();
           break;
-        default:
+        default: 
           obstacle = OBSTACLE_MEDIUM_KEY;
+          obstacleY += Theme.getHeightObstacleMedium();
       }
 
       // create a new obstacle body
@@ -546,12 +548,27 @@ class GameScene extends Phaser.Scene {
           category: 2,
         },
         label: OBSTACLE_KEY,
+        key: obstacle,
       });
     }
     // ...else get the obstacle from the pool
     else {
       const obstacleBody = this.obstaclePool.shift();
       this.obstaclePoolId.shift();
+
+      switch (obstacleBody.key) {
+        case "obstacleSmall":
+          obstacleY += Theme.getHeightObstacleSmall();
+          break;
+        case "obstacleMedium":
+          obstacleY += Theme.getHeightObstacleMedium();
+          break;
+        case "obstacleFlat":
+          obstacleY += Theme.getHeightObstacleFlat();
+          break;
+        default:
+          obstacleY += Theme.getHeightObstacleMedium();
+      }
 
       // move the obstacle body to its new position
       this.matter.body.setPosition(obstacleBody, {

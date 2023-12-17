@@ -144,7 +144,7 @@ DECLARE
     _price INT;
     _coins INT;
 BEGIN
-    SELECT price FROM projet.theme WHERE id_theme = _theme INTO _price;
+    SELECT price FROM projet.themes WHERE id_theme = _theme INTO _price;
     SELECT nbre_collectible FROM projet.collectibles WHERE user_id = _user INTO _coins;
 
     IF(_coins >= _price) THEN
@@ -158,21 +158,21 @@ $$ LANGUAGE plpgsql;
 /*
 INSERT INTO projet.skins (name_skin, label_skin, price) VALUES ('santa', 'Santa', 0);
 INSERT INTO projet.skins (name_skin, label_skin, price) VALUES ('redhat', 'Red Hat', 100);
-INSERT INTO projet.skins (name_skin, label_skin, price) VALUES ('jack', 'Jack', 200);
-INSERT INTO projet.skins (name_skin, label_skin, price) VALUES ('cat', 'Cat', 300);
-INSERT INTO projet.skins (name_skin, label_skin, price) VALUES ('dog', 'Dog', 400);
-INSERT INTO projet.skins (name_skin, label_skin, price) VALUES ('explorer', 'Explorer', 500);
-INSERT INTO projet.skins (name_skin, label_skin, price) VALUES ('adventurer', 'Adventurer', 600);
-INSERT INTO projet.skins (name_skin, label_skin, price) VALUES ('ninjaboy', 'Ninja Boy', 700);
-INSERT INTO projet.skins (name_skin, label_skin, price) VALUES ('ninjagirl', 'Ninja Girl', 800);
-INSERT INTO projet.skins (name_skin, label_skin, price) VALUES ('robot', 'Robot', 1000);
+INSERT INTO projet.skins (name_skin, label_skin, price) VALUES ('jack', 'Jack', 250);
+INSERT INTO projet.skins (name_skin, label_skin, price) VALUES ('cat', 'Cat', 500);
+INSERT INTO projet.skins (name_skin, label_skin, price) VALUES ('dog', 'Dog', 750);
+INSERT INTO projet.skins (name_skin, label_skin, price) VALUES ('explorer', 'Explorer', 1000);
+INSERT INTO projet.skins (name_skin, label_skin, price) VALUES ('adventurer', 'Adventurer', 1500);
+INSERT INTO projet.skins (name_skin, label_skin, price) VALUES ('ninjaboy', 'Ninja Boy', 2000);
+INSERT INTO projet.skins (name_skin, label_skin, price) VALUES ('ninjagirl', 'Ninja Girl', 2500);
+INSERT INTO projet.skins (name_skin, label_skin, price) VALUES ('robot', 'Robot', 5000);
 
 INSERT INTO projet.themes (name_theme, label_theme, price) VALUES ('snow', 'Snow', 0);
-INSERT INTO projet.themes (name_theme, label_theme, price) VALUES ('meadow', 'Meadow', 100);
-INSERT INTO projet.themes (name_theme, label_theme, price) VALUES ('desert', 'Desert', 200);
-INSERT INTO projet.themes (name_theme, label_theme, price) VALUES ('taiga', 'Taiga', 300);
-INSERT INTO projet.themes (name_theme, label_theme, price) VALUES ('forest', 'Forest', 400);
-INSERT INTO projet.themes (name_theme, label_theme, price) VALUES ('tundra', 'Tundra', 500);
+INSERT INTO projet.themes (name_theme, label_theme, price) VALUES ('meadow', 'Meadow', 250);
+INSERT INTO projet.themes (name_theme, label_theme, price) VALUES ('desert', 'Desert', 500);
+INSERT INTO projet.themes (name_theme, label_theme, price) VALUES ('mushroom', 'Mushroom', 1000);
+INSERT INTO projet.themes (name_theme, label_theme, price) VALUES ('candy', 'Candy', 2500);
+INSERT INTO projet.themes (name_theme, label_theme, price) VALUES ('alien', 'Alien',  5000);
 */
 
 
