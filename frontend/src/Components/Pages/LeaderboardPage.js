@@ -1,17 +1,17 @@
 
 import Navigate from '../Router/Navigate';
 import { clearPage } from '../../utils/render';
-import Loading from '../../utils/loading';
+import { startLoading, stopLoading } from '../../utils/loading';
 
 const main = document.querySelector('main');
 
 const Leaderboard = async () => {
   clearPage();
-  Loading.startLoading();
+  startLoading();
 
   await fetchAllScores();
-  
-  Loading.stopLoading();
+
+  stopLoading();
   backListenner();
 }
 

@@ -8,4 +8,4 @@ const stopLoading = () => {
     loader.classList.add('d-none');
 }
 
-export default {startLoading, stopLoading};
+export {startLoading, stopLoading};

@@ -2,9 +2,9 @@ import Phaser from 'phaser';
 import replayButton from '../../assets/replayButton.png';
 import homeButton from '../../assets/homeButton.png';
 import restartButton from '../../assets/restartButton.png';
-import settings from '../../utils/settings';
 import settingsButton from '../../assets/settingsAssest.png'
 import Navigate from '../Router/Navigate';
+import { openSettings } from '../../utils/settings';
 
 const REPLAY_BUTTON = 'replay';
 const HOME_BUTTON = 'home';
@@ -76,7 +76,7 @@ class PauseMenuScene extends Phaser.Scene {
                 this.settingsButton = this.add.image(this.scale.width - 75, this.scale.height - 40, SETTINGS_ASSET);
                 this.settingsButton.setInteractive({ useHandCursor: true});
                 this.settingsButton.on('pointerdown', () => {
-                 settings.openSettings();
+                 openSettings();
                 })
                }
         

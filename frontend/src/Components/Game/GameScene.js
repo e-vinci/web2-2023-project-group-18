@@ -6,7 +6,7 @@ import Theme from './Theme';
 
 import coinAsset from '../../assets/coin.png';
 
-import Settings from '../../utils/settings';
+import { getKey } from '../../utils/settings';
 import ScorePauseScene from './ScorePauseScene';
 
 const GROUND_KEY = 'groundLabel';
@@ -122,12 +122,10 @@ class GameScene extends Phaser.Scene {
       }, 2000);
 
       // Install key
-      const keyChoosen = Settings.getKey();
-      // eslint-disable-next-line no-console
-      console.log(`Settings key : ${keyChoosen}`);
+      const keyChoosen = getKey();
 
       // Create a keyboard event for the chosen key
-      this.keyChose(keyChoosen);
+      this.keyChoose(keyChoosen);
 
       // Animation
       this.createDudeAnimations();
@@ -147,39 +145,23 @@ class GameScene extends Phaser.Scene {
       });
   }
   
-  keyChose(key) {
+  keyChoose(key) {
 
-    if (key !== 'SPACE') {
-      this.key = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes[key]);
-      this.key.on('down', () => {
-        this.dude.anims.play('player-jump', true);
-        if (this.isTouchingGround) {
-          this.dude.setVelocityY(-10);
-          this.dude.setVelocityX(this.caracterSpeed);
-          this.isTouchingGround = false;
-        } else if (this.jumpCount < 2) {
-          this.dude.setVelocityY(-10);
-          this.dude.setVelocityX(this.caracterSpeed);
-          // eslint-disable-next-line no-plusplus
-          this.jumpCount++;
-        }
-      });
-    } else {
-             // Create a keyboard event for the chosen key
-             this.cursors.space.on('pointerdown', () => {
-               this.dude.anims.play('player-jump', true);
-               if (this.isTouchingGround) {
-                 this.dude.setVelocityY(-10);
-                 this.dude.setVelocityX(this.caracterSpeed);
-                 this.isTouchingGround = false;
-               } else if (this.jumpCount < 2) {
-                 this.dude.setVelocityY(-10);
-                 this.dude.setVelocityX(this.caracterSpeed);
-                 // eslint-disable-next-line no-plusplus
-                 this.jumpCount++;
-               }
-             });
-           }
+    this.input.keyboard.removeAllKeys();
+    this.key = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes[key]);
+    this.key.on('down', () => {
+      this.dude.anims.play('player-jump', true);
+      if (this.isTouchingGround) {
+        this.dude.setVelocityY(-10);
+        this.dude.setVelocityX(this.caracterSpeed);
+        this.isTouchingGround = false;
+      } else if (this.jumpCount < 2) {
+        this.dude.setVelocityY(-10);
+        this.dude.setVelocityX(this.caracterSpeed);
+        // eslint-disable-next-line no-plusplus
+        this.jumpCount++;
+      }
+    });
   }
 
   resize(gameSize) {
@@ -344,12 +326,10 @@ class GameScene extends Phaser.Scene {
     // animation
 
     // Install key
-    const keyChoosen = Settings.getKey();
-    // eslint-disable-next-line no-console
-    console.log(`Settings key : ${keyChoosen}`);
+    const keyChoosen = getKey();
 
     // Create a keyboard event for the chosen key
-    this.keyChose(keyChoosen);
+    this.keyChoose(keyChoosen);
 
     if (this.cursors.space.isDown) dude1.play('player-jump', true);
 

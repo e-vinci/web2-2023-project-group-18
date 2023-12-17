@@ -640,11 +640,7 @@ justify-content: space-evenly;
 
 .settings-error-key {
   display: none;
-  color: #fff;
-  font-family: 'Pixel';
-  font-size: 30px;
-  box-sizing: border-box;
-  scroll-behavior: smooth;
+  color: red;
 }
 
 /*

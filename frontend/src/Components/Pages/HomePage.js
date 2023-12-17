@@ -1,8 +1,8 @@
 
 import anime from 'animejs/lib/anime.es';
 import { clearPage } from '../../utils/render';
+import { openSettings } from '../../utils/settings';
 import Navigate from '../Router/Navigate';
-import settings from '../../utils/settings';
 import music from '../../assets/backgroundMusic.mp3'
 
 
@@ -151,8 +151,7 @@ function volumeClick() {
 function settingClick() {
   const btn = document.querySelector('.btn0');
   btn.addEventListener('click', () => {
-    settings.openSettings();
-    settings.getKey();
+    openSettings();
   })
 
 }

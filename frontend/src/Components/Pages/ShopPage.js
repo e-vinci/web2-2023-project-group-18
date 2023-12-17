@@ -2,7 +2,7 @@
 import anime from 'animejs/lib/anime.es';
 import Navigate from '../Router/Navigate';
 import BackGround from '../../utils/background';
-import Loading from '../../utils/loading';
+import { startLoading, stopLoading } from '../../utils/loading';
 import { clearPage } from '../../utils/render';
 
 // skins images
@@ -81,7 +81,7 @@ const ShopPage = async () => {
     }
 
     try {
-        Loading.startLoading();
+        startLoading();
 
         coins = await fetchData(`/collectibles`);
         skinsList = await fetchData(`/shop/getskins`);
@@ -89,7 +89,7 @@ const ShopPage = async () => {
         ownedSkins = await fetchData(`/shop/getuserskins`);
         ownedThemes = await fetchData(`/shop/getuserthemes`);
 
-        Loading.stopLoading();
+        stopLoading();
 
         renderShopPage();
 
