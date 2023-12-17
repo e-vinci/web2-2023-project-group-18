@@ -1,0 +1,30 @@
+### Base url
+@baseUrl = http://localhost:3000
+
+
+### Login as test user
+# @name test2
+POST {{baseUrl}}/auths/login
+Content-Type: application/json
+
+{
+    "username":"test3",
+    "password":"test3"
+}
+
+### Get the amount of collectibles
+GET {{baseUrl}}/collectibles
+Content-Type: application/json
+Authorization: {{test2.response.body.token}}
+
+
+### Add collectibles
+PUT {{baseUrl}}/collectibles/add
+Content-Type: application/json
+Authorization: {{test2.response.body.token}}
+
+
+
+{
+    "collectible" : 900
+}

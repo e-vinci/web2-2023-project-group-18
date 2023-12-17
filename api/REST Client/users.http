@@ -1,0 +1,59 @@
+# BaseURL
+@baseUrl = http://localhost:3000
+
+
+### Try to login an unknow user
+POST {{baseUrl}}/auths/login
+Content-Type: application/json
+
+{
+    "username":"Lucas",
+    "password":"abc"
+}
+
+### Login as test user
+POST {{baseUrl}}/auths/login
+Content-Type: application/json
+
+{
+    "username":"test",
+    "password":"test"
+}
+
+### Create the test2 user
+POST {{baseUrl}}/auths/register
+Content-Type: application/json
+
+{
+    "username":"test2",
+    "password":"test2"
+}
+
+
+### Login the test2 user
+POST {{baseUrl}}/auths/login
+Content-Type: application/json
+
+{
+    "username":"test2",
+    "password":"test2"
+}
+
+
+### Try to create a empty user
+POST {{baseUrl}}/auths/register
+Content-Type: application/json
+
+{
+    "username":"",
+    "password":""
+}
+
+### Try to create a blank user
+POST {{baseUrl}}/auths/register
+Content-Type: application/json
+
+{
+    "username":" ",
+    "password":" "
+}

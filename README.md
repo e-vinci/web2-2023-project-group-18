@@ -1,65 +1,121 @@
-# Projet Web2 2023
-## Introduction
-- Ce boilerplate vous offre l'architecture de base de votre frontend et de votre API pour développer un projet qui vous tient à coeur et qui répond aux exigences résumées ci-dessous (et détaillées dans le template du rapport de projet). 
-- Vous pouvez mettre à jour le boilerplate autant que nécessaire, installer des packages...
-- Votre web repository sur GitHub doit être public.
+[![Open in Visual Studio Code](https://classroom.github.com/assets/open-in-vscode-718a45dd9cf7e7f842a935f5ebbe5719a5e09af4491e668f4dbf3b35d5cca122.svg)](https://classroom.github.com/online_ide?assignment_repo_id=12368739&assignment_repo_type=AssignmentRepo)
 
-## API
-- Votre API doit respecter les conventions REST et appliquer le boilerplate offert dans le cadre du cours de Web2.
-- Veuillez documenter les opérations de votre API, soit à l'aide de tableaux, comme vus dans le cours, soit à l'aide d'outils (Swagger par exemple). Votre fichier `README.md` doit indiquer l'endroit où se situe la documentation de votre API.
-- Les tests de votre API, les requêtes HTTP, doivent être données au sein de votre projet. Votre fichier `README.md` doit indiquer où se trouve ces fichiers. Pour chaque opération de votre API, il doit exister au minimum une requête HTTP associée.
-- La RESTful API ne peut pas être uniquement un « copier/coller » de ressources offertes dans le cours (notamment les ressources **users** et **auths**). Vous pouvez utiliser les ressources offertes dans le cours, mais vous devez y apporter des ajouts significatifs.
-- Votre RESTful API doit mettre en œuvre au minimum un package non vu en cours.
-- Votre API doit respecter les droits d’auteurs, que ça soit pour les éventuelles librairies utilisées, les morceaux de code, les sons, images, vidéos… Cela est de votre responsabilité et non pas de celle de vos enseignants.
-- Vous devez déployer votre backend sur Azure ou d’autres providers gratuits supportant votre application.
+# SantaFall (web2-2023-project-group-18)
 
-## Frontend
-- Votre frontend doit appliquer le boilerplate offert dans le cadre du cours de Web2.
-- Votre frontend doit mettre en œuvre une librairie JS externe, ou l’API Canvas, afin de réaliser une animation.
-- Votre frontend doit mettre en œuvre au minimum une librairie JS non vue en cours.
-- Vous devez déployer votre frontend sur GitHub Pages ou d’autres providers gratuits supportant votre application.
-- Votre RESTful API doit mettre en œuvre au minimum un package non vu en cours.
-- Votre frontend doit respecter les droits d’auteurs, que ça soit pour les éventuels sons, images, vidéos, librairies et morceaux de codes utilisés. Cela est de votre responsabilité et non pas de celle de vos enseignants.
-- Vous devez déployer votre API sur Azure ou d’autres providers gratuits supportant votre application.
+Jeu 2D dans lequel le Père Noël descend une montagne tout en évitant des obstacles sur son chemin.Tout le long de la descente le Père Noël pourra collecter des pièces ce qui lui permettra de personnaliser son apparence et/ou le thème du jeu via la boutique. La prise en main du jeu est simple, une seule action possible : sauter. Le jeu est jouable sur ordinateur, comme sur téléphone pour pouvoir jouer au travail comme aux toilettes. Le but principal est d'aller le plus loin possible dans le jeu afin d'être le joueur avec le meilleur score sur le tableau des scores.
 
-## Ergonomie
-- La vision marketing ainsi que les wireframes de votre application doivent se trouver dans le répertoire `/ergonomics`.
+# Host
 
-## Exécution de vos projets
-- Il doit être possible d'installer et exécuter localement votre frontend et l'API simplement à l'aide de `npm i` et `npm start` au sein des dossiers `frontend` et `api`. 
-- Si d'autres commandes sont nécessaires, vous devez les indiquer au sein du `README.md` de votre projet.
-- Si vous utilisez une base de données ou des API nécessitant des secrets, il est OK de ne pas rendre public vos secrets. Dans ce cas :
-    - Votre application doit être sur le cloud pour que les autres étudiants puissent la revoir ; les étudiants ne pourront donc pas exécuter l'API localement. Veuillez clairement indiquer dans le `README.md` de votre projet si l’application ne peut pas être exécutée localement sans les secrets et veuillez indiquer l'URL tant de votre frontend que de votre API au sein du `README.md` de votre projet.
-    - Vous devez mettre à disposition tous ces secrets (fichiers de configuration) à disposition de vos enseignants lors de la soumission de votre projet.
-    - Pour la création de votre éventuelle DB, si elle ne se fait pas automatiquement lors du démarrage de votre API, vous devez offrir un script et le mettre au sein de votre projet. Dans ce cas, la procédure pour créer la DB doit être documenté au sein du `README.md` de votre projet.
+Frontend: https://e-vinci.github.io/web2-2023-project-group-18/   
 
-## Suivi de projet
-- Au sein du repository GitHub de votre projet, vous devez créer un **Project** pour planifier les tâches, allouer les responsables, documenter vos avancées, visualiser vos milestones...
-- Votre projet doit être **public** et doit suivre le template : **New project**, **Team backlog**. Vous pouvez supprimer la colonne **New**.
-- Veuillez indiquer l'URL vers votre **Project** public sous GitHub dans votre `README.md`.
-- Veuillez commencer votre projet en identifiant toutes les tâches principales à réaliser sur votre projet, principalement en soignant l'identification des use cases. 
-- Chaque **tâche** doit être couverte par une **draft Issue** au sein de GithHub que vous devrez convertir plus tard en **Issue**. Veuillez allouer une **Priority** à chaque **Issue** (ou **draft Issue**), ainsi qu'une **Size**. 
-- Lors de l'identification des tâches, les **Issues** associées se trouvent dans la colonne **Backlog**.
-- Un **cas d'utilisation** doit être couvert par au moins une **Issue** avec un label nommé **enhancement**.
-- Chaque **Issue** doit être associée à au moins un **Assignee**.
-- S'il y a plusieurs **Assignees** associés à une **Issue**, celle-ci devra être découpée en suffisamment de tâches pour qu'il y ait un seul **Assignee** par tâche.
-- Dans un premier temps, une **Issue** associée à plusieurs **Assignees** peut simplement identifier les tâches associées au sein d'une **task list**. Plus tard, ces tâches devront être converties en nouvelles **Issues** associées à un seul **Assignee**.
-- Lorsque vous travailler sur une **Issue** :
-    - elle doit se trouver dans la colonne **In progress** ou **In review** si vous pensez avoir terminé mais que vous attendez le feedback d'un membre de votre projet.
-    - pour chaque avancée significative sur une **Issue**, vous devez indiquer un commentaire via **Comment** résumant le travail effectué.
-- Lorsque vous considérez qu'une **Issue** est terminée, faites la passer dans la colonne **Done**, indiquez un message via **Comment** résumant le travail effectué et cliquez sur **Close issue**.
-- Si vous souhaitez facilement voir le pourcentage de progrès dans la fermeture des **Issues** qui vous sont associées, vous pouvez créer une **Milestone** par membre de projet et associer cette **Milestone** à toutes les **Issues** où le membre de projet est le seul **Assignee**.
+API: https://santafall.azurewebsites.net/
 
-## Rapport de projet
-- Veuillez utiliser le template de projet offert dans le cadre du cours de Web2 pour créer votre rapport de projet. En fin de projet, ce rapport doit se trouver dans le répertoire `/report`.
-- ⚡ Veuillez effacer toutes les consignes mises en grisé dans le rapport de projet avant de le soumettre !!!
+# Installation
 
-## Vidéo
-- Elle doit viser une durée de 5 minutes, ne peut pas dépasser 10 minutes, doit être audible et visible et doit respecter les droits d'auteurs (son, images, vidéos...).
-- Elle doit être visible sous youtube par n'importe qui possédant son URL. Sa visibilité doit donc être en ‘’Unlisted" ou "Public", mais pas « Private » !
-- La vidéo doit se baser principalement :
-    - sur la présentation de votre application web : exécution, en live, de votre API et du frontend ;
-    - la présentation de l’expérience utilisateur.
+### Installer NodeJs
+- [NodeJS](https://nodejs.org/en)
 
-## Revues de projets par les pairs
-- Une fois votre projet soumis, vous devrez réaliser un minimum de 5 revues qui vous seront attribuées automatiquement via le site du cours.
+
+### API
+| Installation des node modules
+```bash
+cd api
+npm i
+```
+
+| Base de donnée
+Il vous faudra un  base de donnée PostgreSQL
+
+[Elephantsql](https://www.elephantsql.com/) prorpose un hébergement gratuit nommé "Tiny Turtle"
+OU 
+Créez votre base de donnée localement [Télécharger](https://www.postgresql.org/download/)
+
+| Secret et information de connection base de donnée
+```bash
+touch .env
+nano .env
+```
+###### Ajouter se-ci dans votre .env
+```
+DB_USER="VOTRE_NOM_UTILISATEUR_BASE_DONNEE"
+DB_HOST="IP_BASE_DONNEE"
+DB_DATABASE="NOM_BASE_DONNEE"
+DB_PASSWORD="MDP_BASE_DONNEE"
+DB_PORT="PORT_BASE_DONNEE"
+
+JWT_SECRET="VOTRE_SECRET"
+```
+
+```bash
+npm run start
+```
+
+Après le premier lancement de l'api
+Veuillez vous connecter à votre base de donner et insérer les lignes suivantes.
+
+```SQL
+INSERT INTO projet.skins (name_skin, label_skin, price) VALUES ('santa', 'Santa', 0);
+INSERT INTO projet.skins (name_skin, label_skin, price) VALUES ('redhat', 'Red Hat', 100);
+INSERT INTO projet.skins (name_skin, label_skin, price) VALUES ('jack', 'Jack', 250);
+INSERT INTO projet.skins (name_skin, label_skin, price) VALUES ('cat', 'Cat', 500);
+INSERT INTO projet.skins (name_skin, label_skin, price) VALUES ('dog', 'Dog', 750);
+INSERT INTO projet.skins (name_skin, label_skin, price) VALUES ('explorer', 'Explorer', 1000);
+INSERT INTO projet.skins (name_skin, label_skin, price) VALUES ('adventurer', 'Adventurer', 1500);
+INSERT INTO projet.skins (name_skin, label_skin, price) VALUES ('ninjaboy', 'Ninja Boy', 2000);
+INSERT INTO projet.skins (name_skin, label_skin, price) VALUES ('ninjagirl', 'Ninja Girl', 2500);
+INSERT INTO projet.skins (name_skin, label_skin, price) VALUES ('robot', 'Robot', 5000);
+
+INSERT INTO projet.themes (name_theme, label_theme, price) VALUES ('snow', 'Snow', 0);
+INSERT INTO projet.themes (name_theme, label_theme, price) VALUES ('meadow', 'Meadow', 250);
+INSERT INTO projet.themes (name_theme, label_theme, price) VALUES ('desert', 'Desert', 500);
+INSERT INTO projet.themes (name_theme, label_theme, price) VALUES ('mushroom', 'Mushroom', 1000);
+INSERT INTO projet.themes (name_theme, label_theme, price) VALUES ('candy', 'Candy', 2500);
+INSERT INTO projet.themes (name_theme, label_theme, price) VALUES ('alien', 'Alien',  5000);
+```
+
+Relancer votre API
+```bash
+npm run start
+```
+
+
+### Frontend
+```bash
+cd frontend
+npm i
+npm run start
+```
+
+
+## API 
+La table des routes de notre api ce trouve dans le rapport 
+
+
+## Credits
+
+[front-end/boilerplate](https://github.com/e-vinci/js-phaser-boilerplate)
+[API/boilerplate](https://github.com/e-vinci/jwt-api-boilerplate)
+[frontend\src\Components\Game](https://www.emanueleferonato.com/)
+[frontend\src\Components\Game](https://mourner.github.io/simplify-js/)
+[frontend\src\Components\assets](https://craftpix.net/)
+[frontend\src\Components\assets](https://pzuh.itch.io/)
+[frontend\src\Components\assets](https://kenney.nl/assets/platformer-art-deluxe)
+
+
+## Authors
+
+
+- [alexis-cattaruzza-vinci](https://github.com/alexis-cattaruzza-vinci)
+- [pierre-alexandre-debin-vinci](https://github.com/Padami-9)
+- [thibaut-devos-vinci](https://github.com/thibaut-devos-vinci)
+- [xavier-massart-vinci](https://github.com/xavier-massart-vinci)
+- [chisom-ubah-vinci](https://github.com/Willom125)
+
+
+## Background Music
+
+- [music background](https://www.youtube.com/watch?v=PUJdZJIrXKw&list=PLWxfclyGJ0RHgpDQT_gS5v5GMy1Ol9d3B)
+
+## PNG conventisseur in JSON
+
+- [player images](https://www.codeandweb.com/texturepacker)

@@ -1,0 +1,72 @@
+### Basic url
+@baseUrl = http://localhost:3000
+
+### Login as test user
+# @name test
+POST {{baseUrl}}/auths/login
+Content-Type: application/json
+
+{
+    "username":"test",
+    "password":"test"
+}
+
+##################### SKINS #####################
+
+### Get all skins in order by price
+GET {{baseUrl}}/shop/getskins
+
+### Get all skins of a player
+GET {{baseUrl}}/shop/getuserskins
+Content-Type: application/jsnpm on
+Authorization: {{test.response.body.token}}
+
+
+### Give a skin to a player
+PUT {{baseUrl}}/shop/addskin
+Content-Type: application/json
+Authorization: {{test.response.body.token}}
+
+{
+    "item": 6
+}
+
+### Try to give a skin that doesn't exist
+PUT {{baseUrl}}/shop/addskin
+Content-Type: application/json
+Authorization: {{test.response.body.token}}
+
+{
+    "item": 10000
+}
+
+
+##################### THEMES #####################
+
+
+### Get all theme in order by price
+GET {{baseUrl}}/shop/getthemes
+
+### Get all skins of a player
+GET {{baseUrl}}/shop/getuserthemes
+Content-Type: application/json
+Authorization: {{test.response.body.token}}
+
+
+### Give a theme to a player
+PUT {{baseUrl}}/shop/addtheme
+Content-Type: application/json
+Authorization: {{test.response.body.token}}
+
+{
+    "item": 5
+}
+
+### Try to give a theme that doesn't exist
+PUT {{baseUrl}}/shop/addtheme
+Content-Type: application/json
+Authorization: {{test.response.body.token}}
+
+{
+    "item": 10000
+}

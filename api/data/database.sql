@@ -1,0 +1,201 @@
+CREATE SCHEMA IF NOT EXISTS projet;
+
+-- Users
+CREATE TABLE IF NOT EXISTS projet.users(
+    id_user SERIAL PRIMARY KEY,
+    username VARCHAR(255) UNIQUE NOT NULL,
+    password VARCHAR(255) NOT NULL
+);
+
+CREATE OR REPLACE FUNCTION projet.insert_user(
+    _username VARCHAR(255),
+    _password VARCHAR(255)
+) RETURNS INTEGER AS $$
+DECLARE
+    id INTEGER;
+BEGIN
+    INSERT INTO projet.users (username, password)
+    VALUES (_username, _password)
+    RETURNING id_user INTO id;
+
+    INSERT INTO projet.users_skins(id_user, id_skin) 
+    VALUES (id, 1);
+
+    INSERT INTO projet.users_themes(id_user, id_theme) 
+    VALUES (id, 1);
+
+RETURN id;
+END;
+$$ LANGUAGE plpgsql;
+
+
+
+
+-- Scores
+CREATE TABLE IF NOT EXISTS projet.scores(
+    id_user INTEGER REFERENCES projet.users(id_user) PRIMARY KEY,
+    score INTEGER NOT NULL,
+    score_date DATE NOT NULL DEFAULT CURRENT_DATE
+    CHECK ( score >= 0 )
+);
+
+CREATE OR REPLACE VIEW  projet.display_scores AS
+    SELECT u.username, s.score, s.score_date
+    FROM projet.scores s, projet.users u
+    WHERE u.id_user = s.id_user
+    ORDER BY 2 DESC, 3 DESC;
+
+CREATE OR REPLACE FUNCTION projet.user_change_score(
+    _user VARCHAR(255),
+    _score INT
+) RETURNS VOID AS $$
+DECLARE
+    user_id INT := NULL;
+    current_score int;
+BEGIN
+
+    SELECT u.id_user FROM projet.users u WHERE u.username = _user INTO user_id;
+
+   IF( user_id IS NULL ) THEN
+       RAISE 'User not found';
+   END IF;
+
+
+    SELECT s.score FROM projet.scores s WHERE s.id_user = user_id INTO current_score;
+
+    IF FOUND THEN
+        IF(current_score >= _score) THEN
+            RAISE 'The score cannot be lower than the current score';
+        END IF;
+
+        -- have already a score
+        UPDATE projet.scores SET score =_score, score_date = CURRENT_DATE WHERE id_user = user_id;
+        RETURN;
+    END IF;
+
+    -- don't have already a score
+    INSERT INTO projet.scores (id_user, score) VALUES (user_id, _score);
+
+RETURN;
+END;
+$$ LANGUAGE plpgsql;
+
+
+CREATE TABLE IF NOT EXISTS projet.skins(
+    id_skin SERIAL PRIMARY KEY,
+    name_skin VARCHAR(255) UNIQUE NOT NULL,
+    label_skin VARCHAR(255) NOT NULL,
+    price INTEGER NOT NULL,
+    CHECK(price >= 0)
+);
+CREATE TABLE IF NOT EXISTS projet.themes(
+    id_theme SERIAL PRIMARY KEY,
+    name_theme VARCHAR(255) UNIQUE NOT NULL,
+    label_theme VARCHAR(255) NOT NULL,
+    price INTEGER NOT NULL,
+    CHECK(price >= 0)
+);
+
+CREATE TABLE IF NOT EXISTS projet.users_skins(
+    id_user INTEGER REFERENCES projet.users(id_user),
+    id_skin INTEGER REFERENCES projet.skins(id_skin),
+    PRIMARY KEY (id_user, id_skin)
+);
+CREATE TABLE IF NOT EXISTS projet.users_themes(
+    id_user INTEGER REFERENCES projet.users(id_user),
+    id_theme INTEGER REFERENCES projet.themes(id_theme),
+    PRIMARY KEY (id_user, id_theme)
+);
+
+CREATE OR REPLACE VIEW  projet.get_all_skins AS
+    SELECT s.id_skin, s.name_skin, s.label_skin, s.price
+    FROM projet.skins s
+    ORDER BY s.price;
+
+CREATE OR REPLACE VIEW  projet.get_all_themes AS
+    SELECT t.id_theme, t.name_theme, t.label_theme, t.price
+    FROM projet.themes t
+    ORDER BY t.price;
+
+CREATE OR REPLACE FUNCTION projet.add_user_skin(
+    _user INT,
+    _skin INT
+) RETURNS VOID AS $$
+DECLARE
+    _price INT;
+    _coins INT;
+BEGIN
+    SELECT price FROM projet.skins WHERE id_skin = _skin INTO _price;
+    SELECT nbre_collectible FROM projet.collectibles WHERE user_id = _user INTO _coins;
+
+    IF(_coins >= _price) THEN
+        INSERT INTO projet.users_skins(id_user, id_skin) VALUES (_user, _skin);
+        UPDATE projet.collectibles SET nbre_collectible = (nbre_collectible - _price) WHERE user_id = _user;
+    END IF;
+RETURN;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION projet.add_user_theme(
+    _user INT,
+    _theme INT
+) RETURNS VOID AS $$
+DECLARE
+    _price INT;
+    _coins INT;
+BEGIN
+    SELECT price FROM projet.themes WHERE id_theme = _theme INTO _price;
+    SELECT nbre_collectible FROM projet.collectibles WHERE user_id = _user INTO _coins;
+
+    IF(_coins >= _price) THEN
+        INSERT INTO projet.users_themes(id_user, id_theme) VALUES (_user, _theme);
+        UPDATE projet.collectibles SET nbre_collectible = (nbre_collectible - _price) WHERE user_id = _user;
+    END IF;
+RETURN;
+END;
+$$ LANGUAGE plpgsql;
+
+
+-- Collectibles
+CREATE TABLE IF NOT EXISTS projet.collectibles(
+    user_id INTEGER PRIMARY KEY NOT NULL REFERENCES projet.users(id_user),
+    nbre_collectible INTEGER NOT NULL
+    CHECK ( nbre_collectible >= 0 )
+);
+
+
+CREATE OR REPLACE FUNCTION projet.get_collectible(_user VARCHAR(255))
+RETURNS INTEGER AS $$
+DECLARE
+    id_current_user INTEGER := NULL;
+    collectibles_count INTEGER := 0;
+BEGIN
+    id_current_user := (SELECT c.nbre_collectible FROM projet.collectibles c, projet.users u WHERE c.user_id = u.id_user AND u.username = _user);
+
+    IF (id_current_user IS NOT NULL) THEN
+        collectibles_count := id_current_user;
+    END IF;
+
+    RETURN collectibles_count;
+END;
+$$ LANGUAGE plpgsql;
+
+
+CREATE OR REPLACE FUNCTION projet.add_collectible(_user VARCHAR(255), _collectible INTEGER)
+RETURNS VOID AS $$
+    DECLARE
+        id_current_user INTEGER := NULL;
+    BEGIN
+        id_current_user := (SELECT c.user_id FROM projet.collectibles c, projet.users u WHERE c.user_id = u.id_user AND u.username = _user);
+    
+    IF (id_current_user IS NOT NULL) THEN
+        UPDATE projet.collectibles SET nbre_collectible = (nbre_collectible + _collectible) WHERE user_id = id_current_user;
+        RETURN;
+    END IF;
+
+    id_current_user := (SELECT u.id_user FROM projet.users u WHERE  u.username = _user);
+    INSERT INTO projet.collectibles (user_id, nbre_collectible) VALUES (id_current_user, _collectible);
+    RETURN;
+END;
+
+$$ LANGUAGE plpgsql;

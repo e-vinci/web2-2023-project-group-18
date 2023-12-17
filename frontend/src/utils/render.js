@@ -1,4 +1,9 @@
 const clearPage = () => {
+  const existingCanvas = document.querySelector('canvas');
+
+  if (existingCanvas) {
+    existingCanvas.remove();
+  }
   const main = document.querySelector('main');
   main.innerHTML = '';
 };
