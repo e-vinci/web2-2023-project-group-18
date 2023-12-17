@@ -63,9 +63,9 @@ const HomePage = () => {
   startClick();
   pauseClick();
   volumeClick();
-  settingClick();
 
-
+  if (!isMobileDevice()) settingClick();
+  
   animeLinks();
   document.addEventListener('DOMContentLoaded', animeLinks);
 };
