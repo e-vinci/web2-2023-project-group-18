@@ -1,6 +1,9 @@
+/* eslint-disable no-param-reassign */
 import anime from 'animejs/lib/anime.es';
 import Navigate from '../Router/Navigate';
+import BackGround from '../../utils/background';
 
+// skins images
 import noImageAvailable from '../../assets/noimageavailable.png';
 import santaImage from '../../assets/skins/santaSkin.png';
 import redhatImage from '../../assets/skins/redhatSkin.png';
@@ -13,8 +16,15 @@ import ninjaboyImage from '../../assets/skins/ninjaboySkin.png';
 import ninjagirlImage from '../../assets/skins/ninjagirlSkin.png';
 import robotImage from '../../assets/skins/robotSkin.png';
 
-import templateMapImage from '../../assets/templateMapShopPage.png';
+// themes images
+import snowImage from '../../assets/themes/snow/snowTheme.png';
+import meadowImage from '../../assets/themes/meadow/meadowTheme.png';
+import desertImage from '../../assets/themes/desert/desertTheme.png';
+import mushroomImage from '../../assets/themes/mushroom/mushroomTheme.png';
+import candyImage from '../../assets/themes/candy/candyTheme.png';
+import alienImage from '../../assets/themes/alien/alienTheme.png';
 
+// configure skin with his image
 const SKINS_IMAGE = {
     santa: santaImage,
     redhat: redhatImage,
@@ -26,6 +36,17 @@ const SKINS_IMAGE = {
     ninjaboy: ninjaboyImage,
     ninjagirl: ninjagirlImage,
     robot: robotImage,
+    default: noImageAvailable
+};
+
+// configure theme with his image
+const THEMES_IMAGE = {
+    snow: snowImage,
+    meadow: meadowImage,
+    desert: desertImage,
+    mushroom: mushroomImage,
+    candy: candyImage,
+    alien: alienImage,
     default: noImageAvailable
 };
 
@@ -59,10 +80,10 @@ const ShopPage = async () => {
     try {
         coins = await fetchData(`/collectibles`);
 
-        skinsList = await fetchData(`/skins/`);
-        themesList = await fetchData(`/themes/`);
-        ownedSkins = await fetchData(`/skins/getuserskins`);
-        ownedThemes = await fetchData(`/themes/getuserthemes`);
+        skinsList = await fetchData(`/shop/getskins`);
+        themesList = await fetchData(`/shop/getthemes`);
+        ownedSkins = await fetchData(`/shop/getuserskins`);
+        ownedThemes = await fetchData(`/shop/getuserthemes`);
 
         renderShopPage();
 
@@ -73,6 +94,7 @@ const ShopPage = async () => {
         backButtonListenner();
 
     } catch(e) {
+        console.log(e);
         document.querySelector('main').innerHTML = `
         <div class="container text-center text-white mt-5">
             <p class="display-5">Error: API ERROR</p>
@@ -161,7 +183,7 @@ function displayCurrentSkinPage() {
             // check if skin is owned -> if yes check if is selected
             if (ownedSkins.some(s => s.name_skin === skin.name_skin)) {
                 if(skin.name_skin === selectedSkin)
-                    typeButton = `<button type="button" class="btn shop-current-button" data-id="${skin.id_skin}">Current</button>`;
+                    typeButton = `<button type="button" class="btn shop-current-button disable" data-id="${skin.id_skin}">Current</button>`;
                 else
                     typeButton = `<button type="button" class="btn shop-own-button shop-own-skin" data-id="${skin.id_skin}">Choose</button>`;
             }
@@ -207,7 +229,7 @@ function displayCurrentThemePage() {
             // check if theme is owned -> if yes check if is selected
             if (ownedThemes.some(t => t.name_theme === theme.name_theme)) {
                 if(theme.name_theme === currentTheme)
-                    typeButton = `<button type="button" class="btn shop-current-button" data-id="${theme.id_theme}">Current</button>`;
+                    typeButton = `<button type="button" class="btn shop-current-button disable" data-id="${theme.id_theme}">Current</button>`;
                 else
                 typeButton = `<button type="button" class="btn shop-own-button shop-own-theme" data-id="${theme.id_theme}">Choose</button>`;
             }
@@ -215,7 +237,7 @@ function displayCurrentThemePage() {
             themeHTML += `
                 <div class="col-md-4 text-center">
                     <h3>${theme.label_theme}</h3>
-                    <img class="w-100 shop-picture" src="${templateMapImage}" alt="theme picture ${theme.name_theme}">
+                    <img class="w-100 shop-picture" src="${THEMES_IMAGE[theme.name_theme] || THEMES_IMAGE.default}" alt="theme picture ${theme.name_theme}">
                     ${typeButton}
                 </div>`;
         }
@@ -278,18 +300,22 @@ async function skinsListenner() {
                 const idSkin = parseInt(btn.getAttribute('data-id'), 10);
 
                 // check if enought coins
-                const notEnoughCoins = skinsList.some(skin => skin.id_skin === idSkin && coins < skin.price);
-                if(notEnoughCoins) {
+                const enoughCoins = skinsList.some(skin => skin.id_skin === idSkin && coins > skin.price);
+                if(!enoughCoins) {
                     notEnoughCoinsAnimation(btn);
                     return;
                 } 
 
                 try {
                     const beforeCoins = coins;
+                    
+                    btn.disabled = true;
+                    btn.innerHTML = "Loading...";
+                    btn.style.backgroundColor = 'gray';
 
-                    await fetchBuy(`/skins`, idSkin);
+                    await fetchBuy(`/shop/addskin`, idSkin);
                     coins = await fetchData(`/collectibles`);
-                    ownedSkins = await fetchData(`/skins/getuserskins`);
+                    ownedSkins = await fetchData(`/shop/getuserskins`);
 
                     coinsAnimation(beforeCoins, coins);
                     displayCurrentSkinPage();
@@ -329,18 +355,22 @@ function themesListenner() {
                 const idTheme = parseInt(btn.getAttribute('data-id'), 10);
                 
                 // check if enought coins
-                const notEnoughCoins = themesList.some(theme => theme.id_theme === idTheme && coins < theme.price);
-                if(notEnoughCoins) {
+                const enoughCoins = themesList.some(theme => theme.id_theme === idTheme && coins > theme.price);
+                if(!enoughCoins) {
                     notEnoughCoinsAnimation(btn);
                     return;
                 } 
 
                 try {
                     const beforeCoins = coins;
+
+                    btn.disabled = true;
+                    btn.innerHTML = "Loading...";
+                    btn.style.backgroundColor = 'gray';
                     
-                    await fetchBuy(`/themes`, idTheme);
+                    await fetchBuy(`/shop/addtheme`, idTheme);
                     coins = await fetchData(`/collectibles`);
-                    ownedThemes = await fetchData(`/themes/getuserthemes`);
+                    ownedThemes = await fetchData(`/shop/getuserthemes`);
 
                     coinsAnimation(beforeCoins, coins);
                     displayCurrentThemePage();
@@ -360,6 +390,7 @@ function themesListenner() {
                 ownedThemes.forEach((theme) => {
                     if(theme.id_theme === idTheme)
                         localStorage.setItem("theme", theme.name_theme);
+                        BackGround();
                         displayCurrentThemePage();
                 });
             })
