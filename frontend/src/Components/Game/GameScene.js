@@ -2,9 +2,9 @@ import Phaser from 'phaser';
 import simplify from 'simplify-js';
 
 import Skin from '../../utils/skins';
-import obstacleSmall from '../../assets/winterTheme/caneRedSmall.png'; //TODO import la classe de biome et extraire les 3 obstacles
-import obstacleMedium from '../../assets/winterTheme/pineSapling.png'; //TODO import la classe de biome et extraire les 3 obstacles
-import obstacleFlat from '../../assets/winterTheme/spikesBottomAlt.png'; //TODO import la classe de biome et extraire les 3 obstacles
+import obstacleSmall from '../../assets/winterTheme/caneRedSmall.png'; // TODO import la classe de biome et extraire les 3 obstacles
+import obstacleMedium from '../../assets/winterTheme/pineSapling.png'; // TODO import la classe de biome et extraire les 3 obstacles
+import obstacleFlat from '../../assets/winterTheme/spikesBottomAlt.png'; // TODO import la classe de biome et extraire les 3 obstacles
 import coinAsset from '../../assets/coin.png';
 
 import Settings from '../../utils/settings';
@@ -17,8 +17,8 @@ const OBSTACLE_SMALL_KEY = 'obstacleSmall';
 const OBSTACLE_MEDIUM_KEY = 'obstacleMedium';
 const OBSTACLE_FLAT_KEY = 'obstacleFlat';
 
-const GROUND_COLOR = 0xdefbff; //TODO import from la classe de biome
-const GROUND_TOP_LAYER_COLOR = 0xc9edf0; //TODO import from la classe de biome
+const GROUND_COLOR = 0xdefbff; // TODO import from la classe de biome
+const GROUND_TOP_LAYER_COLOR = 0xc9edf0; // TODO import from la classe de biome
 
 const DUDE_KEY = 'dude';
 const DUDE_ASSET_WIDTH = 25;
@@ -39,20 +39,21 @@ class GameScene extends Phaser.Scene {
 
   obstacleSmall = Phaser.Physics.Matter.Sprite;
 
-  obstacleMedium = Phaser.Physics.Matter.Sprite; 
+  obstacleMedium = Phaser.Physics.Matter.Sprite;
 
   obstacleFlat = Phaser.Physics.Matter.Sprite;
 
   constructor() {
     super('game-scene');
     this.player = undefined;
-    this.caracterSpeed= undefined;
+    this.caracterSpeed = undefined;
     this.cursors = undefined;
     this.meterLabel = undefined;
     this.coinLabel = undefined;
     this.coins = [];
     this.scorePauseScene = undefined;
     this.gameOver = false;
+    this.key = undefined;
   }
 
   init() {
@@ -70,57 +71,129 @@ class GameScene extends Phaser.Scene {
   }
 
   create() {
-             // Generating Ground and its Collision
-             this.bodyPool = [];
-             this.bodyPoolId = [];
-             this.obstaclePool = [];
-             this.obstaclePoolId = [];
-             this.slopeGraphics = [];
-             this.sliceStart = new Phaser.Math.Vector2(0, 2);
-             for (let i = 0; i < gameOptions.slicesAmount; i += 1) {
-               this.slopeGraphics[i] = this.add.graphics();
-               this.sliceStart = this.createSlope(this.slopeGraphics[i], this.sliceStart);
-             }
+      // Generating Ground and its Collision
+      this.bodyPool = [];
+      this.bodyPoolId = [];
+      this.obstaclePool = [];
+      this.obstaclePoolId = [];
+      this.slopeGraphics = [];
+      this.sliceStart = new Phaser.Math.Vector2(0, 2);
+      for (let i = 0; i < gameOptions.slicesAmount; i += 1) {
+        this.slopeGraphics[i] = this.add.graphics();
+        this.sliceStart = this.createSlope(this.slopeGraphics[i], this.sliceStart);
+      }
 
-             this.dude = this.matter.add
-            .sprite(1500, 500, DUDE_KEY, null, {
-              shape: { type: 'rectangle', width: DUDE_ASSET_WIDTH, height: DUDE_ASSET_HEIGHT },
-            })
-            .play('player-idle')
-            .setFixedRotation();
+      this.dude = this.matter.add
+        .sprite(1500, 500, DUDE_KEY, null, {
+          shape: { type: 'rectangle', width: DUDE_ASSET_WIDTH, height: DUDE_ASSET_HEIGHT },
+        })
+        .play('player-idle')
+        .setFixedRotation();
 
-             this.dude.setOnCollide(() => {
-               this.isTouchingGround = true;
+      this.dude.setOnCollide(() => {
+        this.isTouchingGround = true;
+      });
+
+      // CheckCollision
+      this.matter.world.on(
+        'collisionstart',
+        (event, bodyA, bodyB) => this.checkCollision(bodyA, bodyB),
+        this,
+      );
+      this.matter.world.on(
+        'collisionactive',
+        (event, bodyA, bodyB) => this.checkCollision(bodyA, bodyB),
+        this,
+      );
+      this.matter.world.on(
+        'collisionend',
+        (event, bodyA, bodyB) => this.checkCollision(bodyA, bodyB),
+        this,
+      );
+
+      // Ajoutez un écouteur d'événements de redimensionnement
+      this.scale.on('resize', this.resize, this);
+
+      // Commencez à suivre le personnage
+      this.cameras.main.startFollow(this.dude);
+
+      this.key = this.input.keyboard.addKey(localStorage.getItem('selectedKey'));
+
+      this.caracterSpeed = 5;
+      setInterval(() => {
+        this.caracterSpeed += Math.log(2) / 100;
+      }, 2000);
+
+      // Install key
+      const keyChoosen = Settings.getKey();
+      // eslint-disable-next-line no-console
+      console.log(`Settings key : ${keyChoosen}`);
+
+      // Create a keyboard event for the chosen key
+      this.keyChose(keyChoosen);
+
+      // Animation
+      this.createDudeAnimations();
+
+      this.input.on('pointerdown', () => {
+        this.dude.anims.play('player-jump', true);
+        if (this.isTouchingGround) {
+          this.dude.setVelocityY(-10);
+          this.dude.setVelocityX(this.caracterSpeed);
+          this.isTouchingGround = false;
+        } else if (this.jumpCount < 2) {
+          this.dude.setVelocityY(-10);
+          this.dude.setVelocityX(this.caracterSpeed);
+          // eslint-disable-next-line no-plusplus
+          this.jumpCount++;
+        }
+      });
+  }
+  
+  keyChose(key) {
+
+    if (key !== 'SPACE') {
+      this.key = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes[key]);
+      this.key.on('down', () => {
+        this.dude.anims.play('player-jump', true);
+        if (this.isTouchingGround) {
+          this.dude.setVelocityY(-10);
+          this.dude.setVelocityX(this.caracterSpeed);
+          this.isTouchingGround = false;
+        } else if (this.jumpCount < 2) {
+          this.dude.setVelocityY(-10);
+          this.dude.setVelocityX(this.caracterSpeed);
+          // eslint-disable-next-line no-plusplus
+          this.jumpCount++;
+        }
+      });
+    } else {
+             // Create a keyboard event for the chosen key
+             this.cursors.space.on('pointerdown', () => {
+               this.dude.anims.play('player-jump', true);
+               if (this.isTouchingGround) {
+                 this.dude.setVelocityY(-10);
+                 this.dude.setVelocityX(this.caracterSpeed);
+                 this.isTouchingGround = false;
+               } else if (this.jumpCount < 2) {
+                 this.dude.setVelocityY(-10);
+                 this.dude.setVelocityX(this.caracterSpeed);
+                 // eslint-disable-next-line no-plusplus
+                 this.jumpCount++;
+               }
              });
-
-             // CheckCollision
-             this.matter.world.on(
-               'collisionstart',
-               (event, bodyA, bodyB) => this.checkCollision(bodyA, bodyB),
-               this,
-             );
-             this.matter.world.on(
-               'collisionactive',
-               (event, bodyA, bodyB) => this.checkCollision(bodyA, bodyB),
-               this,
-             );
-             this.matter.world.on(
-               'collisionend',
-               (event, bodyA, bodyB) => this.checkCollision(bodyA, bodyB),
-               this,
-             );
-
-             this.createDudeAnimations();
-
-             this.cameras.main.startFollow(this.dude);
-             this.key = this.input.keyboard.addKey(localStorage.getItem('selectedKey'));
-
-             this.caracterSpeed = 5;
-             setInterval(() => {
-               this.caracterSpeed += Math.log(2) / 100;
-             }, 2000);
            }
+  }
 
+  resize(gameSize) {
+    // Mettez à jour le zoom de la caméra
+    this.updateCameraZoom(gameSize);
+  }
+
+  updateCameraZoom(gameSize) {
+    const zoom = Math.min(gameSize.width / 800, gameSize.height / 600); // Ajustez les nombres en fonction de vos besoins
+    this.cameras.main.setZoom(zoom);
+  }
 
   createSlope(graphics, sliceStart) {
     const slopePoints = [];
@@ -228,23 +301,24 @@ class GameScene extends Phaser.Scene {
         this.matter.body.scale(body, distance, 1);
         this.matter.body.setAngle(body, angle1);
       }
-      
-      // Generate objects
-    if(this.scorePauseScene.meterLabel.timeElapsed){ // spawn at 20m
-      const centerX = center.x + sliceStart.x;
-      const centerY = center.y;
 
-      // add an obstacle
-      if(i%3 === 0 && Phaser.Math.Between(0,100) < gameOptions.obstacleRatio){
+      // Generate objects
+      if (this.scorePauseScene.meterLabel.timeElapsed > 1) {
+        // spawn at 20m
+        const centerX = center.x + sliceStart.x;
+        const centerY = center.y;
+
+        // add an obstacle
+        if (i % 3 === 0 && Phaser.Math.Between(0, 100) < gameOptions.obstacleRatio) {
           // draw the obstacle
-          graphics.fillRect(center.x,center.y,5,5);
+          graphics.fillRect(center.x, center.y, 5, 5);
           this.addObstacle(centerX, centerY);
-      }else 
-      // add a coin
-      if(i%3 === 0 && Phaser.Math.Between(0,100) < gameOptions.coinRatio){
-        this.addCoin(centerX, centerY);
+        }
+        // add a coin
+        else if (i % 3 === 0 && Phaser.Math.Between(0, 100) < gameOptions.coinRatio) {
+          this.addCoin(centerX, centerY);
+        }
       }
-    }
     }
 
     // eslint-disable-next-line no-param-reassign
@@ -263,37 +337,45 @@ class GameScene extends Phaser.Scene {
 
     dude1.x += this.caracterSpeed;
     dude1.play('player-slide', true);
-    const spaceJustPressed = Phaser.Input.Keyboard.JustDown(this.cursors.space);
+    //  const spaceJustPressed = Phaser.Input.Keyboard.JustDown(this.cursors.space);
 
     if (localStorage.getItem('resume')) {
       this.scorePauseScene.meterLabel.resumeMeter();
       localStorage.removeItem('resume');
     }
 
-    if (this.cursors.space.isDown)  this.dude.play('player-jump', true) ;
+    // animation
 
-    if (this.isTouchingGround && spaceJustPressed) {
-      this.dude.setVelocityY(-10);
-      this.dude.setVelocityX(this.caracterSpeed);
-      this.isTouchingGround = false;
+    // Install key
+    const keyChoosen = Settings.getKey();
+    // eslint-disable-next-line no-console
+    console.log(`Settings key : ${keyChoosen}`);
+
+    // Create a keyboard event for the chosen key
+    this.keyChose(keyChoosen);
+
+    if (this.cursors.space.isDown) dude1.play('player-jump', true);
+
+    if (this.isTouchingGround) {
+      if (this.cursors.space.isDown) {
+        dude1.setVelocityY(-10);
+        dude1.setVelocityX(this.caracterSpeed);
+        this.isTouchingGround = false;
+      }
     }
-
-    if (this.cursors.right.isDown) {
-      this.dude.play('player-run',true);
-    }
-
-    const key = Settings.getKey();
-    if (Phaser.Input.Keyboard.KeyCodes[key] !== this.key.keyCode) {
-      this.key.destroy();
-      this.key = this.input.keyboard.addKey(key);
+    // Si le joueur n'est pas en train de sauter, joue l'animation de course ou d'attente
+    else if (dude1.body.velocity.x !== 0) {
+      dude1.anims.play('player-run', true);
+    } else {
+      dude1.anims.play('player-idle', true);
     }
 
     // loop through all mountains
     this.slopeGraphics.forEach((item) => {
       // if the mountain leaves the screen to the left...
-      if(this.cameras.main.scrollX > item.x + item.width + 7000){
-          // reuse the mountain
-          this.sliceStart = this.createSlope(item, this.sliceStart)
+      if (this.cameras.main.scrollX > item.x + item.width + 7000) {
+        // reuse the mountain
+        this.sliceStart = this.createSlope(item, this.sliceStart);
       }
     });
 
@@ -311,9 +393,9 @@ class GameScene extends Phaser.Scene {
         // add the body to the ground pool
         this.bodyPool.push(body);
         this.bodyPoolId.push(body.id);
-      } else 
+      }
       // if the body is out of camera view to the left side && it's not in the current obstacle pool && it's an obstacle body
-      if(
+      else if (
         this.cameras.main.scrollX > body.position.x + 200 &&
         this.obstaclePoolId.indexOf(body.id) === -1 &&
         body.label === OBSTACLE_KEY
@@ -321,21 +403,14 @@ class GameScene extends Phaser.Scene {
         // add the body to the pines pool
         this.obstaclePool.push(body);
         this.obstaclePoolId.push(body.id);
-      } else 
+      }
       // if the body is out of camera view to the left side && it's a coin body
-      if( 
-        this.cameras.main.scrollX > body.position.x &&
-        body.label === COIN_KEY
-      ) {
+      else if (this.cameras.main.scrollX > body.position.x && body.label === COIN_KEY) {
         // Delete the coin body
         body.gameObject.destroy();
       }
     });
-
-    if (!this.scene.isActive('pause-menu')) {
-      this.scene.setActive(true,'pause-menu');
-    }
- }
+  }
 
   createDudeAnimations() {
     this.anims.create({
@@ -390,7 +465,7 @@ class GameScene extends Phaser.Scene {
     return `${formattedMeters} m`;
   }
 
-   hitObstacle(player) {
+  hitObstacle(player) {
     this.scorePauseScene.meterLabel.pauseMeter();
     this.scene.stop();
     this.scorePauseScene.meterLabel.setText(
@@ -402,7 +477,6 @@ class GameScene extends Phaser.Scene {
     if (localStorage.getItem('token')) {
       this.updateScore(this.scorePauseScene.meterLabel.timeElapsed);
       this.scorePauseScene.coinLabel.updateCoinDb();
-
     }
 
     this.matter.pause();
@@ -410,12 +484,11 @@ class GameScene extends Phaser.Scene {
 
     this.scene.stop('game-scene');
     this.scene.stop('pause-score');
-    this.scene.run('game-over', {
+    this.scene.start('game-over', {
       score: this.formatDistance(this.scorePauseScene.meterLabel.timeElapsed),
     });
   }
 
-  
   // eslint-disable-next-line class-methods-use-this
   async updateScore(newScore) {
     const token = localStorage.getItem('token');
@@ -433,13 +506,7 @@ class GameScene extends Phaser.Scene {
       },
     };
 
-    const response = await fetch(`${process.env.API_BASE_URL}/scores`, options);
-
-    if (!response.ok) {
-      // eslint-disable-next-line no-console
-      console.log(response.status);
-      throw new Error();
-    }
+    await fetch(`${process.env.API_BASE_URL}/scores`, options);
   }
 
   addCoin(coinX, coinY) {
@@ -452,8 +519,8 @@ class GameScene extends Phaser.Scene {
 
   addObstacle(obstacleX, centerY) {
     const obstacleY = centerY - 30;
-     // if the pool is empty...
-     if(this.obstaclePool.length === 0){
+    // if the pool is empty...
+    if (this.obstaclePool.length === 0) {
       // choose which obstacle to add
       let obstacle;
       switch (Math.floor(Math.random() * 3)) {
@@ -466,7 +533,8 @@ class GameScene extends Phaser.Scene {
         case 2:
           obstacle = OBSTACLE_FLAT_KEY;
           break;
-        default: obstacle = OBSTACLE_MEDIUM_KEY;
+        default:
+          obstacle = OBSTACLE_MEDIUM_KEY;
       }
 
       // create a new obstacle body
@@ -475,14 +543,14 @@ class GameScene extends Phaser.Scene {
         friction: 1,
         restitution: 0,
         collisionFilter: {
-          category: 2 
+          category: 2,
         },
         label: OBSTACLE_KEY,
       });
     }
     // ...else get the obstacle from the pool
-    else{ 
-      const obstacleBody  = this.obstaclePool.shift();
+    else {
+      const obstacleBody = this.obstaclePool.shift();
       this.obstaclePoolId.shift();
 
       // move the obstacle body to its new position
@@ -491,7 +559,7 @@ class GameScene extends Phaser.Scene {
         y: obstacleY,
         isStatic: true,
         friction: 1,
-        restitution: 0
+        restitution: 0,
       });
     }
   }
