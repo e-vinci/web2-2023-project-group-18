@@ -2,6 +2,7 @@
 import anime from 'animejs/lib/anime.es';
 import Navigate from '../Router/Navigate';
 import BackGround from '../../utils/background';
+import Loading from '../../utils/loading';
 
 // skins images
 import noImageAvailable from '../../assets/noimageavailable.png';
@@ -78,12 +79,15 @@ const ShopPage = async () => {
     }
 
     try {
-        coins = await fetchData(`/collectibles`);
+        Loading.startLoading();
 
+        coins = await fetchData(`/collectibles`);
         skinsList = await fetchData(`/shop/getskins`);
         themesList = await fetchData(`/shop/getthemes`);
         ownedSkins = await fetchData(`/shop/getuserskins`);
         ownedThemes = await fetchData(`/shop/getuserthemes`);
+
+        Loading.stopLoading();
 
         renderShopPage();
 

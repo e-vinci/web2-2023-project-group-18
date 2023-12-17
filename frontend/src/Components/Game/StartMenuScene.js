@@ -68,6 +68,7 @@ class StartMenuScene extends Phaser.Scene {
                 //  textRules.setWordWrapWidth(width * 0.8); // Met à jour la largeur de l'enveloppe de mots
                });
              }
+             
   
     startGame() {
       this.scene.start('game-scene');
