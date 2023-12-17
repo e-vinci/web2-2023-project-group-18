@@ -15,10 +15,10 @@ const HomePage = () => {
   const mainHTML = `
   <div class="screen">
     <div id = "sound" class = "setting-btn">
-    ${!isMobileDevice() ? '<button class = "btn0"><i class="bx bxs-cog"></i></button>': ''} 
-     <button class = "btn1"><i class='bx bx-play'></i></button>
-      <button class = "btn2"><i class='bx bx-pause' ></i></button>
-      <button id = "volume" class = "btn3"><i class='bx bxs-volume-full'></i></button>
+    ${!isMobileDevice() ? '<button class = "btn0"><i class="bx bxs-cog"></i></button>' : ''} 
+
+      <button id = "volume" class = "btn2" style = "display : inline"><i class='bx bxs-volume-full'></i></button>
+      <button id = "volume" class = "btn3" style = "display : none"><i class='bx bxs-volume-full'></i></button>
       <button id = "volume" class = "btn4"><i class='bx bxs-volume-mute'></i></button>
     </div>
  
@@ -58,11 +58,11 @@ const HomePage = () => {
   main.innerHTML = mainHTML;
 
   // eslint-disable-next-line no-unused-expressions
-  (localStorage.getItem('token') !== null) ? isConnected(true) : isConnected(false) ;
+  (localStorage.getItem('token') !== null) ? isConnected(true) : isConnected(false);
+  
   linkClick();
-  startClick();
-  pauseClick();
   volumeClick();
+  firstClickVolume(); 
 
   if (!isMobileDevice()) settingClick();
   
@@ -116,47 +116,32 @@ function linkClick() {
   });
 }
 
-function startClick() {
-
-  const btnPause = document.querySelector('.btn2')
-  const btnStart = document.querySelector('.btn1');
-  btnStart.addEventListener('click', () => {
-    audio.loop = true;
+function firstClickVolume(){
+  document.querySelector('.btn2').addEventListener('click', (e) => {
+    e.preventDefault();
     audio.play();
-    btnStart.style.display = 'none';
-    btnPause.style.display = 'inline';
-  })
-}
-
-function pauseClick() {
-
-  const btnStart = document.querySelector('.btn1');
-  const btnPause = document.querySelector('.btn2');
-  btnPause.addEventListener('click', () => {
-    audio.pause();
-    btnPause.style.display = 'none';
-    btnStart.style.display = 'inline';
-  });
+    audio.volume = 0.3;
+    document.querySelector('.btn3').style.display = 'inline';
+    document.querySelector('.btn2').style.display = 'none';
+})
 }
 
 function volumeClick() {
 
   // volume off
   document.querySelector('.btn4').addEventListener('click', (e) => {
-
-      audio.muted = false;
       e.preventDefault();
+      audio.muted = false;
       document.querySelector('.btn3').style.display = 'inline';
       document.querySelector('.btn4').style.display = 'none';
-    })
+})
   
   // volume on
   document.querySelector('.btn3').addEventListener('click', (e) => {
-
-    audio.muted = true;
-    e.preventDefault();
-    document.querySelector('.btn4').style.display = 'inline';
-    document.querySelector('.btn3').style.display = 'none';
+      audio.muted = true;
+      e.preventDefault();
+      document.querySelector('.btn4').style.display = 'inline';
+      document.querySelector('.btn3').style.display = 'none';
   });
 }
 
