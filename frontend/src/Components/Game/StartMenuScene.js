@@ -48,7 +48,7 @@ class StartMenuScene extends Phaser.Scene {
 
                const textRules = this.add.text(
                  this.scale.width / 2,
-                 700,
+                 this.scale.height / 1.3,
                  'Press to jump over obstacles and roll down the slope \n at full speed to earn as many coins as possible',
                  {
                    fontSize: '5vmin',
