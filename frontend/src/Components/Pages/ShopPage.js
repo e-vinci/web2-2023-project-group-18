@@ -319,6 +319,7 @@ async function skinsListenner() {
                     coinsAnimation(beforeCoins, coins);
                     displayCurrentSkinPage();
                 } catch(e) {
+                    // eslint-disable-next-line no-alert
                     alert("An error occurred while purchasing this skin...");
                 }
 
@@ -374,6 +375,7 @@ function themesListenner() {
                     coinsAnimation(beforeCoins, coins);
                     displayCurrentThemePage();
                 } catch {
+                    // eslint-disable-next-line no-alert
                     alert("An error occurred while purchasing this theme...");
                 }
 
