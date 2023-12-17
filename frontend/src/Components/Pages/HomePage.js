@@ -17,7 +17,7 @@ const HomePage = () => {
     <div id = "sound" class = "setting-btn">
     ${!isMobileDevice() ? '<button class = "btn0"><i class="bx bxs-cog"></i></button>' : ''} 
 
-      <button id = "volume" class = "btn2" style = "display : inline"><i class='bx bxs-volume-full'></i></button>
+      <button id = "volume" class = "btn2" style = "display : inline"><i class='bx bxs-volume-mute'></i></button>
       <button id = "volume" class = "btn3" style = "display : none"><i class='bx bxs-volume-full'></i></button>
       <button id = "volume" class = "btn4"><i class='bx bxs-volume-mute'></i></button>
     </div>
@@ -121,6 +121,7 @@ function firstClickVolume(){
     e.preventDefault();
     audio.play();
     audio.volume = 0.3;
+    audio.loop = true;
     document.querySelector('.btn3').style.display = 'inline';
     document.querySelector('.btn2').style.display = 'none';
 })
