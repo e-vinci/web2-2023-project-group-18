@@ -115,3 +115,7 @@ La table des routes de notre api ce trouve dans le rapport
 ## Background Music
 
 - [music background](https://www.youtube.com/watch?v=PUJdZJIrXKw&list=PLWxfclyGJ0RHgpDQT_gS5v5GMy1Ol9d3B)
+
+## PNG conventisseur in JSON
+
+- [player images](https://www.codeandweb.com/texturepacker)
