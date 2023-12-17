@@ -167,7 +167,7 @@ function renderShopPage() {
 
 // Display skins page
 function displayCurrentSkinPage() {
-    const selectedSkin = localStorage.getItem("skin") || skinsList[0]?.name_skin || null;
+    const selectedSkin = atob(localStorage.getItem("skin")) || skinsList[0]?.name_skin || null;
 
     const startIndex = (currentSkinPage - 1) * skinsPerPage;
     const endIndex = startIndex + skinsPerPage;
@@ -213,7 +213,7 @@ function displayCurrentSkinPage() {
 
 // Display themes page
 function displayCurrentThemePage() {
-    const currentTheme = localStorage.getItem("theme") || themesList[0]?.name_theme || null;
+    const currentTheme = atob(localStorage.getItem("theme")) || themesList[0]?.name_theme || null;
 
     const startIndex = (currentThemePage - 1) * themesPerPage;
     const endIndex = startIndex + themesPerPage;
@@ -341,7 +341,7 @@ async function skinsListenner() {
                 const idSkin = parseInt(btn.getAttribute('data-id'), 10);
                 ownedSkins.forEach((skin) => {
                     if(skin.id_skin === idSkin) {
-                        localStorage.setItem("skin", skin.name_skin);
+                        localStorage.setItem("skin", btoa(skin.name_skin));
                         displayCurrentSkinPage();
                     }
                 });
@@ -397,7 +397,7 @@ function themesListenner() {
                 const idTheme = parseInt(btn.getAttribute('data-id'), 10);
                 ownedThemes.forEach((theme) => {
                     if(theme.id_theme === idTheme)
-                        localStorage.setItem("theme", theme.name_theme);
+                        localStorage.setItem("theme", btoa(theme.name_theme));
                         BackGround();
                         displayCurrentThemePage();
                 });

@@ -47,7 +47,7 @@ let currentTheme;
 
 export default class Theme {
     static setTheme() {
-        const themeName = localStorage.getItem("theme");
+        const themeName = atob(localStorage.getItem("theme"));
         currentTheme = THEMES[themeName] || THEMES.default;
     }
 

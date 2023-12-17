@@ -9,7 +9,7 @@ const BACKGROUND_CLASS = {
 };
 
 const changeBackground = () => {
-    const themeName = localStorage.getItem("theme");
+    const themeName = atob(localStorage.getItem("theme"));
     const backgroundColor = BACKGROUND_CLASS[themeName] || BACKGROUND_CLASS.default;
 
     const body = document.querySelector('body');

@@ -38,7 +38,7 @@ const SKINS = {
 export default class Skin {
 
     static getSkin() {
-        const skinName = localStorage.getItem("skin");
+        const skinName = atob(localStorage.getItem("skin"));
         return SKINS[skinName] || SKINS.default;
     }
 
