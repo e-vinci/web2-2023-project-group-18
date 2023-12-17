@@ -26,13 +26,13 @@ if (process.env.DB_USER
   process.exit(1);
 }
 
-async function queryExecute(query) {
+async function queryExecute(query, values) {
   let client;
   try {
     // connect client to pool
     client = await pool.connect();
     // execute query request
-    return await client.query(query);
+    return await client.query(query, values);
   } finally {
     client.release();
   }

@@ -1,5 +1,5 @@
 const express = require('express');
-const { getCollectible, addCollectible, suppCollectible } = require('../models/collectibles');
+const { getCollectible, addCollectible } = require('../models/collectibles');
 const { authorize } = require('../utils/auths');
 
 const router = express.Router();
@@ -32,20 +32,6 @@ router.put('/add', authorize, async (req, res) => {
         return res.status(400).json({ error: 'This collectible already exist.' });
       }
       return res.sendStatus(500);
-    }
-  }
-  return res.sendStatus(400);
-});
-
-router.put('/supp', authorize, async (req, res) => {
-  const { username } = req.user;
-  const collectible = req?.body?.collectible ? req.body.collectible : undefined;
-  if (collectible) {
-    try {
-      await suppCollectible(username, collectible);
-      return res.sendStatus(200);
-    } catch (error) {
-      return res.sendStatus(404);
     }
   }
   return res.sendStatus(400);

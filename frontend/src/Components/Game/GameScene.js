@@ -246,7 +246,7 @@ class GameScene extends Phaser.Scene {
     graphics.closePath();
     graphics.fillPath();
 
-    // draw the snow
+    // draw the top layer
     graphics.lineStyle(16, Theme.getGroundTopLayerColor());
     graphics.beginPath();
     simpleSlope.forEach((point) => {

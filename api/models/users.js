@@ -83,7 +83,7 @@ async function register(username, password) {
 *
 ************************************************************************************** */
 async function readOneUserFromUsername(username) {
-  const response = await queryExecute(`SELECT * FROM projet.users u WHERE u.username = '${username}';`);
+  const response = await queryExecute('SELECT * FROM projet.users u WHERE u.username = $1;', [username]);
   if (response.rowCount < 0) return undefined;
   return response.rows[0];
 }
@@ -99,7 +99,7 @@ async function readOneUserFromUsername(username) {
 async function createOneUser(username, password) {
   const hashedPassword = await bcrypt.hash(password, saltRounds);
   const cUsername = escape(username);
-  await queryExecute(`SELECT projet.insert_user('${cUsername}', '${hashedPassword}')`);
+  await queryExecute('SELECT projet.insert_user($1,2)', [cUsername, hashedPassword]);
 
   const user = await readOneUserFromUsername(cUsername);
 
