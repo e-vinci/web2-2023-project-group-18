@@ -29,7 +29,7 @@ const gameOptions = {
   slopeLength: [300, 800], 
   slicesAmount: 3,
   slopesPerSlice: 5,
-  obstacleRatio: 10,
+  obstacleRatio: 15,
   coinRatio: 20,
   amountCoin: 10 
 };
@@ -126,6 +126,7 @@ class GameScene extends Phaser.Scene {
 
       // Install key
       const keyChoosen = Settings.getKey();
+      // eslint-disable-next-line no-console
       console.log(`Settings key : ${keyChoosen}`);
 
       // Create a keyboard event for the chosen key
@@ -347,6 +348,7 @@ class GameScene extends Phaser.Scene {
 
     // Install key
     const keyChoosen = Settings.getKey();
+    // eslint-disable-next-line no-console
     console.log(`Settings key : ${keyChoosen}`);
 
     // Create a keyboard event for the chosen key
