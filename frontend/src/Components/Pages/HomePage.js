@@ -121,6 +121,7 @@ function firstClickVolume(){
     e.preventDefault();
     audio.play();
     audio.volume = 0.3;
+    audio.loop = true;
     document.querySelector('.btn3').style.display = 'inline';
     document.querySelector('.btn2').style.display = 'none';
 })
