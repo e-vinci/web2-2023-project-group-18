@@ -1,10 +1,10 @@
 import Phaser from 'phaser';
 import replayButton from '../../assets/replayButton.png';
 import cartShopButton from '../../assets/cartShop.png';
-import settings from '../../utils/settings';
 import settingsButton from '../../assets/settingsAssest.png';
 import homeButton from '../../assets/homeButton.png';
 import Navigate from '../Router/Navigate';
+import { openSettings } from '../../utils/settings';
 
 const REPLAY_BUTTON = 'replay';
 const SHOP_BUTTON = 'shop';
@@ -112,7 +112,7 @@ class GameOverScene extends Phaser.Scene {
       );
       this.settingsButton.setInteractive({ useHandCursor: true });
       this.settingsButton.on('pointerdown', () => {
-        settings.openSettings();
+        openSettings();
       });
     }
 
