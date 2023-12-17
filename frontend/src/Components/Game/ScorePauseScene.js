@@ -51,7 +51,6 @@ class ScorePauseScene extends Phaser.Scene {
 
        pauseGame() {
          this.meterLabel.pauseMeter();
-         this.scene.pause('game-over');
          this.scene.pause('pause-score');
          this.scene.pause('game-scene');
          this.scene.run('pause-menu');

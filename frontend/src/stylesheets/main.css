@@ -215,7 +215,7 @@ text-decoration :underline;
 }
 
 .back{
-  font-size: 12vmin;
+  font-size: 8vmin;
   background-color: transparent;
   color: white;
   border-color: transparent;
@@ -250,31 +250,152 @@ body {
   overflow: hidden;
 }
 
-/* Background and background animation */
+/* Backgrounds and background animation */
 .scrolling-background {
   overflow: hidden;
 }
 
-.body_color_snow {
-  background-color: #16274b;
-}
-
-.background_snow {
+/* Alien Background */
+.background_alien {
   position:fixed;
   height: 100%;
-  width: 200%;
+  width: 300%;
   background-size: cover;
-  background: url('../assets/BG.png') repeat-x;
-  animation: scrollBackground 20s linear infinite; /* Ajust the velocity of the animation */
+  background: url('../assets/backgrounds/alien_BG.png') repeat-x;
+  animation: slideBackgroundAlien 20s linear infinite;
   z-index: -1;
 }
 
-@keyframes scrollBackground {
+.body_color_alien{
+  background-color: #153745;
+}
+
+@keyframes slideBackgroundAlien {
   0% {
     transform: translate(0);
   }
   100% {
-    transform: translate(-50%);
+    transform: translate(-1920px);
+  }
+}
+
+/* Candy Background */
+.background_candy {
+  position:fixed;
+  height: 100%;
+  width: 300%;
+  background-size: cover;
+  background: url('../assets/backgrounds/candy_BG.png') repeat-x;
+  animation: slideBackgroundCandy 20s linear infinite;
+  z-index: -1;
+}
+
+.body_color_candy{
+  background-color: #7e96a4;
+}
+
+@keyframes slideBackgroundCandy {
+  0% {
+    transform: translate(0);
+  }
+  100% {
+    transform: translate(-1920px);
+  }
+}
+
+/* Desert Background */
+.background_desert {
+  position:fixed;
+  height: 100%;
+  width: 300%;
+  background-size: cover;
+  background: url('../assets/backgrounds/desert_BG.png') repeat-x;
+  animation: slideBackgroundDesert 20s linear infinite;
+  z-index: -1;
+}
+
+.body_color_desert{
+  background-color: #9d5e10;
+}
+
+@keyframes slideBackgroundDesert {
+  0% {
+    transform: translate(0);
+  }
+  100% {
+    transform: translate(-1280px);
+  }
+}
+
+/* Meadow Background */
+.background_meadow {
+  position:fixed;
+  height: 100%;
+  width: 300%;
+  background-size: cover;
+  background: url('../assets/backgrounds/meadow_BG.png') repeat-x;
+  animation: slideBackgroundMeadow 20s linear infinite;
+  z-index: -1;
+}
+
+.body_color_meadow{
+  background-color: #30626d;
+}
+
+@keyframes slideBackgroundMeadow {
+  0% {
+    transform: translate(0);
+  }
+  100% {
+    transform: translate(-1920px);
+  }
+}
+
+/* Mushroom Background */
+.background_mushroom {
+  position:fixed;
+  height: 100%;
+  width: 300%;
+  background-size: cover;
+  background: url('../assets/backgrounds/mushroom_BG.png') repeat-x;
+  animation: slideBackgroundMushroom 20s linear infinite;
+  z-index: -1;
+}
+
+.body_color_mushroom{
+  background-color: #0f1123;
+}
+
+@keyframes slideBackgroundMushroom {
+  0% {
+    transform: translate(0);
+  }
+  100% {
+    transform: translate(-1920px);
+  }
+}
+
+/* Snow Background */
+.background_snow {
+  position:fixed;
+  height: 100%;
+  width: 300%;
+  background-size: cover;
+  background: url('../assets/backgrounds/snow_BG.png') repeat-x;
+  animation: slideBackgroundSnow 20s linear infinite;
+  z-index: -1;
+}
+
+.body_color_snow{
+  background-color: #0d1b3f;
+}
+
+@keyframes slideBackgroundSnow {
+  0% {
+    transform: translate(0);
+  }
+  100% {
+    transform: translate(-1799px);
   }
 }
 
@@ -320,16 +441,16 @@ body {
 }
 
 .menu h1{
-
+  font-weight: bold;
   font-size: 7vmin;
-  letter-spacing: 5vmin;
+  letter-spacing: 4.5vmin;
   display: block;
   margin-bottom: 0.5em;
 }
 
 .menu h2{
-  font-weight: 250;
-  font-size: 4vmin;
+  font-weight: bold;
+  font-size: 5vmin;
   letter-spacing: 10px;
   position: relative;
 }
@@ -359,7 +480,7 @@ body {
 }
 
 .menu li{
-  font-size: 2.5vh;
+  font-size: 2vh;
   width: 170px;
 
 }
@@ -461,7 +582,7 @@ color: #dbdbdb;
 .creditPage {
 overflow:auto;
 height: 80vh;
-width: 800px;
+width: 100vmin;
 background: transparent;
 border: 6px solid rgba(255,255,225,.2);
 backdrop-filter: blur(10px);
