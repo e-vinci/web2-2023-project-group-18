@@ -80,10 +80,10 @@ const ShopPage = async () => {
     try {
         coins = await fetchData(`/collectibles`);
 
-        skinsList = await fetchData(`/skins/`);
-        themesList = await fetchData(`/themes/`);
-        ownedSkins = await fetchData(`/skins/getuserskins`);
-        ownedThemes = await fetchData(`/themes/getuserthemes`);
+        skinsList = await fetchData(`/shop/getskins`);
+        themesList = await fetchData(`/shop/getthemes`);
+        ownedSkins = await fetchData(`/shop/getuserskins`);
+        ownedThemes = await fetchData(`/shop/getuserthemes`);
 
         renderShopPage();
 
@@ -313,9 +313,9 @@ async function skinsListenner() {
                     btn.innerHTML = "Loading...";
                     btn.style.backgroundColor = 'gray';
 
-                    await fetchBuy(`/skins`, idSkin);
+                    await fetchBuy(`/shop/addskin`, idSkin);
                     coins = await fetchData(`/collectibles`);
-                    ownedSkins = await fetchData(`/skins/getuserskins`);
+                    ownedSkins = await fetchData(`/shop/getuserskins`);
 
                     coinsAnimation(beforeCoins, coins);
                     displayCurrentSkinPage();
@@ -368,9 +368,9 @@ function themesListenner() {
                     btn.innerHTML = "Loading...";
                     btn.style.backgroundColor = 'gray';
                     
-                    await fetchBuy(`/themes`, idTheme);
+                    await fetchBuy(`/shop/addtheme`, idTheme);
                     coins = await fetchData(`/collectibles`);
-                    ownedThemes = await fetchData(`/themes/getuserthemes`);
+                    ownedThemes = await fetchData(`/shop/getuserthemes`);
 
                     coinsAnimation(beforeCoins, coins);
                     displayCurrentThemePage();
