@@ -1,6 +1,6 @@
 
 import anime from 'animejs/lib/anime.es';
-
+import { clearPage } from '../../utils/render';
 import Navigate from '../Router/Navigate';
 import settings from '../../utils/settings';
 import music from '../../assets/backgroundMusic.mp3'
@@ -10,6 +10,7 @@ const audio = new Audio(music);
 
 const HomePage = () => {
   
+  clearPage();
   const main = document.querySelector('main');
 
   const mainHTML = `

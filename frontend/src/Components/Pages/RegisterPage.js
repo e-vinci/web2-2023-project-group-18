@@ -1,7 +1,9 @@
 import anime from 'animejs/lib/anime.es';
 import Navigate from '../Router/Navigate';
+import { clearPage } from '../../utils/render';
 
 const RegisterPage = () => {
+  clearPage();
 
   if (localStorage.getItem('token')!=null) {
     Navigate('/');

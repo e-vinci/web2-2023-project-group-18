@@ -1,7 +1,9 @@
 import Navigate from "../Router/Navigate";
+import { clearPage } from '../../utils/render';
 
 const LogoutPage = () => { 
-    if (localStorage.getItem('token') == null) {
+  clearPage();
+  if (localStorage.getItem('token') == null) {
       Navigate('/');
       return;
   }

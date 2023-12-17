@@ -4,11 +4,12 @@ import GameScene from '../Game/GameScene';
 import PauseSceneMenu from '../Game/PauseSceneMenu';
 import StartMenuScene from '../Game/StartMenuScene';
 import GameOverScene from '../Game/GameOverScene';
+import { clearPage } from '../../utils/render';
 
 let game;
 
 const GamePage = () => {
-
+clearPage();
 const phaserGame = `
 <div id="gameDiv" class="d-flex justify-content-center"> </div>`;
 

@@ -3,6 +3,7 @@ import anime from 'animejs/lib/anime.es';
 import Navigate from '../Router/Navigate';
 import BackGround from '../../utils/background';
 import Loading from '../../utils/loading';
+import { clearPage } from '../../utils/render';
 
 // skins images
 import noImageAvailable from '../../assets/noimageavailable.png';
@@ -70,7 +71,8 @@ let currentSkinPage = 1;
 let currentThemePage = 1;
 
 const ShopPage = async () => {
-
+    clearPage();
+    
     // if not connected
     const token = localStorage.getItem('token');
     if (!token) {

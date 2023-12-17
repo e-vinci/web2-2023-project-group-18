@@ -1,6 +1,8 @@
 import Navigate from "../Router/Navigate";
+import { clearPage } from '../../utils/render';
 
 const CookiesPolicyPage = () => {
+   clearPage();
    
    const main = document.querySelector('main');
    main.innerHTML = `

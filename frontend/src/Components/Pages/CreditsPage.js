@@ -1,7 +1,9 @@
 import Navigate from '../Router/Navigate';
+import { clearPage } from '../../utils/render';
 
 
 const CreditPage = () => {
+  clearPage();
   const main = document.querySelector('main')
   main.innerHTML = `<div class="div-back"><button id="link" class="back" type="button" data-uri="/"><i class='bx bx-arrow-back'></i></button></div>
   

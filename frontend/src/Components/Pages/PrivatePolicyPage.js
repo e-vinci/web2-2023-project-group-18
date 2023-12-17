@@ -1,7 +1,9 @@
 import Navigate from "../Router/Navigate";
+import { clearPage } from '../../utils/render';
 
 
 const PrivatePolicyPage = () => {
+  clearPage();
    const main = document.querySelector('main');
    main.innerHTML = `
    <div class="div-back">
