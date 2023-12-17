@@ -20,7 +20,6 @@ export default class MeterLabel extends Phaser.GameObjects.Text {
       fontFamily: 'Arial, sans-serif',
     });
     this.timeElapsed = 0;
-    console.log('inside class', this.timeElapsed);
     this.startMeter();
   }
 

@@ -94,7 +94,6 @@ const ShopPage = async () => {
         backButtonListenner();
 
     } catch(e) {
-        console.log(e);
         document.querySelector('main').innerHTML = `
         <div class="container text-center text-white mt-5">
             <p class="display-5">Error: API ERROR</p>
@@ -300,7 +299,7 @@ async function skinsListenner() {
                 const idSkin = parseInt(btn.getAttribute('data-id'), 10);
 
                 // check if enought coins
-                const enoughCoins = skinsList.some(skin => skin.id_skin === idSkin && coins > skin.price);
+                const enoughCoins = skinsList.some(skin => skin.id_skin === idSkin && coins >= skin.price);
                 if(!enoughCoins) {
                     notEnoughCoinsAnimation(btn);
                     return;
@@ -320,6 +319,7 @@ async function skinsListenner() {
                     coinsAnimation(beforeCoins, coins);
                     displayCurrentSkinPage();
                 } catch(e) {
+                    // eslint-disable-next-line no-alert
                     alert("An error occurred while purchasing this skin...");
                 }
 
@@ -355,7 +355,7 @@ function themesListenner() {
                 const idTheme = parseInt(btn.getAttribute('data-id'), 10);
                 
                 // check if enought coins
-                const enoughCoins = themesList.some(theme => theme.id_theme === idTheme && coins > theme.price);
+                const enoughCoins = themesList.some(theme => theme.id_theme === idTheme && coins >= theme.price);
                 if(!enoughCoins) {
                     notEnoughCoinsAnimation(btn);
                     return;
@@ -375,6 +375,7 @@ function themesListenner() {
                     coinsAnimation(beforeCoins, coins);
                     displayCurrentThemePage();
                 } catch {
+                    // eslint-disable-next-line no-alert
                     alert("An error occurred while purchasing this theme...");
                 }
 

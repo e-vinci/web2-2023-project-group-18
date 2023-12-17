@@ -155,26 +155,6 @@ RETURN;
 END;
 $$ LANGUAGE plpgsql;
 
-/*
-INSERT INTO projet.skins (name_skin, label_skin, price) VALUES ('santa', 'Santa', 0);
-INSERT INTO projet.skins (name_skin, label_skin, price) VALUES ('redhat', 'Red Hat', 100);
-INSERT INTO projet.skins (name_skin, label_skin, price) VALUES ('jack', 'Jack', 250);
-INSERT INTO projet.skins (name_skin, label_skin, price) VALUES ('cat', 'Cat', 500);
-INSERT INTO projet.skins (name_skin, label_skin, price) VALUES ('dog', 'Dog', 750);
-INSERT INTO projet.skins (name_skin, label_skin, price) VALUES ('explorer', 'Explorer', 1000);
-INSERT INTO projet.skins (name_skin, label_skin, price) VALUES ('adventurer', 'Adventurer', 1500);
-INSERT INTO projet.skins (name_skin, label_skin, price) VALUES ('ninjaboy', 'Ninja Boy', 2000);
-INSERT INTO projet.skins (name_skin, label_skin, price) VALUES ('ninjagirl', 'Ninja Girl', 2500);
-INSERT INTO projet.skins (name_skin, label_skin, price) VALUES ('robot', 'Robot', 5000);
-
-INSERT INTO projet.themes (name_theme, label_theme, price) VALUES ('snow', 'Snow', 0);
-INSERT INTO projet.themes (name_theme, label_theme, price) VALUES ('meadow', 'Meadow', 250);
-INSERT INTO projet.themes (name_theme, label_theme, price) VALUES ('desert', 'Desert', 500);
-INSERT INTO projet.themes (name_theme, label_theme, price) VALUES ('mushroom', 'Mushroom', 1000);
-INSERT INTO projet.themes (name_theme, label_theme, price) VALUES ('candy', 'Candy', 2500);
-INSERT INTO projet.themes (name_theme, label_theme, price) VALUES ('alien', 'Alien',  5000);
-*/
-
 
 -- Collectibles
 CREATE TABLE IF NOT EXISTS projet.collectibles(
@@ -219,29 +199,3 @@ RETURNS VOID AS $$
 END;
 
 $$ LANGUAGE plpgsql;
-
-
--- CREATE OR REPLACE FUNCTION projet.supp_collectible(_user VARCHAR(255), _collectible INTEGER)
--- RETURNS VOID AS $$
---     DECLARE
---         id_current_user INTEGER := NULL;
---     BEGIN
-
---         id_current_user := (SELECT c.user_id FROM projet.collectibles c, projet.users u WHERE c.user_id = u.id_user AND u.username = _user);
-    
---         IF (id_current_user IS NOT NULL) THEN
---             UPDATE projet.collectibles SET nbre_collectible = (nbre_collectible - _collectible) WHERE user_id = id_current_user;
---             RETURN;
---         end if;  
-
---             RAISE NOTICE 'No user found with this id_user';
-        
---     RETURN;
---     END;
-
--- $$ LANGUAGE plpgsql;
-
-
-
---INSERT INTO projet.collectible(user_id, nbre_collectible) VALUES (1,100);
---INSERT INTO projet.collectible(user_id, nbre_collectible) VALUES (2,215);

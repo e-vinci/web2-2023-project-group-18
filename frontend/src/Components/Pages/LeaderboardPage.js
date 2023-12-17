@@ -77,7 +77,6 @@ async function renderLeaderboardPage(lignes) {
 
 function backListenner() {
   const back = document.querySelector('#back-leaderboard');
-  console.log(typeof back);
   if(back !== null){
     back.addEventListener('click', () => {
       Navigate('/');
