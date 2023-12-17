@@ -23,7 +23,11 @@ async function fetchScores(){
     const allLignes = await response.json();
     return allLignes;
   } catch (err) {
-      document.querySelector('main').innerHTML = `<p class="text-white">Error: API is not online</p>`;
+    stopLoading();
+    document.querySelector('main').innerHTML = `
+    <div class="container text-center text-white mt-5">
+        <p class="display-5">Error: API ERROR</p>
+    </div>`;
     return err
   };
   

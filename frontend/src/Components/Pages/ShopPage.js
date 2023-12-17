@@ -100,6 +100,7 @@ const ShopPage = async () => {
         backButtonListenner();
 
     } catch(e) {
+        stopLoading();
         document.querySelector('main').innerHTML = `
         <div class="container text-center text-white mt-5">
             <p class="display-5">Error: API ERROR</p>
