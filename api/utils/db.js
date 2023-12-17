@@ -34,11 +34,6 @@ async function queryExecute(query, values) {
     client = await pool.connect();
     // execute query request
     if (values === undefined) return await client.query(query);
-    console.log(JSON.stringify(values));
-    for (let i = 0; i < values.length; i += 1) {
-      const element = values[i];
-      console.log(typeof element);
-    }
     return await client.query(query, values);
   } finally {
     client.release();

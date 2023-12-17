@@ -300,7 +300,7 @@ async function skinsListenner() {
                 const idSkin = parseInt(btn.getAttribute('data-id'), 10);
 
                 // check if enought coins
-                const enoughCoins = skinsList.some(skin => skin.id_skin === idSkin && coins > skin.price);
+                const enoughCoins = skinsList.some(skin => skin.id_skin === idSkin && coins >= skin.price);
                 if(!enoughCoins) {
                     notEnoughCoinsAnimation(btn);
                     return;
@@ -355,7 +355,7 @@ function themesListenner() {
                 const idTheme = parseInt(btn.getAttribute('data-id'), 10);
                 
                 // check if enought coins
-                const enoughCoins = themesList.some(theme => theme.id_theme === idTheme && coins > theme.price);
+                const enoughCoins = themesList.some(theme => theme.id_theme === idTheme && coins >= theme.price);
                 if(!enoughCoins) {
                     notEnoughCoinsAnimation(btn);
                     return;
