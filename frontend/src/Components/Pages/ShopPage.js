@@ -3,6 +3,7 @@ import anime from 'animejs/lib/anime.es';
 import Navigate from '../Router/Navigate';
 import BackGround from '../../utils/background';
 
+// skins images
 import noImageAvailable from '../../assets/noimageavailable.png';
 import santaImage from '../../assets/skins/santaSkin.png';
 import redhatImage from '../../assets/skins/redhatSkin.png';
@@ -15,8 +16,13 @@ import ninjaboyImage from '../../assets/skins/ninjaboySkin.png';
 import ninjagirlImage from '../../assets/skins/ninjagirlSkin.png';
 import robotImage from '../../assets/skins/robotSkin.png';
 
+// themes images
 import snowImage from '../../assets/themes/snow/snowTheme.png';
 import meadowImage from '../../assets/themes/meadow/meadowTheme.png';
+import desertImage from '../../assets/themes/desert/desertTheme.png';
+import mushroomImage from '../../assets/themes/mushroom/mushroomTheme.png';
+import candyImage from '../../assets/themes/candy/candyTheme.png';
+import alienImage from '../../assets/themes/alien/alienTheme.png';
 
 // configure skin with his image
 const SKINS_IMAGE = {
@@ -37,6 +43,10 @@ const SKINS_IMAGE = {
 const THEMES_IMAGE = {
     snow: snowImage,
     meadow: meadowImage,
+    desert: desertImage,
+    mushroom: mushroomImage,
+    candy: candyImage,
+    alien: alienImage,
     default: noImageAvailable
 };
 

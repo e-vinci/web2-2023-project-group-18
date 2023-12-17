@@ -81,8 +81,6 @@ body{
 .shop-picture {
     border-top-right-radius: 5px;
     border-top-left-radius: 5px;
-    border: 2px solid rgb(218,217,214);
-    border-bottom: none;
 }
 
 .shop-part {

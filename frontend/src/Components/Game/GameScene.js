@@ -25,7 +25,7 @@ const gameOptions = {
   slopeLength: [300, 800], 
   slicesAmount: 3,
   slopesPerSlice: 5,
-  obstacleRatio: 15,
+  obstacleRatio: 12,
   coinRatio: 20,
   amountCoin: 10 
 };
@@ -510,6 +510,7 @@ class GameScene extends Phaser.Scene {
     const coin = this.matter.add.image(coinX + 20, coinY - 55, COIN_KEY, null);
     coin.setCircle();
     coin.setStatic(true);
+    coin.body.isSensor = true;
     coin.body.label = COIN_KEY;
     this.coins.push(coin);
   }
