@@ -23,19 +23,19 @@ const HomePage = () => {
     </div>
  
     <div class= "menu">
+      <div class="mb-5">
         <h1 class="title">SantaFall</h1>
-        <br>
-        <h2 style = "text-decoration: underline" >Let us slide</h2>
-        <br>
-        <br>
+        <h2 class="text-decoration-underline" >Let us slide</h2>
+      </div>
+
       <ul>
-      <li><a id="game-link" class="nav-link" href="#" data-uri="/game">Play</a></li>
-      <li><a class="nav-link" href="#" data-uri="/leaderboard">LeaderBoard</a></li>
-      
-      <li id="linkConnection1"></li>
-      <li id="linkConnection2"></li>
-      
-      <li><a class="nav-link" href="#" data-uri="/credits">Credits</a></li>
+        <li><a id="game-link" class="nav-link" href="#" data-uri="/game">Play</a></li>
+        <li><a class="nav-link" href="#" data-uri="/leaderboard">LeaderBoard</a></li>
+        
+        <li id="linkConnection1"></li>
+        <li id="linkConnection2"></li>
+        
+        <li><a class="nav-link" href="#" data-uri="/credits">Credits</a></li>
       </ul>
     </div>
   </div>
