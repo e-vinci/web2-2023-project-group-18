@@ -28,14 +28,3 @@ Authorization: {{test2.response.body.token}}
 {
     "collectible" : 900
 }
-
-### Supp collectibles
-PUT {{baseUrl}}/collectibles/supp
-Content-Type: application/json
-Authorization: {{test2.response.body.token}}
-
-
-
-{
-    "collectible" : 1700
-}
