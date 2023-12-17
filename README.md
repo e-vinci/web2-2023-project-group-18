@@ -2,7 +2,7 @@
 
 # SantaFall (web2-2023-project-group-18)
 
-Jeu 2D dans lequelle le Père Noël descend une montagne tout en évitant des obstacles sur son chemin.Tout le long de la descente le Père Noël pourra collecter des pièces ce qui lui permettra de personnaliser son apparence et/ou le thème du jeu via la boutique. La prise en main du jeu est simple, une seule action possible : sauter. Le jeu est jouable sur ordinateur, comme sur téléphone pour pouvoir jouer au travail comme aux toilettes. Le but principal est d'aller le plus loin possible dans le jeu afin d'être le joueur avec le meilleur score sur le tableau des scores.
+Jeu 2D dans lequel le Père Noël descend une montagne tout en évitant des obstacles sur son chemin.Tout le long de la descente le Père Noël pourra collecter des pièces ce qui lui permettra de personnaliser son apparence et/ou le thème du jeu via la boutique. La prise en main du jeu est simple, une seule action possible : sauter. Le jeu est jouable sur ordinateur, comme sur téléphone pour pouvoir jouer au travail comme aux toilettes. Le but principal est d'aller le plus loin possible dans le jeu afin d'être le joueur avec le meilleur score sur le tableau des scores.
 
 # Host
 
@@ -95,11 +95,11 @@ La table des routes de notre api ce trouve dans le rapport
 
 [front-end/boilerplate](https://github.com/e-vinci/js-phaser-boilerplate)
 [API/boilerplate](https://github.com/e-vinci/jwt-api-boilerplate)
-[front-end/game](https://www.emanueleferonato.com/)
-[front-end/game](https://mourner.github.io/simplify-js/)
-[front-end/assets](https://craftpix.net/)
-[front-end/assets](https://pzuh.itch.io/)
-[front-end/assets](https://kenney.nl/assets/platformer-art-deluxe)
+[frontend\src\Components\Game](https://www.emanueleferonato.com/)
+[frontend\src\Components\Game](https://mourner.github.io/simplify-js/)
+[frontend\src\Components\assets](https://craftpix.net/)
+[frontend\src\Components\assets](https://pzuh.itch.io/)
+[frontend\src\Components\assets](https://kenney.nl/assets/platformer-art-deluxe)
 
 
 ## Authors
