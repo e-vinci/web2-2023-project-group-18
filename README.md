@@ -51,6 +51,36 @@ JWT_SECRET="VOTRE_SECRET"
 ```bash
 npm run start
 ```
+
+Après le premier lancement de l'api
+Veuillez vous connecter à votre base de donner et insérer les lignes suivantes.
+
+```SQL
+INSERT INTO projet.skins (name_skin, label_skin, price) VALUES ('santa', 'Santa', 0);
+INSERT INTO projet.skins (name_skin, label_skin, price) VALUES ('redhat', 'Red Hat', 100);
+INSERT INTO projet.skins (name_skin, label_skin, price) VALUES ('jack', 'Jack', 250);
+INSERT INTO projet.skins (name_skin, label_skin, price) VALUES ('cat', 'Cat', 500);
+INSERT INTO projet.skins (name_skin, label_skin, price) VALUES ('dog', 'Dog', 750);
+INSERT INTO projet.skins (name_skin, label_skin, price) VALUES ('explorer', 'Explorer', 1000);
+INSERT INTO projet.skins (name_skin, label_skin, price) VALUES ('adventurer', 'Adventurer', 1500);
+INSERT INTO projet.skins (name_skin, label_skin, price) VALUES ('ninjaboy', 'Ninja Boy', 2000);
+INSERT INTO projet.skins (name_skin, label_skin, price) VALUES ('ninjagirl', 'Ninja Girl', 2500);
+INSERT INTO projet.skins (name_skin, label_skin, price) VALUES ('robot', 'Robot', 5000);
+
+INSERT INTO projet.themes (name_theme, label_theme, price) VALUES ('snow', 'Snow', 0);
+INSERT INTO projet.themes (name_theme, label_theme, price) VALUES ('meadow', 'Meadow', 250);
+INSERT INTO projet.themes (name_theme, label_theme, price) VALUES ('desert', 'Desert', 500);
+INSERT INTO projet.themes (name_theme, label_theme, price) VALUES ('mushroom', 'Mushroom', 1000);
+INSERT INTO projet.themes (name_theme, label_theme, price) VALUES ('candy', 'Candy', 2500);
+INSERT INTO projet.themes (name_theme, label_theme, price) VALUES ('alien', 'Alien',  5000);
+```
+
+Relancer votre API
+```bash
+npm run start
+```
+
+
 ### Frontend
 ```bash
 cd frontend
@@ -62,7 +92,7 @@ npm run start
 
 
 ## API 
-La table des route de notre api ce trouve dans le rapport 
+La table des routes de notre api ce trouve dans le rapport 
 
 
 ## Credits
