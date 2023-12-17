@@ -52,6 +52,7 @@ class GameScene extends Phaser.Scene {
   }
 
   init() {
+    Theme.setTheme();
     this.cursors = this.input.keyboard.createCursorKeys();
     this.scorePauseScene = this.scene.add('pause-score', ScorePauseScene, true);
   }

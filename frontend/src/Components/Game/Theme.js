@@ -43,42 +43,44 @@ const THEMES = {
     default:  { groundColor: "#DEFBFF", groundTopLayerColor: "#C9EDF0", obstacles: OBSTACLES.default }
 };
 
+let currentTheme;
+
 export default class Theme {
-    static getTheme() {
+    static setTheme() {
         const themeName = localStorage.getItem("theme");
-        return THEMES[themeName] || THEMES.default;
+        currentTheme = THEMES[themeName] || THEMES.default;
     }
 
     static getGroundColor() {
-        return Theme.getTheme().groundColor.replace("#", "0x");
+        return currentTheme.groundColor.replace("#", "0x");
     }
 
     static getGroundTopLayerColor() {
-        return Theme.getTheme().groundTopLayerColor.replace("#", "0x");
+        return currentTheme.groundTopLayerColor.replace("#", "0x");
     }
 
     static getObstacleSmall() {
-        return Theme.getTheme().obstacles.small;
+        return currentTheme.obstacles.small;
     }
 
     static getObstacleMedium() {
-        return Theme.getTheme().obstacles.medium;
+        return currentTheme.obstacles.medium;
     }
 
     static getObstacleFlat() {
-        return Theme.getTheme().obstacles.flat;
+        return currentTheme.obstacles.flat;
     }
 
     static getHeightObstacleSmall() {
-        return Theme.getTheme().obstacles.heightSmall;
+        return currentTheme.obstacles.heightSmall;
     }
 
     static getHeightObstacleMedium() {
-        return Theme.getTheme().obstacles.heightMedium;
+        return currentTheme.obstacles.heightMedium;
     }
 
     static getHeightObstacleFlat() {
-        return Theme.getTheme().obstacles.heightFlat;
+        return currentTheme.obstacles.heightFlat;
     }
     
 }
