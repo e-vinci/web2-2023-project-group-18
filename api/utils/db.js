@@ -2,7 +2,6 @@ const { Pool } = require('pg');
 require('dotenv').config();
 const fs = require('fs');
 const path = require('path');
-const { CLIENT_RENEG_LIMIT } = require('tls');
 
 const filePath = path.join(__dirname, '../data/database.sql');
 
@@ -23,6 +22,7 @@ if (process.env.DB_USER
     connectionTimeoutMillis: 2000,
   });
 } else {
+  // eslint-disable-next-line no-console
   console.error('Your database credentials are not correct!');
   process.exit(1);
 }
